@@ -1,11 +1,9 @@
-import 'package:country_code_picker/country_code_picker.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sarya/authentication/signup/model/signup_request.dart';
-import 'package:sarya/authentication/signup/signup_view_model/country_cubits.dart';
-import 'package:sarya/authentication/signup/signup_view_model/country_states.dart';
 import 'package:sarya/authentication/signup/signup_view_model/signup_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/signup_states.dart';
 import 'package:sarya/extensions/string_extension.dart';
@@ -14,10 +12,9 @@ import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../../customWidgets/custom_country_picker.dart';
 import '../../../navigation/navigation_service.dart';
-import '../model/country_response.dart';
 
 class SignupScreen extends StatefulWidget {
- final List countries;
+  final List countries;
   const SignupScreen({Key? key, required this.countries}) : super(key: key);
 
   @override
@@ -25,8 +22,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-
-  final PageController _pageController      = PageController(
+  final PageController _pageController = PageController(
     initialPage: 0,
     keepPage: true,
   );
@@ -35,47 +31,49 @@ class _SignupScreenState extends State<SignupScreen> {
     keepPage: true,
   );
 
-  TextEditingController userNameController  = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController   = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
 
-  TextEditingController nationalityController  = TextEditingController();
-  TextEditingController cOFController          = TextEditingController();
+  TextEditingController nationalityController = TextEditingController();
+  TextEditingController cOFController = TextEditingController();
 
-  TextEditingController emailNameController    = TextEditingController();
+  TextEditingController emailNameController = TextEditingController();
   TextEditingController passwordNameController = TextEditingController();
-  TextEditingController phoneController        = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
-  TextEditingController hobbyController        = TextEditingController();
-  TextEditingController favCountryController   = TextEditingController();
-  TextEditingController tellMoreController     = TextEditingController();
+  TextEditingController hobbyController = TextEditingController();
+  TextEditingController favCountryController = TextEditingController();
+  TextEditingController tellMoreController = TextEditingController();
 
   late NavigationService _navigationService;
   List<Widget> list = [];
-  List<Widget> listImage = [SvgPicture.asset('signup_logo'.svg),SvgPicture.asset('signup_logo_2'.svg),SvgPicture.asset('signup_logo_3'.svg),SvgPicture.asset('signup_completed'.svg),];
+  List<Widget> listImage = [
+    SvgPicture.asset('signup_logo'.svg),
+    SvgPicture.asset('signup_logo_2'.svg),
+    SvgPicture.asset('signup_logo_3'.svg),
+    SvgPicture.asset('signup_completed'.svg),
+  ];
 
-  final _formKey  = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
   final _formKey4 = GlobalKey<FormState>();
-  
+
   List listGender = ["Male", 'Female'];
   String? selectedGender;
-  String dob='', telCode ='';
+  String dob = '', telCode = '';
 
-  ValueNotifier<String> dateValueNotifier =  ValueNotifier('');
-  ValueNotifier<String> genderNotifier    =  ValueNotifier('');
-  ValueNotifier<String> countriesNotifier =  ValueNotifier('');
+  ValueNotifier<String> dateValueNotifier = ValueNotifier('');
+  ValueNotifier<String> genderNotifier = ValueNotifier('');
+  ValueNotifier<String> countriesNotifier = ValueNotifier('');
 
   String? selectedCountry;
-
 
   @override
   void initState() {
     super.initState();
-
     _navigationService = locator<NavigationService>();
-
     setState(() {
       list = [
         Form(
@@ -104,11 +102,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     return null;
                   }
                 },
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
-
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
@@ -136,11 +133,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     return null;
                   }
                 },
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
-
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
@@ -168,11 +164,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     return null;
                   }
                 },
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
-
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
@@ -208,16 +203,14 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(
                 height: 30,
               ),
-
               ValueListenableBuilder(
                   valueListenable: genderNotifier,
-                  builder:
-                      (BuildContext context, String value, Widget? child) {
-                    if(value.isEmpty) {
-                      return   Align(
+                  builder: (BuildContext context, String value, Widget? child) {
+                    if (value.isEmpty) {
+                      return Align(
                         alignment: Alignment.centerLeft,
                         child: DropdownButton<String>(
-                          underline:const SizedBox(),
+                          underline: const SizedBox(),
                           hint: const Text(
                             '*Gender',
                             style: TextStyle(
@@ -226,37 +219,32 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           value: selectedGender,
                           onChanged: (String? newValue) {
-                            genderNotifier.value = newValue??'';
+                            genderNotifier.value = newValue ?? '';
                             selectedGender = newValue;
-
                           },
-
                           items: listGender.map((var value) {
                             return DropdownMenuItem<String>(
                               value: '$value',
                               child: Text(
                                 '$value',
-                                style: const TextStyle(
-                                    color: AppColor.colorBlack),
+                                style:
+                                    const TextStyle(color: AppColor.colorBlack),
                               ),
                             );
                           }).toList(),
                         ),
                       );
-
                     }
 
-                    return  Align(
+                    return Align(
                       alignment: Alignment.centerLeft,
                       child: DropdownButton<String>(
-                        underline:const SizedBox(),
+                        underline: const SizedBox(),
                         value: selectedGender,
                         onChanged: (String? newValue) {
-                          genderNotifier.value = newValue??'';
+                          genderNotifier.value = newValue ?? '';
                           selectedGender = newValue;
-
                         },
-
                         items: listGender.map((var value) {
                           return DropdownMenuItem<String>(
                             value: '$value',
@@ -272,38 +260,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     );
                   }),
-
-            Container(
-              height: 1,
-              color: AppColor.lightIndigo,
-            ),
-
+              Container(
+                height: 1,
+                color: AppColor.lightIndigo,
+              ),
               const SizedBox(
                 height: 50,
               ),
               ValueListenableBuilder(
                   valueListenable: dateValueNotifier,
-                  builder:
-                      (BuildContext context, String value, Widget? child) {
-                      if(value.isEmpty) {
-                        return Align(
-                          alignment: Alignment.centerLeft,
-                          child: InkWell(
-                            onTap: () {
-                              _selectDate();
-                            },
-                            child: SizedBox(
-                              height: 20,
-                              child: Text(
-                                " *Birthdate  $value", style: const TextStyle(
-                                  fontSize: 14.0,
-                                  color: AppColor.colorGrey,
-                                  fontWeight: FontWeight.w500),),
-                            ),
-                          ),
-                        );
-                      }
-
+                  builder: (BuildContext context, String value, Widget? child) {
+                    if (value.isEmpty) {
                       return Align(
                         alignment: Alignment.centerLeft,
                         child: InkWell(
@@ -313,16 +280,36 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: SizedBox(
                             height: 20,
                             child: Text(
-                              " * $value", style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),),
+                              " *Birthdate  $value",
+                              style: const TextStyle(
+                                  fontSize: 14.0,
+                                  color: AppColor.colorGrey,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           ),
                         ),
                       );
+                    }
+
+                    return Align(
+                      alignment: Alignment.centerLeft,
+                      child: InkWell(
+                        onTap: () {
+                          _selectDate();
+                        },
+                        child: SizedBox(
+                          height: 20,
+                          child: Text(
+                            " * $value",
+                            style: const TextStyle(
+                                fontSize: 14.0,
+                                color: AppColor.lightIndigo,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                    );
                   }),
-
-
               const SizedBox(
                 height: 8,
               ),
@@ -342,7 +329,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     return null;
                   }
                 },
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
@@ -373,11 +360,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     return null;
                   }
                 },
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
-
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
@@ -416,7 +402,6 @@ class _SignupScreenState extends State<SignupScreen> {
               TextFormField(
                 controller: emailNameController,
                 keyboardType: TextInputType.emailAddress,
-
                 validator: (v) {
                   if (v!.isEmpty) {
                     return "Please enter email.";
@@ -424,11 +409,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     return null;
                   }
                 },
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
-
                 decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
@@ -457,7 +441,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     return null;
                   }
                 },
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
@@ -481,92 +465,105 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               SizedBox(
                 height: 50.0,
-                child:     ValueListenableBuilder(
+                child: ValueListenableBuilder(
                     valueListenable: countriesNotifier,
-                    builder: (BuildContext context, String value, Widget? child) {
-
-                      if(value.isEmpty) {
+                    builder:
+                        (BuildContext context, String value, Widget? child) {
+                      if (value.isEmpty) {
                         return CustomCountryPicker(
                           value: selectedCountry,
-                          icon:const Icon(Icons.flag, color: AppColor.colorGrey,),
+                          icon: const Icon(
+                            Icons.flag,
+                            color: AppColor.colorGrey,
+                          ),
                           hint: 'Country',
-                          items: widget.countries.map((value) =>
-                              DropdownMenuItem(
-                                value: value['name'],
-
-                                child: SizedBox(
-                                  width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width/1.2,
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.flag,
-                                        color: AppColor.colorGrey,
+                          items: widget.countries
+                              .map((value) => DropdownMenuItem(
+                                    value: value['name'],
+                                    child: SizedBox(
+                                      width: MediaQuery.of(
+                                                  locator<NavigationService>()
+                                                      .navigatorKey
+                                                      .currentContext!)
+                                              .size
+                                              .width /
+                                          1.2,
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.flag,
+                                            color: AppColor.colorGrey,
+                                          ),
+                                          const SizedBox(width: 20),
+                                          Text(value['name'] ?? ''),
+                                          Text(' (${value['tel']})'),
+                                        ],
                                       ),
-                                      const SizedBox(width: 20),
-                                      Text(value['name'] ?? ''),
-                                      Text(' (${value['tel']})' ),
-                                    ],
-                                  ),
-                                ),
-                                onTap: () {
-                                  telCode = value['tel'];
-                                },
-                              )).toList(),
-                          onItemChanged: (v){
-
+                                    ),
+                                    onTap: () {
+                                      telCode = value['tel'];
+                                    },
+                                  ))
+                              .toList(),
+                          onItemChanged: (v) {
                             countriesNotifier.value = v;
                             selectedCountry = v;
-
                           },
                           errorText: '',
-
                         );
-
                       }
 
                       return CustomCountryPicker(
                         value: selectedCountry,
-                        icon:const Icon(Icons.flag),
+                        icon: const Icon(Icons.flag),
                         hint: 'Country',
-                        items: widget.countries.map((value) =>
-                            DropdownMenuItem(
-                              value: value['name'],
-                              child: SizedBox(
-                                width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width/1.2,
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.flag,
-                                      color: AppColor.aquaGreen,
+                        items: widget.countries
+                            .map((value) => DropdownMenuItem(
+                                  value: value['name'],
+                                  child: SizedBox(
+                                    width: MediaQuery.of(
+                                                locator<NavigationService>()
+                                                    .navigatorKey
+                                                    .currentContext!)
+                                            .size
+                                            .width /
+                                        1.2,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.flag,
+                                          color: AppColor.aquaGreen,
+                                        ),
+                                        const SizedBox(width: 20),
+                                        Text(
+                                          value['name'] ?? '',
+                                          style: const TextStyle(
+                                              fontSize: 14.0,
+                                              color: AppColor.aquaGreen,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        Text(
+                                          " (${value['tel']})" ?? '',
+                                          style: const TextStyle(
+                                              fontSize: 14.0,
+                                              color: AppColor.aquaGreen,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 20),
-                                    Text(value['name'] ?? '',style: const TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.aquaGreen,
-                                        fontWeight: FontWeight.w500),),
-                                    Text(" (${value['tel']})"?? '',style: const TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.aquaGreen,
-                                        fontWeight: FontWeight.w500),),
-                                  ],
-                                ),
-                              ),
-                              onTap: () {
-
-                              },
-                            )).toList(),
-                        onItemChanged: (v){
-
-                            countriesNotifier.value = v;
-                            selectedCountry = v;
-
+                                  ),
+                                  onTap: () {},
+                                ))
+                            .toList(),
+                        onItemChanged: (v) {
+                          countriesNotifier.value = v;
+                          selectedCountry = v;
                         },
                         errorText: '',
-
                       );
                     }),
 
-            /*    BlocBuilder<CountryCubits, CountryStates>(
+                /*    BlocBuilder<CountryCubits, CountryStates>(
                     builder: (context, state) {
                       if(state is CountryInitial){
                         return const SizedBox();
@@ -631,7 +628,11 @@ class _SignupScreenState extends State<SignupScreen> {
                 padding: const EdgeInsets.only(top: 2.0),
                 child: SizedBox(
                   height: 50.0,
-                  width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width ,
+                  width: MediaQuery.of(locator<NavigationService>()
+                          .navigatorKey
+                          .currentContext!)
+                      .size
+                      .width,
                   child: TextFormField(
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
@@ -642,7 +643,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         return null;
                       }
                     },
-                    style:const TextStyle(
+                    style: const TextStyle(
                         fontSize: 14.0,
                         color: AppColor.aquaGreen,
                         fontWeight: FontWeight.w500),
@@ -663,7 +664,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
@@ -686,7 +686,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               TextFormField(
                 controller: hobbyController,
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
@@ -710,7 +710,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               TextFormField(
                 controller: favCountryController,
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
@@ -734,7 +734,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               TextFormField(
                 controller: tellMoreController,
-                style:const TextStyle(
+                style: const TextStyle(
                     fontSize: 14.0,
                     color: AppColor.aquaGreen,
                     fontWeight: FontWeight.w500),
@@ -770,18 +770,16 @@ class _SignupScreenState extends State<SignupScreen> {
       firstDate: DateTime(2010),
       lastDate: DateTime(2025),
     );
-    if (selected != null ) {
-
-        String d = selected.toString();
-        var splitDate = d.split(" ");
-        dateValueNotifier.value = splitDate[0];
-        dob = splitDate[0];
-
+    if (selected != null) {
+      String d = selected.toString();
+      var splitDate = d.split(" ");
+      dateValueNotifier.value = splitDate[0];
+      dob = splitDate[0];
     }
   }
 
   ValueNotifier<int> valueNotifier = ValueNotifier(0);
-
+  double total_width = 5.0;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -803,38 +801,106 @@ class _SignupScreenState extends State<SignupScreen> {
                 _navigationService.goBack();
               },
             ),
-            backgroundColor: AppColor.aquaCasper2,
+            backgroundColor: AppColor.whiteColor,
             title: const Text(
               "Sign Up",
               style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
             ),
             centerTitle: true,
             bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(170),
-              child: SizedBox(
-                height: 170.0,
-                width: size.width,
-                child: PageView.builder(
-                    itemCount: listImage.length,
-
-                    reverse: false,
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: _pageControllerImage,
-                    itemBuilder: (c, index) {
-                      return    Container(
-                        color: AppColor.whiteColor,
-                        child: listImage[index],
-                      );
-                    }),
-              )
-
-
-            ),
+                preferredSize: const Size.fromHeight(170),
+                child: SizedBox(
+                  height: 170.0,
+                  width: size.width,
+                  child: Container(
+                    color: AppColor.whiteColor,
+                    height: 170.0,
+                    width: size.width,
+                    child: Stack(
+                      children: [
+                        AnimatedPositioned(
+                          duration: Duration(milliseconds: 500),
+                          child: Container(
+                            width: size.width,
+                            color: AppColor.whiteColor,
+                            child: SvgPicture.asset('star'.svg),
+                          ),
+                          top: 0,
+                          right: 20,
+                        ),
+                        Positioned(
+                          child: Container(
+                            height: 5,
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            width: size.width,
+                            color: Color(0xff5E59ED),
+                          ),
+                          bottom: 10,
+                        ),
+                        if (total_width >= 155.0)
+                          Positioned(
+                            child: FadeInUp(
+                              child: Container(
+                                height: 70,
+                                color: AppColor.whiteColor,
+                                child: SvgPicture.asset('last_star'.svg),
+                              ),
+                            ),
+                            right: 5,
+                            bottom: 70,
+                          ),
+                        if (total_width >= 105.0)
+                          Positioned(
+                            child: FadeInUp(
+                              child: Container(
+                                height: 70,
+                                color: AppColor.whiteColor,
+                                child: SvgPicture.asset('slash'.svg),
+                              ),
+                            ),
+                            left: 25,
+                            bottom: 40,
+                          ),
+                        if (total_width >= 155.0)
+                          Positioned(
+                            child: FadeInUp(
+                              child: Container(
+                                height: 70,
+                                color: AppColor.whiteColor,
+                                child: SvgPicture.asset('flag'.svg),
+                              ),
+                            ),
+                            right: 5,
+                            bottom: 20,
+                          ),
+                        AnimatedPositioned(
+                          duration: Duration(milliseconds: 500),
+                          child: Container(
+                            color: AppColor.whiteColor,
+                            child: SvgPicture.asset('turtle'.svg),
+                          ),
+                          left: total_width,
+                          bottom: 20,
+                        ),
+                      ],
+                    ),
+                    // child: PageView.builder(
+                    //     itemCount: listImage.length,
+                    //     reverse: false,
+                    //     physics: const NeverScrollableScrollPhysics(),
+                    //     controller: _pageControllerImage,
+                    //     itemBuilder: (c, index) {
+                    //       return Container(
+                    //         color: AppColor.whiteColor,
+                    //         child: listImage[index],
+                    //       );
+                    //     }),
+                  ),
+                )),
           ),
           bottomNavigationBar: BlocBuilder<SignupCubits, SignupStates>(
             builder: (context, state) {
-
-              return   SizedBox(
+              return SizedBox(
                 height: 120,
                 child: ValueListenableBuilder(
                     valueListenable: valueNotifier,
@@ -925,41 +991,35 @@ class _SignupScreenState extends State<SignupScreen> {
                               }
 
                               int position = 1 + value;
-
-
-                              _pageControllerImage.animateToPage(position,
-                                  curve: Curves.decelerate,
-                                  duration: const Duration(milliseconds: 300));
-
+                              total_width = total_width + 50;
+                              // _pageControllerImage.animateToPage(position,
+                              //     curve: Curves.decelerate,
+                              //     duration: const Duration(milliseconds: 300));
+                              setState(() {});
                               _pageController.animateToPage(position,
                                   curve: Curves.decelerate,
                                   duration: const Duration(milliseconds: 300));
                               // for animated jump. Requires a curve and a duration
                               if (position == 4) {
-                                String phone = zeroLeadValue(value: phoneController.text);
+                                String phone =
+                                    zeroLeadValue(value: phoneController.text);
 
-
-
-                                context
-                                    .read<SignupCubits>()
-                                    .saveSignup(signupRequest:
-                                      SignupRequest(
-                                          firstName: firstNameController.text,
-                                          lastName: firstNameController.text,
-                                          userName: userNameController.text,
-                                          gender: selectedGender,
-                                          birthday: dob,
-                                          nationality: nationalityController.text,
-                                          country: cOFController.text,
-                                          email: emailNameController.text,
-                                          password: passwordNameController.text,
-                                          telCode: telCode,
-                                          phone: phone,
-                                          hobbies: hobbyController.text,
-                                          favCountry: favCountryController.text,
-                                          extraInfo: tellMoreController.text
-
-                                    ));
+                                context.read<SignupCubits>().saveSignup(
+                                    signupRequest: SignupRequest(
+                                        firstName: firstNameController.text,
+                                        lastName: firstNameController.text,
+                                        userName: userNameController.text,
+                                        gender: selectedGender,
+                                        birthday: dob,
+                                        nationality: nationalityController.text,
+                                        country: cOFController.text,
+                                        email: emailNameController.text,
+                                        password: passwordNameController.text,
+                                        telCode: telCode,
+                                        phone: phone,
+                                        hobbies: hobbyController.text,
+                                        favCountry: favCountryController.text,
+                                        extraInfo: tellMoreController.text));
 
                                 _navigationService.navigateTo(termRoutSecond);
                                 return;
@@ -975,7 +1035,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Text(
                                   "Next",
                                   style: TextStyle(
-                                      fontSize: 15.0, color: AppColor.whiteColor),
+                                      fontSize: 15.0,
+                                      color: AppColor.whiteColor),
                                 ),
                               ),
                             ),
@@ -984,10 +1045,6 @@ class _SignupScreenState extends State<SignupScreen> {
                       );
                     }),
               );
-
-
-
-
             },
           ),
           body: list.isEmpty
@@ -1029,12 +1086,11 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  String zeroLeadValue({required String value}){
+  String zeroLeadValue({required String value}) {
     if (value.startsWith('0') && value.length > 1) {
-      return value.replaceAll( RegExp(r'^0+(?=.)'), '');
+      return value.replaceAll(RegExp(r'^0+(?=.)'), '');
     } else {
       return value;
     }
   }
-
 }

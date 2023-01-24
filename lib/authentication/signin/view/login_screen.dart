@@ -27,233 +27,236 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   late NavigationService _navigationService;
 
-
   @override
   void initState() {
     super.initState();
     context.read<CountryCubits>().getCountries();
 
     _navigationService = locator<NavigationService>();
-
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: AppColor.whiteColor,
-      body:  BlocBuilder<SignInCubits, SignInStates>(
-        builder: (context, state) {
+        backgroundColor: AppColor.whiteColor,
+        body: BlocBuilder<SignInCubits, SignInStates>(
+          builder: (context, state) {
+            bool loading = false;
 
-          bool loading = false;
+            if (state is SignInInitial) {
+              loading = false;
+            }
 
-         if(state is SignInInitial){
-           loading = false;
-          }
+            if (state is SignInLoading) {
+              loading = true;
+            }
 
-          if(state is SignInLoading){
-            loading = true;
+            if (state is SignInLoaded) {
+              loading = false;
+            }
 
-          }
-
-          if(state is SignInLoaded){
-            loading = false;
-
-          }
-
-
-          return DataLoading(
-            isLoading: loading,
-            child: SafeArea(
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                            height: size.height / 2.5,
-                            child: SizedBox(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: 150.0,
-                                    width: 150.0,
-                                    child: SvgPicture.asset('logo'.svg),
-                                  )
-                                ],),
-
-                            )),
-                        const SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: userNameController,
-                          validator: (v){
-
-                            if(v!.isEmpty){
-                              return "Please enter username.";
-                            }else{
-                              return null;
-                            }
-
-                          },
-                          style:const TextStyle(
-                              fontSize: 13.0,
-                              color: AppColor.aquaGreen,
-                              fontWeight: FontWeight.w500),
-                          decoration: const InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
-                              ),
-                              hintText: "Email or phone",
-                              fillColor: AppColor.colorGrey,
-                              contentPadding: EdgeInsets.zero,
-                              hintStyle: TextStyle(
-                                  fontSize: 13.0,
-                                  color: AppColor.colorGrey,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                        const SizedBox(height:30.0),
-                        TextFormField(
-                          controller: passController,
-                          validator: (v){
-
-                            if(v!.isEmpty){
-                              return "Please enter password.";
-                            }else{
-                              return null;
-                            }
-
-
-
-                          },
-                          style:const TextStyle(
-                              fontSize: 13.0,
-                              color: AppColor.aquaGreen,
-                              fontWeight: FontWeight.w500),
-                          decoration: const InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
-                              ),
-                              contentPadding: EdgeInsets.zero,
-                              hintText: "Password",
-                              fillColor: AppColor.aquaCasper,
-                              hintStyle: TextStyle(
-                                  fontSize: 13.0,
-                                  color: AppColor.colorGrey,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                        const SizedBox(height:15.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                                onTap: (){
-                                  _navigationService.navigateTo(forgetRout);
-
-                                },
-                                child: const SizedBox(
-                                    height: 40.0,
-
-                                    child: Center(
-                                      child: Text("Forget password?", style: TextStyle(
-                                          fontSize: 13.0,
-                                          color: AppColor.lightIndigo,
-                                          fontWeight: FontWeight.w400),),
-                                    ))),
-                            InkWell(
-                                onTap: (){
-                                  if (_formKey.currentState!.validate()) {
-                                    //  _navigationService.navigatePushReplace(dashboardRout);
-                                    SignInRequest  request = SignInRequest(userName: userNameController.text, password: passController.text);
-                                    context
-                                        .read<SignInCubits>()
-                                        .doSignIn(signInRequest:request , navigationService: _navigationService);
-
-                                  }
-                                },
-                                child: const SizedBox(
-                                    height: 40.0,
-                                    child: Center(
-                                      child: Text("Let's Go!", style: TextStyle(
-                                          fontSize: 13.0,
-                                          color: AppColor.aquaCasper,
-                                          fontWeight: FontWeight.w700),),
-                                    )))
-
-                          ],),
-                        SizedBox(
-                          height:  size.width/5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-
-                          children: [
-                            const Text("Don’t have an account? ", style: TextStyle(
+            return DataLoading(
+              isLoading: loading,
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                              height: size.height / 2.5,
+                              child: SizedBox(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 150.0,
+                                      width: 150.0,
+                                      child: SvgPicture.asset('logo'.svg),
+                                    )
+                                  ],
+                                ),
+                              )),
+                          const SizedBox(height: 20.0),
+                          TextFormField(
+                            controller: userNameController,
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return "Please enter username.";
+                              } else {
+                                return null;
+                              }
+                            },
+                            style: const TextStyle(
                                 fontSize: 13.0,
-                                color: AppColor.aquaCasper,
-                                fontWeight: FontWeight.w400),),
-                            InkWell(
-                                onTap: ()async{
-
-                                  SharedPrefs pref = SharedPrefs();
-                                  List listOfCountries = await pref.getCountries();
-                                  _navigationService.navigateTo(signupRout, arguments: listOfCountries);
-
-                                },
-                                child:const  Text("Sign Up!", style: TextStyle(
+                                color: AppColor.aquaGreen,
+                                fontWeight: FontWeight.w500),
+                            decoration: const InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
+                                ),
+                                hintText: "Email or phone",
+                                fillColor: AppColor.colorGrey,
+                                contentPadding: EdgeInsets.zero,
+                                hintStyle: TextStyle(
+                                    fontSize: 13.0,
+                                    color: AppColor.colorGrey,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          const SizedBox(height: 30.0),
+                          TextFormField(
+                            controller: passController,
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return "Please enter password.";
+                              } else {
+                                return null;
+                              }
+                            },
+                            style: const TextStyle(
+                                fontSize: 13.0,
+                                color: AppColor.aquaGreen,
+                                fontWeight: FontWeight.w500),
+                            decoration: const InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
+                                ),
+                                contentPadding: EdgeInsets.zero,
+                                hintText: "Password",
+                                fillColor: AppColor.aquaCasper,
+                                hintStyle: TextStyle(
+                                    fontSize: 13.0,
+                                    color: AppColor.colorGrey,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          const SizedBox(height: 15.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                  onTap: () {
+                                    _navigationService.navigateTo(forgetRout);
+                                  },
+                                  child: const SizedBox(
+                                      height: 40.0,
+                                      child: Center(
+                                        child: Text(
+                                          "Forget password?",
+                                          style: TextStyle(
+                                              fontSize: 13.0,
+                                              color: AppColor.lightIndigo,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ))),
+                              InkWell(
+                                  onTap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      //  _navigationService.navigatePushReplace(dashboardRout);
+                                      SignInRequest request = SignInRequest(
+                                          userName: userNameController.text,
+                                          password: passController.text);
+                                      context.read<SignInCubits>().doSignIn(
+                                          signInRequest: request,
+                                          navigationService:
+                                              _navigationService);
+                                    }
+                                  },
+                                  child: const SizedBox(
+                                      height: 40.0,
+                                      child: Center(
+                                        child: Text(
+                                          "Let's Go!",
+                                          style: TextStyle(
+                                              fontSize: 13.0,
+                                              color: AppColor.aquaCasper,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      )))
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.width / 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Don’t have an account? ",
+                                style: TextStyle(
                                     fontSize: 13.0,
                                     color: AppColor.aquaCasper,
-                                    fontWeight: FontWeight.w700),)),
-
-                          ],),
-                        const SizedBox(height:15.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-
-                          children: [
-                            const SizedBox(
-                                height: 40.0,
-
-                                child: Text("I agree to the ", style: TextStyle(
-                                    fontSize: 13.0,
-                                    color: AppColor.aquaCasper,
-                                    fontWeight: FontWeight.w400),)),
-                            InkWell(
-                                onTap: (){
-                                  _navigationService.navigateTo(termRout);
-
-                                },
-                                child: const SizedBox(
-                                    height: 40.0,
-                                    child: Text("term & conditions.", style: TextStyle(
-                                        decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              InkWell(
+                                  onTap: () async {
+                                    SharedPrefs pref = SharedPrefs();
+                                    List listOfCountries =
+                                        await pref.getCountries();
+                                    _navigationService.navigateTo(signupRout,
+                                        arguments: listOfCountries);
+                                  },
+                                  child: const Text(
+                                    "Sign Up!",
+                                    style: TextStyle(
                                         fontSize: 13.0,
                                         color: AppColor.aquaCasper,
-                                        fontWeight: FontWeight.w400),))),
-
-                          ],)
-                      ],
+                                        fontWeight: FontWeight.w700),
+                                  )),
+                            ],
+                          ),
+                          const SizedBox(height: 15.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                  height: 40.0,
+                                  child: Text(
+                                    "I agree to the ",
+                                    style: TextStyle(
+                                        fontSize: 13.0,
+                                        color: AppColor.aquaCasper,
+                                        fontWeight: FontWeight.w400),
+                                  )),
+                              InkWell(
+                                  onTap: () {
+                                    _navigationService.navigateTo(termRout);
+                                  },
+                                  child: const SizedBox(
+                                      height: 40.0,
+                                      child: Text(
+                                        "term & conditions.",
+                                        style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            fontSize: 13.0,
+                                            color: AppColor.aquaCasper,
+                                            fontWeight: FontWeight.w400),
+                                      ))),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          );
-
-
-
-        },
-      )
-
-    );
+            );
+          },
+        ));
   }
 }
