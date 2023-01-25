@@ -5,7 +5,7 @@ import 'package:sarya/theme/color_scheme.dart';
 class CustomCountryPicker extends StatelessWidget {
 
   final dynamic value;
-  final Widget icon;
+  final Widget? icon;
   final String hint;
   final String errorText;
   final List<DropdownMenuItem<dynamic>> items;
@@ -18,7 +18,7 @@ class CustomCountryPicker extends StatelessWidget {
   const CustomCountryPicker({
     Key? key,
     required this.value,
-    required this.icon,
+     this.icon,
     required this.hint,
     required this.items,
     required this.onItemChanged,
@@ -41,7 +41,7 @@ class CustomCountryPicker extends StatelessWidget {
       disabledHint: Text(disabledHint),
       hint: Row(
         children: [
-          icon,
+          icon ==  null? const SizedBox.shrink(): icon!,
           const SizedBox(width: 10),
           Expanded(
             child: Text(

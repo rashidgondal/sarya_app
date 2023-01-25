@@ -28,7 +28,7 @@ class AuthInterceptors extends Interceptor {
   void onError(DioError err, ErrorInterceptorHandler handler) async {
     log('response.statusCode......${err.response?.statusCode}', name:'onError | AuthRepository');
 
-    if (err.response?.statusCode == 403 || err.response?.statusCode == 401) {
+    if (err.response?.statusCode == 403 || err.response?.statusCode == 401 || err.response?.statusCode == 409) {
       log('response.statusCode......${err.response?.statusCode}', name:'onError | AuthRepository');
       ErrorModel errorModel = ErrorModel.fromJson(err.response?.data);
       ShowSnackBar.showSnackBar(msg: errorModel.msg??'');

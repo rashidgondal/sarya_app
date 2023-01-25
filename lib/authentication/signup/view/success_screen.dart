@@ -67,7 +67,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
             children: [
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: size.height * 0.300,
                     child: SvgPicture.asset('sucsess_screen'.svg),
                   ),
@@ -153,11 +153,11 @@ class _SuccessScreenState extends State<SuccessScreen> {
               AnimatedPositioned(
                   top: 55,
                   left: left_offset,
-                  child: Container(
+                  duration:const Duration(seconds: 1),
+                  child: SizedBox(
                     height: size.height * 0.300,
                     child: SvgPicture.asset('turtle'.svg),
-                  ),
-                  duration: Duration(seconds: 1)),
+                  )),
               Positioned(
                 top: 0,
                 left: size.width/2-100,

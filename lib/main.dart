@@ -9,6 +9,7 @@ import 'package:sarya/locator.dart';
 import 'authentication/signin/signin_view_model/signin_cubits.dart';
 import 'navigation/navigation_service.dart';
 import  'navigation/router.dart' as routes;
+
 void main() {
   setupLocator();
   runApp(const MyApp());
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginScreen(),
+        home:const LoginScreen(),
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: routes.generateRoute,
       ),
