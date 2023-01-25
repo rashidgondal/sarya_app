@@ -54,8 +54,9 @@ class _SuccessScreenState extends State<SuccessScreen> {
           appBar: AppBar(
             elevation: 0,
             toolbarHeight: 60,
-            //leading: IconButton(icon: const Icon(Icons.arrow_back_ios, color: AppColor.lightIndigo,), onPressed: () {  },),
-            automaticallyImplyLeading: false,
+            leading: IconButton(icon: const Icon(Icons.arrow_back_ios, color: AppColor.lightIndigo,), onPressed: () {
+              _navigationService.goBack();
+            },),
             backgroundColor: AppColor.aquaCasper2,
             title: const Text(
               "Sign Up",

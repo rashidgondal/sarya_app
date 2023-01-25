@@ -38,8 +38,9 @@ class _TermAndConditionState extends State<TermAndCondition> {
           appBar: AppBar(
             elevation: 0,
             toolbarHeight: 60,
-            //leading: IconButton(icon: const Icon(Icons.arrow_back_ios, color: AppColor.lightIndigo,), onPressed: () {  },),
-            automaticallyImplyLeading: false,
+            leading: IconButton(icon: const Icon(Icons.arrow_back_ios, color: AppColor.lightIndigo,), onPressed: () {
+              _navigationService.goBack();
+            },),
             backgroundColor: AppColor.aquaCasper2,
             title: const Text("Term & Condition", style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),),
             centerTitle: true,

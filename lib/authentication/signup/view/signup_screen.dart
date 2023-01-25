@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sarya/authentication/signup/model/signup_request.dart';
 import 'package:sarya/authentication/signup/signup_view_model/signup_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/signup_states.dart';
@@ -12,6 +13,7 @@ import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../../customWidgets/custom_country_picker.dart';
 import '../../../navigation/navigation_service.dart';
+import '../signup_widget/bottom_sheet_country_picker.dart';
 
 class SignupScreen extends StatefulWidget {
   final List countries;
@@ -62,16 +64,17 @@ class _SignupScreenState extends State<SignupScreen> {
 
   List listGender = ["Male", 'Female'];
   String? selectedGender;
-  String dob = '', telCode = '', nationality='', _cor ='';
+  String dob = '', telCode = '', nationality='', _cor ='',country='';
 
   ValueNotifier<String> dateValueNotifier = ValueNotifier('');
   ValueNotifier<String> genderNotifier = ValueNotifier('');
   ValueNotifier<String> countriesNotifier = ValueNotifier('');
   ValueNotifier<String> nationalityNotifier = ValueNotifier('');
+  ValueNotifier<String> telCodeNotifier = ValueNotifier('');
 
   ValueNotifier<String> corNotifier = ValueNotifier('');
 
-  String? selectedCountry, selectedNationality, selectedCOR;
+  String? selectedCountry;
 
   @override
   void initState() {
@@ -361,96 +364,85 @@ class _SignupScreenState extends State<SignupScreen> {
                 valueListenable: nationalityNotifier,
                 builder:
                     (BuildContext context, String value, Widget? child) {
-                  if (value.isEmpty) {
-                    return CustomCountryPicker(
-                      value: selectedNationality,
-                  /*    icon: const Icon(
-                        Icons.flag,
-                        color: AppColor.colorGrey,
-                      ),*/
-                      hint: 'Nationality',
-                      items: widget.countries
-                          .map((value) => DropdownMenuItem(
-                        value: value['nationality'],
-                        child: SizedBox(
-                          width: MediaQuery.of(
-                              locator<NavigationService>()
-                                  .navigatorKey
-                                  .currentContext!)
-                              .size
-                              .width /
-                              1.2,
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.flag,
-                                color: AppColor.colorGrey,
-                              ),
-                              const SizedBox(width: 20),
-                              Text(value['nationality'] ?? ''),
-                            ],
+
+                      if(value.isEmpty) {
+                        return InkWell(
+                          onTap: (){
+                            showMaterialModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => Container(
+                                  color: Colors.white,
+                                  height: MediaQuery.of(context).size.height,
+                                  width: MediaQuery.of(context).size.width,
+                                  child:  BottomSheetCountryPicker(
+                                    countries: widget.countries,
+                                    countryName: (v) {
+
+                                    },
+                                    countryTel: (v) {
+
+                                    },
+                                    nationality: (v){
+                                      nationalityNotifier.value = v;
+                                      nationality =v;
+                                    },
+                                  )),
+                            ).then((value) {
+                              setState(() {});
+                            });
+                          },
+                          child:const Align(
+                            alignment: Alignment.centerLeft,
+                            child:  Padding(
+                              padding:  EdgeInsets.only(bottom: 16.0),
+                              child: Text("*Nationality", style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: AppColor.colorGrey,
+                                  fontWeight: FontWeight.w500),),
+                            ),
+                          ),
+                        ) ;
+
+                      }
+
+                      return InkWell(
+                        onTap: (){
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => Container(
+                                color: Colors.white,
+                                height: MediaQuery.of(context).size.height/1.2,
+                                width: MediaQuery.of(context).size.width,
+                                child:  BottomSheetCountryPicker(
+                                  countries: widget.countries,
+                                  countryName: (v) {
+                                  },
+                                  countryTel: (v) {
+
+                                  },
+                                  nationality: (v){
+                                    nationalityNotifier.value = v;
+                                    nationality =v;
+                                  },
+                                )),
+                          ).then((value) {
+                            setState(() {});
+                          });
+                        },
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: Text(nationality, style:const TextStyle(
+                                fontSize: 14.0,
+                                color: AppColor.lightIndigo,
+                                fontWeight: FontWeight.w500),),
                           ),
                         ),
-                        onTap: () {
-                          nationality = value['nationality'];
-                        },
-                      ))
-                          .toList(),
-                      onItemChanged: (v) {
-                        nationalityNotifier.value = v;
-                        selectedNationality = v;
-                      },
-                      errorText: '',
-                    );
-                  }
+                      ) ;
 
-                  return CustomCountryPicker(
-                    value: selectedNationality,
-                   // icon: const Icon(Icons.flag),
-                    hint: 'Nationality',
-                    items: widget.countries
-                        .map((value) => DropdownMenuItem(
-                      value: value['nationality'],
-                      child: SizedBox(
-                        width: MediaQuery.of(
-                            locator<NavigationService>()
-                                .navigatorKey
-                                .currentContext!)
-                            .size
-                            .width /
-                            1.2,
-                        child: Row(
-                          children: [
-                      /*      const Icon(
-                              Icons.flag,
-                              color: AppColor.aquaGreen,
-                            ),*/
-                            const SizedBox(width: 20),
-                            Text(
-                              value['nationality'] ?? '',
-                              style: const TextStyle(
-                                  fontSize: 14.0,
-                                  color: AppColor.lightIndigo,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-
-                          nationality = value['nationality'];
-
-                      },
-                    ))
-                        .toList(),
-
-                    onItemChanged: (v) {
-                      nationalityNotifier.value = v;
-                      selectedNationality = v;
-                    },
-
-                    errorText: '',
-                  );
                 })),
               Container(
                 height: 1,
@@ -465,98 +457,87 @@ class _SignupScreenState extends State<SignupScreen> {
                       valueListenable: corNotifier,
                       builder:
                           (BuildContext context, String value, Widget? child) {
-                        if (value.isEmpty) {
-                          return CustomCountryPicker(
-                            value: selectedCOR,
 
-                            hint: 'Country of Residence',
-                            items: widget.countries
-                                .map((value) => DropdownMenuItem(
-                              value: value['name'],
-                              child: SizedBox(
-                                width: MediaQuery.of(
-                                    locator<NavigationService>()
-                                        .navigatorKey
-                                        .currentContext!)
-                                    .size
-                                    .width /
-                                    1.2,
-                                child: Row(
-                                  children: [
-                            /*        const Icon(
-                                      Icons.flag,
-                                      color: AppColor.colorGrey,
-                                    ),*/
-                                    const SizedBox(width: 20),
-                                    Text(value['name'] ?? ''),
-                                  ],
+                            if(value.isEmpty) {
+                              return InkWell(
+                                onTap: (){
+                                  showMaterialModalBottomSheet(
+                                    context: context,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => Container(
+                                        color: Colors.white,
+                                        height: MediaQuery.of(context).size.height,
+                                        width: MediaQuery.of(context).size.width,
+                                        child:  BottomSheetCountryPicker(
+                                          countries: widget.countries,
+                                          countryName: (v) {
+                                            corNotifier.value = v;
+                                            _cor =v;
+                                          },
+                                          countryTel: (v) {
+
+                                          },
+                                          nationality: (v){
+
+                                          },
+                                        )),
+                                  ).then((value) {
+                                    setState(() {});
+                                  });
+                                },
+                                child:const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child:  Padding(
+                                    padding:  EdgeInsets.only(bottom: 16.0),
+                                    child: Text("*Country of Residence", style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500),),
+                                  ),
+                                ),
+                              ) ;
+
+                            }
+
+                            return InkWell(
+                              onTap: (){
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => Container(
+                                      color: Colors.white,
+                                      height: MediaQuery.of(context).size.height/1.2,
+                                      width: MediaQuery.of(context).size.width,
+                                      child:  BottomSheetCountryPicker(
+                                        countries: widget.countries,
+                                        countryName: (v) {
+                                          corNotifier.value = v;
+                                          _cor =v;
+                                        },
+                                        countryTel: (v) {
+
+                                        },
+                                        nationality: (v){
+
+                                        },
+                                      )),
+                                ).then((value) {
+                                  setState(() {});
+                                });
+                              },
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Text(_cor, style:const TextStyle(
+                                      fontSize: 14.0,
+                                      color: AppColor.lightIndigo,
+                                      fontWeight: FontWeight.w500),),
                                 ),
                               ),
-                              onTap: () {
+                            ) ;
 
-                                setState(() {
-                                  _cor = value['name'];
-                                  isIgnorePointer = false;
 
-                                });                              },
-                            ))
-                                .toList(),
-                            onItemChanged: (v) {
-                              corNotifier.value = v;
-                              selectedCOR = v;
-                            },
-                            errorText: '',
-                          );
-                        }
-
-                        return CustomCountryPicker(
-                          value: selectedCOR,
-                          hint: 'Country of Residence',
-                          items: widget.countries
-                              .map((value) => DropdownMenuItem(
-                            value: value['name'],
-                            child: SizedBox(
-                              width: MediaQuery.of(
-                                  locator<NavigationService>()
-                                      .navigatorKey
-                                      .currentContext!)
-                                  .size
-                                  .width /
-                                  1.2,
-                              child: Row(
-                                children: [
-                            /*      const Icon(
-                                    Icons.flag,
-                                    color: AppColor.aquaGreen,
-                                  ),*/
-                                  const SizedBox(width: 20),
-                                  Text(
-                                    value['name'] ?? '',
-                                    style: const TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.lightIndigo,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            onTap: () {
-
-                              setState(() {
-                                _cor = value['name'];
-                                isIgnorePointer = false;
-
-                              });
-
-                            },
-                          ))
-                              .toList(),
-                          onItemChanged: (v) {
-                            corNotifier.value = v;
-                            selectedCOR = v;
-                          },
-                          errorText: '',
-                        );
                       })),
               Container(
                 height: 1,
@@ -648,189 +629,154 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(
                 height: 30,
               ),
-              SizedBox(
-                height: 50.0,
-                child:     ValueListenableBuilder(
-                    valueListenable: countriesNotifier,
-                    builder: (BuildContext context, String value, Widget? child) {
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 49.0,
+                        width: 100,
+                        child: ValueListenableBuilder(
+                            valueListenable: countriesNotifier,
+                            builder: (BuildContext context, String value, Widget? child) {
 
-                      if(value.isEmpty) {
-                        return CustomCountryPicker(
-                          value: selectedCountry,
-                      /*    icon:const Icon(Icons.flag, color: AppColor.colorGrey,),*/
-                          hint: 'Country',
-                          items: widget.countries.map((value) =>
-                              DropdownMenuItem(
-                                value: value['name'],
+                              if(value.isEmpty) {
+                                return InkWell(
+                                  onTap: (){
+                                    showMaterialModalBottomSheet(
+                                      context: context,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context) => Container(
+                                          color: Colors.white,
+                                          height: MediaQuery.of(context).size.height,
+                                          width: MediaQuery.of(context).size.width,
+                                          child:  BottomSheetCountryPicker(
+                                            countries: widget.countries,
+                                            countryName: (v) {
 
-                                child: SizedBox(
-                                  width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width/1.2,
-                                  child: Row(
-                                    children: [
-                                 /*     const Icon(
-                                        Icons.flag,
-                                        color: AppColor.colorGrey,
-                                      ),*/
-                                      const SizedBox(width: 20),
-                                      Text(value['name'] ?? ''),
-                                      Text(' (${value['tel']})' ),
-                                    ],
+                                            },
+                                            countryTel: (v) {
+                                              telCode = v;
+                                              telCodeNotifier.value =v;
+                                            },
+                                            nationality: (v){},
+                                          )),
+                                    ).then((value) {
+                                      setState(() {});
+                                    });
+                                  },
+                                  child:const Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child:  Padding(
+                                      padding:  EdgeInsets.only(bottom: 16.0),
+                                      child: Text("*Country", style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: AppColor.colorGrey,
+                                          fontWeight: FontWeight.w500),),
+                                    ),
+                                  ),
+                                ) ;
+
+                              }
+
+                              return InkWell(
+                                onTap: (){
+                                  showMaterialModalBottomSheet(
+                                    context: context,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => Container(
+                                        color: Colors.white,
+                                        height: MediaQuery.of(context).size.height/1.2,
+                                        width: MediaQuery.of(context).size.width,
+                                        child:  BottomSheetCountryPicker(
+                                          countries: widget.countries,
+                                          countryName: (v) {
+                                          },
+                                          countryTel: (v) {
+                                            telCode = v;
+                                            countriesNotifier.value = v;
+
+                                          },
+                                          nationality: (v){},
+                                        )),
+                                  ).then((value) {
+                                    setState(() {});
+                                  });
+                                },
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 16.0),
+                                    child: Text('($telCode)', style:const TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.lightIndigo,
+                                        fontWeight: FontWeight.w500),),
                                   ),
                                 ),
-                                onTap: () {
-                                  telCode = value['tel'];
+                              ) ;
+                            }),
+
+
+                      ),
+                      Container(
+                        height: 1,
+                        width: 100,
+                        color: AppColor.lightIndigo,
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(width: 10,),
+                  ValueListenableBuilder(
+                      valueListenable: telCodeNotifier,
+                      builder: (BuildContext context, String value, Widget? child) {
+
+                        return  Visibility(
+                          visible: value.isNotEmpty,
+                          child: Expanded(child: Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
+                            child: SizedBox(
+                              height: 50.0,
+                              width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width ,
+                              child: TextFormField(
+                                controller: phoneController,
+                                keyboardType: TextInputType.phone,
+                                validator: (v) {
+                                  if (v!.isEmpty) {
+                                    return "Please enter phone number.";
+                                  } else {
+                                    return null;
+                                  }
                                 },
-                              )).toList(),
-                          onItemChanged: (v){
-
-                            countriesNotifier.value = v;
-                            selectedCountry = v;
-
-                          },
-                          errorText: '',
-
-                        );
-
-                      }
-
-                      return CustomCountryPicker(
-                        value: selectedCountry,
-                     /*   icon:const Icon(Icons.flag),*/
-                        hint: 'Country',
-                        items: widget.countries.map((value) =>
-                            DropdownMenuItem(
-                              value: value['name'],
-                              child: SizedBox(
-                                width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width/1.2,
-                                child: Row(
-                                  children: [
-                                /*    const Icon(
-                                      Icons.flag,
-                                      color: AppColor.aquaGreen,
-                                    ),*/
-                                    const SizedBox(width: 20),
-                                    Text(value['name'] ?? '',style: const TextStyle(
-                                        fontSize: 15.0,
-                                        color: AppColor.lightIndigo,
-                                        fontWeight: FontWeight.w500),),
-                                    Text(" (${value['tel']})"?? '',style: const TextStyle(
-                                        fontSize: 15.0,
-                                        color: AppColor.lightIndigo,
-                                        fontWeight: FontWeight.w500),),
-                                  ],
-                                ),
+                                style:const TextStyle(
+                                    fontSize: 15.0,
+                                    color: AppColor.lightIndigo,
+                                    fontWeight: FontWeight.w500),
+                                decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    hintText: " *Phone Number",
+                                    fillColor: AppColor.aquaCasper,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500)),
                               ),
-                              onTap: () {
-
-                              },
-                            )).toList(),
-                        onItemChanged: (v){
-
-                          countriesNotifier.value = v;
-                          selectedCountry = v;
-
-                        },
-                        errorText: '',
-
-                      );
-                    }),
-
-                /*    BlocBuilder<CountryCubits, CountryStates>(
-                    builder: (context, state) {
-                      if(state is CountryInitial){
-                        return const SizedBox();
-                      }
-
-                      if(state is CountryLoading){
-                        return const Center(child:  CupertinoActivityIndicator());
-
-                      }
-
-                      if(state is CountryLoaded){
-
-                        return  CustomCountryPicker(
-                          value: selectedCountry,
-                          icon:const Icon(Icons.flag),
-                          hint: 'Country',
-                          items: state.countries.map((value) =>
-                              DropdownMenuItem(
-                                value: value['name'],
-                                child: Container(
-                                  width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width/1.2,
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.flag,
-                                        color: AppColor.colorGrey,
-                                      ),
-                                      const SizedBox(width: 20),
-                                      Text(value['name'] ?? ''),
-                                     const Spacer(),
-                                      Text(value['tel'] ?? ''),
-                                    ],
-                                  ),
-                                ),
-                                onTap: () {
-
-                                },
-                              )).toList(),
-                          onItemChanged: (v){
-                            setState(() {
-                              selectedCountry = v;
-                            });
-                          },
-                          errorText: '',
-
+                            ),
+                          ),
+                          ),
                         );
-                      }
-                      else{
-                        return const Center(child: Text("No Data found"),);
-                      }
+                      }),
+                ],
+              ),
 
-                    }),*/
-              ),
-              Container(
-                height: 1,
-                color: AppColor.lightIndigo,
-              ),
               const SizedBox(
                 height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: SizedBox(
-                  height: 50.0,
-                  width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width ,
-                  child: TextFormField(
-                    controller: phoneController,
-                    keyboardType: TextInputType.phone,
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "Please enter phone number.";
-                      } else {
-                        return null;
-                      }
-                    },
-                    style:const TextStyle(
-                        fontSize: 15.0,
-                        color: AppColor.lightIndigo,
-                        fontWeight: FontWeight.w500),
-                    decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.lightIndigo),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.lightIndigo),
-                        ),
-                        hintText: " *Phone Number",
-                        fillColor: AppColor.aquaCasper,
-                        contentPadding: EdgeInsets.zero,
-                        hintStyle: TextStyle(
-                            fontSize: 14.0,
-                            color: AppColor.colorGrey,
-                            fontWeight: FontWeight.w500)),
-                  ),
-                ),
               ),
 
             ],
@@ -1185,7 +1131,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   context.read<SignupCubits>().saveSignup(
                                       signupRequest: SignupRequest(
                                           firstName: firstNameController.text,
-                                          lastName: firstNameController.text,
+                                          lastName: lastNameController.text,
                                           userName: userNameController.text,
                                           gender: selectedGender,
                                           birthday: dob,

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sarya/authentication/signup/signup_view_model/avatar_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/signup_cubits.dart';
+import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../../locator.dart';
 import '../../../navigation/navigation_service.dart';
@@ -94,7 +95,11 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
                   width: 20,
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: () async{
+
+                    SharedPrefs pref =SharedPrefs();
+                    String url = '${widget.map['url']}${widget.map['listOfColor'][selectedPic]}.${widget.map['format']}';
+                    pref.saveProfilePath(url);
 
                     SignupRequest  req =  context.read<SignupCubits>().getSignupRequest;
                     SignupRequest signupRequest = SignupRequest(
@@ -115,6 +120,8 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
                         avatar: widget.map['listOfColor'][selectedPic]
 
                     );
+
+
                     context.read<SignupCubits>().doSignup(signupRequest: signupRequest, navigationService: _navigationService);
 
                   },
