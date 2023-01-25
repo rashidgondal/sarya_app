@@ -37,7 +37,6 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
 
-  TextEditingController cOFController = TextEditingController();
 
   TextEditingController emailNameController = TextEditingController();
   TextEditingController passwordNameController = TextEditingController();
@@ -63,14 +62,16 @@ class _SignupScreenState extends State<SignupScreen> {
 
   List listGender = ["Male", 'Female'];
   String? selectedGender;
-  String dob = '', telCode = '', nationality='';
+  String dob = '', telCode = '', nationality='', _cor ='';
 
   ValueNotifier<String> dateValueNotifier = ValueNotifier('');
   ValueNotifier<String> genderNotifier = ValueNotifier('');
   ValueNotifier<String> countriesNotifier = ValueNotifier('');
   ValueNotifier<String> nationalityNotifier = ValueNotifier('');
 
-  String? selectedCountry, selectedNationality;
+  ValueNotifier<String> corNotifier = ValueNotifier('');
+
+  String? selectedCountry, selectedNationality, selectedCOR;
 
   @override
   void initState() {
@@ -334,7 +335,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: SizedBox(
                           height: 20,
                           child: Text(
-                            " * $value", style: const TextStyle(
+                            "$value", style: const TextStyle(
                               fontSize: 15.0,
                               color: AppColor.lightIndigo,
                               fontWeight: FontWeight.w500),),
@@ -363,10 +364,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   if (value.isEmpty) {
                     return CustomCountryPicker(
                       value: selectedNationality,
-                      icon: const Icon(
+                  /*    icon: const Icon(
                         Icons.flag,
                         color: AppColor.colorGrey,
-                      ),
+                      ),*/
                       hint: 'Nationality',
                       items: widget.countries
                           .map((value) => DropdownMenuItem(
@@ -405,7 +406,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   return CustomCountryPicker(
                     value: selectedNationality,
-                    icon: const Icon(Icons.flag),
+                   // icon: const Icon(Icons.flag),
                     hint: 'Nationality',
                     items: widget.countries
                         .map((value) => DropdownMenuItem(
@@ -420,10 +421,10 @@ class _SignupScreenState extends State<SignupScreen> {
                             1.2,
                         child: Row(
                           children: [
-                            const Icon(
+                      /*      const Icon(
                               Icons.flag,
                               color: AppColor.aquaGreen,
-                            ),
+                            ),*/
                             const SizedBox(width: 20),
                             Text(
                               value['nationality'] ?? '',
@@ -435,13 +436,19 @@ class _SignupScreenState extends State<SignupScreen> {
                           ],
                         ),
                       ),
-                      onTap: () {},
+                      onTap: () {
+
+                          nationality = value['nationality'];
+
+                      },
                     ))
                         .toList(),
+
                     onItemChanged: (v) {
                       nationalityNotifier.value = v;
-                      selectedCountry = v;
+                      selectedNationality = v;
                     },
+
                     errorText: '',
                   );
                 })),
@@ -452,34 +459,108 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(
                 height: 30,
               ),
-              TextFormField(
-                controller: cOFController,
-                validator: (v) {
-                  if (v!.isEmpty) {
-                    return "Please enter Country of residence.";
-                  } else {
-                    return null;
-                  }
-                },
-                style:const TextStyle(
-                    fontSize: 15.0,
-                    color: AppColor.lightIndigo,
-                    fontWeight: FontWeight.w500),
+              SizedBox(
+                  height: 50.0,
+                  child: ValueListenableBuilder(
+                      valueListenable: corNotifier,
+                      builder:
+                          (BuildContext context, String value, Widget? child) {
+                        if (value.isEmpty) {
+                          return CustomCountryPicker(
+                            value: selectedCOR,
 
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    hintText: " *Country of Residence",
-                    fillColor: AppColor.aquaCasper,
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.colorGrey,
-                        fontWeight: FontWeight.w500)),
+                            hint: 'Country of Residence',
+                            items: widget.countries
+                                .map((value) => DropdownMenuItem(
+                              value: value['name'],
+                              child: SizedBox(
+                                width: MediaQuery.of(
+                                    locator<NavigationService>()
+                                        .navigatorKey
+                                        .currentContext!)
+                                    .size
+                                    .width /
+                                    1.2,
+                                child: Row(
+                                  children: [
+                            /*        const Icon(
+                                      Icons.flag,
+                                      color: AppColor.colorGrey,
+                                    ),*/
+                                    const SizedBox(width: 20),
+                                    Text(value['name'] ?? ''),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+
+                                setState(() {
+                                  _cor = value['name'];
+                                  isIgnorePointer = false;
+
+                                });                              },
+                            ))
+                                .toList(),
+                            onItemChanged: (v) {
+                              corNotifier.value = v;
+                              selectedCOR = v;
+                            },
+                            errorText: '',
+                          );
+                        }
+
+                        return CustomCountryPicker(
+                          value: selectedCOR,
+                          hint: 'Country of Residence',
+                          items: widget.countries
+                              .map((value) => DropdownMenuItem(
+                            value: value['name'],
+                            child: SizedBox(
+                              width: MediaQuery.of(
+                                  locator<NavigationService>()
+                                      .navigatorKey
+                                      .currentContext!)
+                                  .size
+                                  .width /
+                                  1.2,
+                              child: Row(
+                                children: [
+                            /*      const Icon(
+                                    Icons.flag,
+                                    color: AppColor.aquaGreen,
+                                  ),*/
+                                  const SizedBox(width: 20),
+                                  Text(
+                                    value['name'] ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.lightIndigo,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+
+                              setState(() {
+                                _cor = value['name'];
+                                isIgnorePointer = false;
+
+                              });
+
+                            },
+                          ))
+                              .toList(),
+                          onItemChanged: (v) {
+                            corNotifier.value = v;
+                            selectedCOR = v;
+                          },
+                          errorText: '',
+                        );
+                      })),
+              Container(
+                height: 1,
+                color: AppColor.lightIndigo,
               ),
             ],
           ),
@@ -576,7 +657,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       if(value.isEmpty) {
                         return CustomCountryPicker(
                           value: selectedCountry,
-                          icon:const Icon(Icons.flag, color: AppColor.colorGrey,),
+                      /*    icon:const Icon(Icons.flag, color: AppColor.colorGrey,),*/
                           hint: 'Country',
                           items: widget.countries.map((value) =>
                               DropdownMenuItem(
@@ -586,10 +667,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                   width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width/1.2,
                                   child: Row(
                                     children: [
-                                      const Icon(
+                                 /*     const Icon(
                                         Icons.flag,
                                         color: AppColor.colorGrey,
-                                      ),
+                                      ),*/
                                       const SizedBox(width: 20),
                                       Text(value['name'] ?? ''),
                                       Text(' (${value['tel']})' ),
@@ -614,7 +695,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                       return CustomCountryPicker(
                         value: selectedCountry,
-                        icon:const Icon(Icons.flag),
+                     /*   icon:const Icon(Icons.flag),*/
                         hint: 'Country',
                         items: widget.countries.map((value) =>
                             DropdownMenuItem(
@@ -623,10 +704,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                 width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width/1.2,
                                 child: Row(
                                   children: [
-                                    const Icon(
+                                /*    const Icon(
                                       Icons.flag,
                                       color: AppColor.aquaGreen,
-                                    ),
+                                    ),*/
                                     const SizedBox(width: 20),
                                     Text(value['name'] ?? '',style: const TextStyle(
                                         fontSize: 15.0,
@@ -1109,7 +1190,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           gender: selectedGender,
                                           birthday: dob,
                                           nationality: nationality,
-                                          country: cOFController.text,
+                                          country: _cor,
                                           email: emailNameController.text,
                                           password: passwordNameController.text,
                                           telCode: telCode,
@@ -1173,6 +1254,8 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Widget _buildButton({required int index}){
+    print("_cor.............$_cor");
+
     if(index == 0){
       if(userNameController.text.isEmpty){
         return Container(
@@ -1298,7 +1381,9 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         );
       }
-      if(cOFController.text.isEmpty){
+
+      print("_cor.............$_cor");
+      if(_cor.isEmpty){
         return Container(
           height: 46.0,
           width: 200.0,
@@ -1315,6 +1400,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         );
       }
+
       isIgnorePointer = false;
       return Container(
         height: 46.0,

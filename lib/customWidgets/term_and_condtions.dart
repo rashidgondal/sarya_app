@@ -16,12 +16,16 @@ class TermAndCondition extends StatefulWidget {
 class _TermAndConditionState extends State<TermAndCondition> {
   late NavigationService _navigationService;
 
+    String date = '';
   @override
   void initState() {
     super.initState();
     _navigationService = locator<NavigationService>();
-
   }
+
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -52,8 +56,8 @@ class _TermAndConditionState extends State<TermAndCondition> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: const [
-                   Icon(Icons.question_mark,size: 20,),
-                  Text("Last update: November 25, 2022", style: TextStyle(fontSize: 12, color: AppColor.subtitleColor),)
+                   Icon(Icons.date_range,size: 20,),
+                  Text("Last update: January 25, 2023", style: TextStyle(fontSize: 12, color: AppColor.subtitleColor),)
                 ],),
               ),
               const SizedBox(height: 20.0,),
@@ -93,7 +97,7 @@ class _TermAndConditionState extends State<TermAndCondition> {
                           borderRadius: BorderRadius.circular(8.0)),
                       child: const Center(
                         child: Text(
-                          "Next",
+                          "Accept",
                           style: TextStyle(
                               fontSize: 15.0, color: AppColor.whiteColor),
                         ),
