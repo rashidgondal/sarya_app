@@ -9,8 +9,6 @@ import 'package:sarya/locator.dart';
 import 'authentication/signin/signin_view_model/signin_cubits.dart';
 import 'navigation/navigation_service.dart';
 import  'navigation/router.dart' as routes;
-
-
 void main() {
   setupLocator();
   runApp(const MyApp());
