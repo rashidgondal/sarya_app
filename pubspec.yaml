@@ -50,6 +50,7 @@ dependencies:
   confetti: ^0.7.0
   cached_network_image: ^3.2.3
   animate_do: ^3.0.2
+  modal_bottom_sheet: ^2.1.2
 
 dev_dependencies:
   flutter_test:
