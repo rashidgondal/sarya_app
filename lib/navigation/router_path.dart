@@ -20,6 +20,14 @@ const String dayDesignRoute             = "Day Design Intinerary Screen";
 const String checkListRoute             = "CheckList Screen";
 const String soldIntineraryRoute        = "Sold Intinerary Screen";
 const String shareIntineraryRoute       = "Share Intinerary Screen";
-const String animationRoute       = "Animation Screen";
+const String animationRoute             = "Animation Screen";
+const String settingRoute               = "Setting Screen";
+
+const String nameSettingRoute           = "Name Setting Screen";
+const String avatarSettingRoute           = "Avatar Setting Screen";
+const String mobileSettingRoute           = "Mobile Setting Screen";
+const String emailSettingRoute           = "Email Setting Screen";
+const String passwordSettingRoute           = "Password Setting Screen";
+const String birthdaySettingRoute           = "Birth Setting Screen";
 
 

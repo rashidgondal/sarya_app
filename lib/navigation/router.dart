@@ -5,6 +5,12 @@ import 'package:sarya/authentication/signin/view/login_screen.dart';
 import 'package:sarya/authentication/signup/model/signup_request.dart';
 import 'package:sarya/authentication/signup/view/choose_avatar.dart';
 import 'package:sarya/authentication/signup/view/success_screen.dart';
+import 'package:sarya/settings/view/avatar_screen.dart';
+import 'package:sarya/settings/view/birthday_screen.dart';
+import 'package:sarya/settings/view/email_screen.dart';
+import 'package:sarya/settings/view/name_screen.dart';
+import 'package:sarya/settings/view/password_screen.dart';
+import 'package:sarya/settings/view/phone_screen.dart';
 import 'package:sarya/utils/constant.dart';
 import 'package:sarya/create_intinerary/view/day_design_intinerary.dart';
 import 'package:sarya/create_intinerary/view/summary.dart';
@@ -21,6 +27,7 @@ import '../customWidgets/term_and_condtions.dart';
 import '../home/view/draft_itinerary_screen.dart';
 import '../home/view/sold_itinerary_screen.dart';
 import '../main.dart';
+import '../settings/view/settings_home_screen.dart';
 import 'router_path.dart' as routes;
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -108,6 +115,33 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) =>   ShowAnimation(signInRequest: settings.arguments as SignInRequest,),
       );
+    case routes.settingRoute:
+      return MaterialPageRoute(
+        builder: (context) =>  const SettingsHome());
+
+    case routes.nameSettingRoute:
+      return MaterialPageRoute(
+        builder: (context) =>  const NameScreen(),
+      );
+    case routes.avatarSettingRoute:
+      return MaterialPageRoute(
+        builder: (context) =>  const AvatarScreen(),
+      );
+    case routes.mobileSettingRoute:
+      return MaterialPageRoute(
+        builder: (context) =>  const PhoneScreen(),
+      );
+    case routes.emailSettingRoute:
+      return MaterialPageRoute(
+        builder: (context) =>  const EmailScreen(),
+      );
+    case routes.birthdaySettingRoute:
+      return MaterialPageRoute(
+        builder: (context) => const BirthdayScreen()
+      );
+    case routes.passwordSettingRoute:
+      return MaterialPageRoute(
+          builder: (context) =>  const PasswordScreen());
 
     default:
       return MaterialPageRoute(

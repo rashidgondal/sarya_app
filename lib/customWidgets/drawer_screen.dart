@@ -171,7 +171,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 const SizedBox(height: 1,),
                 InkWell(
                   onTap: (){
-                  },
+
+                    _navigationService.navigateTo(settingRoute);
+                    },
                    child: Padding(
                     padding:const  EdgeInsets.only(left: 30, right: 30),
                     child:   TextDecoratedContainer(titleWidget:const Text(

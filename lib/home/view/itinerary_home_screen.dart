@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sarya/authentication/signin/models/signin_response_model.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/locator.dart';
@@ -57,8 +56,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         toolbarHeight: 60,
         leading: IconButton(
             icon: profilePath == null
-                ? SvgPicture.asset('user'.svg)
-                : SvgPicture.network(profilePath!),
+                ? SvgPicture.asset('user'.svg, height: 16.0, width: 16.0,)
+                : SvgPicture.network(profilePath!, height: 16.0, width: 16.0,),
             onPressed: () => _scaffoldKey.currentState!.openDrawer()),
         backgroundColor: AppColor.aquaCasper2,
         title: const Text(

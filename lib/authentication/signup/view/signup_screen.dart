@@ -73,6 +73,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
   String? selectedCountry;
 
+  bool showPassword = true;
+
+
   @override
   void initState() {
     super.initState();
@@ -629,6 +632,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
                     ),
+                    
                     hintText: " *Password",
                     fillColor: AppColor.aquaCasper,
                     contentPadding: EdgeInsets.zero,

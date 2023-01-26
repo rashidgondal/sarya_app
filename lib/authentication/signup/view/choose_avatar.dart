@@ -110,10 +110,9 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
                     ),
                     InkWell(
                       onTap: () async {
-                        SharedPrefs pref = SharedPrefs();
                         String url =
                             '${widget.map['url']}${widget.map['listOfColor'][selectedPic]}.${widget.map['format']}';
-                        pref.saveProfilePath(url);
+
 
                         SignupRequest req =
                             context.read<SignupCubits>().getSignupRequest;
@@ -132,7 +131,7 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
                             favCountry: req.favCountry,
                             hobbies: req.hobbies,
                             extraInfo: req.favCountry,
-                            avatar: widget.map['listOfColor'][selectedPic]);
+                            avatar: url);
 
                         context.read<SignupCubits>().doSignup(
                             signupRequest: signupRequest,
