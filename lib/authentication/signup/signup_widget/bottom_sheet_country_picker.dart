@@ -82,7 +82,9 @@ class _BottomSheetCountryPickerState extends State<BottomSheetCountryPicker> {
                                 TextStyle(fontSize: 13, color: Colors.black26)),
                       );
                     } else {
-                      if ('${e['name']}'.contains(searchKeyWord)) {
+                      if ('${e['name']}'
+                          .toLowerCase()
+                          .contains(searchKeyWord.toLowerCase())) {
                         return ListTile(
                           onTap: () {
                             widget.country_name!.call('${e['name']}');
