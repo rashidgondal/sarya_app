@@ -1071,17 +1071,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ],
                     ),
-                    // child: PageView.builder(
-                    //     itemCount: listImage.length,
-                    //     reverse: false,
-                    //     physics: const NeverScrollableScrollPhysics(),
-                    //     controller: _pageControllerImage,
-                    //     itemBuilder: (c, index) {
-                    //       return Container(
-                    //         color: AppColor.whiteColor,
-                    //         child: listImage[index],
-                    //       );
-                    //     }),
                   ),
                 )),
           ),

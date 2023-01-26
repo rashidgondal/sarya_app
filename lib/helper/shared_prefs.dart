@@ -7,6 +7,7 @@ class SharedPrefs {
    final String _countriesResponseKey  = 'Countries';
    final String _profilePathKey        = 'Profile pic path';
    final String _saveUserDataKey       = 'Save user';
+   final String _tokenKey       = 'Save token';
 
 
     Future getUser() async {
@@ -38,6 +39,17 @@ class SharedPrefs {
       final prefs = await SharedPreferences.getInstance();
       prefs.setString(_profilePathKey, value);
     }
+
+
+   Future getToken() async {
+     final prefs = await SharedPreferences.getInstance();
+     return prefs.getString(_tokenKey);
+   }
+
+   Future<void> saveToken(dynamic value) async {
+     final prefs = await SharedPreferences.getInstance();
+     prefs.setString(_tokenKey, value);
+   }
 
    Future<void> clearCache() async {
      final prefs = await SharedPreferences.getInstance();

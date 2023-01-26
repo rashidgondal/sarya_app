@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sarya/authentication/signup/signup_view_model/avatar_cubits.dart';
-import 'package:sarya/authentication/signup/signup_view_model/avatar_states.dart';
-import 'package:sarya/authentication/signup/signup_view_model/signup_cubits.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../../locator.dart';
 import '../../../navigation/navigation_service.dart';
-import '../model/signup_request.dart';
+import '../signup_view_model/avatar_states.dart';
 
 class AvatarsTypesScreen extends StatefulWidget {
 

@@ -78,4 +78,15 @@ class SaryaAPI {
       rethrow;
     }
   }
+
+
+  Future<dynamic> update({required body}) async {
+    try {
+      String url = '';
+      url = ApiRoutes.update;
+      return await _http.iPostRequest(url, data: body);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

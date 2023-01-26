@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 
+import '../../../../helper/shared_prefs.dart';
 import '../connectivity/dio_connectivity_request_retrier.dart';
 import '../interceptor/app_interceptors.dart';
 import '/core/core.dart';
@@ -79,6 +80,24 @@ class HTTP implements IHTTP {
       rethrow;
     }
   }
+
+
+  @override
+  Future<dynamic> iPostRequest(String url,
+      {Map<String, dynamic>? data,
+        Map<String, dynamic>? queryParameters}) async {
+    try {
+
+      SharedPrefs prefs = SharedPrefs();
+      var token = await prefs.getToken();
+      var res = await dioInstance(token).post(url, data: data);
+
+      var result = ApiResponse().response(res);
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 class HTTPAUTH with IHTTP {
@@ -144,4 +163,36 @@ class HTTPAUTH with IHTTP {
       rethrow;
     }
   }
+
+
+  @override
+  Future<dynamic> iPostRequest(String url,
+      {Map<String, dynamic>? data,
+        Map<String, dynamic>? queryParameters}) async {
+    try {
+
+      SharedPrefs prefs = SharedPrefs();
+      var token = await prefs.getToken();
+      var res = await dioInstance(token).post(url, data: data);
+
+      var result = ApiResponse().response(res);
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+}
+
+
+
+Dio dioInstance(String accessCode) {
+
+  Dio dio = Dio();
+  BaseOptions options =  BaseOptions(
+      baseUrl: ApiRoutes.baseURL,
+      headers: {'x-access-token': '$accessCode'}
+  );
+
+  dio.options = options;
+  return dio;
 }

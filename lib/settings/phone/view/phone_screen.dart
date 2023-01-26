@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
-import '../../customWidgets/text_decorated_icon.dart';
+import '../../../customWidgets/text_decorated_icon.dart';
 
-class EmailScreen extends StatefulWidget {
-  const EmailScreen({Key? key}) : super(key: key);
+class PhoneScreen extends StatefulWidget {
+  const PhoneScreen({Key? key}) : super(key: key);
 
   @override
-  State<EmailScreen> createState() => _EmailScreenState();
+  State<PhoneScreen> createState() => _PhoneScreenState();
 }
 
-class _EmailScreenState extends State<EmailScreen> {
+class _PhoneScreenState extends State<PhoneScreen> {
 
   TextEditingController textEditingController = TextEditingController();
 
@@ -26,7 +26,7 @@ class _EmailScreenState extends State<EmailScreen> {
           backgroundColor: AppColor.whiteColor,
           appBar: AppBar(
             elevation: 0,
-            title: const Text("Email", style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),),
+            title: const Text("Mobile No", style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),),
             leading: IconButton(icon: const Icon(Icons.arrow_back_ios, color: AppColor.lightIndigo,),
               onPressed: () {
                // _navigationService.goBack();
@@ -39,16 +39,12 @@ class _EmailScreenState extends State<EmailScreen> {
                 height: 50,
                 width: size.width,
                 color: AppColor.colorLiteGrey,
-                child:   Padding(
-                  padding:const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                        SizedBox(
-                            width: size.width/1.2,
-                            child:const Text("You can use this email address to log in, or for password recovery.", style: TextStyle(fontSize: 14, color: AppColor.headingColor2),)),
-                    ],
-                  ),
+                child:Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const[
+                      SizedBox(width: 40.0,),
+                      Text("Account", style: TextStyle(fontSize: 14, color: AppColor.headingColor2),),
+                  ],
                 ),
               ),
             ),
@@ -67,20 +63,34 @@ class _EmailScreenState extends State<EmailScreen> {
                       child:const TextDecoratedContainer(
 
                         titleWidget: Text(
-                          'Sarya@gmail.com',
+                          'AE - United Arab Emirate',
+                          style:  TextStyle(
+                              fontSize: 15.0, color: AppColor.headingColor2),
+                        ),
+                        iconImage: Icon(Icons.question_mark ,color: AppColor.colorBlack,size: 15.0,),)),
+                ),
+                Padding(
+                  padding:const EdgeInsets.symmetric(horizontal: 30),
+                  child: InkWell(
+                      onTap: (){
+
+                      },
+                      child:const TextDecoratedContainer(
+
+                        titleWidget: Text(
+                          '+923000275513',
                           style:  TextStyle(
                               fontSize: 15.0, color: AppColor.headingColor2),
                         ),
                         iconImage: Icon(Icons.question_mark ,color: AppColor.colorBlack,size: 15.0,),)),
                 ),
 
-
                 Padding(
                   padding:const EdgeInsets.symmetric(horizontal: 30),
                   child: Row(
                     children: [
                       const Text(
-                        "Your email is verified",
+                        "Let friends find me by my mobile number",
                         style: TextStyle(
                             fontSize: 12.0,
                             fontWeight: FontWeight.w400,

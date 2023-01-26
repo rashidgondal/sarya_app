@@ -114,5 +114,23 @@ class AuthRepository{
     }
   }
 
+  Future<dynamic> update({required body}) async{
+    try{
+
+      log('body......$body', name:'update | AuthRepository');
+
+      var data =await _saryaAPI.update(body: body);
+
+      log('data......$data', name:'update | AuthRepository');
+
+      return data;
+    }catch(e){
+      log('catch......${e.toString()}', name:'update | AuthRepository');
+
+      rethrow;
+    }
+  }
+
+
 
 }

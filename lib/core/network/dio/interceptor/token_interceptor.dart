@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
+import 'package:sarya/helper/shared_prefs.dart';
 
 import '../../../../helper/userStorage.dart';
 
 class TokenInterceptors extends Interceptor {
   // ignore: prefer_typing_uninitialized_variables
-  var token;
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    await UserSecureStorage()
-        .getField('accessToken')
-        .then((value) => token = value);
+    SharedPrefs prefs = SharedPrefs();
+    var token = await prefs.getToken();
+    print("tokent ..........$token");
     options.headers['Authorization'] = 'x-access-token $token';
 
     handler.next(options);

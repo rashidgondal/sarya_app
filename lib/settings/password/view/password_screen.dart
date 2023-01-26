@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
-import '../../customWidgets/text_decorated_icon.dart';
+import '../../../customWidgets/text_decorated_icon.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({Key? key}) : super(key: key);

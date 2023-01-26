@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
-import '../../customWidgets/dialoge_airport_cost.dart';
-import '../../customWidgets/dialoge_calender.dart';
-import '../../customWidgets/text_decorated_icon.dart';
+import '../../../customWidgets/dialoge_airport_cost.dart';
+import '../../../customWidgets/dialoge_calender.dart';
+import '../../../customWidgets/text_decorated_icon.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({Key? key}) : super(key: key);

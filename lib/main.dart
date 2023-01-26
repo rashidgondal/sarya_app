@@ -7,6 +7,7 @@ import 'package:sarya/authentication/signup/signup_view_model/avatar_cubits.dart
 import 'package:sarya/authentication/signup/signup_view_model/country_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/signup_cubits.dart';
 import 'package:sarya/locator.dart';
+import 'package:sarya/settings/name/view_model/name_cubits.dart';
 import 'authentication/signin/signin_view_model/signin_cubits.dart';
 import 'navigation/navigation_service.dart';
 import  'navigation/router.dart' as routes;
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AvatarCubits()),
         BlocProvider(create: (context) => CountryCubits()),
         BlocProvider(create: (context) => ResetPasswordCubits()),
+        BlocProvider(create: (context) => NameCubits()),
       ],
       child: MaterialApp(
         title: 'Sarya',
