@@ -39,6 +39,11 @@ class SharedPrefs {
       prefs.setString(_profilePathKey, value);
     }
 
+   Future<void> clearCache() async {
+     final prefs = await SharedPreferences.getInstance();
+     prefs.clear();
+   }
+
 
 
 }

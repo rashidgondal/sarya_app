@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sarya/customWidgets/text_decorated_icon.dart';
 import 'package:sarya/extensions/string_extension.dart';
+import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
@@ -170,7 +171,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 const SizedBox(height: 1,),
                 InkWell(
                   onTap: (){
-
                   },
                    child: Padding(
                     padding:const  EdgeInsets.only(left: 30, right: 30),
@@ -187,6 +187,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 const SizedBox(height: 1,),
                 InkWell(
                   onTap: (){
+                    SharedPrefs pref = SharedPrefs();
+                    pref.clearCache();
                     _navigationService.navigatePushReplace(loginRout);
                   },
                   child: Padding(

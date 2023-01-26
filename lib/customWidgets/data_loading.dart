@@ -31,7 +31,7 @@ class _DataLoadingState extends State<DataLoading> {
               size: 50.0,
             ),
           )
-        ):SizedBox()
+        ):const SizedBox()
       ],
     );
   }
