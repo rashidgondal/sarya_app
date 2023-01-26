@@ -33,7 +33,6 @@ class _SignupScreenState extends State<SignupScreen> {
     keepPage: true,
   );
 
-  bool isIgnorePointer = true;
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
@@ -237,7 +236,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                     1.2,
                                 child: Row(
                                   children: [
-                                    const SizedBox(width: 20),
                                     Text(
                                       value,
                                       style: const TextStyle(
@@ -392,14 +390,20 @@ class _SignupScreenState extends State<SignupScreen> {
                               setState(() {});
                             });
                           },
-                          child:const Align(
+                          child: Align(
                             alignment: Alignment.centerLeft,
                             child:  Padding(
-                              padding:  EdgeInsets.only(bottom: 16.0),
-                              child: Text("*Nationality", style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: AppColor.colorGrey,
-                                  fontWeight: FontWeight.w500),),
+                              padding:const  EdgeInsets.only(bottom: 16.0),
+                              child: Row(
+                                children:const [
+                                  Text("*Nationality", style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: AppColor.colorGrey,
+                                      fontWeight: FontWeight.w500),),
+                                  Spacer(),
+                                  Icon(Icons.keyboard_arrow_down_outlined, color: AppColor.headingColor2,)
+                                ],
+                              ),
                             ),
                           ),
                         ) ;
@@ -435,10 +439,17 @@ class _SignupScreenState extends State<SignupScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Text(nationality, style:const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),),
+                            child: Row(
+                              children: [
+                                Text(nationality, style:const TextStyle(
+                                    fontSize: 14.0,
+                                    color: AppColor.lightIndigo,
+                                    fontWeight: FontWeight.w500),),
+                                const Spacer(),
+                                const Icon(Icons.keyboard_arrow_down_outlined, color: AppColor.lightIndigo,)
+
+                              ],
+                            ),
                           ),
                         ),
                       ) ;
@@ -485,14 +496,20 @@ class _SignupScreenState extends State<SignupScreen> {
                                     setState(() {});
                                   });
                                 },
-                                child:const Align(
+                                child: Align(
                                   alignment: Alignment.centerLeft,
                                   child:  Padding(
-                                    padding:  EdgeInsets.only(bottom: 16.0),
-                                    child: Text("*Country of Residence", style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.colorGrey,
-                                        fontWeight: FontWeight.w500),),
+                                    padding:const  EdgeInsets.only(bottom: 16.0),
+                                    child: Row(
+                                      children: const[
+                                        Text("*Country of Residence", style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: AppColor.colorGrey,
+                                            fontWeight: FontWeight.w500),),
+                                        Spacer(),
+                                        Icon(Icons.keyboard_arrow_down_outlined, color: AppColor.headingColor2,)
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ) ;
@@ -511,6 +528,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       child:  BottomSheetCountryPicker(
                                         countries: widget.countries,
                                         countryName: (v) {
+
                                           corNotifier.value = v;
                                           _cor =v;
                                         },
@@ -529,17 +547,25 @@ class _SignupScreenState extends State<SignupScreen> {
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Text(_cor, style:const TextStyle(
-                                      fontSize: 14.0,
-                                      color: AppColor.lightIndigo,
-                                      fontWeight: FontWeight.w500),),
+                                  child:  Row(
+                                    children: [
+                                      Text(_cor, style:const TextStyle(
+                                          fontSize: 14.0,
+                                          color: AppColor.lightIndigo,
+                                          fontWeight: FontWeight.w500),),
+                                      const Spacer(),
+                                      const Icon(Icons.keyboard_arrow_down_outlined, color: AppColor.lightIndigo,)
+                                    ],
+                                  ),
+
+
                                 ),
                               ),
                             ) ;
 
 
                       })),
-              Container(
+                      Container(
                 height: 1,
                 color: AppColor.lightIndigo,
               ),
@@ -635,10 +661,11 @@ class _SignupScreenState extends State<SignupScreen> {
                     children: [
                       SizedBox(
                         height: 49.0,
-                        width: 100,
+                        width: 90,
                         child: ValueListenableBuilder(
-                            valueListenable: countriesNotifier,
+                            valueListenable: telCodeNotifier,
                             builder: (BuildContext context, String value, Widget? child) {
+                              print("value............$value");
 
                               if(value.isEmpty) {
                                 return InkWell(
@@ -656,8 +683,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                             },
                                             countryTel: (v) {
-                                              telCode = v;
+                                              print("countryTel...1.........$telCode");
                                               telCodeNotifier.value =v;
+                                              telCode = v;
                                             },
                                             nationality: (v){},
                                           )),
@@ -665,14 +693,23 @@ class _SignupScreenState extends State<SignupScreen> {
                                       setState(() {});
                                     });
                                   },
-                                  child:const Align(
+                                  child: Align(
                                     alignment: Alignment.bottomCenter,
                                     child:  Padding(
-                                      padding:  EdgeInsets.only(bottom: 16.0),
-                                      child: Text("*Country", style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: AppColor.colorGrey,
-                                          fontWeight: FontWeight.w500),),
+                                      padding: const  EdgeInsets.only(bottom: 12.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children:const [
+                                          Text("Country", style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: AppColor.colorGrey,
+                                              fontWeight: FontWeight.w500),),
+                                           SizedBox(width: 5,),
+                                           Icon(Icons.keyboard_arrow_down_outlined, color: AppColor.headingColor2,)
+
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ) ;
@@ -693,8 +730,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                           countryName: (v) {
                                           },
                                           countryTel: (v) {
+                                            print("countryTel...1.........$telCode");
+
+                                            telCodeNotifier.value = v;
                                             telCode = v;
-                                            countriesNotifier.value = v;
 
                                           },
                                           nationality: (v){},
@@ -706,11 +745,20 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 16.0),
-                                    child: Text('($telCode)', style:const TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.lightIndigo,
-                                        fontWeight: FontWeight.w500),),
+                                    padding: const EdgeInsets.only(bottom: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+
+                                      children: [
+                                        Text(telCode, style:const TextStyle(
+                                            fontSize: 14.0,
+                                            color: AppColor.lightIndigo,
+                                            fontWeight: FontWeight.w500),),
+                                        const  SizedBox(width: 5,),
+                                        const Icon(Icons.keyboard_arrow_down_outlined, color: AppColor.lightIndigo,)
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ) ;
@@ -720,7 +768,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       Container(
                         height: 1,
-                        width: 100,
+                        width: 90,
                         color: AppColor.lightIndigo,
                       ),
                     ],
@@ -731,45 +779,42 @@ class _SignupScreenState extends State<SignupScreen> {
                       valueListenable: telCodeNotifier,
                       builder: (BuildContext context, String value, Widget? child) {
 
-                        return  Visibility(
-                          visible: value.isNotEmpty,
-                          child: Expanded(child: Padding(
-                            padding: const EdgeInsets.only(top: 2.0),
-                            child: SizedBox(
-                              height: 50.0,
-                              width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width ,
-                              child: TextFormField(
-                                controller: phoneController,
-                                keyboardType: TextInputType.phone,
-                                validator: (v) {
-                                  if (v!.isEmpty) {
-                                    return "Please enter phone number.";
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                style:const TextStyle(
-                                    fontSize: 15.0,
-                                    color: AppColor.lightIndigo,
-                                    fontWeight: FontWeight.w500),
-                                decoration: const InputDecoration(
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                                    ),
-                                    hintText: " *Phone Number",
-                                    fillColor: AppColor.aquaCasper,
-                                    contentPadding: EdgeInsets.zero,
-                                    hintStyle: TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.colorGrey,
-                                        fontWeight: FontWeight.w500)),
-                              ),
+                        return  Expanded(child: Padding(
+                          padding: const EdgeInsets.only(top: 2.0),
+                          child: SizedBox(
+                            height: 50.0,
+                            width: MediaQuery.of(locator<NavigationService>().navigatorKey.currentContext!).size.width ,
+                            child: TextFormField(
+                              controller: phoneController,
+                              keyboardType: TextInputType.phone,
+                              validator: (v) {
+                                if (v!.isEmpty) {
+                                  return "Please enter phone number.";
+                                } else {
+                                  return null;
+                                }
+                              },
+                              style:const TextStyle(
+                                  fontSize: 15.0,
+                                  color: AppColor.lightIndigo,
+                                  fontWeight: FontWeight.w500),
+                              decoration: const InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+                                  hintText: " *Phone Number",
+                                  fillColor: AppColor.aquaCasper,
+                                  contentPadding: EdgeInsets.zero,
+                                  hintStyle: TextStyle(
+                                      fontSize: 14.0,
+                                      color: AppColor.colorGrey,
+                                      fontWeight: FontWeight.w500)),
                             ),
                           ),
-                          ),
+                        ),
                         );
                       }),
                 ],
@@ -901,7 +946,6 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    print("isIgnorePointer........$isIgnorePointer");
 
     return Container(
       color: AppColor.whiteColor,
@@ -1026,7 +1070,6 @@ class _SignupScreenState extends State<SignupScreen> {
                     valueListenable: valueNotifier,
                     builder: (BuildContext context, int value, Widget? child) {
                       if(value == 3){
-                        isIgnorePointer = false;
                       }
                       return Column(
                         children: [
@@ -1083,75 +1126,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           const SizedBox(
                             height: 30,
                           ),
-                          IgnorePointer(
-                            ignoring:isIgnorePointer ,
-                            child: InkWell(
-                              onTap: () {
-                             /*   if (value == 0) {
-                                  if (_formKey.currentState!.validate()) {
-
-
-                                  } else {
-                                    return;
-                                  }
-                                }
-
-                                if (value == 1) {
-                                  if (_formKey2.currentState!.validate()) {
-                                  } else {
-                                    return;
-                                  }
-                                }
-
-                                if (value == 2) {
-                                  if (_formKey3.currentState!.validate()) {
-                                  } else {
-                                    return;
-                                  }
-                                }
-
-                                if (value == 3) {
-                                  if (_formKey4.currentState!.validate()) {
-                                  } else {
-                                    return;
-                                  }
-                                }*/
-
-                                int position = 1 + value;
-                                total_width = total_width + 50;
-                                setState(() {});
-                                _pageController.animateToPage(position,
-                                    curve: Curves.decelerate,
-                                    duration: const Duration(milliseconds: 300));
-                                // for animated jump. Requires a curve and a duration
-                                if (position == 4) {
-                                  String phone =
-                                      zeroLeadValue(value: phoneController.text);
-
-                                  context.read<SignupCubits>().saveSignup(
-                                      signupRequest: SignupRequest(
-                                          firstName: firstNameController.text,
-                                          lastName: lastNameController.text,
-                                          userName: userNameController.text,
-                                          gender: selectedGender,
-                                          birthday: dob,
-                                          nationality: nationality,
-                                          country: _cor,
-                                          email: emailNameController.text,
-                                          password: passwordNameController.text,
-                                          telCode: telCode,
-                                          phone: phone,
-                                          hobbies: hobbyController.text,
-                                          favCountry: favCountryController.text,
-                                          extraInfo: tellMoreController.text));
-
-                                  _navigationService.navigateTo(termRoutSecond);
-                                  return;
-                                }
-                              },
-                              child: _buildButton(index: value)
-                            ),
-                          ),
+                          _buildButton(index: value),
                         ],
                       );
                     }),
@@ -1166,7 +1141,6 @@ class _SignupScreenState extends State<SignupScreen> {
                       itemCount: list.length,
                       onPageChanged: (v) {
                         valueNotifier.value = v;
-                        isIgnorePointer = true;
                       },
                       reverse: false,
                       physics: const NeverScrollableScrollPhysics(),
@@ -1180,11 +1154,53 @@ class _SignupScreenState extends State<SignupScreen> {
                               SizedBox(
                                 height: index == 1 || index == 2 ? 20 : size.width / 5,
                               ),
-                              Text(
-                                index == 3
-                                    ? 'Skip Now & Answer Later'
-                                    : "Fields marked with (*) are mandatory.",
-                                style: const TextStyle(
+                              index ==3 ? InkWell(
+                                onTap: () {
+
+
+                                  int position = 1 + index;
+                                  total_width = total_width + 50;
+                                  setState(() {});
+                                  _pageController.animateToPage(position,
+                                      curve: Curves.decelerate,
+                                      duration: const Duration(milliseconds: 300));
+                                  // for animated jump. Requires a curve and a duration
+                                  if (position == 4) {
+                                    String phone =
+                                    zeroLeadValue(value: phoneController.text);
+
+                                    context.read<SignupCubits>().saveSignup(
+                                        signupRequest: SignupRequest(
+                                            firstName: firstNameController.text,
+                                            lastName: lastNameController.text,
+                                            userName: userNameController.text,
+                                            gender: selectedGender,
+                                            birthday: dob,
+                                            nationality: nationality,
+                                            country: _cor,
+                                            email: emailNameController.text,
+                                            password: passwordNameController.text,
+                                            telCode: telCode,
+                                            phone: phone,
+                                            hobbies: hobbyController.text,
+                                            favCountry: favCountryController.text,
+                                            extraInfo: tellMoreController.text));
+
+                                    _navigationService.navigateTo(termRoutSecond);
+                                    return;
+                                  }
+                                },
+                                child: const Text(
+                                  'Skip Now & Answer Later',
+                                  style:  TextStyle(
+                                      fontSize: 14,
+                                      color: AppColor.aquaGreen,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ):
+                              const Text(
+                                 "Fields marked with (*) are mandatory.",
+                                style:  TextStyle(
                                     fontSize: 14,
                                     color: AppColor.aquaGreen,
                                     fontWeight: FontWeight.w400),
@@ -1254,19 +1270,55 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         );
       }
-      isIgnorePointer = false;
-      return Container(
-        height: 46.0,
-        width: 200.0,
-        decoration: BoxDecoration(
-            color: AppColor.lightIndigo,
-            borderRadius: BorderRadius.circular(8.0)),
-        child: const Center(
-          child: Text(
-            "Next",
-            style: TextStyle(
-                fontSize: 15.0,
-                color: AppColor.whiteColor),
+      return InkWell(
+        onTap: () {
+
+
+          int position = 1 + index;
+          total_width = total_width + 50;
+          setState(() {});
+          _pageController.animateToPage(position,
+              curve: Curves.decelerate,
+              duration: const Duration(milliseconds: 300));
+          // for animated jump. Requires a curve and a duration
+          if (position == 4) {
+            String phone =
+            zeroLeadValue(value: phoneController.text);
+
+            context.read<SignupCubits>().saveSignup(
+                signupRequest: SignupRequest(
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                    userName: userNameController.text,
+                    gender: selectedGender,
+                    birthday: dob,
+                    nationality: nationality,
+                    country: _cor,
+                    email: emailNameController.text,
+                    password: passwordNameController.text,
+                    telCode: telCode,
+                    phone: phone,
+                    hobbies: hobbyController.text,
+                    favCountry: favCountryController.text,
+                    extraInfo: tellMoreController.text));
+
+            _navigationService.navigateTo(termRoutSecond);
+            return;
+          }
+        },
+        child: Container(
+          height: 46.0,
+          width: 200.0,
+          decoration: BoxDecoration(
+              color: AppColor.lightIndigo,
+              borderRadius: BorderRadius.circular(8.0)),
+          child: const Center(
+            child: Text(
+              "Next",
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.whiteColor),
+            ),
           ),
         ),
       );
@@ -1347,23 +1399,58 @@ class _SignupScreenState extends State<SignupScreen> {
         );
       }
 
-      isIgnorePointer = false;
-      return Container(
-        height: 46.0,
-        width: 200.0,
-        decoration: BoxDecoration(
-            color: AppColor.lightIndigo,
-            borderRadius: BorderRadius.circular(8.0)),
-        child: const Center(
-          child: Text(
-            "Next",
-            style: TextStyle(
-                fontSize: 15.0,
-                color: AppColor.whiteColor),
+      return InkWell(
+        onTap: () {
+
+
+          int position = 1 + index;
+          total_width = total_width + 50;
+          setState(() {});
+          _pageController.animateToPage(position,
+              curve: Curves.decelerate,
+              duration: const Duration(milliseconds: 300));
+          // for animated jump. Requires a curve and a duration
+          if (position == 4) {
+            String phone =
+            zeroLeadValue(value: phoneController.text);
+
+            context.read<SignupCubits>().saveSignup(
+                signupRequest: SignupRequest(
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                    userName: userNameController.text,
+                    gender: selectedGender,
+                    birthday: dob,
+                    nationality: nationality,
+                    country: _cor,
+                    email: emailNameController.text,
+                    password: passwordNameController.text,
+                    telCode: telCode,
+                    phone: phone,
+                    hobbies: hobbyController.text,
+                    favCountry: favCountryController.text,
+                    extraInfo: tellMoreController.text));
+
+            _navigationService.navigateTo(termRoutSecond);
+            return;
+          }
+        },
+        child: Container(
+          height: 46.0,
+          width: 200.0,
+          decoration: BoxDecoration(
+              color: AppColor.lightIndigo,
+              borderRadius: BorderRadius.circular(8.0)),
+          child: const Center(
+            child: Text(
+              "Next",
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.whiteColor),
+            ),
           ),
         ),
-      );
-    }
+      );    }
     else if(index ==2){
       if(emailNameController.text.isEmpty){
         return Container(
@@ -1416,19 +1503,73 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         );
       }
-      isIgnorePointer = false;
-      return Container(
-        height: 46.0,
-        width: 200.0,
-        decoration: BoxDecoration(
-            color: AppColor.lightIndigo,
-            borderRadius: BorderRadius.circular(8.0)),
-        child: const Center(
-          child: Text(
-            "Next",
-            style: TextStyle(
-                fontSize: 15.0,
-                color: AppColor.whiteColor),
+      if(phoneController.text.isEmpty){
+        return Container(
+          height: 46.0,
+          width: 200.0,
+          decoration: BoxDecoration(
+              color: AppColor.colorGrey,
+              borderRadius: BorderRadius.circular(8.0)),
+          child: const Center(
+            child: Text(
+              "Next",
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.whiteColor),
+            ),
+          ),
+        );
+      }
+
+      return InkWell(
+        onTap: () {
+
+
+          int position = 1 + index;
+          total_width = total_width + 50;
+          setState(() {});
+          _pageController.animateToPage(position,
+              curve: Curves.decelerate,
+              duration: const Duration(milliseconds: 300));
+          // for animated jump. Requires a curve and a duration
+          if (position == 4) {
+            String phone =
+            zeroLeadValue(value: phoneController.text);
+
+            context.read<SignupCubits>().saveSignup(
+                signupRequest: SignupRequest(
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                    userName: userNameController.text,
+                    gender: selectedGender,
+                    birthday: dob,
+                    nationality: nationality,
+                    country: _cor,
+                    email: emailNameController.text,
+                    password: passwordNameController.text,
+                    telCode: telCode,
+                    phone: phone,
+                    hobbies: hobbyController.text,
+                    favCountry: favCountryController.text,
+                    extraInfo: tellMoreController.text));
+
+            _navigationService.navigateTo(termRoutSecond);
+            return;
+          }
+        },
+        child: Container(
+          height: 46.0,
+          width: 200.0,
+          decoration: BoxDecoration(
+              color: AppColor.lightIndigo,
+              borderRadius: BorderRadius.circular(8.0)),
+          child: const Center(
+            child: Text(
+              "Next",
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.whiteColor),
+            ),
           ),
         ),
       );
@@ -1436,18 +1577,55 @@ class _SignupScreenState extends State<SignupScreen> {
     }
     else{
 
-      return Container(
-        height: 46.0,
-        width: 200.0,
-        decoration: BoxDecoration(
-            color: AppColor.lightIndigo,
-            borderRadius: BorderRadius.circular(8.0)),
-        child: const Center(
-          child: Text(
-            "Next",
-            style: TextStyle(
-                fontSize: 15.0,
-                color: AppColor.whiteColor),
+      return InkWell(
+        onTap: () {
+
+
+          int position = 1 + index;
+          total_width = total_width + 50;
+          setState(() {});
+          _pageController.animateToPage(position,
+              curve: Curves.decelerate,
+              duration: const Duration(milliseconds: 300));
+          // for animated jump. Requires a curve and a duration
+          if (position == 4) {
+            String phone =
+            zeroLeadValue(value: phoneController.text);
+
+            context.read<SignupCubits>().saveSignup(
+                signupRequest: SignupRequest(
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                    userName: userNameController.text,
+                    gender: selectedGender,
+                    birthday: dob,
+                    nationality: nationality,
+                    country: _cor,
+                    email: emailNameController.text,
+                    password: passwordNameController.text,
+                    telCode: telCode,
+                    phone: phone,
+                    hobbies: hobbyController.text,
+                    favCountry: favCountryController.text,
+                    extraInfo: tellMoreController.text));
+
+            _navigationService.navigateTo(termRoutSecond);
+            return;
+          }
+        },
+        child: Container(
+          height: 46.0,
+          width: 200.0,
+          decoration: BoxDecoration(
+              color: AppColor.lightIndigo,
+              borderRadius: BorderRadius.circular(8.0)),
+          child: const Center(
+            child: Text(
+              "Next",
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.whiteColor),
+            ),
           ),
         ),
       );

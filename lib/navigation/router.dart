@@ -40,7 +40,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case routes.resetRout:
       return MaterialPageRoute(
-        builder: (context) => const  ResetPasswordScreen(),
+        builder: (context) =>  ResetPasswordScreen(email: settings.arguments as String,),
       );
     case routes.dashboardRout:
       return MaterialPageRoute(

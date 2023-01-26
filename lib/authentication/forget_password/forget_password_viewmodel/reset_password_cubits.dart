@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sarya/authentication/forget_password/forget_password_viewmodel/reset_password_states.dart';
 import 'package:sarya/authentication/forget_password/models/forget_password_request.dart';
 import 'package:sarya/authentication/forget_password/models/forget_password_response.dart';
 import 'package:sarya/authentication/forget_password/models/reset_password_response.dart';
@@ -9,37 +10,21 @@ import '../../../helper/show_snake_bar.dart';
 import '../models/reset_password_request.dart';
 import 'forget_password_states.dart';
 
-class ForgetPasswordCubits extends Cubit<ForgetPasswordStates> {
-  ForgetPasswordCubits(): super(ForgetPasswordInitial());
-
-  Future doForgetPassword({required String email , required NavigationService navigationService}) async{
-    try{
-      emit(ForgetPasswordLoading());
-      ForgetPasswordRequest forgetPasswordRequest = ForgetPasswordRequest(email: email);
-      final ForgetPasswordResponse res = await AuthRepository.instance.forgetPassword(body: forgetPasswordRequest.toJson());
-      emit(const ForgetPasswordLoaded());
-      ShowSnackBar.showSnackBar(msg: res.msg??'');
-
-      navigationService.navigateTo(resetRout, arguments: email);
-
-    }catch(e){
-      emit(const ForgetPasswordFailure(error: ''));
-
-    }
-  }
+class ResetPasswordCubits extends Cubit<ResetPasswordStates> {
+  ResetPasswordCubits(): super(ResetPasswordInitial());
 
   Future doResetPassword({required int otp, required String password,required String email, required NavigationService navigationService}) async{
     try{
-      emit(ForgetPasswordLoading());
+      emit(ResetPasswordLoading());
       ResetPasswordRequest resetPasswordRequest = ResetPasswordRequest(email: email, pwdResetCode: otp, password: password);
       final  res = await AuthRepository.instance.resetPassword(body: resetPasswordRequest.toJson());
-      emit(const ForgetPasswordLoaded());
+      emit(const ResetPasswordLoaded());
       ShowSnackBar.showSnackBar(msg: res.msg??'');
 
       navigationService.navigatePushReplace(loginRout);
 
     }catch(e){
-      emit(const ForgetPasswordFailure(error: ''));
+      emit(const ResetPasswordFailure(error: ''));
 
     }
   }

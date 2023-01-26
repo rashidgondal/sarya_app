@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sarya/authentication/forget_password/forget_password_viewmodel/forget_password_cubits.dart';
+import 'package:sarya/authentication/forget_password/forget_password_viewmodel/reset_password_cubits.dart';
 import 'package:sarya/authentication/signin/view/login_screen.dart';
 import 'package:sarya/authentication/signup/signup_view_model/avatar_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/country_cubits.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ForgetPasswordCubits()),
         BlocProvider(create: (context) => AvatarCubits()),
         BlocProvider(create: (context) => CountryCubits()),
+        BlocProvider(create: (context) => ResetPasswordCubits()),
       ],
       child: MaterialApp(
         title: 'Sarya',
