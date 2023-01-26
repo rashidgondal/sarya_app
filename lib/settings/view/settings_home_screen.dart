@@ -6,6 +6,7 @@ import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 import '../../customWidgets/text_decorated_icon.dart';
+import '../../helper/shared_prefs.dart';
 import '../../locator.dart';
 import '../../navigation/navigation_service.dart';
 import '../../navigation/router_path.dart';
@@ -22,16 +23,31 @@ class _SettingsHomeState extends State<SettingsHome> {
 
 
   late NavigationService _navigationService;
+  String fullName = '';
 
   @override
   void initState() {
     super.initState();
 
     _navigationService = locator<NavigationService>();
+
   }
+
+  getUserInfo() async {
+    print("..........");
+    SharedPrefs pref = SharedPrefs();
+
+    Map map = await pref.getUser();
+
+    fullName = '${map['firstName']} ${map['lastName']}';
+    setState(() {});
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    getUserInfo();
     Size size = MediaQuery.of(context).size;
 
     return Container(
@@ -92,8 +108,8 @@ class _SettingsHomeState extends State<SettingsHome> {
                         _navigationService.navigateTo(nameSettingRoute);
                       },
                       child: TextDecoratedContainer(
-                        titleWidget: const Text(
-                          'Name',
+                        titleWidget:  Text(
+                          '$fullName',
                           style: TextStyle(
                               fontSize: 15.0, color: AppColor.headingColor2),
                         ),

@@ -5,6 +5,7 @@ import 'package:sarya/settings/name/view_model/name_cubits.dart';
 import 'package:sarya/settings/name/view_model/name_states.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
+import '../../../helper/shared_prefs.dart';
 import '../../../locator.dart';
 import '../../../navigation/navigation_service.dart';
 import '../model/update_name_request.dart';
@@ -28,6 +29,18 @@ class _NameScreenState extends State<NameScreen> {
   void initState() {
     super.initState();
     _navigationService = locator<NavigationService>();
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    print("..........");
+    SharedPrefs pref = SharedPrefs();
+
+   Map map = await pref.getUser();
+    firstTextEditingController.text = map['firstName'];
+    lastTextEditingController.text = map['lastName'];
+
+    setState(() {});
 
   }
 
