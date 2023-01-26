@@ -14,14 +14,13 @@ import '../model/update_name_request.dart';
 class NameCubits extends Cubit<NameStates> {
   NameCubits(): super(NameInitial());
 
-  Future updateName({required UpdateNameRequest updateNameRequest}) async{
+  Future updateName({required UpdateNameRequest updateNameRequest,required NavigationService navigationService, }) async{
     try{
       emit(NameLoading());
       final  res = await AuthRepository.instance.update(body: updateNameRequest.toJson());
-      SignInResponse signInResponse = res;
       SharedPrefs pref = SharedPrefs();
       pref.saveUser(res);
-
+      navigationService.navigateTo(settingRoute);
       emit(NameLoaded());
 
     }catch(e){

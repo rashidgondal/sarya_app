@@ -5,6 +5,8 @@ import 'package:sarya/settings/name/view_model/name_cubits.dart';
 import 'package:sarya/settings/name/view_model/name_states.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
+import '../../../locator.dart';
+import '../../../navigation/navigation_service.dart';
 import '../model/update_name_request.dart';
 
 class NameScreen extends StatefulWidget {
@@ -20,6 +22,14 @@ class _NameScreenState extends State<NameScreen> {
   TextEditingController lastTextEditingController = TextEditingController();
 
   String firstName ='', lastName='';
+  late NavigationService _navigationService;
+
+  @override
+  void initState() {
+    super.initState();
+    _navigationService = locator<NavigationService>();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +70,7 @@ class _NameScreenState extends State<NameScreen> {
                   color: AppColor.lightIndigo,
                 ),
                 onPressed: () {
-                  // _navigationService.goBack();
+                  _navigationService.goBack();
                 },
               ),
               backgroundColor: AppColor.aquaCasper2,
@@ -100,7 +110,8 @@ class _NameScreenState extends State<NameScreen> {
                     );
 
                     context.read<NameCubits>().updateName(
-                        updateNameRequest:updateNameRequest,
+                        updateNameRequest:updateNameRequest, navigationService: _navigationService,
+
                        );
                   },
                   child: Container(

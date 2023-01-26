@@ -19,7 +19,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   late NavigationService _navigationService;
   String? profilePath;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  SharedPrefs pref = SharedPrefs();
    Map? map;
 
   @override
@@ -31,18 +30,30 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   }
 
   getProfilePicture() async {
+    SharedPrefs pref = SharedPrefs();
+
     profilePath = await pref.getProfilePath();
     setState(() {});
   }
 
   getUserInfo() async {
+    print("..........");
+    SharedPrefs pref = SharedPrefs();
+
     map = await pref.getUser();
     setState(() {});
 
   }
 
   @override
+  void didChangeDependencies() {
+
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    getUserInfo();
     return SafeArea(
         child: Scaffold(
       key: _scaffoldKey,

@@ -7,7 +7,7 @@ class SharedPrefs {
    final String _countriesResponseKey  = 'Countries';
    final String _profilePathKey        = 'Profile pic path';
    final String _saveUserDataKey       = 'Save user';
-   final String _tokenKey       = 'Save token';
+   final String _tokenKey              = 'Save token';
 
 
     Future getUser() async {
