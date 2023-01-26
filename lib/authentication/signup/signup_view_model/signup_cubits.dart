@@ -24,7 +24,8 @@ class SignupCubits extends Cubit<SignupStates> {
      String userName = map['email'];
      String password = map['password'];
      SignInRequest signInRequest = SignInRequest(userName: userName, password: password);
-      navigationService.navigateTo(animationRoute, arguments: signInRequest);
+
+     navigationService.navigateTo(animationRoute, arguments: signInRequest);
 
     }catch(e){
       emit(const SignupFailure(error: ''));

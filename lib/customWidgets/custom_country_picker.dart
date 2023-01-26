@@ -42,7 +42,6 @@ class CustomCountryPicker extends StatelessWidget {
       hint: Row(
         children: [
           icon ==  null? const SizedBox.shrink(): icon!,
-          const SizedBox(width: 10),
           Expanded(
             child: Text(
               hint,

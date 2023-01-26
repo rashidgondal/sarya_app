@@ -24,7 +24,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   final _formKey = GlobalKey<FormState>();
   late NavigationService _navigationService;
-
+  String email ='';
 
   @override
   void initState() {
@@ -88,20 +88,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         const SizedBox(height: 20.0),
                         TextFormField(
                           controller: emailController,
-                          validator: (v){
-
-                            if(v!.isEmpty){
-                              return "Please enter email.";
-                            }else{
-                              return null;
-                            }
-
-
-
+                          onChanged: (v){
+                            setState(() {
+                              email =v;
+                            });
                           },
                           style:const TextStyle(
-                              fontSize: 13.0,
-                              color: AppColor.aquaGreen,
+                              fontSize: 14.0,
+                              color: AppColor.lightIndigo,
                               fontWeight: FontWeight.w500),
                           decoration: const InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -120,27 +114,48 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         ),
                         const SizedBox(height:30.0),
                         InkWell(
-                          onTap: () {
+                          onTap:email.isEmpty? null:() {
 
-                            context.read<ForgetPasswordCubits>().doForgetPassword(email: emailController.text, navigationService: _navigationService);
+                           context.read<ForgetPasswordCubits>()
+                               .doForgetPassword(email: emailController.text,
+                               navigationService: _navigationService);
 
                             },
                           child: Container(
                             height: 46.0,
                             width: 200.0,
                             decoration: BoxDecoration(
-                                color: AppColor.lightIndigo,
+                                color:email.isEmpty? AppColor.colorLiteGrey: AppColor.lightIndigo,
                                 borderRadius: BorderRadius.circular(8.0)),
-                            child: const Center(
+                            child:  Center(
                               child: Text(
                                 "Send Code",
                                 style: TextStyle(
-                                    fontSize: 15.0, color: AppColor.whiteColor),
+                                    fontSize: 15.0, color:email.isEmpty? AppColor.headingColor2: AppColor.whiteColor),
                               ),
                             ),
                           ),
                         ),
-
+                        const SizedBox(height:20.0),
+                        InkWell(
+                          onTap: () {
+                            _navigationService.goBack();
+                          },
+                          child: Container(
+                            height: 46.0,
+                            width: 200.0,
+                            decoration: BoxDecoration(
+                                color: AppColor.colorLiteGrey,
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: const Center(
+                              child: Text(
+                                "Back",
+                                style: TextStyle(
+                                    fontSize: 15.0, color: AppColor.headingColor2),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

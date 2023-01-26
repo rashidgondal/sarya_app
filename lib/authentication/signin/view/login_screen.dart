@@ -93,8 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             },
                             style: const TextStyle(
-                                fontSize: 13.0,
-                                color: AppColor.aquaGreen,
+                                fontSize: 14.0,
+                                color: AppColor.lightIndigo,
                                 fontWeight: FontWeight.w500),
                             decoration: const InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
@@ -124,8 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             },
                             style: const TextStyle(
-                                fontSize: 13.0,
-                                color: AppColor.aquaGreen,
+                                fontSize: 14.0,
+                                color: AppColor.lightIndigo,
                                 fontWeight: FontWeight.w500),
                             decoration: const InputDecoration(
                                 enabledBorder: UnderlineInputBorder(

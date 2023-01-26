@@ -21,8 +21,6 @@ class AvatarsTypesScreen extends StatefulWidget {
 
 class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
   late NavigationService _navigationService;
-  int selectedIndex = 0;
-   List listOfColor =[];
    String baseUrl ='';
    String format ='';
 
@@ -60,82 +58,7 @@ class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
             ),
             centerTitle: true,
           ),
-          bottomSheet: Container(
-            color: AppColor.whiteColor,
-            height: 150.0,
-            width: size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-                    _navigationService.navigateTo(chooseAvatarRout, arguments: {'listOfColor': listOfColor, 'url':baseUrl, 'format': format});
 
-                  },
-                  child: Container(
-                    height: 46.0,
-                    width: 150.0,
-                    decoration: BoxDecoration(
-                        color: AppColor.buttonColor,
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: const Center(
-                      child: Text(
-                        "Customize",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.whiteColor),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                InkWell(
-                  onTap: () {
-                    SignupRequest req =
-                        context.read<SignupCubits>().getSignupRequest;
-                    SignupRequest signupRequest = SignupRequest(
-                        userName: req.userName,
-                        lastName: req.lastName,
-                        firstName: req.firstName,
-                        password: req.password,
-                        email: req.email,
-                        gender: req.gender,
-                        birthday: req.birthday,
-                        phone: req.phone,
-                        telCode: req.telCode,
-                        country: req.country,
-                        nationality: req.nationality,
-                        favCountry: req.favCountry,
-                        hobbies: req.hobbies,
-                        extraInfo: req.favCountry,
-                        avatar: 'turtle');
-                    context.read<SignupCubits>().doSignup(
-                        signupRequest: signupRequest,
-                        navigationService: _navigationService);
-                  },
-                  child: Container(
-                    height: 46.0,
-                    width: 150.0,
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
-                    child: const Center(
-                      child: Text(
-                        "Skip",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.colorBlack),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           body: Container(
             padding: const EdgeInsets.only(left: 65.0, right: 65, ),
             child: Column(
@@ -155,7 +78,6 @@ class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
                       List list = state.avatars;
                        baseUrl = state.baseUrl;
                        format = state.format;
-                      listOfColor = list[selectedIndex]['colors'];
 
                       return GridView.builder(
                         itemCount: list.length,
@@ -171,7 +93,8 @@ class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
                             imageUrl: '$baseUrl${list[index]['name']}.$format',
                             size: size,
                             index: index,
-                            list: list
+                            list: list,
+                            listOfColor:list[index]['colors']
                         ),
                       );
 
@@ -184,9 +107,7 @@ class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
 
                   }),
                 ),
-                const SizedBox(
-                  height: 160,
-                )
+
               ],
             ),
           ),
@@ -199,24 +120,22 @@ class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
     required String imageUrl,
     required Size size,
     required int index,
-    required List list
+    required List list,
+    required List listOfColor
   }) {
     return InkWell(
       onTap: () {
-        setState(() {
-          selectedIndex = index;
-        });
+
+
+        _navigationService.navigateTo(chooseAvatarRout, arguments: {'listOfColor': listOfColor, 'url':baseUrl, 'format': format});
+
       },
       child: Container(
 
         decoration: BoxDecoration(
-            color: selectedIndex == index
-                ? AppColor.aquaCasper2
-                : AppColor.whiteColor,
+
             borderRadius: BorderRadius.circular(10.0),
-            border: selectedIndex == index
-                ? null
-                : Border.all(color: AppColor.lightIndigo, width: 1)),
+            border:Border.all(color: AppColor.lightIndigo, width: 1)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

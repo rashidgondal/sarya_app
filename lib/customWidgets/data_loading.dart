@@ -25,20 +25,13 @@ class _DataLoadingState extends State<DataLoading> {
           width: size.width,
           height: size.height,
           color: AppColor.whiteColor.withOpacity(0.5),
-          child: Center(
-            child: SpinKitThreeInOut(
-              itemBuilder: (BuildContext context, int index) {
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: index.isEven ? AppColor.lightIndigo : AppColor.aquaGreen,
-                    shape: BoxShape.circle
-                  ),
-                );
-              },
-              size: 40.0,
+          child:const  Center(
+            child: SpinKitWave(
+             color: AppColor.lightIndigo,
+              size: 50.0,
             ),
           )
-        ):SizedBox()
+        ):const SizedBox()
       ],
     );
   }
