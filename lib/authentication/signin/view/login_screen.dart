@@ -35,6 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
     _navigationService = locator<NavigationService>();
   }
 
+  bool showPassword = true;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -113,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     color: AppColor.colorGrey,
                                     fontWeight: FontWeight.w500)),
                           ),
-                          const SizedBox(height: 30.0),
+                          const SizedBox(height: 50.0),
                           TextFormField(
                             controller: passController,
                             validator: (v) {
@@ -123,24 +125,47 @@ class _LoginScreenState extends State<LoginScreen> {
                                 return null;
                               }
                             },
+                            maxLines: 1,
+                            obscureText: showPassword,
                             style: const TextStyle(
                                 fontSize: 14.0,
                                 color: AppColor.lightIndigo,
                                 fontWeight: FontWeight.w500),
-                            decoration: const InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppColor.lightIndigo),
+
+                            decoration:  InputDecoration(
+                                isDense: true,
+                                suffixIconConstraints:const BoxConstraints(
+                                  minWidth: 20,
+                                  minHeight: 30,
                                 ),
-                                focusedBorder: UnderlineInputBorder(
+
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                ),
+                                suffixIcon: showPassword?
+                                InkWell(
+                                  onTap: (){
+                                    setState(() {
+                                      showPassword = false;
+                                    });
+                                  },
+                                    child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.colorGrey,)):
+                                InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        showPassword = true;
+                                      });
+                                    },
+                                    child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.lightIndigo,)),
+                                focusedBorder:const UnderlineInputBorder(
                                   borderSide:
                                       BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 contentPadding: EdgeInsets.zero,
                                 hintText: "Password",
                                 fillColor: AppColor.aquaCasper,
-                                hintStyle: TextStyle(
-                                    fontSize: 13.0,
+                                hintStyle:const TextStyle(
+                                    fontSize: 14.0,
                                     color: AppColor.colorGrey,
                                     fontWeight: FontWeight.w500)),
                           ),

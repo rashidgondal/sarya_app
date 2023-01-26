@@ -11,6 +11,11 @@ class NameScreen extends StatefulWidget {
 }
 
 class _NameScreenState extends State<NameScreen> {
+
+  TextEditingController firstTextEditingController = TextEditingController();
+  TextEditingController lastTextEditingController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -61,13 +66,22 @@ class _NameScreenState extends State<NameScreen> {
                           borderRadius: BorderRadius.circular(10.0),
                           border:
                           Border.all(color: AppColor.borderColor2, width: 1)),
-                      child: Row(
-                        children: const[
-                          Text(
-                            'Me',
-                            style:  TextStyle(
-                                fontSize: 15.0, color: AppColor.headingColor2)),
-                        ],
+                      child:  TextFormField(
+                        controller: firstTextEditingController,
+
+                        style: const TextStyle(
+                            fontSize: 14.0,
+                            color: AppColor.lightIndigo,
+                            fontWeight: FontWeight.w500),
+                        decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "First Name",
+                            fillColor: AppColor.colorGrey,
+                            contentPadding: EdgeInsets.zero,
+                            hintStyle: TextStyle(
+                                fontSize: 13.0,
+                                color: AppColor.colorGrey,
+                                fontWeight: FontWeight.w500)),
                       ),
                 )),
                 const SizedBox(height: 15,),
@@ -82,13 +96,29 @@ class _NameScreenState extends State<NameScreen> {
                           borderRadius: BorderRadius.circular(10.0),
                           border:
                           Border.all(color: AppColor.borderColor2, width: 1)),
-                      child:Row(
-                        children:const [
-                           Text(
-                              'Boo',
-                              style:  TextStyle(
-                                  fontSize: 15.0, color: AppColor.headingColor2)),
-                        ],
+                      child: TextFormField(
+                        controller: lastTextEditingController,
+
+                        style: const TextStyle(
+                            fontSize: 14.0,
+                            color: AppColor.lightIndigo,
+                            fontWeight: FontWeight.w500),
+                        decoration: const InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                              BorderSide(color: AppColor.lightIndigo),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                              BorderSide(color: AppColor.lightIndigo),
+                            ),
+                            hintText: "Last Name",
+                            fillColor: AppColor.colorGrey,
+                            contentPadding: EdgeInsets.zero,
+                            hintStyle: TextStyle(
+                                fontSize: 13.0,
+                                color: AppColor.colorGrey,
+                                fontWeight: FontWeight.w500)),
                       ),
                     )),
 

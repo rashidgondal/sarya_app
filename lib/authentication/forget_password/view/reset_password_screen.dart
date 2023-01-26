@@ -27,8 +27,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   TextEditingController passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  late NavigationService _navigationService;
   String otp ='', password ='';
+  late NavigationService _navigationService;
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +94,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
                               });
                             },
+                            keyboardType: TextInputType.number,
                             style: const TextStyle(
                                 fontSize: 14.0,
                                 color: AppColor.lightIndigo,
