@@ -12,7 +12,7 @@ import 'forget_password_states.dart';
 class ForgetPasswordCubits extends Cubit<ForgetPasswordStates> {
   ForgetPasswordCubits(): super(ForgetPasswordInitial());
 
-  Future doForgetPassword({required String email , required NavigationService navigationService}) async{
+  Future doForgetPassword({required String email , required NavigationService navigationService, required bool rootValue}) async{
     try{
       emit(ForgetPasswordLoading());
       ForgetPasswordRequest forgetPasswordRequest = ForgetPasswordRequest(email: email);
@@ -20,7 +20,7 @@ class ForgetPasswordCubits extends Cubit<ForgetPasswordStates> {
       emit(const ForgetPasswordLoaded());
       ShowSnackBar.showSnackBar(msg: res.msg??'');
 
-      navigationService.navigateTo(resetRout, arguments: email);
+      navigationService.navigateTo(resetRout, arguments:{ "email": email, "root":rootValue});
 
     }catch(e){
       emit(const ForgetPasswordFailure(error: ''));
@@ -28,15 +28,19 @@ class ForgetPasswordCubits extends Cubit<ForgetPasswordStates> {
     }
   }
 
-  Future doResetPassword({required int otp, required String password,required String email, required NavigationService navigationService}) async{
+  Future doResetPassword({required int otp, required String password,required String email, required NavigationService navigationService, required bool rootValue}) async{
     try{
       emit(ForgetPasswordLoading());
       ResetPasswordRequest resetPasswordRequest = ResetPasswordRequest(email: email, pwdResetCode: otp, password: password);
       final  res = await AuthRepository.instance.resetPassword(body: resetPasswordRequest.toJson());
       emit(const ForgetPasswordLoaded());
       ShowSnackBar.showSnackBar(msg: res.msg??'');
+   if(rootValue) {
+     navigationService.navigatePushReplace(loginRout);
+   }else{
+     navigationService.navigatePushReplace(settingRoute);
 
-      navigationService.navigatePushReplace(loginRout);
+   }
 
     }catch(e){
       emit(const ForgetPasswordFailure(error: ''));

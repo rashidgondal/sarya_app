@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sarya/authentication/signup/signup_view_model/avatar_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/signup_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/signup_states.dart';
-import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../../customWidgets/data_loading.dart';
 import '../../../locator.dart';
 import '../../../navigation/navigation_service.dart';
+import '../../../settings/avatar/model/update_avatar_request.dart';
+import '../../../settings/avatar/view_model/update_avatar_cubits.dart';
 import '../model/signup_request.dart';
+import '../signup_view_model/avatar_cubits.dart';
 
 class ChooseAvatar extends StatefulWidget {
   final Map map;
@@ -110,32 +111,35 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
                     ),
                     InkWell(
                       onTap: () async {
-                        String url =
-                            '${widget.map['url']}${widget.map['listOfColor'][selectedPic]}.${widget.map['format']}';
+
+                        String url = '${widget.map['url']}${widget
+                            .map['listOfColor'][selectedPic]}.${widget
+                            .map['format']}';
 
 
-                        SignupRequest req =
-                            context.read<SignupCubits>().getSignupRequest;
-                        SignupRequest signupRequest = SignupRequest(
-                            userName: req.userName,
-                            lastName: req.lastName,
-                            firstName: req.firstName,
-                            password: req.password,
-                            email: req.email,
-                            gender: req.gender,
-                            birthday: req.birthday,
-                            phone: req.phone,
-                            telCode: req.telCode,
-                            country: req.country,
-                            nationality: req.nationality,
-                            favCountry: req.favCountry,
-                            hobbies: req.hobbies,
-                            extraInfo: req.favCountry,
-                            avatar: url);
+                          SignupRequest req = context.read<SignupCubits>().getSignupRequest;
+                          SignupRequest signupRequest = SignupRequest(
+                              userName: req.userName,
+                              lastName: req.lastName,
+                              firstName: req.firstName,
+                              password: req.password,
+                              email: req.email,
+                              gender: req.gender,
+                              birthday: req.birthday,
+                              phone: req.phone,
+                              telCode: req.telCode,
+                              country: req.country,
+                              nationality: req.nationality,
+                              favCountry: req.favCountry,
+                              hobbies: req.hobbies,
+                              extraInfo: req.favCountry,
+                              bankDetails: req.bankDetails,
+                              avatar: url);
 
-                        context.read<SignupCubits>().doSignup(
-                            signupRequest: signupRequest,
-                            navigationService: _navigationService);
+                          context.read<SignupCubits>().doSignup(
+                              signupRequest: signupRequest,
+                              navigationService: _navigationService);
+
                       },
                       child: Container(
                         height: 46.0,

@@ -1,9 +1,14 @@
+import 'dart:collection';
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
+import 'package:geojson/geojson.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarya/theme/color_scheme.dart';
-
+import '../../helper/shared_prefs.dart';
 import '../../locator.dart';
 import '../../navigation/navigation_service.dart';
-import '../../navigation/router_path.dart';
 
 class SelectDestination extends StatefulWidget {
   const SelectDestination({Key? key}) : super(key: key);
@@ -13,15 +18,88 @@ class SelectDestination extends StatefulWidget {
 }
 
 class _SelectDestinationState extends State<SelectDestination> {
-
   late NavigationService _navigationService;
+  var list = [];
+  var boolList = [];
+  var tempCountryList = [];
+  late GoogleMapController c;
+  TextEditingController searchController = TextEditingController();
+  String searchKeyWord = '';
+
+  // on below line we have set the camera position
+  static final CameraPosition _kGoogle = const CameraPosition(
+    target: LatLng(19.0759837, 72.8776559),
+    zoom: 4,
+  );
+
+  Set<Polygon> _polygon = HashSet<Polygon>();
+  List<GeoJsonFeature> features = [];
+
+  bool loading =  true;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
+    parseAndDrawAssetsOnMap();
     _navigationService = locator<NavigationService>();
-
+    //getUserInfo();
   }
 
+  addPolygon({required String polygonCountry, required List<LatLng> points}) {
+    _polygon.add(Polygon(
+      // given polygonId
+      polygonId: PolygonId(polygonCountry),
+      // initialize the list of points to display polygon
+      points: points,
+      // given color to polygon
+      fillColor: Colors.green.withOpacity(0.3),
+      // given border color to polygon
+      strokeColor: Colors.green,
+      geodesic: true,
+      // given width of border
+      strokeWidth: 4,
+    ));
+  }
+
+  void addPoints() {
+    /*   for( var i=0 ; i < GeoJson.AF.length ; i++ )
+    {
+      var ltlng= LatLng( GeoJson.AF[ i ][ 1 ], GeoJson.AF[ i ][ 0 ] );
+      point.add( ltlng );
+    }
+*/
+    setState(() {});
+  }
+
+/*  getUserInfo() async {
+    SharedPrefs pref = SharedPrefs();
+    list = await pref.getCountries();
+    boolList = List.filled(list.length, false);
+    print(
+        "tempList..1...........${boolList}......length....${boolList.length}");
+
+    setState(() {});
+  }*/
+
+  Future<void> parseAndDrawAssetsOnMap() async {
+    final geo = GeoJson();
+
+    final data =
+        await rootBundle.loadString('lib/assets/json_data/countries.geojson');
+    await geo.parse(data, verbose: true);
+
+    features = geo.features;
+    print("features ....${features.length}");
+    boolList = List.filled(features.length, false);
+    setState(() {
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +107,7 @@ class _SelectDestinationState extends State<SelectDestination> {
 
     return SafeArea(
         child: Scaffold(
-          backgroundColor: AppColor.whiteColor,
+      backgroundColor: AppColor.whiteColor,
           appBar: AppBar(
         elevation: 0,
         toolbarHeight: 60,
@@ -38,7 +116,9 @@ class _SelectDestinationState extends State<SelectDestination> {
             Icons.arrow_back_ios,
             color: AppColor.subtitleColor,
           ),
-          onPressed: () {},
+          onPressed: () {
+            _navigationService.goBack();
+          },
         ),
         backgroundColor: AppColor.aquaCasper2,
         title: const Text(
@@ -52,9 +132,7 @@ class _SelectDestinationState extends State<SelectDestination> {
         color: AppColor.whiteColor,
         child: Center(
           child: InkWell(
-            onTap: () {
-              _navigationService.navigateTo(designIntineraryRoute);
-            },
+            onTap: () {},
             child: Container(
               height: 46.0,
               width: 200.0,
@@ -71,7 +149,7 @@ class _SelectDestinationState extends State<SelectDestination> {
           ),
         ),
       ),
-          body: Column(
+            body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -79,13 +157,20 @@ class _SelectDestinationState extends State<SelectDestination> {
             color: AppColor.colorGrey,
             padding: const EdgeInsets.only(top: 1),
             child: Container(
-              height: size.height * 0.250,
+              height: size.height * 0.350,
               color: AppColor.aquaCasper2,
+              child: GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: _kGoogle,
+                zoomControlsEnabled: true,
+                polygons: _polygon,
+                onMapCreated: (GoogleMapController controller) {
+                  c = controller;
+                },
+              ),
             ),
           ),
-          const SizedBox(
-            height: 15.0,
-          ),
+          const SizedBox(height: 15.0),
           Expanded(
               child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -100,6 +185,10 @@ class _SelectDestinationState extends State<SelectDestination> {
                           Border.all(color: AppColor.borderColor2, width: 1),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: TextFormField(
+                    controller: searchController,
+                    onChanged: (v) {
+                      searchKeyWord = v;
+                    },
                     decoration: const InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.search),
@@ -112,39 +201,103 @@ class _SelectDestinationState extends State<SelectDestination> {
                   height: 10,
                 ),
                 Expanded(
-                  child: ListView.builder(
-                      itemCount: 11,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 15.0),
-                          child: Container(
-                            height: 55.0,
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: AppColor.borderColor2, width: 1),
-                                borderRadius: BorderRadius.circular(10.0)),
-                            child: CheckboxListTile(
-                              contentPadding: EdgeInsets.zero,
-                              value: true,
-                              onChanged: (bool? value) {},
-                              secondary: Container(
-                                height: 24.0,
-                                width: 24.0,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColor.colorGrey),
+                  child:/* searchKeyWord.isEmpty
+                      ? ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                                padding: const EdgeInsets.only(top: 15.0),
+                                child: Container(
+                                    height: 55.0,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: AppColor.borderColor2,
+                                            width: 1),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                    child: CheckboxListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        value: boolList[index],
+                                        onChanged: (bool? value) {
+                                          print("va.......$value");
+                                          if (value == null) {
+                                            return;
+                                          }
+
+                                          if (value == true) {
+                                            boolList[index] = true;
+                                            tempCountryList.add(list[index]);
+                                          } else {
+                                            boolList[index] = false;
+                                            tempCountryList.removeAt(index);
+                                          }
+
+                                          setState(() {});
+                                        },
+                                        title: Text(
+                                          list[index]['name'] ?? '',
+                                          style: TextStyle(
+                                              fontSize: 17.0,
+                                              color: AppColor.colorLiteBlack5),
+                                        ))));
+                          })
+                      : */
+                  loading?Center(child: CupertinoActivityIndicator(),):
+                  features.isEmpty?
+                  Center(child: Text("Data not found."),)
+
+                      :ListView.builder(
+                          itemCount: features.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 15.0),
+                              child: Container(
+                                height: 55.0,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColor.borderColor2, width: 1),
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                child: CheckboxListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  value: boolList[index],
+                                  onChanged: (bool? value) {
+                                    List<LatLng> pointAll = [];
+
+                                    print("va.......$value");
+                                    if (value == null) {
+                                      return;
+                                    }
+
+                                    if (value == true) {
+                                      boolList[index] = true;
+                                      var a = features[index].geometry;
+
+
+                                      /*a.forEach((element) {
+                                        print("ele..............$element");
+                                      });*/
+                                      //pointAll.addAll(a);
+                                    } else {
+                                      boolList[index] = false;
+                                      pointAll.removeAt(index);
+                                    }
+
+                                    addPolygon(points: pointAll, polygonCountry: '$index', );
+                                  },
+                                  title: Text(
+                                    features[index].properties!['ADMIN'] ?? '',
+                                    style: TextStyle(
+                                        fontSize: 17.0,
+                                        color: AppColor.colorLiteBlack5),
+                                  ),
+                                ),
                               ),
-                              title: const Text(
-                                "Dubai",
-                                style: TextStyle(
-                                    fontSize: 17.0,
-                                    color: AppColor.colorLiteBlack5),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
+                            );
+                          }),
                 )
               ],
             ),

@@ -10,8 +10,8 @@ import '../../../navigation/navigation_service.dart';
 import '../signup_view_model/avatar_states.dart';
 
 class AvatarsTypesScreen extends StatefulWidget {
-
-  const AvatarsTypesScreen({Key? key,}) : super(key: key);
+  final Map map;
+  const AvatarsTypesScreen({Key? key, required this.map}) : super(key: key);
 
   @override
   State<AvatarsTypesScreen> createState() => _AvatarsTypesScreenState();
@@ -124,9 +124,19 @@ class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
     return InkWell(
       onTap: () {
 
-
-        _navigationService.navigateTo(chooseAvatarRout, arguments: {'listOfColor': listOfColor, 'url':baseUrl, 'format': format});
-
+        if(widget.map['isFromSignUp'] == true) {
+          _navigationService.navigateTo(chooseAvatarRout, arguments: {
+            'listOfColor': listOfColor,
+            'url': baseUrl,
+            'format': format,
+          });
+        }else{
+          _navigationService.navigateTo(updateAvatarRout, arguments: {
+            'listOfColor': listOfColor,
+            'url': baseUrl,
+            'format': format,
+          });
+        }
       },
       child: Container(
 

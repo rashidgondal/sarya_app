@@ -116,7 +116,7 @@ class _NameScreenState extends State<NameScreen> {
               width: size.width,
               child: Center(
                 child: InkWell(
-                  onTap:firstName.isEmpty|| lastName.isEmpty? null : (){
+                  onTap:firstTextEditingController.text.isEmpty|| lastTextEditingController.text.isEmpty? null : (){
                     UpdateNameRequest updateNameRequest = UpdateNameRequest(
                       firstName: firstTextEditingController.text,
                       lastName: lastTextEditingController.text
@@ -131,13 +131,13 @@ class _NameScreenState extends State<NameScreen> {
                     height: 46.0,
                     width: 200.0,
                     decoration:  BoxDecoration(
-                        color: firstName.isEmpty|| lastName.isEmpty? AppColor.colorLiteGrey:AppColor.aquaGreen,
+                        color: firstTextEditingController.text.isEmpty|| lastTextEditingController.text.isEmpty? AppColor.colorLiteGrey:AppColor.aquaGreen,
                         borderRadius: BorderRadius.circular(8.0)),
                     child:  Center(
                       child: Text(
                         "Save",
                         style:
-                            TextStyle(fontSize: 15.0, color: firstName.isEmpty|| lastName.isEmpty?AppColor.headingColor2 :AppColor.whiteColor),
+                            TextStyle(fontSize: 15.0, color: firstTextEditingController.text.isEmpty|| firstTextEditingController.text.isEmpty? AppColor.headingColor2 : AppColor.whiteColor),
                       ),
                     ),
                   ),

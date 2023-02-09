@@ -52,6 +52,11 @@ dependencies:
   animate_do: ^3.0.2
   modal_bottom_sheet: ^2.1.2
   flutter_launcher_icons: ^0.11.0
+  google_maps_flutter: ^2.2.3
+  geolocator: ^9.0.1
+  flutter_google_places: ^0.3.0
+  awesome_snackbar_content: ^0.0.8
+  geojson: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +88,8 @@ flutter:
   assets:
   - lib/assets/svgs/
   - lib/assets/images/
+  - lib/assets/map/
+  - lib/assets/json_data/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

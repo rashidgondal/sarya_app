@@ -87,7 +87,8 @@ class _BottomSheetCountryPickerState extends State<BottomSheetCountryPicker> {
                           style: const TextStyle(
                               fontSize: 13, color: Colors.black26)),
                     );
-                  } else {
+                  }
+                  else {
                     if ('${e['name']}'.contains(searchKeyWord)) {
                       return ListTile(
                         onTap: () {
@@ -99,7 +100,8 @@ class _BottomSheetCountryPickerState extends State<BottomSheetCountryPicker> {
                         title: Text('${e['name']}'),
                         trailing: Text('${e['tel']}'),
                       );
-                    } else {
+                    }
+                    else {
                       if ('${e['name']}'
                           .toLowerCase()
                           .contains(searchKeyWord.toLowerCase())) {

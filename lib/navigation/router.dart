@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sarya/authentication/forget_password/view/forget_password_screen.dart';
 import 'package:sarya/authentication/forget_password/view/reset_password_screen.dart';
 import 'package:sarya/authentication/signin/view/login_screen.dart';
-import 'package:sarya/authentication/signup/model/signup_request.dart';
 import 'package:sarya/authentication/signup/view/choose_avatar.dart';
 import 'package:sarya/authentication/signup/view/success_screen.dart';
 import 'package:sarya/settings/avatar/view/avatar_screen.dart';
@@ -26,7 +25,9 @@ import '../customWidgets/show_aimation.dart';
 import '../customWidgets/term_and_condtions.dart';
 import '../home/view/draft_itinerary_screen.dart';
 import '../home/view/sold_itinerary_screen.dart';
-import '../main.dart';
+import '../payments/view/bank_detail.dart';
+import '../payments/view/bank_update.dart';
+import '../settings/avatar/view/update_avatar.dart';
 import '../settings/view/settings_home_screen.dart';
 import 'router_path.dart' as routes;
 
@@ -43,11 +44,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case routes.forgetRout:
       return MaterialPageRoute(
-        builder: (context) => const  ForgetPasswordScreen(),
+        builder: (context) =>   ForgetPasswordScreen(map: settings.arguments as Map,),
       );
     case routes.resetRout:
       return MaterialPageRoute(
-        builder: (context) =>  ResetPasswordScreen(email: settings.arguments as String,),
+        builder: (context) =>  ResetPasswordScreen(map: settings.arguments as Map,),
       );
     case routes.dashboardRout:
       return MaterialPageRoute(
@@ -67,10 +68,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case routes.chooseAvatarRout:
       return MaterialPageRoute(
-        builder: (context) =>    ChooseAvatar(map: settings.arguments as Map));
+        builder: (context) =>    ChooseAvatar(map: settings.arguments as Map,));
+    case routes.updateAvatarRout:
+      return MaterialPageRoute(
+          builder: (context) =>    UpdateAvatar(map: settings.arguments as Map,));
     case routes.avatarRout:
       return MaterialPageRoute(
-          builder: (context) =>  const  AvatarsTypesScreen());
+          builder: (context) =>    AvatarsTypesScreen(map: settings.arguments as Map,));
     case routes.destinationRout:
       return MaterialPageRoute(
         builder: (context) =>  const SelectDestination(),
@@ -142,6 +146,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.passwordSettingRoute:
       return MaterialPageRoute(
           builder: (context) =>  const PasswordScreen());
+    case routes.bankDetailRoute:
+      return MaterialPageRoute(
+          builder: (context) =>  const BankDetail());
+    case routes.bankUpdateRoute:
+      return MaterialPageRoute(
+          builder: (context) =>  const UpdateBankDetails());
 
     default:
       return MaterialPageRoute(

@@ -25,16 +25,10 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   void initState() {
     super.initState();
     _navigationService = locator<NavigationService>();
-    getProfilePicture();
     getUserInfo();
   }
 
-  getProfilePicture() async {
-    SharedPrefs pref = SharedPrefs();
 
-    profilePath = await pref.getProfilePath();
-    setState(() {});
-  }
 
   getUserInfo() async {
     print("..........");
@@ -53,23 +47,21 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getUserInfo();
     return SafeArea(
         child: Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColor.whiteColor,
-      drawer: DrawerScreen(
-        profilePath: profilePath,
-        map: map == null? {}: map!,
-      ),
+      drawer: DrawerScreen(),
       appBar: AppBar(
         elevation: 0,
         toolbarHeight: 60,
         leading: IconButton(
-            icon: profilePath == null
-                ? SvgPicture.asset('user'.svg, height: 16.0, width: 16.0,)
-                : SvgPicture.network(profilePath!, height: 16.0, width: 16.0,),
-            onPressed: () => _scaffoldKey.currentState!.openDrawer()),
+            icon: map == null
+                ? SvgPicture.asset('user'.svg, height: 26.0, width: 26.0,)
+                : SvgPicture.network(map!['avatar'], height: 26.0, width: 26.0,),
+            onPressed: () {
+              _scaffoldKey.currentState!.openDrawer();
+            }),
         backgroundColor: AppColor.aquaCasper2,
         title: const Text(
           "Itinerary",

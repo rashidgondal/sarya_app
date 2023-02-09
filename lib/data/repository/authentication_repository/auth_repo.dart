@@ -114,7 +114,7 @@ class AuthRepository{
     }
   }
 
-  Future<dynamic> update({required body}) async{
+  Future<SignInResponse> update({required body}) async{
     try{
 
       log('body......$body', name:'update | AuthRepository');
@@ -122,8 +122,8 @@ class AuthRepository{
       var data =await _saryaAPI.update(body: body);
 
       log('data......$data', name:'update | AuthRepository');
-
-      return data;
+      SignInResponse signInResponse = SignInResponse.fromJson(data);
+      return signInResponse;
     }catch(e){
       log('catch......${e.toString()}', name:'update | AuthRepository');
 

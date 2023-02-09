@@ -23,14 +23,15 @@ class _SettingsHomeState extends State<SettingsHome> {
 
 
   late NavigationService _navigationService;
-  String fullName = '';
+  String fullName = '', email = '', mobile ='', birthday ='',  picUrl = '';
+
 
   @override
   void initState() {
     super.initState();
 
     _navigationService = locator<NavigationService>();
-
+    getUserInfo();
   }
 
   getUserInfo() async {
@@ -40,6 +41,10 @@ class _SettingsHomeState extends State<SettingsHome> {
     Map map = await pref.getUser();
 
     fullName = '${map['firstName']} ${map['lastName']}';
+    email = '${map['email']}';
+    mobile = '${map['telCode']??''}${map['phone']}';
+    picUrl = '${map['avatar']??''}';
+   // birthday = '${map['birthday']}'??'';
     setState(() {});
 
   }
@@ -47,7 +52,6 @@ class _SettingsHomeState extends State<SettingsHome> {
 
   @override
   Widget build(BuildContext context) {
-    getUserInfo();
     Size size = MediaQuery.of(context).size;
 
     return Container(
@@ -105,7 +109,10 @@ class _SettingsHomeState extends State<SettingsHome> {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: InkWell(
                       onTap: () {
-                        _navigationService.navigateTo(nameSettingRoute);
+                        _navigationService.navigateTo(nameSettingRoute)!.then((value) {
+                          getUserInfo();
+
+                        });
                       },
                       child: TextDecoratedContainer(
                         titleWidget:  Text(
@@ -130,7 +137,10 @@ class _SettingsHomeState extends State<SettingsHome> {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: InkWell(
                       onTap: () {
-                        _navigationService.navigateTo(avatarSettingRoute);
+                        _navigationService.navigateTo(avatarSettingRoute)!.then((value) {
+                          getUserInfo();
+
+                        });
 
                       },
                       child: TextDecoratedContainer(
@@ -143,10 +153,12 @@ class _SettingsHomeState extends State<SettingsHome> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SvgPicture.asset(
-                              'user'.svg,
+                            Container(
                               height: 16.0,
                               width: 16.0,
+                              child: picUrl ==''?
+                              SvgPicture.asset('user'.svg):
+                              SvgPicture.network(picUrl,) ,
                             ),
                           ],
                         ),
@@ -185,12 +197,14 @@ class _SettingsHomeState extends State<SettingsHome> {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: InkWell(
                       onTap: () {
-                        _navigationService.navigateTo(mobileSettingRoute);
+                        _navigationService.navigateTo(mobileSettingRoute)!.then((value) {
+                          getUserInfo();
+                        });
 
                       },
                       child: TextDecoratedContainer(
-                        titleWidget: const Text(
-                          'Mobile Number',
+                        titleWidget:  Text(
+                          mobile,
                           style: TextStyle(
                               fontSize: 15.0, color: AppColor.headingColor2),
                         ),
@@ -206,15 +220,15 @@ class _SettingsHomeState extends State<SettingsHome> {
                       )),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  padding:  EdgeInsets.symmetric(horizontal: 30),
                   child: InkWell(
                       onTap: () {
                         _navigationService.navigateTo(emailSettingRoute);
 
                       },
                       child: TextDecoratedContainer(
-                        titleWidget: const Text(
-                          'Email',
+                        titleWidget:  Text(
+                          email,
                           style: TextStyle(
                               fontSize: 15.0, color: AppColor.headingColor2),
                         ),
@@ -235,9 +249,8 @@ class _SettingsHomeState extends State<SettingsHome> {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: InkWell(
                       onTap: () {
-                        _navigationService.navigateTo(passwordSettingRoute);
-
-                      },
+                        _navigationService.navigateTo(forgetRout, arguments: {"isFromLogin": false});
+                        },
                       child: TextDecoratedContainer(
                         titleWidget: const Text(
                           'Password',
@@ -255,7 +268,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                         ),
                       )),
                 ),
-                Padding(
+           /*     Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: InkWell(
                       onTap: () {
@@ -263,8 +276,8 @@ class _SettingsHomeState extends State<SettingsHome> {
 
                       },
                       child: TextDecoratedContainer(
-                        titleWidget: const Text(
-                          'Birthday',
+                        titleWidget:  Text(
+                          birthday,
                           style: TextStyle(
                               fontSize: 15.0, color: AppColor.headingColor2),
                         ),
@@ -278,8 +291,8 @@ class _SettingsHomeState extends State<SettingsHome> {
                           ],
                         ),
                       )),
-                ),
-/*
+                ),*/
+          /*
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: InkWell(

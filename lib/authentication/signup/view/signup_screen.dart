@@ -12,6 +12,7 @@ import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../../customWidgets/custom_country_picker.dart';
+import '../../../helper/helper_methods.dart';
 import '../../../navigation/navigation_service.dart';
 import '../signup_widget/bottom_sheet_country_picker.dart';
 
@@ -24,14 +25,14 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+
   final PageController _pageController = PageController(
     initialPage: 0,
     keepPage: true,
   );
-  final PageController _pageControllerImage = PageController(
-    initialPage: 0,
-    keepPage: true,
-  );
+
+  DateTime dateIos = DateTime(2016, 10, 26);
+
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
@@ -44,6 +45,13 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController hobbyController = TextEditingController();
   TextEditingController favCountryController = TextEditingController();
   TextEditingController tellMoreController = TextEditingController();
+
+  TextEditingController bankNameController = TextEditingController();
+  TextEditingController beneficiaryController = TextEditingController();
+  TextEditingController accountNoController = TextEditingController();
+  TextEditingController ibanNoController = TextEditingController();
+  TextEditingController swiftCodeNoController = TextEditingController();
+
 
   late NavigationService _navigationService;
   List<Widget> list = [];
@@ -61,19 +69,19 @@ class _SignupScreenState extends State<SignupScreen> {
 
   List listGender = ["Male", 'Female'];
   String? selectedGender;
-  String dob = '', telCode = '', nationality = '', _cor = '', country = '';
+  String dob = '', telCode = '', nationality = '', _cor = '', bankCountry = '';
 
   ValueNotifier<String> dateValueNotifier = ValueNotifier('');
   ValueNotifier<String> genderNotifier = ValueNotifier('');
   ValueNotifier<String> countriesNotifier = ValueNotifier('');
   ValueNotifier<String> nationalityNotifier = ValueNotifier('');
+  ValueNotifier<String> bankCountryNotifier = ValueNotifier('');
   ValueNotifier<String> telCodeNotifier = ValueNotifier('');
+  ValueNotifier<bool> showPasswordNotifier = ValueNotifier(true);
 
   ValueNotifier<String> corNotifier = ValueNotifier('');
 
   String? selectedCountry;
-
-  bool showPassword = true;
 
 
   @override
@@ -119,7 +127,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
                     ),
-                    hintText: " *Username",
+                    hintText: "Username",
                     fillColor: AppColor.aquaCasper,
                     contentPadding: EdgeInsets.zero,
                     hintStyle: TextStyle(
@@ -150,7 +158,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
                     ),
-                    hintText: " *First Name",
+                    hintText: "First Name",
                     fillColor: AppColor.aquaCasper,
                     contentPadding: EdgeInsets.zero,
                     hintStyle: TextStyle(
@@ -181,7 +189,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
                     ),
-                    hintText: " *Last Name",
+                    hintText: "Last Name",
                     fillColor: AppColor.aquaCasper,
                     contentPadding: EdgeInsets.zero,
                     hintStyle: TextStyle(
@@ -215,7 +223,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     if (value.isEmpty) {
                       return CustomCountryPicker(
                         value: selectedGender,
-                        hint: '*Gender',
+                        hint: 'Gender',
                         items: listGender
                             .map((value) => DropdownMenuItem(
                                   value: value,
@@ -251,7 +259,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                     return CustomCountryPicker(
                       value: selectedGender,
-                      hint: '*Gender',
+                      hint: 'Gender',
                       items: listGender
                           .map((value) => DropdownMenuItem(
                                 value: value,
@@ -300,13 +308,24 @@ class _SignupScreenState extends State<SignupScreen> {
                       return Align(
                         alignment: Alignment.centerLeft,
                         child: InkWell(
-                          onTap: () {
-                            _selectDate();
-                          },
+                          onTap: () => _showDialog(
+                            CupertinoDatePicker(
+                              initialDateTime: dateIos,
+                              mode: CupertinoDatePickerMode.date,
+                              use24hFormat: true,
+                              // This is called when the user changes the date.
+                              onDateTimeChanged: (DateTime newDate) {
+                                String d = newDate.toString();
+                                var splitDate = d.split(" ");
+                                dateValueNotifier.value = splitDate[0];
+                                dob = splitDate[0];
+                              },
+                            ),
+                          ),
                           child: SizedBox(
                             height: 20,
                             child: Text(
-                              " *Birthdate  $value",
+                              "Birthdate  $value",
                               style: const TextStyle(
                                   fontSize: 14.0,
                                   color: AppColor.colorGrey,
@@ -320,9 +339,20 @@ class _SignupScreenState extends State<SignupScreen> {
                     return Align(
                       alignment: Alignment.centerLeft,
                       child: InkWell(
-                        onTap: () {
-                          _selectDate();
-                        },
+                        onTap: () => _showDialog(
+                          CupertinoDatePicker(
+                            initialDateTime: dateIos,
+                            mode: CupertinoDatePickerMode.date,
+                            use24hFormat: true,
+                            // This is called when the user changes the date.
+                            onDateTimeChanged: (DateTime newDate) {
+                              String d = newDate.toString();
+                              var splitDate = d.split(" ");
+                              dateValueNotifier.value = splitDate[0];
+                              dob = splitDate[0];
+                            },
+                          ),
+                        ),
                         child: SizedBox(
                           height: 20,
                           child: Text(
@@ -382,7 +412,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Row(
                                   children: const [
                                     Text(
-                                      "*Nationality",
+                                      "Nationality",
                                       style: TextStyle(
                                           fontSize: 14.0,
                                           color: AppColor.colorGrey,
@@ -490,7 +520,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Row(
                                   children: const [
                                     Text(
-                                      "*Country of Residence",
+                                      "Country of Residence",
                                       style: TextStyle(
                                           fontSize: 14.0,
                                           color: AppColor.colorGrey,
@@ -600,7 +630,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
                     ),
-                    hintText: " *Email",
+                    hintText: "Email",
                     fillColor: AppColor.aquaCasper,
                     contentPadding: EdgeInsets.zero,
                     hintStyle: TextStyle(
@@ -609,8 +639,70 @@ class _SignupScreenState extends State<SignupScreen> {
                         fontWeight: FontWeight.w500)),
               ),
               const SizedBox(
-                height: 30,
+                height: 40,
               ),
+
+              ValueListenableBuilder(
+                  valueListenable: showPasswordNotifier,
+                  builder:
+                      (BuildContext context, bool value, Widget? child) {
+                    return  TextFormField(
+                      controller: passwordNameController,
+                      validator: (v) {
+                        if (v!.isEmpty) {
+                          return "Please enter password.";
+                        } else {
+                          return null;
+                        }
+                      },
+                      maxLines: 1,
+                      obscureText: showPasswordNotifier.value,
+                      style: const TextStyle(
+                          fontSize: 14.0,
+                          color: AppColor.lightIndigo,
+                          fontWeight: FontWeight.w500),
+
+                      decoration:  InputDecoration(
+                          isDense: true,
+                          suffixIconConstraints:const BoxConstraints(
+                            minWidth: 20,
+                            minHeight: 30,
+                          ),
+
+                          enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.lightIndigo),
+                          ),
+                          suffixIcon: showPasswordNotifier.value?
+                          InkWell(
+                              onTap: (){
+
+                                  showPasswordNotifier.value = false;
+
+                              },
+                              child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.colorGrey,)):
+                          InkWell(
+                              onTap: (){
+
+                                showPasswordNotifier.value = true;
+                              },
+                              child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.lightIndigo,)),
+                          focusedBorder:const UnderlineInputBorder(
+                            borderSide:
+                            BorderSide(color: AppColor.lightIndigo),
+                          ),
+                          contentPadding: EdgeInsets.zero,
+                          hintText: "Password",
+                          fillColor: AppColor.aquaCasper,
+                          hintStyle:const TextStyle(
+                              fontSize: 14.0,
+                              color: AppColor.colorGrey,
+                              fontWeight: FontWeight.w500)),
+                    );
+
+                  }),
+
+
+/*
               TextFormField(
                 controller: passwordNameController,
                 keyboardType: TextInputType.text,
@@ -632,8 +724,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AppColor.lightIndigo),
                     ),
-                    
-                    hintText: " *Password",
+
+                    hintText: "Password",
                     fillColor: AppColor.aquaCasper,
                     contentPadding: EdgeInsets.zero,
                     hintStyle: TextStyle(
@@ -641,6 +733,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         color: AppColor.colorGrey,
                         fontWeight: FontWeight.w500)),
               ),
+*/
               const SizedBox(
                 height: 30,
               ),
@@ -824,7 +917,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       borderSide: BorderSide(
                                           color: AppColor.lightIndigo),
                                     ),
-                                    hintText: " *Phone Number",
+                                    hintText: "Phone Number",
                                     fillColor: AppColor.aquaCasper,
                                     contentPadding: EdgeInsets.zero,
                                     hintStyle: TextStyle(
@@ -933,31 +1026,276 @@ class _SignupScreenState extends State<SignupScreen> {
             ],
           ),
         ),
+        Column(
+          children: [
+            const SizedBox(
+              height: 40,
+            ),
+            const Text(
+              "Add bank detail",
+              style: TextStyle(
+                  fontSize: 14,
+                  color: AppColor.colorBlue,
+                  fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+                height: 50.0,
+                child: ValueListenableBuilder(
+                    valueListenable: bankCountryNotifier,
+                    builder:
+                        (BuildContext context, String value, Widget? child) {
+                      if (value.isEmpty) {
+                        return InkWell(
+                          onTap: () {
+                            showMaterialModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => Container(
+                                  color: Colors.white,
+                                  height: MediaQuery.of(context).size.height,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: BottomSheetCountryPicker(
+                                    countries: widget.countries,
+                                    countryName: (v) {
+                                      bankCountryNotifier.value = v;
+                                      bankCountry = v;
+                                    },
+                                    countryTel: (v) {},
+                                    nationality: (v) {
+
+                                    },
+                                  )),
+                            ).then((value) {
+                              setState(() {});
+                            });
+                          },
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: Row(
+                                children: const [
+                                  Text(
+                                    "Search Country",
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Spacer(),
+                                  Icon(
+                                    Icons.keyboard_arrow_down_outlined,
+                                    color: AppColor.headingColor2,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      return InkWell(
+                        onTap: () {
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => Container(
+                                color: Colors.white,
+                                height:
+                                MediaQuery.of(context).size.height / 1.2,
+                                width: MediaQuery.of(context).size.width,
+                                child: BottomSheetCountryPicker(
+                                  countries: widget.countries,
+                                  countryName: (v) {},
+                                  countryTel: (v) {},
+                                  nationality: (v) {
+                                    bankCountryNotifier.value = v;
+                                    bankCountry = v;
+                                  },
+                                )),
+                          ).then((value) {
+                            setState(() {});
+                          });
+                        },
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  bankCountry,
+                                  style: const TextStyle(
+                                      fontSize: 14.0,
+                                      color: AppColor.lightIndigo,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const Spacer(),
+                                const Icon(
+                                  Icons.keyboard_arrow_down_outlined,
+                                  color: AppColor.lightIndigo,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    })),
+            Container(
+              height: 1,
+              color: AppColor.lightIndigo,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: bankNameController,
+              keyboardType: TextInputType.text,
+
+              style: const TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.lightIndigo,
+                  fontWeight: FontWeight.w500),
+              decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+
+                  hintText: "Bank Name",
+                  fillColor: AppColor.aquaCasper,
+                  contentPadding: EdgeInsets.zero,
+                  hintStyle: TextStyle(
+                      fontSize: 14.0,
+                      color: AppColor.colorGrey,
+                      fontWeight: FontWeight.w500)),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: beneficiaryController,
+              keyboardType: TextInputType.text,
+              style: const TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.lightIndigo,
+                  fontWeight: FontWeight.w500),
+              decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+
+                  hintText: "Beneficiary Name",
+                  fillColor: AppColor.aquaCasper,
+                  contentPadding: EdgeInsets.zero,
+                  hintStyle: TextStyle(
+                      fontSize: 14.0,
+                      color: AppColor.colorGrey,
+                      fontWeight: FontWeight.w500)),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: accountNoController,
+              keyboardType: TextInputType.emailAddress,
+
+              style: const TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.lightIndigo,
+                  fontWeight: FontWeight.w500),
+              decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+                  hintText: "Account No.",
+                  fillColor: AppColor.aquaCasper,
+                  contentPadding: EdgeInsets.zero,
+                  hintStyle: TextStyle(
+                      fontSize: 14.0,
+                      color: AppColor.colorGrey,
+                      fontWeight: FontWeight.w500)),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: ibanNoController,
+              keyboardType: TextInputType.text,
+
+              style: const TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.lightIndigo,
+                  fontWeight: FontWeight.w500),
+              decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+
+                  hintText: "IBAN No.",
+                  fillColor: AppColor.aquaCasper,
+                  contentPadding: EdgeInsets.zero,
+                  hintStyle: TextStyle(
+                      fontSize: 14.0,
+                      color: AppColor.colorGrey,
+                      fontWeight: FontWeight.w500)),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: swiftCodeNoController,
+              keyboardType: TextInputType.text,
+
+              style: const TextStyle(
+                  fontSize: 15.0,
+                  color: AppColor.lightIndigo,
+                  fontWeight: FontWeight.w500),
+              decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                  ),
+
+                  hintText: "Swift Code.",
+                  fillColor: AppColor.aquaCasper,
+                  contentPadding: EdgeInsets.zero,
+                  hintStyle: TextStyle(
+                      fontSize: 14.0,
+                      color: AppColor.colorGrey,
+                      fontWeight: FontWeight.w500)),
+            ),
+
+          ],
+        ),
+
       ];
     });
   }
 
-  String date = "";
   DateTime selectedDate = DateTime.now();
 
-  _selectDate() async {
-    final DateTime? selected = await showDatePicker(
-      context: locator<NavigationService>().navigatorKey.currentContext!,
-      initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
-    );
-    if (selected != null) {
-      String d = selected.toString();
-      var splitDate = d.split(" ");
-      dateValueNotifier.value = splitDate[0];
-      dob = splitDate[0];
-    }
-  }
 
   ValueNotifier<int> valueNotifier = ValueNotifier(0);
   double total_width = 5.0;
   int? current_position;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -1133,6 +1471,19 @@ class _SignupScreenState extends State<SignupScreen> {
                                         ? AppColor.lightIndigo
                                         : AppColor.fogColor),
                               ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                height: 9.0,
+                                width: 9.0,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: value == 4
+                                        ? AppColor.lightIndigo
+                                        : AppColor.fogColor),
+                              ),
+
                             ],
                           ),
                           const SizedBox(
@@ -1163,7 +1514,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             children: [
                               list[index],
                               SizedBox(
-                                height: index == 1 || index == 2
+                                height: index == 1
                                     ? 20
                                     : size.width / 5,
                               ),
@@ -1246,7 +1597,6 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Widget _buildButton({required int index}) {
-    print("_cor.............$_cor");
 
     if (index == 0) {
       if (userNameController.text.isEmpty) {
@@ -1303,29 +1653,7 @@ class _SignupScreenState extends State<SignupScreen> {
               curve: Curves.decelerate,
               duration: const Duration(milliseconds: 300));
           // for animated jump. Requires a curve and a duration
-          if (position == 4) {
-            String phone = zeroLeadValue(value: phoneController.text);
 
-            context.read<SignupCubits>().saveSignup(
-                signupRequest: SignupRequest(
-                    firstName: firstNameController.text,
-                    lastName: lastNameController.text,
-                    userName: userNameController.text,
-                    gender: selectedGender,
-                    birthday: dob,
-                    nationality: nationality,
-                    country: _cor,
-                    email: emailNameController.text,
-                    password: passwordNameController.text,
-                    telCode: telCode,
-                    phone: phone,
-                    hobbies: hobbyController.text,
-                    favCountry: favCountryController.text,
-                    extraInfo: tellMoreController.text));
-
-            _navigationService.navigateTo(termRoutSecond);
-            return;
-          }
         },
         child: Container(
           height: 46.0,
@@ -1341,7 +1669,8 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       );
-    } else if (index == 1) {
+    }
+    else if (index == 1) {
       if (selectedGender != null) {
         if (selectedGender!.isEmpty) {
           return Container(
@@ -1416,29 +1745,7 @@ class _SignupScreenState extends State<SignupScreen> {
               curve: Curves.decelerate,
               duration: const Duration(milliseconds: 300));
           // for animated jump. Requires a curve and a duration
-          if (position == 4) {
-            String phone = zeroLeadValue(value: phoneController.text);
 
-            context.read<SignupCubits>().saveSignup(
-                signupRequest: SignupRequest(
-                    firstName: firstNameController.text,
-                    lastName: lastNameController.text,
-                    userName: userNameController.text,
-                    gender: selectedGender,
-                    birthday: dob,
-                    nationality: nationality,
-                    country: _cor,
-                    email: emailNameController.text,
-                    password: passwordNameController.text,
-                    telCode: telCode,
-                    phone: phone,
-                    hobbies: hobbyController.text,
-                    favCountry: favCountryController.text,
-                    extraInfo: tellMoreController.text));
-
-            _navigationService.navigateTo(termRoutSecond);
-            return;
-          }
         },
         child: Container(
           height: 46.0,
@@ -1454,7 +1761,8 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       );
-    } else if (index == 2) {
+    }
+    else if (index == 2) {
       if (emailNameController.text.isEmpty) {
         return Container(
           height: 46.0,
@@ -1525,29 +1833,7 @@ class _SignupScreenState extends State<SignupScreen> {
               curve: Curves.decelerate,
               duration: const Duration(milliseconds: 300));
           // for animated jump. Requires a curve and a duration
-          if (position == 4) {
-            String phone = zeroLeadValue(value: phoneController.text);
 
-            context.read<SignupCubits>().saveSignup(
-                signupRequest: SignupRequest(
-                    firstName: firstNameController.text,
-                    lastName: lastNameController.text,
-                    userName: userNameController.text,
-                    gender: selectedGender,
-                    birthday: dob,
-                    nationality: nationality,
-                    country: _cor,
-                    email: emailNameController.text,
-                    password: passwordNameController.text,
-                    telCode: telCode,
-                    phone: phone,
-                    hobbies: hobbyController.text,
-                    favCountry: favCountryController.text,
-                    extraInfo: tellMoreController.text));
-
-            _navigationService.navigateTo(termRoutSecond);
-            return;
-          }
         },
         child: Container(
           height: 46.0,
@@ -1563,7 +1849,8 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       );
-    } else {
+    }
+    else if(index == 3){
       return InkWell(
         onTap: () {
           int position = 1 + index;
@@ -1572,30 +1859,7 @@ class _SignupScreenState extends State<SignupScreen> {
           _pageController.animateToPage(position,
               curve: Curves.decelerate,
               duration: const Duration(milliseconds: 300));
-          // for animated jump. Requires a curve and a duration
-          if (position == 4) {
-            String phone = zeroLeadValue(value: phoneController.text);
 
-            context.read<SignupCubits>().saveSignup(
-                signupRequest: SignupRequest(
-                    firstName: firstNameController.text,
-                    lastName: lastNameController.text,
-                    userName: userNameController.text,
-                    gender: selectedGender,
-                    birthday: dob,
-                    nationality: nationality,
-                    country: _cor,
-                    email: emailNameController.text,
-                    password: passwordNameController.text,
-                    telCode: telCode,
-                    phone: phone,
-                    hobbies: hobbyController.text,
-                    favCountry: favCountryController.text,
-                    extraInfo: tellMoreController.text));
-
-            _navigationService.navigateTo(termRoutSecond);
-            return;
-          }
         },
         child: Container(
           height: 46.0,
@@ -1612,13 +1876,88 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       );
     }
+    else {
+      return InkWell(
+        onTap: () {
+        int position = 1 + index;
+        total_width = total_width + 50;
+        setState(() {});
+        _pageController.animateToPage(position,
+            curve: Curves.decelerate,
+            duration: const Duration(milliseconds: 300));
+        // for animated jump. Requires a curve and a duration
+        if (position == 5) {
+          String phone = zeroLeadValue(value: phoneController.text);
+
+          BankDetails bankDetails = BankDetails(
+              country: bankCountry,
+              name: bankNameController.text,
+              beneficiary: beneficiaryController.text,
+              accountNo: accountNoController.text,
+              iban: ibanNoController.text,
+              swiftCode: swiftCodeNoController.text
+          );
+
+          context.read<SignupCubits>().saveSignup(
+              signupRequest: SignupRequest(
+                  firstName: firstNameController.text,
+                  lastName: lastNameController.text,
+                  userName: userNameController.text,
+                  gender: selectedGender,
+                  birthday: dob,
+                  nationality: nationality,
+                  country: _cor,
+                  email: emailNameController.text,
+                  password: passwordNameController.text,
+                  telCode: telCode,
+                  phone: phone,
+                  hobbies: hobbyController.text,
+                  favCountry: favCountryController.text,
+                  extraInfo: tellMoreController.text,
+                  bankDetails: bankDetails
+              ));
+
+          _navigationService.navigateTo(termRoutSecond);
+          return;
+        }},
+        child: Container(
+          height: 46.0,
+          width: 200.0,
+          decoration: BoxDecoration(
+              color: AppColor.lightIndigo,
+              borderRadius: BorderRadius.circular(8.0)),
+          child: const Center(
+            child: Text(
+              "Next",
+              style: TextStyle(fontSize: 15.0, color: AppColor.whiteColor),
+            ),
+          ),
+        ),
+      );
+    }
+
+
   }
 
-  String zeroLeadValue({required String value}) {
-    if (value.startsWith('0') && value.length > 1) {
-      return value.replaceAll(RegExp(r'^0+(?=.)'), '');
-    } else {
-      return value;
-    }
+  void _showDialog(Widget child) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => Container(
+          height: 316,
+          padding: const EdgeInsets.only(top: 6.0),
+          // The Bottom margin is provided to align the popup above the system
+          // navigation bar.
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          // Provide a background color for the popup.
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+          // Use a SafeArea widget to avoid system overlaps.
+          child: SafeArea(
+            top: false,
+            child: child,
+          ),
+        ));
   }
+
 }

@@ -126,7 +126,8 @@ class _SuccessScreenState extends State<SuccessScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            _navigationService.navigateTo(avatarRout);
+                            _navigationService.navigateTo(avatarRout,
+                            arguments: {'isFromSignUp':true});
                           },
                           child: Container(
                             height: 46.0,

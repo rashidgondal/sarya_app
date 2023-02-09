@@ -32,17 +32,14 @@ class _ShowAnimationState extends State<ShowAnimation> {
     super.initState();
     _navigationService = locator<NavigationService>();
     _controllerCenter =
-        ConfettiController(duration: const Duration(seconds: 10));
+        ConfettiController(duration: const Duration(seconds: 5));
 
     _controllerCenter.play();
-
-    Future.delayed(const Duration(seconds: 6),(){
-      context
-          .read<SignInCubits>()
-          .doSignIn(signInRequest: widget.signInRequest, navigationService: _navigationService);
+    context
+        .read<SignInCubits>()
+        .doSignIn(signInRequest: widget.signInRequest, navigationService: _navigationService);
 
 
-    });
 
   }
 

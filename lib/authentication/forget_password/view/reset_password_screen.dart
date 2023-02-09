@@ -14,26 +14,27 @@ import '../../../navigation/navigation_service.dart';
 import '../forget_password_viewmodel/forget_password_cubits.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  final String email;
 
-  const ResetPasswordScreen({Key? key, required this.email}) : super(key: key);
+  final Map map;
+
+  const ResetPasswordScreen({Key? key, required this.map}) : super(key: key);
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+
   TextEditingController otpController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
   String otp ='', password ='';
   late NavigationService _navigationService;
+  bool showPassword = true;
 
   @override
   void initState() {
     super.initState();
-
     _navigationService = locator<NavigationService>();
   }
 
@@ -43,6 +44,25 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     return Scaffold(
         backgroundColor: AppColor.whiteColor,
+        appBar: AppBar(
+          elevation: 0,
+          title:  Text(
+            widget.map['root'] ? "Forget Password": "Reset Password",
+            style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
+          ),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: AppColor.lightIndigo,
+            ),
+            onPressed: () {
+              _navigationService.goBack();
+            },
+          ),
+          backgroundColor: AppColor.aquaCasper2,
+          toolbarHeight: 55.0,
+        ),
+
         body: BlocBuilder<ResetPasswordCubits, ResetPasswordStates>(
           builder: (context, state) {
             bool loading = false;
@@ -119,6 +139,60 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           const SizedBox(height: 20.0),
                           TextFormField(
                             controller: passwordController,
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return "Please new password.";
+                              } else {
+                                return null;
+                              }
+                            },
+                            maxLines: 1,
+                            obscureText: showPassword,
+                            style: const TextStyle(
+                                fontSize: 14.0,
+                                color: AppColor.lightIndigo,
+                                fontWeight: FontWeight.w500),
+
+                            decoration:  InputDecoration(
+                                isDense: true,
+                                suffixIconConstraints:const BoxConstraints(
+                                  minWidth: 20,
+                                  minHeight: 30,
+                                ),
+
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                ),
+                                suffixIcon: showPassword?
+                                InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        showPassword = false;
+                                      });
+                                    },
+                                    child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.colorGrey,)):
+                                InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        showPassword = true;
+                                      });
+                                    },
+                                    child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.lightIndigo,)),
+                                focusedBorder:const UnderlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: AppColor.lightIndigo),
+                                ),
+                                contentPadding: EdgeInsets.zero,
+                                hintText: "New Password",
+                                fillColor: AppColor.aquaCasper,
+                                hintStyle:const TextStyle(
+                                    fontSize: 14.0,
+                                    color: AppColor.colorGrey,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+
+                      /*    TextFormField(
+                            controller: passwordController,
                             onChanged: (v){
 
                               setState(() {
@@ -146,7 +220,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     fontSize: 13.0,
                                     color: AppColor.colorGrey,
                                     fontWeight: FontWeight.w500)),
-                          ),
+                          ),*/
                           const SizedBox(height: 30.0),
                           InkWell(
                             onTap: otp.isEmpty || password.isEmpty?null:() {
@@ -157,8 +231,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     .doResetPassword(
                                         otp: code,
                                         password: passwordController.text,
-                                        email: widget.email,
-                                        navigationService: _navigationService);
+                                        email: widget.map['email'],
+                                        navigationService: _navigationService,
+                                        rootValue: widget.map['root']
+                                );
 
                             },
                             child: Container(
@@ -180,7 +256,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           const SizedBox(height: 20.0),
                           InkWell(
                             onTap: () {
-                              _navigationService.navigatePushReplace(loginRout);
+                              if(widget.map['root'] == true) {
+                                _navigationService.navigatePushReplace(loginRout);
+                              }else{
+                                _navigationService.navigatePushReplace(settingRoute);
+                              }
                             },
                             child: Container(
                               height: 46.0,

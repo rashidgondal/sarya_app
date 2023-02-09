@@ -61,12 +61,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
         ),
         Positioned(
-          bottom: widget.maxLine == 1 ? 60 : 100,
+          bottom: widget.maxLine == 1 ? 57 : 100,
           left: 20,
           child: Container(
             color: AppColor.whiteColor,
             height: 20,
-            width: 30,
             child: widget.icon
           ),
         ),

@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
+
+import '../../../helper/shared_prefs.dart';
+import '../../../locator.dart';
+import '../../../navigation/navigation_service.dart';
+import '../../../navigation/router_path.dart';
 
 
 class AvatarScreen extends StatefulWidget {
@@ -11,7 +18,23 @@ class AvatarScreen extends StatefulWidget {
 
 class _AvatarScreenState extends State<AvatarScreen> {
 
-  TextEditingController textEditingController = TextEditingController();
+  late NavigationService _navigationService;
+  String picUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _navigationService = locator<NavigationService>();
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    SharedPrefs pref = SharedPrefs();
+    Map map = await pref.getUser();
+    picUrl = map['avatar'] ?? '';
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +50,7 @@ class _AvatarScreenState extends State<AvatarScreen> {
             title: const Text("Avatar", style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),),
             leading: IconButton(icon: const Icon(Icons.arrow_back_ios, color: AppColor.lightIndigo,),
               onPressed: () {
-               // _navigationService.goBack();
+                _navigationService.goBack();
               },),
             backgroundColor: AppColor.aquaCasper2,
             toolbarHeight: 55.0,
@@ -66,8 +89,11 @@ class _AvatarScreenState extends State<AvatarScreen> {
                           Container(
                             height: 100.0,
                             width: 100.0,
-                            color: AppColor.aquaGreen,
-                          )
+                            child: picUrl ==''?
+                            SvgPicture.asset('user'.svg):
+                            SvgPicture.network(picUrl,) ,
+                      ),
+
                         ],),
 
                     )),
@@ -76,45 +102,31 @@ class _AvatarScreenState extends State<AvatarScreen> {
 
                 Padding(
                     padding:const EdgeInsets.symmetric(horizontal: 30),
-                    child: Container(
-                      height: 50.0,
-                      width: size.width,
+                    child: InkWell(
+                      onTap: (){
+                        _navigationService.navigateTo(avatarRout,
+                            arguments: {'isFromSignUp':false});
+                      },
+                      child: Container(
+                        height: 50.0,
+                        width: size.width,
 
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          border:
-                          Border.all(color: AppColor.borderColor2, width: 1)),
-                      child: Row(
-                        children: const[
-                          Text(
-                              'Change my Avatar',
-                              style:  TextStyle(
-                                  fontSize: 15.0, color: AppColor.headingColor2)),
-                        ],
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: AppColor.colorLiteGrey,
+                            borderRadius: BorderRadius.circular(10.0),
+                            border:
+                            Border.all(color: AppColor.borderColor2, width: 1)),
+                        child: Row(
+                          children: const[
+                            Text(
+                                'Change my Avatar',
+                                style:  TextStyle(
+                                    fontSize: 15.0, color: AppColor.headingColor2)),
+                          ],
+                        ),
                       ),
                     )),
-                const SizedBox(height: 15,),
-                Padding(
-                    padding:const EdgeInsets.symmetric(horizontal: 30),
-                    child: Container(
-                      height: 50.0,
-                      width: size.width,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          border:
-                          Border.all(color: AppColor.borderColor2, width: 1)),
-                      child:Row(
-                        children:const [
-                          Text(
-                              'Edit my Avatar',
-                              style:  TextStyle(
-                                  fontSize: 15.0, color: AppColor.headingColor2)),
-                        ],
-                      ),
-                    )),
-
 
 
               ],

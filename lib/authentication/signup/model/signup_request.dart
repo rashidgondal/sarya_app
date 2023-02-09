@@ -14,6 +14,7 @@ class SignupRequest {
   String? favCountry;
   String? extraInfo;
   String? avatar;
+  BankDetails? bankDetails;
 
   SignupRequest(
       {this.userName,
@@ -31,7 +32,7 @@ class SignupRequest {
         this.favCountry,
         this.extraInfo,
         this.avatar,
-      });
+        this.bankDetails});
 
   SignupRequest.fromJson(Map<String, dynamic> json) {
     userName = json['userName'];
@@ -49,30 +50,68 @@ class SignupRequest {
     favCountry = json['favCountry'];
     extraInfo = json['extraInfo'];
     avatar = json['avatar'];
+    bankDetails = json['bankDetails'] != null
+        ? new BankDetails.fromJson(json['bankDetails'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['userName'] = userName;
-    data['password'] = password;
-    data['email'] = email;
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
-    data['gender'] = gender;
-    data['birthday'] = birthday;
-    data['nationality'] = nationality;
-    data['country'] = country;
-    data['phone'] = phone;
-    data['telCode'] = telCode;
-    data['hobbies'] = hobbies;
-    data['favCountry'] = favCountry;
-    data['extraInfo'] = extraInfo;
-    data['avatar'] = avatar;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['userName'] = this.userName;
+    data['password'] = this.password;
+    data['email'] = this.email;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['gender'] = this.gender;
+    data['birthday'] = this.birthday;
+    data['nationality'] = this.nationality;
+    data['country'] = this.country;
+    data['phone'] = this.phone;
+    data['telCode'] = this.telCode;
+    data['hobbies'] = this.hobbies;
+    data['favCountry'] = this.favCountry;
+    data['extraInfo'] = this.extraInfo;
+    data['avatar'] = this.avatar;
+    if (this.bankDetails != null) {
+      data['bankDetails'] = this.bankDetails!.toJson();
+    }
     return data;
   }
+}
 
-  SignupRequest.avatarFromJson(Map<String, dynamic> json){
-    avatar = json['avatar'];
+class BankDetails {
+  String? country;
+  String? name;
+  String? beneficiary;
+  String? accountNo;
+  String? iban;
+  String? swiftCode;
 
+  BankDetails(
+      {this.country,
+        this.name,
+        this.beneficiary,
+        this.accountNo,
+        this.iban,
+        this.swiftCode});
+
+  BankDetails.fromJson(Map<String, dynamic> json) {
+    country = json['country'];
+    name = json['name'];
+    beneficiary = json['beneficiary'];
+    accountNo = json['accountNo'];
+    iban = json['iban'];
+    swiftCode = json['swiftCode'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['country'] = this.country;
+    data['name'] = this.name;
+    data['beneficiary'] = this.beneficiary;
+    data['accountNo'] = this.accountNo;
+    data['iban'] = this.iban;
+    data['swiftCode'] = this.swiftCode;
+    return data;
   }
 }

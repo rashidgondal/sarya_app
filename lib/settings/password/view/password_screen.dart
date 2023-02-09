@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
+import 'package:sarya/extensions/string_extension.dart';
+import 'package:sarya/locator.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 import '../../../customWidgets/text_decorated_icon.dart';
+import '../../../helper/shared_prefs.dart';
+import '../../../navigation/navigation_service.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({Key? key}) : super(key: key);
@@ -13,7 +18,27 @@ class PasswordScreen extends StatefulWidget {
 
 class _PasswordScreenState extends State<PasswordScreen> {
 
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController passTextEditingController = TextEditingController();
+
+  late NavigationService _navigationService;
+
+  @override
+  void initState() {
+    super.initState();
+    _navigationService = locator<NavigationService>();
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    print("..........");
+    SharedPrefs pref = SharedPrefs();
+
+    Map map = await pref.getUser();
+    passTextEditingController.text = map['pass'] ?? '';
+
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +54,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
             title: const Text("Password", style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),),
             leading: IconButton(icon: const Icon(Icons.arrow_back_ios, color: AppColor.lightIndigo,),
               onPressed: () {
-               // _navigationService.goBack();
+               _navigationService.goBack();
               },),
             backgroundColor: AppColor.aquaCasper2,
             toolbarHeight: 55.0,
@@ -58,16 +83,27 @@ class _PasswordScreenState extends State<PasswordScreen> {
             children:  [
               const SizedBox(height: 15,),
               Padding(
-                padding:const EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: CustomTextField(
-                    maxLine: 1,
-                    textEditingController: textEditingController,
-                    size: size,
-                    textInputType: TextInputType.text,
-                    hintText: "Password", icon:const Icon(Icons.question_mark)),
+                  maxLine: 1,
+                  textEditingController: passTextEditingController,
+                  size: size,
+                  textInputType: TextInputType.phone,
+                  hintText: '',
+                  icon: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'lock'.svg,
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(height: 5,),
-              textEditingController.text.isEmpty? const  Padding(
+              passTextEditingController.text.isEmpty?
+              const  Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Align(
                   alignment: Alignment.centerLeft,
@@ -79,7 +115,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         color: AppColor.headingColor2),
                   ),
                 ),
-              ):const SizedBox(),
+              ):
+              const SizedBox(),
               const Spacer(),
               InkWell(
                 onTap: () {
@@ -89,15 +126,15 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   height: 46.0,
                   width: 150.0,
                   decoration: BoxDecoration(
-                      color: AppColor.buttonColor,
+                      color: passTextEditingController.text.isEmpty?AppColor.colorLiteGrey :AppColor.buttonColor,
                       borderRadius: BorderRadius.circular(8.0)),
                   child:  Center(
                     child: Text(
-                      textEditingController.text.isEmpty?"Ok":"Save",
-                      style: const TextStyle(
+                      passTextEditingController.text.isEmpty?"Ok":"Save",
+                      style:  TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.w500,
-                          color: AppColor.whiteColor),
+                          color: passTextEditingController.text.isEmpty? AppColor.headingColor2 :AppColor.whiteColor),
                     ),
                   ),
                 ),

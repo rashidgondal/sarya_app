@@ -175,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               InkWell(
                                   onTap: () {
-                                    _navigationService.navigateTo(forgetRout);
+                                    _navigationService.navigateTo(forgetRout,arguments: {"isFromLogin": true});
                                   },
                                   child: const SizedBox(
                                       height: 40.0,

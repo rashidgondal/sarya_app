@@ -16,15 +16,14 @@ class SignInCubits extends Cubit<SignInStates> {
     try{
       emit(SignInLoading());
 
-      final  res = await AuthRepository.instance.signIn(body: signInRequest.toJson());
+      final SignInResponse  res = await AuthRepository.instance.signIn(body: signInRequest.toJson());
       SharedPrefs pref = SharedPrefs();
 
-      SignInResponse signInResponse = res;
-      String? url = signInResponse.avatar;
+      String? url = res.avatar;
       pref.saveProfilePath(url);
       pref.saveUser(res);
 
-      print("res.token...............${res.token}");
+      print("res.token...............${res.userName}");
 
       pref.saveToken(res.token);
       emit(SignInLoaded(signInResponse: res));

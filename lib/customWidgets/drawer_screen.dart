@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sarya/customWidgets/text_decorated_icon.dart';
 import 'package:sarya/extensions/string_extension.dart';
@@ -6,12 +7,13 @@ import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
+import '../authentication/signin/signin_view_model/signin_cubits.dart';
+import '../authentication/signin/signin_view_model/signin_states.dart';
 import '../navigation/navigation_service.dart';
 
 class DrawerScreen extends StatefulWidget {
-  final String? profilePath;
-  final Map map;
-   const DrawerScreen({Key? key,  this.profilePath, required this.map}) : super(key: key);
+
+   const DrawerScreen({Key? key,}) : super(key: key);
 
   @override
   State<DrawerScreen> createState() => _DrawerScreenState();
@@ -20,14 +22,23 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
 
   late NavigationService _navigationService;
+   Map? map;
 
   @override
   void initState() {
     super.initState();
     _navigationService = locator<NavigationService>();
-
+    getUserInfo();
   }
 
+  getUserInfo() async {
+    print("..........");
+    SharedPrefs pref = SharedPrefs();
+
+    map = await pref.getUser();
+    setState(() {});
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +48,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
       color: AppColor.whiteColor,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: AppColor.whiteColor,
           appBar: AppBar(
             elevation: 0,
             toolbarHeight: 0,
@@ -59,18 +71,19 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       SizedBox(
                         height: 60,
                         width: 169,
-                        child:  widget.profilePath ==null?
+                        child:  map ==null?
                         SvgPicture.asset('user'.svg):
-                        SvgPicture.network(widget.profilePath!, height: 60,width: 169,) ,
+                        SvgPicture.network(map!["avatar"]!, height: 60,width: 169,) ,
                       ),
                       const  SizedBox(height: 15,),
 
-                      Text("${widget.map["firstName"]??''} ${widget.map["lastName"]??''}", style:const TextStyle(fontSize: 29, color: AppColor.colorBlack,fontWeight: FontWeight.w700),)
+                      Text("${map==null?"":map!["firstName"]??''} ${map==null?"":map!["lastName"]??''}", style:const TextStyle(fontSize: 29, color: AppColor.colorBlack,fontWeight: FontWeight.w700),)
                       ,
                       const  SizedBox(height: 15,)
-                      , Text("${widget.map["userName"]??''} | 0 friends", style: TextStyle(fontSize: 13, color: AppColor.headingColor2,fontWeight: FontWeight.w500),)
+                      , Text("${map==null?"":map!["userName"]??''} | 0 friends", style: TextStyle(fontSize: 13, color: AppColor.headingColor2,fontWeight: FontWeight.w500),)
                     ],
                   ),
+
                 ),
                 Padding(
                   padding:const  EdgeInsets.only(right: 18.0, top: 12),
@@ -93,120 +106,123 @@ class _DrawerScreenState extends State<DrawerScreen> {
           ),
           body: SingleChildScrollView(
             physics:const  BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                const SizedBox(height: 15,),
-                InkWell(
-                   onTap: (){
+            child: Container(
+              color: AppColor.whiteColor,
+              child: Column(
+                children: [
+                  const SizedBox(height: 15,),
+                  InkWell(
+                     onTap: (){
 
-                   },
-                   child: Padding(
-                    padding: const  EdgeInsets.only(left: 30, right: 30),
-                    child:   TextDecoratedContainer(titleWidget:const Text(
-                      'Account ',
-                      style:  TextStyle(
-                          fontSize: 15.0, color: AppColor.headingColor2),
-                    ), iconImage: SvgPicture.asset('summary_icon'.svg),),
-                ),
-                 ),
-                const SizedBox(height: 1,),
-                InkWell(
-                  onTap: (){
+                     },
+                     child: Padding(
+                      padding: const  EdgeInsets.only(left: 30, right: 30),
+                      child:   TextDecoratedContainer(titleWidget:const Text(
+                        'Account ',
+                        style:  TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ), iconImage: SvgPicture.asset('summary_icon'.svg),),
+                  ),
+                   ),
+                  const SizedBox(height: 1,),
+                  InkWell(
+                    onTap: (){
 
-                  },
-                   child:const Padding(
-                    padding:  EdgeInsets.only(left: 30, right: 30),
-                    child:   TextDecoratedContainer(titleWidget: Text(
-                      'Share my location ',
-                      style:  TextStyle(
-                          fontSize: 15.0, color: AppColor.headingColor2),
-                    ), iconImage: Icon(Icons.share_location, color: AppColor.lightIndigo,size: 18,),),
-                ),
-                 ),
-                const SizedBox(height: 1,),
-                InkWell(
-                  onTap: (){
-
-                  },
-                   child:const Padding(
-                    padding:  EdgeInsets.only(left: 30, right: 30),
-                    child:   TextDecoratedContainer(titleWidget: Text(
-                      'Add Bank Detail',
-                      style:  TextStyle(
-                          fontSize: 15.0, color: AppColor.headingColor2),
-                    ),
-                      iconImage: Icon(Icons.account_balance,color: AppColor.lightIndigo,size: 18,),
-                    icon: Icon(Icons.arrow_forward_ios,color: AppColor.lightIndigo,),
-                    ),
-                ),
-                 ),
-                const SizedBox(height: 1,),
-                InkWell(
-                  onTap: (){
-
-                  },
-                   child: Padding(
-                    padding:const  EdgeInsets.only(left: 30, right: 30),
-                    child:   TextDecoratedContainer(titleWidget:const Text(
-                      'Contacts',
-                      style:  TextStyle(
-                          fontSize: 15.0, color: AppColor.headingColor2),
-                    ), iconImage: SvgPicture.asset('contacts'.svg),),
-                ),
-                 ),
-                const SizedBox(height: 1,),
-                InkWell(
-                  onTap: (){
-
-                  },
-                   child: Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30),
-                    child:   TextDecoratedContainer(titleWidget:const Text(
-                      'Help ',
-                      style:  TextStyle(
-                          fontSize: 15.0, color: AppColor.headingColor2),
-                    ), iconImage: SvgPicture.asset('help'.svg),),
-                ),
-                 ),
-                const SizedBox(height: 1,),
-                InkWell(
-                  onTap: (){
-
-                    _navigationService.navigateTo(settingRoute);
                     },
-                   child: Padding(
-                    padding:const  EdgeInsets.only(left: 30, right: 30),
-                    child:   TextDecoratedContainer(titleWidget:const Text(
-                      'Setting',
-                      style:  TextStyle(
-                          fontSize: 15.0, color: AppColor.headingColor2),
-                    ),
-                      iconImage: SvgPicture.asset('help'.svg),
+                     child:const Padding(
+                      padding:  EdgeInsets.only(left: 30, right: 30),
+                      child:   TextDecoratedContainer(titleWidget: Text(
+                        'Share my location ',
+                        style:  TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ), iconImage: Icon(Icons.share_location, color: AppColor.lightIndigo,size: 18,),),
+                  ),
+                   ),
+                  const SizedBox(height: 1,),
+                  InkWell(
+                    onTap: (){
+                      _navigationService.navigateTo(bankDetailRoute);
+                    },
+                     child:const Padding(
+                      padding:  EdgeInsets.only(left: 30, right: 30),
+                      child:   TextDecoratedContainer(titleWidget: Text(
+                        'Bank Detail',
+                        style:  TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ),
+                        iconImage: Icon(Icons.account_balance,color: AppColor.lightIndigo,size: 18,),
+                      icon: Icon(Icons.arrow_forward_ios,color: AppColor.lightIndigo,),
+                      ),
+                  ),
+                   ),
+                  const SizedBox(height: 1,),
+                  InkWell(
+                    onTap: (){
 
-                    ),
-                ),
-                 ),
-                const SizedBox(height: 1,),
-                InkWell(
-                  onTap: (){
-                    SharedPrefs pref = SharedPrefs();
-                    pref.clearCache();
-                    _navigationService.navigatePushReplace(loginRout);
-                  },
-                  child: Padding(
-                    padding:const  EdgeInsets.only(left: 30, right: 30),
-                    child:   TextDecoratedContainer(titleWidget:const Text(
-                      'Logout',
-                      style:  TextStyle(
-                          fontSize: 15.0, color: AppColor.headingColor2),
-                    ),
-                      iconImage: SvgPicture.asset('exit'.svg),
+                    },
+                     child: Padding(
+                      padding:const  EdgeInsets.only(left: 30, right: 30),
+                      child:   TextDecoratedContainer(titleWidget:const Text(
+                        'Contacts',
+                        style:  TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ), iconImage: SvgPicture.asset('contacts'.svg),),
+                  ),
+                   ),
+                  const SizedBox(height: 1,),
+                  InkWell(
+                    onTap: (){
 
+                    },
+                     child: Padding(
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child:   TextDecoratedContainer(titleWidget:const Text(
+                        'Help ',
+                        style:  TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ), iconImage: SvgPicture.asset('help'.svg),),
+                  ),
+                   ),
+                  const SizedBox(height: 1,),
+                  InkWell(
+                    onTap: (){
+
+                      _navigationService.navigateTo(settingRoute);
+                      },
+                     child: Padding(
+                      padding:const  EdgeInsets.only(left: 30, right: 30),
+                      child:   TextDecoratedContainer(titleWidget:const Text(
+                        'Setting',
+                        style:  TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ),
+                        iconImage: SvgPicture.asset('help'.svg),
+
+                      ),
+                  ),
+                   ),
+                  const SizedBox(height: 1,),
+                  InkWell(
+                    onTap: (){
+                      SharedPrefs pref = SharedPrefs();
+                      pref.clearCache();
+                      _navigationService.navigatePushReplace(loginRout);
+                    },
+                    child: Padding(
+                      padding:const  EdgeInsets.only(left: 30, right: 30),
+                      child:   TextDecoratedContainer(titleWidget:const Text(
+                        'Logout',
+                        style:  TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ),
+                        iconImage: SvgPicture.asset('exit'.svg),
+
+                      ),
                     ),
                   ),
-                ),
 
-              ],
+                ],
+              ),
             ),
           ),
         ),

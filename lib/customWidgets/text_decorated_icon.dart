@@ -47,7 +47,6 @@ class TextDecoratedContainer extends StatelessWidget {
           child: Container(
               color: AppColor.whiteColor,
               height: 20,
-              width: 30,
               child:iconImage
           ),
         ),

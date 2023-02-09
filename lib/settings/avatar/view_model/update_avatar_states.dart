@@ -23,7 +23,6 @@ class UpdateAvatarLoading extends UpdateAvatarStates {
 
 }
 
-
 class UpdateAvatarLoaded extends UpdateAvatarStates {
 
 }
