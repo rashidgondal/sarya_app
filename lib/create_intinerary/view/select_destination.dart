@@ -286,6 +286,8 @@ class _SelectDestinationState extends State<SelectDestination> {
                                       pointAll.removeAt(index);
                                     }
 
+
+                                    
                                     addPolygon(points: pointAll, polygonCountry: '$index', );
                                   },
                                   title: Text(
