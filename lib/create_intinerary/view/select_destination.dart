@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class _SelectDestinationState extends State<SelectDestination> {
   Set<Polygon> _polygon = HashSet<Polygon>();
   List<GeoJsonFeature> features = [];
 
-  bool loading =  true;
+  bool loading = true;
 
   @override
   void dispose() {
@@ -108,7 +109,7 @@ class _SelectDestinationState extends State<SelectDestination> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: AppColor.whiteColor,
-          appBar: AppBar(
+      appBar: AppBar(
         elevation: 0,
         toolbarHeight: 60,
         leading: IconButton(
@@ -127,7 +128,7 @@ class _SelectDestinationState extends State<SelectDestination> {
         ),
         centerTitle: true,
       ),
-          bottomNavigationBar: Container(
+      bottomNavigationBar: Container(
         height: 100.0,
         color: AppColor.whiteColor,
         child: Center(
@@ -149,7 +150,7 @@ class _SelectDestinationState extends State<SelectDestination> {
           ),
         ),
       ),
-            body: Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -201,7 +202,7 @@ class _SelectDestinationState extends State<SelectDestination> {
                   height: 10,
                 ),
                 Expanded(
-                  child:/* searchKeyWord.isEmpty
+                  child: /* searchKeyWord.isEmpty
                       ? ListView.builder(
                           itemCount: list.length,
                           itemBuilder: (BuildContext context, int index) {
@@ -244,61 +245,96 @@ class _SelectDestinationState extends State<SelectDestination> {
                                         ))));
                           })
                       : */
-                  loading?Center(child: CupertinoActivityIndicator(),):
-                  features.isEmpty?
-                  Center(child: Text("Data not found."),)
+                      loading
+                          ? Center(
+                              child: CupertinoActivityIndicator(),
+                            )
+                          : features.isEmpty
+                              ? Center(
+                                  child: Text("Data not found."),
+                                )
+                              : ListView.builder(
+                                  itemCount: features.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 15.0),
+                                      child: Container(
+                                        height: 55.0,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: AppColor.borderColor2,
+                                                width: 1),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        child: CheckboxListTile(
+                                          contentPadding: EdgeInsets.zero,
+                                          value: boolList[index],
+                                          onChanged: (bool? value) {
+                                            log('click');
+                                            log('features = ${features[index].geometry}');
+                                            List<LatLng> pointAll = [];
 
-                      :ListView.builder(
-                          itemCount: features.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 15.0),
-                              child: Container(
-                                height: 55.0,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: AppColor.borderColor2, width: 1),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: CheckboxListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  value: boolList[index],
-                                  onChanged: (bool? value) {
-                                    List<LatLng> pointAll = [];
+                                            print("va.......$value");
+                                            if (value == null) {
+                                              return;
+                                            }
 
-                                    print("va.......$value");
-                                    if (value == null) {
-                                      return;
-                                    }
+                                            if (value == true) {
+                                              boolList[index] = true;
+                                              if(features[index].geometry is GeoJsonPolygon){
+                                                GeoJsonPolygon polygon =
+                                                    features[index].geometry;
+                                                polygon.geoSeries
+                                                    .forEach((element) {
+                                                  List<LatLng> latlng = [];
+                                                  element.geoPoints.forEach((e) {
+                                                    latlng.add(LatLng(
+                                                        e.latitude, e.longitude));
+                                                  });
+                                                  pointAll.addAll(latlng);
+                                                });
+                                              }else{
+                                                GeoJsonMultiPolygon polygon =
+                                                    features[index].geometry;
+                                                polygon.polygons
+                                                    .forEach((element) {
+                                                  element.geoSeries.forEach((e) {
+                                                    List<LatLng> latlng = [];
+                                                    e.geoPoints.forEach((e1) {
+                                                      latlng.add(LatLng(
+                                                          e1.latitude, e1.longitude));
+                                                    });
+                                                    pointAll.addAll(latlng);
+                                                  });
+                                                });
+                                              }
+                                              setState(() {});
+                                            } else {
+                                              boolList[index] = false;
+                                              pointAll.removeAt(index);
+                                            }
 
-                                    if (value == true) {
-                                      boolList[index] = true;
-                                      var a = features[index].geometry;
-
-
-                                      /*a.forEach((element) {
-                                        print("ele..............$element");
-                                      });*/
-                                      //pointAll.addAll(a);
-                                    } else {
-                                      boolList[index] = false;
-                                      pointAll.removeAt(index);
-                                    }
-
-
-                                    addPolygon(points: pointAll, polygonCountry: '$index', );
-                                  },
-                                  title: Text(
-                                    features[index].properties!['ADMIN'] ?? '',
-                                    style: TextStyle(
-                                        fontSize: 17.0,
-                                        color: AppColor.colorLiteBlack5),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }),
+                                            addPolygon(
+                                              points: pointAll,
+                                              polygonCountry: '$index',
+                                            );
+                                          },
+                                          title: Text(
+                                            features[index]
+                                                    .properties!['ADMIN'] ??
+                                                '',
+                                            style: TextStyle(
+                                                fontSize: 17.0,
+                                                color:
+                                                    AppColor.colorLiteBlack5),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
                 )
               ],
             ),
