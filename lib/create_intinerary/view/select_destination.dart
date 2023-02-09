@@ -287,7 +287,6 @@ class _SelectDestinationState extends State<SelectDestination> {
                                     }
 
 
-                                    
                                     addPolygon(points: pointAll, polygonCountry: '$index', );
                                   },
                                   title: Text(
