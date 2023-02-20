@@ -24,5 +24,9 @@ class AppColor {
   static const buttonColor      =   Color(0xFF19C6C0);
   static const textColor        =   Color(0xFF87D5CB);
 
+  //dark theme color code
+
+  static const bgColorDark       =   Color(0xFF181A31);
+
 
 }

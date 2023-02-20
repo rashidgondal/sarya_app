@@ -35,9 +35,7 @@ class CustomCountryPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<dynamic>(
-
       value: value,
-
       disabledHint: Text(disabledHint),
       hint: Row(
         children: [

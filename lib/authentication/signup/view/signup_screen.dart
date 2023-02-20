@@ -88,1205 +88,7 @@ class _SignupScreenState extends State<SignupScreen> {
   void initState() {
     super.initState();
     _navigationService = locator<NavigationService>();
-    setState(() {
-      list = [
-        Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                "Tell us a little bit about yourself",
-                style: TextStyle(
-                    fontSize: 15,
-                    color: AppColor.colorBlue,
-                    fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                controller: userNameController,
-                validator: (v) {
-                  if (v!.isEmpty) {
-                    return "Please enter username.";
-                  } else {
-                    return null;
-                  }
-                },
-                style: const TextStyle(
-                    fontSize: 15.0,
-                    color: AppColor.lightIndigo,
-                    fontWeight: FontWeight.w500),
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    hintText: "Username",
-                    fillColor: AppColor.aquaCasper,
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.colorGrey,
-                        fontWeight: FontWeight.w500)),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: firstNameController,
-                validator: (v) {
-                  if (v!.isEmpty) {
-                    return "Please enter first name.";
-                  } else {
-                    return null;
-                  }
-                },
-                style: const TextStyle(
-                    fontSize: 15.0,
-                    color: AppColor.lightIndigo,
-                    fontWeight: FontWeight.w500),
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    hintText: "First Name",
-                    fillColor: AppColor.aquaCasper,
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.colorGrey,
-                        fontWeight: FontWeight.w500)),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: lastNameController,
-                validator: (v) {
-                  if (v!.isEmpty) {
-                    return "Please enter last name.";
-                  } else {
-                    return null;
-                  }
-                },
-                style: const TextStyle(
-                    fontSize: 15.0,
-                    color: AppColor.lightIndigo,
-                    fontWeight: FontWeight.w500),
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    hintText: "Last Name",
-                    fillColor: AppColor.aquaCasper,
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.colorGrey,
-                        fontWeight: FontWeight.w500)),
-              ),
-            ],
-          ),
-        ),
-        Form(
-          key: _formKey2,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                "a few more things",
-                style: TextStyle(
-                    fontSize: 15,
-                    color: AppColor.colorBlue,
-                    fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              ValueListenableBuilder(
-                  valueListenable: genderNotifier,
-                  builder: (BuildContext context, String value, Widget? child) {
-                    if (value.isEmpty) {
-                      return CustomCountryPicker(
-                        value: selectedGender,
-                        hint: 'Gender',
-                        items: listGender
-                            .map((value) => DropdownMenuItem(
-                                  value: value,
-                                  child: SizedBox(
-                                    width: MediaQuery.of(
-                                                locator<NavigationService>()
-                                                    .navigatorKey
-                                                    .currentContext!)
-                                            .size
-                                            .width /
-                                        1.2,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          value,
-                                          style: const TextStyle(
-                                              fontSize: 15.0,
-                                              color: AppColor.lightIndigo,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ))
-                            .toList(),
-                        onItemChanged: (v) {
-                          genderNotifier.value = v;
-                          selectedGender = v;
-                        },
-                        errorText: '',
-                      );
-                    }
 
-                    return CustomCountryPicker(
-                      value: selectedGender,
-                      hint: 'Gender',
-                      items: listGender
-                          .map((value) => DropdownMenuItem(
-                                value: value,
-                                child: SizedBox(
-                                  width: MediaQuery.of(
-                                              locator<NavigationService>()
-                                                  .navigatorKey
-                                                  .currentContext!)
-                                          .size
-                                          .width /
-                                      1.2,
-                                  child: Row(
-                                    children: [
-                                      const SizedBox(width: 20),
-                                      Text(
-                                        value,
-                                        style: const TextStyle(
-                                            fontSize: 15.0,
-                                            color: AppColor.lightIndigo,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                onTap: () {},
-                              ))
-                          .toList(),
-                      onItemChanged: (v) {
-                        genderNotifier.value = v;
-                        selectedGender = v;
-                      },
-                      errorText: '',
-                    );
-                  }),
-              Container(
-                height: 1,
-                color: AppColor.lightIndigo,
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              ValueListenableBuilder(
-                  valueListenable: dateValueNotifier,
-                  builder: (BuildContext context, String value, Widget? child) {
-                    if (value.isEmpty) {
-                      return Align(
-                        alignment: Alignment.centerLeft,
-                        child: InkWell(
-                          onTap: () => _showDialog(
-                            CupertinoDatePicker(
-                              initialDateTime: dateIos,
-                              mode: CupertinoDatePickerMode.date,
-                              use24hFormat: true,
-                              // This is called when the user changes the date.
-                              onDateTimeChanged: (DateTime newDate) {
-                                String d = newDate.toString();
-                                var splitDate = d.split(" ");
-                                dateValueNotifier.value = splitDate[0];
-                                dob = splitDate[0];
-                              },
-                            ),
-                          ),
-                          child: SizedBox(
-                            height: 20,
-                            child: Text(
-                              "Birthdate  $value",
-                              style: const TextStyle(
-                                  fontSize: 14.0,
-                                  color: AppColor.colorGrey,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-
-                    return Align(
-                      alignment: Alignment.centerLeft,
-                      child: InkWell(
-                        onTap: () => _showDialog(
-                          CupertinoDatePicker(
-                            initialDateTime: dateIos,
-                            mode: CupertinoDatePickerMode.date,
-                            use24hFormat: true,
-                            // This is called when the user changes the date.
-                            onDateTimeChanged: (DateTime newDate) {
-                              String d = newDate.toString();
-                              var splitDate = d.split(" ");
-                              dateValueNotifier.value = splitDate[0];
-                              dob = splitDate[0];
-                            },
-                          ),
-                        ),
-                        child: SizedBox(
-                          height: 20,
-                          child: Text(
-                            "$value",
-                            style: const TextStyle(
-                                fontSize: 15.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-              const SizedBox(
-                height: 8,
-              ),
-              Container(
-                height: 1,
-                color: AppColor.lightIndigo,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              SizedBox(
-                  height: 50.0,
-                  child: ValueListenableBuilder(
-                      valueListenable: nationalityNotifier,
-                      builder:
-                          (BuildContext context, String value, Widget? child) {
-                        if (value.isEmpty) {
-                          return InkWell(
-                            onTap: () {
-                              showMaterialModalBottomSheet(
-                                context: context,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) => Container(
-                                    color: Colors.white,
-                                    height: MediaQuery.of(context).size.height,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: BottomSheetCountryPicker(
-                                      countries: widget.countries,
-                                      countryName: (v) {},
-                                      countryTel: (v) {},
-                                      nationality: (v) {
-                                        nationalityNotifier.value = v;
-                                        nationality = v;
-                                      },
-                                    )),
-                              ).then((value) {
-                                setState(() {});
-                              });
-                            },
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 16.0),
-                                child: Row(
-                                  children: const [
-                                    Text(
-                                      "Nationality",
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: AppColor.colorGrey,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.keyboard_arrow_down_outlined,
-                                      color: AppColor.headingColor2,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-
-                        return InkWell(
-                          onTap: () {
-                            showMaterialModalBottomSheet(
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => Container(
-                                  color: Colors.white,
-                                  height:
-                                      MediaQuery.of(context).size.height / 1.2,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: BottomSheetCountryPicker(
-                                    countries: widget.countries,
-                                    countryName: (v) {},
-                                    countryTel: (v) {},
-                                    nationality: (v) {
-                                      nationalityNotifier.value = v;
-                                      nationality = v;
-                                    },
-                                  )),
-                            ).then((value) {
-                              setState(() {});
-                            });
-                          },
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    nationality,
-                                    style: const TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.lightIndigo,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const Spacer(),
-                                  const Icon(
-                                    Icons.keyboard_arrow_down_outlined,
-                                    color: AppColor.lightIndigo,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      })),
-              Container(
-                height: 1,
-                color: AppColor.lightIndigo,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              SizedBox(
-                  height: 50.0,
-                  child: ValueListenableBuilder(
-                      valueListenable: corNotifier,
-                      builder:
-                          (BuildContext context, String value, Widget? child) {
-                        if (value.isEmpty) {
-                          return InkWell(
-                            onTap: () {
-                              showMaterialModalBottomSheet(
-                                context: context,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) => Container(
-                                    color: Colors.white,
-                                    height: MediaQuery.of(context).size.height,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: BottomSheetCountryPicker(
-                                      countries: widget.countries,
-                                      countryName: (v) {
-                                        corNotifier.value = v;
-                                        _cor = v;
-                                      },
-                                      countryTel: (v) {},
-                                      nationality: (v) {},
-                                    )),
-                              ).then((value) {
-                                setState(() {});
-                              });
-                            },
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 16.0),
-                                child: Row(
-                                  children: const [
-                                    Text(
-                                      "Country of Residence",
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: AppColor.colorGrey,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.keyboard_arrow_down_outlined,
-                                      color: AppColor.headingColor2,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-
-                        return InkWell(
-                          onTap: () {
-                            showMaterialModalBottomSheet(
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => Container(
-                                  color: Colors.white,
-                                  height:
-                                      MediaQuery.of(context).size.height / 1.2,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: BottomSheetCountryPicker(
-                                    countries: widget.countries,
-                                    countryName: (v) {
-                                      corNotifier.value = v;
-                                      _cor = v;
-                                    },
-                                    countryTel: (v) {},
-                                    nationality: (v) {},
-                                  )),
-                            ).then((value) {
-                              setState(() {});
-                            });
-                          },
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    _cor,
-                                    style: const TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.lightIndigo,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const Spacer(),
-                                  const Icon(
-                                    Icons.keyboard_arrow_down_outlined,
-                                    color: AppColor.lightIndigo,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      })),
-              Container(
-                height: 1,
-                color: AppColor.lightIndigo,
-              ),
-            ],
-          ),
-        ),
-        Form(
-          key: _formKey3,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 40,
-              ),
-              const Text(
-                "almost there!",
-                style: TextStyle(
-                    fontSize: 14,
-                    color: AppColor.colorBlue,
-                    fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                controller: emailNameController,
-                keyboardType: TextInputType.emailAddress,
-                validator: (v) {
-                  if (v!.isEmpty) {
-                    return "Please enter email.";
-                  } else {
-                    return null;
-                  }
-                },
-                style: const TextStyle(
-                    fontSize: 15.0,
-                    color: AppColor.lightIndigo,
-                    fontWeight: FontWeight.w500),
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    hintText: "Email",
-                    fillColor: AppColor.aquaCasper,
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.colorGrey,
-                        fontWeight: FontWeight.w500)),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-
-              ValueListenableBuilder(
-                  valueListenable: showPasswordNotifier,
-                  builder:
-                      (BuildContext context, bool value, Widget? child) {
-                    return  TextFormField(
-                      controller: passwordNameController,
-                      validator: (v) {
-                        if (v!.isEmpty) {
-                          return "Please enter password.";
-                        } else {
-                          return null;
-                        }
-                      },
-                      maxLines: 1,
-                      obscureText: showPasswordNotifier.value,
-                      style: const TextStyle(
-                          fontSize: 14.0,
-                          color: AppColor.lightIndigo,
-                          fontWeight: FontWeight.w500),
-
-                      decoration:  InputDecoration(
-                          isDense: true,
-                          suffixIconConstraints:const BoxConstraints(
-                            minWidth: 20,
-                            minHeight: 30,
-                          ),
-
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: AppColor.lightIndigo),
-                          ),
-                          suffixIcon: showPasswordNotifier.value?
-                          InkWell(
-                              onTap: (){
-
-                                  showPasswordNotifier.value = false;
-
-                              },
-                              child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.colorGrey,)):
-                          InkWell(
-                              onTap: (){
-
-                                showPasswordNotifier.value = true;
-                              },
-                              child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.lightIndigo,)),
-                          focusedBorder:const UnderlineInputBorder(
-                            borderSide:
-                            BorderSide(color: AppColor.lightIndigo),
-                          ),
-                          contentPadding: EdgeInsets.zero,
-                          hintText: "Password",
-                          fillColor: AppColor.aquaCasper,
-                          hintStyle:const TextStyle(
-                              fontSize: 14.0,
-                              color: AppColor.colorGrey,
-                              fontWeight: FontWeight.w500)),
-                    );
-
-                  }),
-
-
-/*
-              TextFormField(
-                controller: passwordNameController,
-                keyboardType: TextInputType.text,
-                validator: (v) {
-                  if (v!.isEmpty) {
-                    return "Please enter password.";
-                  } else {
-                    return null;
-                  }
-                },
-                style: const TextStyle(
-                    fontSize: 15.0,
-                    color: AppColor.lightIndigo,
-                    fontWeight: FontWeight.w500),
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-
-                    hintText: "Password",
-                    fillColor: AppColor.aquaCasper,
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.colorGrey,
-                        fontWeight: FontWeight.w500)),
-              ),
-*/
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 49.0,
-                        width: 90,
-                        child: ValueListenableBuilder(
-                            valueListenable: telCodeNotifier,
-                            builder: (BuildContext context, String value,
-                                Widget? child) {
-                              print("value............$value");
-
-                              if (value.isEmpty) {
-                                return InkWell(
-                                  onTap: () {
-                                    showMaterialModalBottomSheet(
-                                      context: context,
-                                      backgroundColor: Colors.transparent,
-                                      builder: (context) => Container(
-                                          color: Colors.white,
-                                          height: MediaQuery.of(context)
-                                              .size
-                                              .height,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: BottomSheetCountryPicker(
-                                            countries: widget.countries,
-                                            countryName: (v) {},
-                                            countryTel: (v) {
-                                              print(
-                                                  "countryTel...1.........$telCode");
-                                              telCodeNotifier.value = v;
-                                              telCode = v;
-                                            },
-                                            nationality: (v) {},
-                                          )),
-                                    ).then((value) {
-                                      setState(() {});
-                                    });
-                                  },
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 12.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: const [
-                                          Text(
-                                            "Country",
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                color: AppColor.colorGrey,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Icon(
-                                            Icons.keyboard_arrow_down_outlined,
-                                            color: AppColor.headingColor2,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-
-                              return InkWell(
-                                onTap: () {
-                                  showMaterialModalBottomSheet(
-                                    context: context,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (context) => Container(
-                                        color: Colors.white,
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                1.2,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: BottomSheetCountryPicker(
-                                          countries: widget.countries,
-                                          countryName: (v) {},
-                                          countryTel: (v) {
-                                            print(
-                                                "countryTel...1.........$telCode");
-
-                                            telCodeNotifier.value = v;
-                                            telCode = v;
-                                          },
-                                          nationality: (v) {},
-                                        )),
-                                  ).then((value) {
-                                    setState(() {});
-                                  });
-                                },
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 12.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          telCode,
-                                          style: const TextStyle(
-                                              fontSize: 14.0,
-                                              color: AppColor.lightIndigo,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        const Icon(
-                                          Icons.keyboard_arrow_down_outlined,
-                                          color: AppColor.lightIndigo,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-                      ),
-                      Container(
-                        height: 1,
-                        width: 90,
-                        color: AppColor.lightIndigo,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  ValueListenableBuilder(
-                      valueListenable: telCodeNotifier,
-                      builder:
-                          (BuildContext context, String value, Widget? child) {
-                        return Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 2.0),
-                            child: SizedBox(
-                              height: 50.0,
-                              width: MediaQuery.of(locator<NavigationService>()
-                                      .navigatorKey
-                                      .currentContext!)
-                                  .size
-                                  .width,
-                              child: TextFormField(
-                                controller: phoneController,
-                                keyboardType: TextInputType.phone,
-                                validator: (v) {
-                                  if (v!.isEmpty) {
-                                    return "Please enter phone number.";
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                style: const TextStyle(
-                                    fontSize: 15.0,
-                                    color: AppColor.lightIndigo,
-                                    fontWeight: FontWeight.w500),
-                                decoration: const InputDecoration(
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppColor.lightIndigo),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppColor.lightIndigo),
-                                    ),
-                                    hintText: "Phone Number",
-                                    fillColor: AppColor.aquaCasper,
-                                    contentPadding: EdgeInsets.zero,
-                                    hintStyle: TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.colorGrey,
-                                        fontWeight: FontWeight.w500)),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-            ],
-          ),
-        ),
-        Form(
-          key: _formKey4,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 40,
-              ),
-              const Text(
-                "Just want to know a bit more about you",
-                style: TextStyle(
-                    fontSize: 14,
-                    color: AppColor.colorBlue,
-                    fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                controller: hobbyController,
-                style: const TextStyle(
-                    fontSize: 15.0,
-                    color: AppColor.lightIndigo,
-                    fontWeight: FontWeight.w500),
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    hintText: " Your Hobbies",
-                    fillColor: AppColor.aquaCasper,
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.colorGrey,
-                        fontWeight: FontWeight.w500)),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: favCountryController,
-                style: const TextStyle(
-                    fontSize: 15.0,
-                    color: AppColor.lightIndigo,
-                    fontWeight: FontWeight.w500),
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    hintText: " Favourite Country",
-                    fillColor: AppColor.aquaCasper,
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.colorGrey,
-                        fontWeight: FontWeight.w500)),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: tellMoreController,
-                style: const TextStyle(
-                    fontSize: 15.0,
-                    color: AppColor.lightIndigo,
-                    fontWeight: FontWeight.w500),
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightIndigo),
-                    ),
-                    hintText: " Want to tell us more?",
-                    fillColor: AppColor.aquaCasper,
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColor.colorGrey,
-                        fontWeight: FontWeight.w500)),
-              ),
-            ],
-          ),
-        ),
-        Column(
-          children: [
-            const SizedBox(
-              height: 40,
-            ),
-            const Text(
-              "Add bank detail",
-              style: TextStyle(
-                  fontSize: 14,
-                  color: AppColor.colorBlue,
-                  fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-                height: 50.0,
-                child: ValueListenableBuilder(
-                    valueListenable: bankCountryNotifier,
-                    builder:
-                        (BuildContext context, String value, Widget? child) {
-                      if (value.isEmpty) {
-                        return InkWell(
-                          onTap: () {
-                            showMaterialModalBottomSheet(
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => Container(
-                                  color: Colors.white,
-                                  height: MediaQuery.of(context).size.height,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: BottomSheetCountryPicker(
-                                    countries: widget.countries,
-                                    countryName: (v) {
-                                      bankCountryNotifier.value = v;
-                                      bankCountry = v;
-                                    },
-                                    countryTel: (v) {},
-                                    nationality: (v) {
-
-                                    },
-                                  )),
-                            ).then((value) {
-                              setState(() {});
-                            });
-                          },
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
-                              child: Row(
-                                children: const [
-                                  Text(
-                                    "Search Country",
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.colorGrey,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Spacer(),
-                                  Icon(
-                                    Icons.keyboard_arrow_down_outlined,
-                                    color: AppColor.headingColor2,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-
-                      return InkWell(
-                        onTap: () {
-                          showMaterialModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => Container(
-                                color: Colors.white,
-                                height:
-                                MediaQuery.of(context).size.height / 1.2,
-                                width: MediaQuery.of(context).size.width,
-                                child: BottomSheetCountryPicker(
-                                  countries: widget.countries,
-                                  countryName: (v) {},
-                                  countryTel: (v) {},
-                                  nationality: (v) {
-                                    bankCountryNotifier.value = v;
-                                    bankCountry = v;
-                                  },
-                                )),
-                          ).then((value) {
-                            setState(() {});
-                          });
-                        },
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  bankCountry,
-                                  style: const TextStyle(
-                                      fontSize: 14.0,
-                                      color: AppColor.lightIndigo,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const Spacer(),
-                                const Icon(
-                                  Icons.keyboard_arrow_down_outlined,
-                                  color: AppColor.lightIndigo,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    })),
-            Container(
-              height: 1,
-              color: AppColor.lightIndigo,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              controller: bankNameController,
-              keyboardType: TextInputType.text,
-
-              style: const TextStyle(
-                  fontSize: 15.0,
-                  color: AppColor.lightIndigo,
-                  fontWeight: FontWeight.w500),
-              decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-
-                  hintText: "Bank Name",
-                  fillColor: AppColor.aquaCasper,
-                  contentPadding: EdgeInsets.zero,
-                  hintStyle: TextStyle(
-                      fontSize: 14.0,
-                      color: AppColor.colorGrey,
-                      fontWeight: FontWeight.w500)),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              controller: beneficiaryController,
-              keyboardType: TextInputType.text,
-              style: const TextStyle(
-                  fontSize: 15.0,
-                  color: AppColor.lightIndigo,
-                  fontWeight: FontWeight.w500),
-              decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-
-                  hintText: "Beneficiary Name",
-                  fillColor: AppColor.aquaCasper,
-                  contentPadding: EdgeInsets.zero,
-                  hintStyle: TextStyle(
-                      fontSize: 14.0,
-                      color: AppColor.colorGrey,
-                      fontWeight: FontWeight.w500)),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              controller: accountNoController,
-              keyboardType: TextInputType.emailAddress,
-
-              style: const TextStyle(
-                  fontSize: 15.0,
-                  color: AppColor.lightIndigo,
-                  fontWeight: FontWeight.w500),
-              decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-                  hintText: "Account No.",
-                  fillColor: AppColor.aquaCasper,
-                  contentPadding: EdgeInsets.zero,
-                  hintStyle: TextStyle(
-                      fontSize: 14.0,
-                      color: AppColor.colorGrey,
-                      fontWeight: FontWeight.w500)),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              controller: ibanNoController,
-              keyboardType: TextInputType.text,
-
-              style: const TextStyle(
-                  fontSize: 15.0,
-                  color: AppColor.lightIndigo,
-                  fontWeight: FontWeight.w500),
-              decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-
-                  hintText: "IBAN No.",
-                  fillColor: AppColor.aquaCasper,
-                  contentPadding: EdgeInsets.zero,
-                  hintStyle: TextStyle(
-                      fontSize: 14.0,
-                      color: AppColor.colorGrey,
-                      fontWeight: FontWeight.w500)),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              controller: swiftCodeNoController,
-              keyboardType: TextInputType.text,
-
-              style: const TextStyle(
-                  fontSize: 15.0,
-                  color: AppColor.lightIndigo,
-                  fontWeight: FontWeight.w500),
-              decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.lightIndigo),
-                  ),
-
-                  hintText: "Swift Code.",
-                  fillColor: AppColor.aquaCasper,
-                  contentPadding: EdgeInsets.zero,
-                  hintStyle: TextStyle(
-                      fontSize: 14.0,
-                      color: AppColor.colorGrey,
-                      fontWeight: FontWeight.w500)),
-            ),
-
-          ],
-        ),
-
-      ];
-    });
   }
 
   DateTime selectedDate = DateTime.now();
@@ -1301,10 +103,10 @@ class _SignupScreenState extends State<SignupScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Container(
-      color: AppColor.whiteColor,
+      color: AppColor.bgColorDark,
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: AppColor.whiteColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             elevation: 0,
             toolbarHeight: 50,
@@ -1326,7 +128,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 }
               },
             ),
-            backgroundColor: AppColor.aquaCasper2,
+            backgroundColor:Theme.of(context).scaffoldBackgroundColor,
             title: const Text(
               "Sign Up",
               style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
@@ -1338,7 +140,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   height: 170.0,
                   width: size.width,
                   child: Container(
-                    color: AppColor.whiteColor,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     height: 170.0,
                     width: size.width,
                     child: Stack(
@@ -1347,7 +149,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           duration: Duration(milliseconds: 500),
                           child: Container(
                             width: size.width,
-                            color: AppColor.whiteColor,
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             child: SvgPicture.asset('star'.svg),
                           ),
                           top: 0,
@@ -1367,7 +169,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             child: FadeInUp(
                               child: Container(
                                 height: 70,
-                                color: AppColor.whiteColor,
+                                color: Theme.of(context).scaffoldBackgroundColor,
                                 child: SvgPicture.asset('last_star'.svg),
                               ),
                             ),
@@ -1379,7 +181,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             child: FadeInUp(
                               child: Container(
                                 height: 70,
-                                color: AppColor.whiteColor,
+                                color: Theme.of(context).scaffoldBackgroundColor,
                                 child: SvgPicture.asset('slash'.svg),
                               ),
                             ),
@@ -1391,7 +193,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             child: FadeInUp(
                               child: Container(
                                 height: 70,
-                                color: AppColor.whiteColor,
+                                color: Theme.of(context).scaffoldBackgroundColor,
                                 child: SvgPicture.asset('flag'.svg),
                               ),
                             ),
@@ -1403,7 +205,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           left: total_width,
                           bottom: 20,
                           child: Container(
-                            color: AppColor.whiteColor,
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             child: SvgPicture.asset('turtle'.svg),
                           ),
                         ),
@@ -1496,100 +298,1265 @@ class _SignupScreenState extends State<SignupScreen> {
               );
             },
           ),
-          body: list.isEmpty
-              ? const SizedBox()
-              : Container(
+          body: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: PageView.builder(
-                      itemCount: list.length,
-                      onPageChanged: (v) {
-                        valueNotifier.value = v;
-                      },
-                      reverse: false,
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: _pageController,
-                      itemBuilder: (c, index) {
-                        return SingleChildScrollView(
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (v) {
+                      valueNotifier.value = v;
+                    },
+                    children: [
+                      Form(
+                        key: _formKey,
+                        child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              list[index],
-                              SizedBox(
-                                height: index == 1
-                                    ? 20
-                                    : size.width / 5,
+                              const SizedBox(
+                                height: 20,
                               ),
-                              index == 3
-                                  ? InkWell(
-                                      onTap: () {
-                                        int position = 1 + index;
-                                        total_width = total_width + 50;
-                                        setState(() {});
-                                        _pageController.animateToPage(position,
-                                            curve: Curves.decelerate,
-                                            duration: const Duration(
-                                                milliseconds: 300));
-                                        // for animated jump. Requires a curve and a duration
-                                        if (position == 4) {
-                                          String phone = zeroLeadValue(
-                                              value: phoneController.text);
-
-                                          context
-                                              .read<SignupCubits>()
-                                              .saveSignup(
-                                                  signupRequest: SignupRequest(
-                                                      firstName:
-                                                          firstNameController
-                                                              .text,
-                                                      lastName:
-                                                          lastNameController
-                                                              .text,
-                                                      userName:
-                                                          userNameController
-                                                              .text,
-                                                      gender: selectedGender,
-                                                      birthday: dob,
-                                                      nationality: nationality,
-                                                      country: _cor,
-                                                      email: emailNameController
-                                                          .text,
-                                                      password:
-                                                          passwordNameController
-                                                              .text,
-                                                      telCode: telCode,
-                                                      phone: phone,
-                                                      hobbies:
-                                                          hobbyController.text,
-                                                      favCountry:
-                                                          favCountryController
-                                                              .text,
-                                                      extraInfo:
-                                                          tellMoreController
-                                                              .text));
-
-                                          _navigationService
-                                              .navigateTo(termRoutSecond);
-                                          return;
-                                        }
-                                      },
-                                      child: const Text(
-                                        'Skip Now & Answer Later',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: AppColor.aquaGreen,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    )
-                                  : const Text(
-                                      "Fields marked with (*) are mandatory.",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: AppColor.aquaGreen,
-                                          fontWeight: FontWeight.w400),
+                              const Text(
+                                "Tell us a little bit about yourself",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: AppColor.colorBlue,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                controller: userNameController,
+                                validator: (v) {
+                                  if (v!.isEmpty) {
+                                    return "Please enter username.";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                style: Theme.of(context).textTheme.headline1,
+                                decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
                                     ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    hintText: "Username",
+                                    fillColor: AppColor.aquaCasper,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              TextFormField(
+                                controller: firstNameController,
+                                validator: (v) {
+                                  if (v!.isEmpty) {
+                                    return "Please enter first name.";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                style: Theme.of(context).textTheme.headline1,
+                                decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    hintText: "First Name",
+                                    fillColor: AppColor.aquaCasper,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              TextFormField(
+                                controller: lastNameController,
+                                validator: (v) {
+                                  if (v!.isEmpty) {
+                                    return "Please enter last name.";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                style: Theme.of(context).textTheme.headline1,
+                                decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    hintText: "Last Name",
+                                    fillColor: AppColor.aquaCasper,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              SizedBox(
+                                height: size.width / 5,
+                              ),
+                              const Text(
+                                "Fields marked with (*) are mandatory.",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.aquaGreen,
+                                    fontWeight: FontWeight.w400),
+                              ),
                             ],
                           ),
-                        );
-                      }),
+                        ),
+                      ),
+                      Form(
+                        key: _formKey2,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text(
+                                "a few more things",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: AppColor.colorBlue,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              ValueListenableBuilder(
+                                  valueListenable: genderNotifier,
+                                  builder: (BuildContext context, String value, Widget? child) {
+                                    if (value.isEmpty) {
+                                      return CustomCountryPicker(
+                                        value: selectedGender,
+                                        hint: 'Gender',
+                                        items: listGender
+                                            .map((value) => DropdownMenuItem(
+                                          value: value,
+                                          child: SizedBox(
+                                            width: MediaQuery.of(
+                                                locator<NavigationService>()
+                                                    .navigatorKey
+                                                    .currentContext!)
+                                                .size
+                                                .width /
+                                                1.2,
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  value,
+                                                  style: Theme.of(context).textTheme.headline1,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ))
+                                            .toList(),
+                                        onItemChanged: (v) {
+                                          genderNotifier.value = v;
+                                          selectedGender = v;
+                                        },
+                                        errorText: '',
+                                      );
+                                    }
+
+                                    return CustomCountryPicker(
+                                      value: selectedGender,
+                                      hint: 'Gender',
+                                      items: listGender
+                                          .map((value) => DropdownMenuItem(
+                                        value: value,
+                                        child: SizedBox(
+                                          width: MediaQuery.of(
+                                              locator<NavigationService>()
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                              .size
+                                              .width /
+                                              1.2,
+                                          child: Row(
+                                            children: [
+                                              const SizedBox(width: 20),
+                                              Text(
+                                                value,
+                                                style: Theme.of(context).textTheme.headline1,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        onTap: () {},
+                                      ))
+                                          .toList(),
+                                      onItemChanged: (v) {
+                                        genderNotifier.value = v;
+                                        selectedGender = v;
+                                      },
+                                      errorText: '',
+                                    );
+                                  }),
+                              Container(
+                                height: 1,
+                                color: AppColor.lightIndigo,
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              ValueListenableBuilder(
+                                  valueListenable: dateValueNotifier,
+                                  builder: (BuildContext context, String value, Widget? child) {
+                                    if (value.isEmpty) {
+                                      return Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: InkWell(
+                                          onTap: () => _showDialog(
+                                            CupertinoDatePicker(
+                                              initialDateTime: dateIos,
+                                              mode: CupertinoDatePickerMode.date,
+                                              use24hFormat: true,
+                                              // This is called when the user changes the date.
+                                              onDateTimeChanged: (DateTime newDate) {
+                                                String d = newDate.toString();
+                                                var splitDate = d.split(" ");
+                                                dateValueNotifier.value = splitDate[0];
+                                                dob = splitDate[0];
+                                              },
+                                            ),
+                                          ),
+                                          child: SizedBox(
+                                            height: 20,
+                                            child: Text(
+                                              "Birthdate  $value",
+                                              style: const TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: AppColor.colorGrey,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+
+                                    return Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: InkWell(
+                                        onTap: () => _showDialog(
+                                          CupertinoDatePicker(
+                                            initialDateTime: dateIos,
+                                            mode: CupertinoDatePickerMode.date,
+                                            use24hFormat: true,
+                                            // This is called when the user changes the date.
+                                            onDateTimeChanged: (DateTime newDate) {
+                                              String d = newDate.toString();
+                                              var splitDate = d.split(" ");
+                                              dateValueNotifier.value = splitDate[0];
+                                              dob = splitDate[0];
+                                            },
+                                          ),
+                                        ),
+                                        child: SizedBox(
+                                          height: 20,
+                                          child: Text(
+                                            "$value",
+                                            style: const TextStyle(
+                                                fontSize: 15.0,
+                                                color: AppColor.lightIndigo,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Container(
+                                height: 1,
+                                color: AppColor.lightIndigo,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              SizedBox(
+                                  height: 50.0,
+                                  child: ValueListenableBuilder(
+                                      valueListenable: nationalityNotifier,
+                                      builder:
+                                          (BuildContext context, String value, Widget? child) {
+                                        if (value.isEmpty) {
+                                          return InkWell(
+                                            onTap: () {
+                                              showMaterialModalBottomSheet(
+                                                context: context,
+                                                backgroundColor: Colors.transparent,
+                                                builder: (context) => Container(
+                                                    color: Colors.white,
+                                                    height: MediaQuery.of(context).size.height,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    child: BottomSheetCountryPicker(
+                                                      countries: widget.countries,
+                                                      countryName: (v) {},
+                                                      countryTel: (v) {},
+                                                      nationality: (v) {
+                                                        nationalityNotifier.value = v;
+                                                        nationality = v;
+                                                      },
+                                                    )),
+                                              ).then((value) {
+                                                setState(() {});
+                                              });
+                                            },
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(bottom: 16.0),
+                                                child: Row(
+                                                  children: const [
+                                                    Text(
+                                                      "Nationality",
+                                                      style: TextStyle(
+                                                          fontSize: 14.0,
+                                                          color: AppColor.colorGrey,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                    Spacer(),
+                                                    Icon(
+                                                      Icons.keyboard_arrow_down_outlined,
+                                                      color: AppColor.headingColor2,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+
+                                        return InkWell(
+                                          onTap: () {
+                                            showMaterialModalBottomSheet(
+                                              context: context,
+                                              backgroundColor: Colors.transparent,
+                                              builder: (context) => Container(
+                                                  color: Colors.white,
+                                                  height:
+                                                  MediaQuery.of(context).size.height / 1.2,
+                                                  width: MediaQuery.of(context).size.width,
+                                                  child: BottomSheetCountryPicker(
+                                                    countries: widget.countries,
+                                                    countryName: (v) {},
+                                                    countryTel: (v) {},
+                                                    nationality: (v) {
+                                                      nationalityNotifier.value = v;
+                                                      nationality = v;
+                                                    },
+                                                  )),
+                                            ).then((value) {
+                                              setState(() {});
+                                            });
+                                          },
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(bottom: 16.0),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    nationality,
+                                                    style: const TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: AppColor.lightIndigo,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                                  const Spacer(),
+                                                  const Icon(
+                                                    Icons.keyboard_arrow_down_outlined,
+                                                    color: AppColor.lightIndigo,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      })),
+                              Container(
+                                height: 1,
+                                color: AppColor.lightIndigo,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              SizedBox(
+                                  height: 50.0,
+                                  child: ValueListenableBuilder(
+                                      valueListenable: corNotifier,
+                                      builder:
+                                          (BuildContext context, String value, Widget? child) {
+                                        if (value.isEmpty) {
+                                          return InkWell(
+                                            onTap: () {
+                                              showMaterialModalBottomSheet(
+                                                context: context,
+                                                backgroundColor: Colors.transparent,
+                                                builder: (context) => Container(
+                                                    color: Colors.white,
+                                                    height: MediaQuery.of(context).size.height,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    child: BottomSheetCountryPicker(
+                                                      countries: widget.countries,
+                                                      countryName: (v) {
+                                                        corNotifier.value = v;
+                                                        _cor = v;
+                                                      },
+                                                      countryTel: (v) {},
+                                                      nationality: (v) {},
+                                                    )),
+                                              ).then((value) {
+                                                setState(() {});
+                                              });
+                                            },
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(bottom: 16.0),
+                                                child: Row(
+                                                  children: const [
+                                                    Text(
+                                                      "Country of Residence",
+                                                      style: TextStyle(
+                                                          fontSize: 14.0,
+                                                          color: AppColor.colorGrey,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                    Spacer(),
+                                                    Icon(
+                                                      Icons.keyboard_arrow_down_outlined,
+                                                      color: AppColor.headingColor2,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+
+                                        return InkWell(
+                                          onTap: () {
+                                            showMaterialModalBottomSheet(
+                                              context: context,
+                                              backgroundColor: Colors.transparent,
+                                              builder: (context) => Container(
+                                                  color: Colors.white,
+                                                  height:
+                                                  MediaQuery.of(context).size.height / 1.2,
+                                                  width: MediaQuery.of(context).size.width,
+                                                  child: BottomSheetCountryPicker(
+                                                    countries: widget.countries,
+                                                    countryName: (v) {
+                                                      corNotifier.value = v;
+                                                      _cor = v;
+                                                    },
+                                                    countryTel: (v) {},
+                                                    nationality: (v) {},
+                                                  )),
+                                            ).then((value) {
+                                              setState(() {});
+                                            });
+                                          },
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(bottom: 8.0),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    _cor,
+                                                    style: const TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: AppColor.lightIndigo,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                                  const Spacer(),
+                                                  const Icon(
+                                                    Icons.keyboard_arrow_down_outlined,
+                                                    color: AppColor.lightIndigo,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      })),
+                              Container(
+                                height: 1,
+                                color: AppColor.lightIndigo,
+                              ),
+                              SizedBox(
+                                height: size.width / 7,
+                              ),
+                              Text(
+                                "Fields marked with (*) are mandatory.",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.aquaGreen,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Form(
+                        key: _formKey3,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              const Text(
+                                "almost there!",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.colorBlue,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                controller: emailNameController,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (v) {
+                                  if (v!.isEmpty) {
+                                    return "Please enter email.";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                style: Theme.of(context).textTheme.headline1,
+                                decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    hintText: "Email",
+                                    fillColor: AppColor.aquaCasper,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+
+                              ValueListenableBuilder(
+                                  valueListenable: showPasswordNotifier,
+                                  builder:
+                                      (BuildContext context, bool value, Widget? child) {
+                                    return  TextFormField(
+                                      controller: passwordNameController,
+                                      validator: (v) {
+                                        if (v!.isEmpty) {
+                                          return "Please enter password.";
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      maxLines: 1,
+                                      obscureText: showPasswordNotifier.value,
+                                      style: Theme.of(context).textTheme.headline1,
+                                      decoration:  InputDecoration(
+                                          isDense: true,
+                                          suffixIconConstraints:const BoxConstraints(
+                                            minWidth: 20,
+                                            minHeight: 30,
+                                          ),
+
+                                          enabledBorder: const UnderlineInputBorder(
+                                            borderSide: BorderSide(color: AppColor.lightIndigo),
+                                          ),
+                                          suffixIcon: showPasswordNotifier.value?
+                                          InkWell(
+                                              onTap: (){
+
+                                                showPasswordNotifier.value = false;
+
+                                              },
+                                              child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.colorGrey,)):
+                                          InkWell(
+                                              onTap: (){
+
+                                                showPasswordNotifier.value = true;
+                                              },
+                                              child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.lightIndigo,)),
+                                          focusedBorder:const UnderlineInputBorder(
+                                            borderSide:
+                                            BorderSide(color: AppColor.lightIndigo),
+                                          ),
+                                          contentPadding: EdgeInsets.zero,
+                                          hintText: "Password",
+                                          fillColor: AppColor.aquaCasper,
+                                          hintStyle:const TextStyle(
+                                              fontSize: 14.0,
+                                              color: AppColor.colorGrey,
+                                              fontWeight: FontWeight.w500)),
+                                    );
+
+                                  }),
+
+
+/*
+              TextFormField(
+                controller: passwordNameController,
+                keyboardType: TextInputType.text,
+                validator: (v) {
+                  if (v!.isEmpty) {
+                    return "Please enter password.";
+                  } else {
+                    return null;
+                  }
+                },
+                style: const TextStyle(
+                    fontSize: 15.0,
+                    color: AppColor.lightIndigo,
+                    fontWeight: FontWeight.w500),
+                decoration: const InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                    ),
+
+                    hintText: "Password",
+                    fillColor: AppColor.aquaCasper,
+                    contentPadding: EdgeInsets.zero,
+                    hintStyle: TextStyle(
+                          fontSize: 14.0,
+                          color: AppColor.colorGrey,
+                          fontWeight: FontWeight.w500)),
+              ),
+*/
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Row(
+                                children: [
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 49.0,
+                                        width: 90,
+                                        child: ValueListenableBuilder(
+                                            valueListenable: telCodeNotifier,
+                                            builder: (BuildContext context, String value,
+                                                Widget? child) {
+                                              print("value............$value");
+
+                                              if (value.isEmpty) {
+                                                return InkWell(
+                                                  onTap: () {
+                                                    showMaterialModalBottomSheet(
+                                                      context: context,
+                                                      backgroundColor: Colors.transparent,
+                                                      builder: (context) => Container(
+                                                          color: Colors.white,
+                                                          height: MediaQuery.of(context)
+                                                              .size
+                                                              .height,
+                                                          width:
+                                                          MediaQuery.of(context).size.width,
+                                                          child: BottomSheetCountryPicker(
+                                                            countries: widget.countries,
+                                                            countryName: (v) {},
+                                                            countryTel: (v) {
+                                                              print(
+                                                                  "countryTel...1.........$telCode");
+                                                              telCodeNotifier.value = v;
+                                                              telCode = v;
+                                                            },
+                                                            nationality: (v) {},
+                                                          )),
+                                                    ).then((value) {
+                                                      setState(() {});
+                                                    });
+                                                  },
+                                                  child: Align(
+                                                    alignment: Alignment.bottomCenter,
+                                                    child: Padding(
+                                                      padding:
+                                                      const EdgeInsets.only(bottom: 12.0),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                        children: const [
+                                                          Text(
+                                                            "Country",
+                                                            style: TextStyle(
+                                                                fontSize: 14.0,
+                                                                color: AppColor.colorGrey,
+                                                                fontWeight: FontWeight.w500),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Icon(
+                                                            Icons.keyboard_arrow_down_outlined,
+                                                            color: AppColor.headingColor2,
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+
+                                              return InkWell(
+                                                onTap: () {
+                                                  showMaterialModalBottomSheet(
+                                                    context: context,
+                                                    backgroundColor: Colors.transparent,
+                                                    builder: (context) => Container(
+                                                        color: Colors.white,
+                                                        height:
+                                                        MediaQuery.of(context).size.height /
+                                                            1.2,
+                                                        width:
+                                                        MediaQuery.of(context).size.width,
+                                                        child: BottomSheetCountryPicker(
+                                                          countries: widget.countries,
+                                                          countryName: (v) {},
+                                                          countryTel: (v) {
+                                                            print(
+                                                                "countryTel...1.........$telCode");
+
+                                                            telCodeNotifier.value = v;
+                                                            telCode = v;
+                                                          },
+                                                          nationality: (v) {},
+                                                        )),
+                                                  ).then((value) {
+                                                    setState(() {});
+                                                  });
+                                                },
+                                                child: Align(
+                                                  alignment: Alignment.bottomCenter,
+                                                  child: Padding(
+                                                    padding:
+                                                    const EdgeInsets.only(bottom: 12.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                          telCode,
+                                                          style: const TextStyle(
+                                                              fontSize: 14.0,
+                                                              color: AppColor.lightIndigo,
+                                                              fontWeight: FontWeight.w500),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        const Icon(
+                                                          Icons.keyboard_arrow_down_outlined,
+                                                          color: AppColor.lightIndigo,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        width: 90,
+                                        color: AppColor.lightIndigo,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ValueListenableBuilder(
+                                      valueListenable: telCodeNotifier,
+                                      builder:
+                                          (BuildContext context, String value, Widget? child) {
+                                        return Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(top: 2.0),
+                                            child: SizedBox(
+                                              height: 50.0,
+                                              width: MediaQuery.of(locator<NavigationService>()
+                                                  .navigatorKey
+                                                  .currentContext!)
+                                                  .size
+                                                  .width,
+                                              child: TextFormField(
+                                                controller: phoneController,
+                                                keyboardType: TextInputType.phone,
+                                                validator: (v) {
+                                                  if (v!.isEmpty) {
+                                                    return "Please enter phone number.";
+                                                  } else {
+                                                    return null;
+                                                  }
+                                                },
+                                                style: Theme.of(context).textTheme.headline1,
+                                                decoration: const InputDecoration(
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: AppColor.lightIndigo),
+                                                    ),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: AppColor.lightIndigo),
+                                                    ),
+                                                    hintText: "Phone Number",
+                                                    fillColor: AppColor.aquaCasper,
+                                                    contentPadding: EdgeInsets.zero,
+                                                    hintStyle: TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: AppColor.colorGrey,
+                                                        fontWeight: FontWeight.w500)),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                ],
+                              ),
+                              SizedBox(
+                                height: size.width / 5,
+                              ),
+                              const Text(
+                                "Fields marked with (*) are mandatory.",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.aquaGreen,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Form(
+                        key: _formKey4,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              const Text(
+                                "Just want to know a bit more about you",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.colorBlue,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                controller: hobbyController,
+                                style: Theme.of(context).textTheme.headline1,
+                                decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    hintText: " Your Hobbies",
+                                    fillColor: AppColor.aquaCasper,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              TextFormField(
+                                controller: favCountryController,
+                                style: Theme.of(context).textTheme.headline1,
+                                decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    hintText: " Favourite Country",
+                                    fillColor: AppColor.aquaCasper,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              TextFormField(
+                                controller: tellMoreController,
+                                style: Theme.of(context).textTheme.headline1,
+                                decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    ),
+                                    hintText: " Want to tell us more?",
+                                    fillColor: AppColor.aquaCasper,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorGrey,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              valueNotifier.value == 3
+                                  ? InkWell(
+                                onTap: () {
+                                  int position = 1 + valueNotifier.value;
+                                  total_width = total_width + 50;
+                                  setState(() {});
+                                  _pageController.animateToPage(position,
+                                      curve: Curves.decelerate,
+                                      duration: const Duration(
+                                          milliseconds: 300));
+                                  // for animated jump. Requires a curve and a duration
+                                  if (position == 4) {
+                                    String phone = zeroLeadValue(
+                                        value: phoneController.text);
+
+                                    context
+                                        .read<SignupCubits>()
+                                        .saveSignup(
+                                        signupRequest: SignupRequest(
+                                            firstName:
+                                            firstNameController
+                                                .text,
+                                            lastName:
+                                            lastNameController
+                                                .text,
+                                            userName:
+                                            userNameController
+                                                .text,
+                                            gender: selectedGender,
+                                            birthday: dob,
+                                            nationality: nationality,
+                                            country: _cor,
+                                            email: emailNameController
+                                                .text,
+                                            password:
+                                            passwordNameController
+                                                .text,
+                                            telCode: telCode,
+                                            phone: phone,
+                                            hobbies:
+                                            hobbyController.text,
+                                            favCountry:
+                                            favCountryController
+                                                .text,
+                                            extraInfo:
+                                            tellMoreController
+                                                .text));
+
+                                    _navigationService
+                                        .navigateTo(termRoutSecond);
+                                    return;
+                                  }
+                                },
+                                child: const Text(
+                                  'Skip Now & Answer Later',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: AppColor.aquaGreen,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              )
+                                  : const Text(
+                                "Fields marked with (*) are mandatory.",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.aquaGreen,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            const Text(
+                              "Add bank detail",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColor.colorBlue,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                                height: 50.0,
+                                child: ValueListenableBuilder(
+                                    valueListenable: bankCountryNotifier,
+                                    builder:
+                                        (BuildContext context, String value, Widget? child) {
+                                      if (value.isEmpty) {
+                                        return InkWell(
+                                          onTap: () {
+                                            showMaterialModalBottomSheet(
+                                              context: context,
+                                              backgroundColor: Colors.transparent,
+                                              builder: (context) => Container(
+                                                  color: Colors.white,
+                                                  height: MediaQuery.of(context).size.height,
+                                                  width: MediaQuery.of(context).size.width,
+                                                  child: BottomSheetCountryPicker(
+                                                    countries: widget.countries,
+                                                    countryName: (v) {
+                                                      bankCountryNotifier.value = v;
+                                                      bankCountry = v;
+                                                    },
+                                                    countryTel: (v) {},
+                                                    nationality: (v) {
+
+                                                    },
+                                                  )),
+                                            ).then((value) {
+                                              setState(() {});
+                                            });
+                                          },
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(bottom: 16.0),
+                                              child: Row(
+                                                children: const [
+                                                  Text(
+                                                    "Search Country",
+                                                    style: TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: AppColor.colorGrey,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                                  Spacer(),
+                                                  Icon(
+                                                    Icons.keyboard_arrow_down_outlined,
+                                                    color: AppColor.headingColor2,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+
+                                      return InkWell(
+                                        onTap: () {
+                                          showMaterialModalBottomSheet(
+                                            context: context,
+                                            backgroundColor: Colors.transparent,
+                                            builder: (context) => Container(
+                                                color: Colors.white,
+                                                height:
+                                                MediaQuery.of(context).size.height / 1.2,
+                                                width: MediaQuery.of(context).size.width,
+                                                child: BottomSheetCountryPicker(
+                                                  countries: widget.countries,
+                                                  countryName: (v) {},
+                                                  countryTel: (v) {},
+                                                  nationality: (v) {
+                                                    bankCountryNotifier.value = v;
+                                                    bankCountry = v;
+                                                  },
+                                                )),
+                                          ).then((value) {
+                                            setState(() {});
+                                          });
+                                        },
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(bottom: 16.0),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  bankCountry,
+                                                  style: const TextStyle(
+                                                      fontSize: 14.0,
+                                                      color: AppColor.lightIndigo,
+                                                      fontWeight: FontWeight.w500),
+                                                ),
+                                                const Spacer(),
+                                                const Icon(
+                                                  Icons.keyboard_arrow_down_outlined,
+                                                  color: AppColor.lightIndigo,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    })),
+                            Container(
+                              height: 1,
+                              color: AppColor.lightIndigo,
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            TextFormField(
+                              controller: bankNameController,
+                              keyboardType: TextInputType.text,
+
+                              style: Theme.of(context).textTheme.headline1,
+                              decoration: const InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+
+                                  hintText: "Bank Name",
+                                  fillColor: AppColor.aquaCasper,
+                                  contentPadding: EdgeInsets.zero,
+                                  hintStyle: TextStyle(
+                                      fontSize: 14.0,
+                                      color: AppColor.colorGrey,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            TextFormField(
+                              controller: beneficiaryController,
+                              keyboardType: TextInputType.text,
+                              style: Theme.of(context).textTheme.headline1,
+                              decoration: const InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+
+                                  hintText: "Beneficiary Name",
+                                  fillColor: AppColor.aquaCasper,
+                                  contentPadding: EdgeInsets.zero,
+                                  hintStyle: TextStyle(
+                                      fontSize: 14.0,
+                                      color: AppColor.colorGrey,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            TextFormField(
+                              controller: accountNoController,
+                              keyboardType: TextInputType.emailAddress,
+                              style: Theme.of(context).textTheme.headline1,
+                              decoration: const InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+                                  hintText: "Account No.",
+                                  fillColor: AppColor.aquaCasper,
+                                  contentPadding: EdgeInsets.zero,
+                                  hintStyle: TextStyle(
+                                      fontSize: 14.0,
+                                      color: AppColor.colorGrey,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            TextFormField(
+                              controller: ibanNoController,
+                              keyboardType: TextInputType.text,
+                              style: Theme.of(context).textTheme.headline1,
+                              decoration: const InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+
+                                  hintText: "IBAN No.",
+                                  fillColor: AppColor.aquaCasper,
+                                  contentPadding: EdgeInsets.zero,
+                                  hintStyle: TextStyle(
+                                      fontSize: 14.0,
+                                      color: AppColor.colorGrey,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            TextFormField(
+                              controller: swiftCodeNoController,
+                              keyboardType: TextInputType.text,
+                              style: Theme.of(context).textTheme.headline1,
+                              decoration: const InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  ),
+
+                                  hintText: "Swift Code.",
+                                  fillColor: AppColor.aquaCasper,
+                                  contentPadding: EdgeInsets.zero,
+                                  hintStyle: TextStyle(
+                                      fontSize: 14.0,
+                                      color: AppColor.colorGrey,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  )
+
                 ),
         ),
       ),

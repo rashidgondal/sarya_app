@@ -21,8 +21,11 @@ class DrawerScreen extends StatefulWidget {
 
 class _DrawerScreenState extends State<DrawerScreen> {
 
-  late NavigationService _navigationService;
-   Map? map;
+    late NavigationService _navigationService;
+    Map? map;
+    bool isSwitched = false;
+    SharedPrefs sharedPrefs = SharedPrefs();
+
 
   @override
   void initState() {
@@ -33,11 +36,33 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   getUserInfo() async {
     print("..........");
-    SharedPrefs pref = SharedPrefs();
 
-    map = await pref.getUser();
+    isSwitched = await sharedPrefs.getDarkMode() ?? false;
+    map = await sharedPrefs.getUser();
     setState(() {});
 
+  }
+
+  void toggleSwitch(bool value) async{
+
+
+    if(isSwitched == false)
+    {
+      sharedPrefs.saveDarkMode(true);
+      setState(() {
+        isSwitched = true;
+      });
+    }
+    else
+    {
+      sharedPrefs.saveDarkMode(false);
+
+      setState(() {
+
+        isSwitched = false;
+      });
+      print('Switch Button is OFF');
+    }
   }
 
   @override
@@ -76,11 +101,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         SvgPicture.network(map!["avatar"]!, height: 60,width: 169,) ,
                       ),
                       const  SizedBox(height: 15,),
-
-                      Text("${map==null?"":map!["firstName"]??''} ${map==null?"":map!["lastName"]??''}", style:const TextStyle(fontSize: 29, color: AppColor.colorBlack,fontWeight: FontWeight.w700),)
-                      ,
+                      Text("${map==null?"":map!["firstName"]??''} ${map==null?"":map!["lastName"]??''}", style:const TextStyle(fontSize: 29, color: AppColor.colorBlack,fontWeight: FontWeight.w700),),
                       const  SizedBox(height: 15,)
-                      , Text("${map==null?"":map!["userName"]??''} | 0 friends", style: TextStyle(fontSize: 13, color: AppColor.headingColor2,fontWeight: FontWeight.w500),)
+                      ,Text("${map==null?"":map!["userName"]??''} | 0 friends", style: TextStyle(fontSize: 13, color: AppColor.headingColor2,fontWeight: FontWeight.w500),)
                     ],
                   ),
 
@@ -201,6 +224,29 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       ),
                   ),
                    ),
+                  const SizedBox(height: 1,),
+                  Padding(
+                    padding:const  EdgeInsets.only(left: 30, right: 30),
+                    child:   TextDecoratedContainer(titleWidget:const Text(
+                      'Dark Mode',
+                      style:  TextStyle(
+                          fontSize: 15.0, color: AppColor.headingColor2),
+                    ),
+                      iconImage: SvgPicture.asset('help'.svg),
+                      icon: Transform.scale(
+                          scale: 1.5,
+                          child: Switch(
+                            onChanged: toggleSwitch,
+                            value: isSwitched,
+                            activeColor: AppColor.lightIndigo,
+                            activeTrackColor:AppColor.colorBlue ,
+                            inactiveThumbColor: AppColor.headingColor2.withOpacity(0.5),
+                            inactiveTrackColor: AppColor.headingColor.withOpacity(0.5),
+                          )
+                      ),
+
+                    ),
+                  ),
                   const SizedBox(height: 1,),
                   InkWell(
                     onTap: (){

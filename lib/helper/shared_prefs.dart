@@ -8,6 +8,7 @@ class SharedPrefs {
    final String _profilePathKey        = 'Profile pic path';
    final String _saveUserDataKey       = 'Save user';
    final String _tokenKey              = 'Save token';
+   final String _darkModeKey              = 'Dark Mode';
 
 
     Future getUser() async {
@@ -56,6 +57,14 @@ class SharedPrefs {
      prefs.clear();
    }
 
+   Future<void> saveDarkMode(bool value) async {
+     final prefs = await SharedPreferences.getInstance();
+     prefs.setBool(_darkModeKey, value);
+   }
 
+   Future getDarkMode() async {
+     final prefs = await SharedPreferences.getInstance();
+     return prefs.getBool(_darkModeKey);
+   }
 
 }

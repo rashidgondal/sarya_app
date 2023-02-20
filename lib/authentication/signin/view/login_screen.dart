@@ -26,13 +26,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
   late NavigationService _navigationService;
+  SharedPrefs sharedPrefs = SharedPrefs();
+  bool _darkMode = false;
+
 
   @override
   void initState() {
+    _mode();
     super.initState();
     context.read<CountryCubits>().getCountries();
-
     _navigationService = locator<NavigationService>();
+  }
+
+  void _mode()async{
+    _darkMode = await sharedPrefs.getDarkMode()?? false;
   }
 
   bool showPassword = true;
@@ -42,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-        backgroundColor: AppColor.whiteColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: BlocBuilder<SignInCubits, SignInStates>(
           builder: (context, state) {
             bool loading = false;
@@ -94,10 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 return null;
                               }
                             },
-                            style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
+                            style: Theme.of(context).textTheme.headline1,
                             decoration: const InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide:
@@ -127,11 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             maxLines: 1,
                             obscureText: showPassword,
-                            style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
-
+                            style: Theme.of(context).textTheme.headline1,
                             decoration:  InputDecoration(
                                 isDense: true,
                                 suffixIconConstraints:const BoxConstraints(

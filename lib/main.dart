@@ -24,22 +24,27 @@ import 'package:sarya/settings/name/view_model/name_cubits.dart';
 import 'package:sarya/settings/phone/view_model/phone_cubits.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import 'authentication/signin/signin_view_model/signin_cubits.dart';
+import 'helper/shared_prefs.dart';
 import 'navigation/navigation_service.dart';
 import  'navigation/router.dart' as routes;
 import 'navigation/router_path.dart';
 
 
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
+  SharedPrefs sharedPrefs = SharedPrefs();
+  var _value = await sharedPrefs.getDarkMode();
+  print("_value.............$_value");
+  bool _mode = _value == null? false : _value;
   setupLocator();
-  runApp(const MyApp());
+  runApp( MyApp(mode: _mode,));
 }
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool mode;
+  const MyApp({super.key, required this.mode});
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +65,25 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Sarya',
         debugShowCheckedModeBanner: false,
+        themeMode: mode?ThemeMode.dark:ThemeMode.light,
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          backgroundColor: AppColor.colorBlue,
+          scaffoldBackgroundColor: AppColor.whiteColor,
+          textTheme: TextTheme(headline1: const TextStyle(
+              fontSize: 14.0,
+              color: AppColor.lightIndigo,
+              fontWeight: FontWeight.w500))
+        ),
+        darkTheme: ThemeData(
+          primarySwatch: Colors.blue,
+            backgroundColor: AppColor.bgColorDark,
+            scaffoldBackgroundColor: AppColor.bgColorDark,
+            textTheme: TextTheme(headline1: const TextStyle(
+                fontSize: 14.0,
+                color: AppColor.whiteColor,
+                fontWeight: FontWeight.w500))
+
         ),
         home: MyHomePage(),
         navigatorKey: locator<NavigationService>().navigatorKey,
@@ -95,10 +117,11 @@ class _MyHomePageState extends State<MyHomePage> {
   });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            backgroundColor: AppColor.colorBlue,
+            backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

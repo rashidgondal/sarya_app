@@ -11,6 +11,7 @@ import 'package:sarya/theme/color_scheme.dart';
 import '../../customWidgets/dialoge_airport_cost.dart';
 import '../../customWidgets/dialoge_type_of_transport.dart';
 import '../../locator.dart';
+import '../model/create_intenerary.dart' as create_intinerary;
 
 class DayDesignIntineraryScreen extends StatefulWidget {
   const DayDesignIntineraryScreen({Key? key}) : super(key: key);
@@ -22,12 +23,22 @@ class DayDesignIntineraryScreen extends StatefulWidget {
 
 class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   TextEditingController textEditingController = TextEditingController();
-
   late NavigationService _navigationService;
+
+  create_intinerary.CreateIntinerary createIntinerary = create_intinerary.CreateIntinerary();
+  List<create_intinerary.Days> listOfDays = [];
+
   @override
   void initState() {
     super.initState();
     _navigationService = locator<NavigationService>();
+    /*createIntinerary.days!.addAll(listOfDays);
+    createIntinerary.title ="";
+    createIntinerary.summary ="";
+
+    listOfDays.add(create_intinerary.Days());*/
+
+    listOfDays.add(create_intinerary.Days(airport: ''));
 
   }
 
