@@ -16,7 +16,6 @@ import '../../customWidgets/text_decorated_icon.dart';
 
 class DesignIntineraryScreen extends StatefulWidget {
   const DesignIntineraryScreen({Key? key}) : super(key: key);
-
   @override
   State<DesignIntineraryScreen> createState() => _DesignIntineraryScreenState();
 }

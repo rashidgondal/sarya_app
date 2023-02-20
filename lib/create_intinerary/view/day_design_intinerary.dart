@@ -9,6 +9,7 @@ import 'package:sarya/theme/color_scheme.dart';
 import '../../customWidgets/dialoge_airport_cost.dart';
 import '../../customWidgets/dialoge_type_of_transport.dart';
 import '../../locator.dart';
+import '../model/create_intenerary.dart' as create_intenerary;
 
 class DayDesignIntineraryScreen extends StatefulWidget {
   const DayDesignIntineraryScreen({Key? key}) : super(key: key);
@@ -21,13 +22,19 @@ class DayDesignIntineraryScreen extends StatefulWidget {
 class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   TextEditingController textEditingController = TextEditingController();
   int dayLength = 5;
-
   late NavigationService _navigationService;
+  List<create_intenerary.Days> list_of_days = [];
   @override
   void initState() {
+    for (var i = 0; i < dayLength; i++) {
+      list_of_days
+          .add(create_intenerary.Days(airport: '', country: '', market: ''));
+    }
     super.initState();
     _navigationService = locator<NavigationService>();
   }
+
+  int selected_index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +44,8 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
       color: AppColor.whiteColor,
       child: SafeArea(
           child: Scaffold(
-            backgroundColor: AppColor.whiteColor,
-            appBar: AppBar(
+        backgroundColor: AppColor.whiteColor,
+        appBar: AppBar(
           elevation: 0,
           toolbarHeight: 90,
           /*   leading: IconButton(
@@ -56,101 +63,147 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
           ),
           centerTitle: true,
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(140), child: Container(
-            color: AppColor.whiteColor,
-            height: 170,
-            width: size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 3.0,),
-                SizedBox(
-                  height: 50,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: ListView.separated(
+            preferredSize: const Size.fromHeight(140),
+            child: Container(
+              color: AppColor.whiteColor,
+              height: 170,
+              width: size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 3.0,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         physics: BouncingScrollPhysics(),
-                        itemCount: dayLength,
-                        itemBuilder: (BuildContext context, int index){
+                        itemCount: list_of_days.length,
+                        itemBuilder: (BuildContext context, int index) {
                           int day = index + 1;
+                          return InkWell(
+                            onTap: () {
+                              selected_index = index;
+                              setState(() {});
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 30.0,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    color: selected_index == index
+                                        ? AppColor.lightIndigo
+                                        : Colors.grey,
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    "Day $day",
+                                    style: TextStyle(
+                                        color: AppColor.whiteColor,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  )),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
                           return Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                            Container(
-                              height: 30.0,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                color: AppColor.lightIndigo,
-                                borderRadius: BorderRadius.circular(15.0),
+                              Container(
+                                height: 2,
+                                width: 20,
+                                decoration: BoxDecoration(
+                                    color: AppColor.colorGrey,
+                                    borderRadius: BorderRadius.circular(5)),
                               ),
-                              child:  Center(child: Text("Day $day",style: TextStyle(color: AppColor.whiteColor, fontSize: 14, fontWeight: FontWeight.w500),)),
-                            ),
-                            const SizedBox(width: 5,),
-
-                          ],);
-                    }, separatorBuilder: (BuildContext context, int index) {
-                          return Row(children: [
-                            Container(height: 2,width: 20,
-                              decoration:  BoxDecoration(
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              Container(
+                                height: 2,
+                                width: 2,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
                                   color: AppColor.colorGrey,
-                                  borderRadius: BorderRadius.circular(5)
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 2,),
-                            Container(height: 2,width: 2,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColor.colorGrey,
+                              const SizedBox(
+                                width: 2,
                               ),
-                            ),
-                            const SizedBox(width: 2,),
-                            Container(height: 2,width: 2,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColor.colorGrey,
+                              Container(
+                                height: 2,
+                                width: 2,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColor.colorGrey,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 5,),
-                          ],);
-
-                    },),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5.0,),
-                SizedBox(
-                  height: 91.0,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      physics: BouncingScrollPhysics(),
-                      itemCount: 3,
-                      itemBuilder: (BuildContext context, int index){
-                        return Column(
-
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            SizedBox(
-                              height: 60.0,
-                              width: 70.0,
-                              child: Icon(Icons.question_mark, ),
-                            ),
-                            SizedBox(height: 5,),
-                            Text("Malaysia", style: TextStyle(fontSize: 16,color: AppColor.headingColor2, fontWeight: FontWeight.w500),)
-
-
-                          ],
-                        );
-                      }, separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(width: 20,);
-
-                    },),
-                  )
-              /*    Row(
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  SizedBox(
+                      height: 91.0,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: 3,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: const [
+                                SizedBox(
+                                  height: 60.0,
+                                  width: 70.0,
+                                  child: Icon(
+                                    Icons.question_mark,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "Malaysia",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColor.headingColor2,
+                                      fontWeight: FontWeight.w500),
+                                )
+                              ],
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              width: 20,
+                            );
+                          },
+                        ),
+                      )
+                      /*    Row(
 
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -192,14 +245,13 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
 
                     ],
                   ),*/
-                )
-
-              ],),
-          ),
+                      )
+                ],
+              ),
+            ),
           ),
         ),
-        
-            bottomNavigationBar: Container(
+        bottomNavigationBar: Container(
           height: 100,
           color: AppColor.whiteColor,
           child: Row(
@@ -209,7 +261,6 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
               InkWell(
                 onTap: () {
                   _navigationService.navigateTo(draftIntineraryRoute);
-
                 },
                 child: Container(
                   height: 46.0,
@@ -233,8 +284,15 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
               ),
               InkWell(
                 onTap: () {
-                  _navigationService.navigateTo(summaryRoutSold);
-
+                  //_navigationService.navigateTo(summaryRoutSold);
+                  if (selected_index < list_of_days.length) {
+                    if(list_of_days[selected_index].airport!.isNotEmpty){
+                      selected_index++;
+                      setState(() {});
+                    }else{
+                      print('please input airpot code');
+                    }
+                  }
                 },
                 child: Container(
                   height: 46.0,
@@ -256,155 +314,182 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
             ],
           ),
         ),
-            body: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: SingleChildScrollView(
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-                child: Column(
+              child: Column(
                 children: [
-                    SizedBox(
+                  SizedBox(
                     height: 1.0,
                   ),
-                    InkWell(
-                       onTap: (){
-                         showDialog(
-                             context: context,
-                             builder: (BuildContext context) =>  AirportSelection(textEditingController: textEditingController,));
-                       },
-                       child: TextDecoratedContainer(
-                         icon: Icon(
-                         Icons.arrow_forward_ios_outlined,
-                         color: AppColor.lightIndigo,
-                         size: 20,
-                       ),
-                         titleWidget: Text(
-                         'Airport Code',
-                         style:  TextStyle(
-                             fontSize: 15.0, color: AppColor.headingColor2),
-                       ),
-                         iconImage: Row(children: [SvgPicture.asset('airplane_icon'.svg)],)
-                       )),
-                    InkWell(
-                      onTap: (){
+                  InkWell(
+                      onTap: () {
                         showDialog(
                             context: context,
-                            builder: (BuildContext context) =>  TypeOfTransport(textEditingController: textEditingController,));
-
-
-                      },child: TextDecoratedContainer(
-                          icon: Icon(
-                     Icons.arrow_forward_ios_outlined,
-                     color: AppColor.lightIndigo,
-                     size: 20,
-                   ),
-                          titleWidget:  Text(
-                     'Type of transport',
-                     style:  TextStyle(
-                         fontSize: 15.0, color: AppColor.headingColor2),
-                   ),
-                        iconImage: Row(children: [SvgPicture.asset('transport_icoon'.svg)],)
-                    )),
-                    InkWell(
-                      onTap: (){
-
-
+                            builder: (BuildContext context) => AirportSelection(
+                                  textEditingController: textEditingController,
+                                )).then((value) {
+                          list_of_days[selected_index].airport = 'Dubai';
+                          setState(() {});
+                        });
                       },
-                       child:  TextDecoratedContainer(
-                         icon: Icon(
-                         Icons.arrow_forward_ios_outlined,
-                         color: AppColor.lightIndigo,
-                         size: 20,
-                       ),
-                         titleWidget:Text(
-                           'Accommodation',
-                           style:  TextStyle(
-                               fontSize: 15.0, color: AppColor.headingColor2),
-                         ),
-                         iconImage: Row(children: [SvgPicture.asset('accomadation'.svg)],))),
-                    InkWell(
-                      onTap: (){
+                      child: TextDecoratedContainer(
+                          icon: Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: AppColor.lightIndigo,
+                            size: 20,
+                          ),
+                          titleWidget: Text(
+                            list_of_days[selected_index].airport!.isEmpty
+                                ? 'Airport Code'
+                                : '${list_of_days[selected_index].airport}',
+                            style: TextStyle(
+                                fontSize: 15.0, color: AppColor.headingColor2),
+                          ),
+                          iconImage: Row(
+                            children: [SvgPicture.asset('airplane_icon'.svg)],
+                          ))),
+                  InkWell(
+                      onTap: () {
                         showDialog(
                             context: context,
-                            builder: (BuildContext context) =>  ActivitiesExcursion(textEditingController: textEditingController,));
-
-
-                      },child: TextDecoratedContainer(
-                            icon: Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    color: AppColor.lightIndigo,
-                    size: 20,
-                  ),
-                            titleWidget: Text(
-                    'Activities and Excursion',
-                    style:  TextStyle(
-                        fontSize: 15.0, color: AppColor.headingColor2),
-                  ),
-                            iconImage: Row(children: [SvgPicture.asset('activityy_Icon'.svg)],),)),
-                    TextDecoratedContainer(
+                            builder: (BuildContext context) => TypeOfTransport(
+                                  textEditingController: textEditingController,
+                                ));
+                      },
+                      child: TextDecoratedContainer(
                           icon: Icon(
-                     Icons.arrow_forward_ios_outlined,
-                     color: AppColor.lightIndigo,
-                     size: 20,
-                   ),
-                          titleWidget : Text('Breakfast', style:  TextStyle(
-                        fontSize: 15.0, color: AppColor.headingColor2),),
-                          iconImage: Row(children: [SvgPicture.asset('breakfast_icon'.svg)],),),
-                    TextDecoratedContainer(
+                            Icons.arrow_forward_ios_outlined,
+                            color: AppColor.lightIndigo,
+                            size: 20,
+                          ),
+                          titleWidget: Text(
+                            'Type of transport',
+                            style: TextStyle(
+                                fontSize: 15.0, color: AppColor.headingColor2),
+                          ),
+                          iconImage: Row(
+                            children: [SvgPicture.asset('transport_icoon'.svg)],
+                          ))),
+                  InkWell(
+                      onTap: () {},
+                      child: TextDecoratedContainer(
+                          icon: Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: AppColor.lightIndigo,
+                            size: 20,
+                          ),
+                          titleWidget: Text(
+                            'Accommodation',
+                            style: TextStyle(
+                                fontSize: 15.0, color: AppColor.headingColor2),
+                          ),
+                          iconImage: Row(
+                            children: [SvgPicture.asset('accomadation'.svg)],
+                          ))),
+                  InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                ActivitiesExcursion(
+                                  textEditingController: textEditingController,
+                                ));
+                      },
+                      child: TextDecoratedContainer(
                         icon: Icon(
-                     Icons.arrow_forward_ios_outlined,
-                     color: AppColor.lightIndigo,
-                     size: 20,
-                   ),
+                          Icons.arrow_forward_ios_outlined,
+                          color: AppColor.lightIndigo,
+                          size: 20,
+                        ),
                         titleWidget: Text(
-                    'Lunch',
-                    style:  TextStyle(
-                        fontSize: 15.0, color: AppColor.headingColor2),
-                  ),
-                        iconImage: Row(children: [SvgPicture.asset('lunch_icon'.svg)],)),
-                    TextDecoratedContainer(
-                        icon: Icon(
-                     Icons.arrow_forward_ios_outlined,
-                     color: AppColor.lightIndigo,
-                     size: 20,
-                   ),
-                        titleWidget: Text(
-                       'Dinner',
-                     style:  TextStyle(
-                         fontSize: 15.0, color: AppColor.headingColor2),
-                   ),
-                        iconImage: Row(children: [SvgPicture.asset('dinner_icon'.svg)],),),
-                    TextDecoratedContainer(
+                          'Activities and Excursion',
+                          style: TextStyle(
+                              fontSize: 15.0, color: AppColor.headingColor2),
+                        ),
+                        iconImage: Row(
+                          children: [SvgPicture.asset('activityy_Icon'.svg)],
+                        ),
+                      )),
+                  TextDecoratedContainer(
                     icon: Icon(
-                     Icons.arrow_forward_ios_outlined,
-                     color: AppColor.lightIndigo,
-                     size: 20,
-                   ),
-                    titleWidget:Text(
-                    'Coffee Shops Clubs & Lounges',
-                    style:  TextStyle(
-                        fontSize: 15.0, color: AppColor.headingColor2),
-                  ) , iconImage: Row(children: [SvgPicture.asset('coffee_icon'.svg)],)),
-                    TextDecoratedContainer(
-                       icon: Icon(
-                     Icons.arrow_forward_ios_outlined,
-                     color: AppColor.lightIndigo,
-                     size: 20,
-                   ),
-                       titleWidget:Text(
-                      'Market, Malls & Store',
-                    style:  TextStyle(
-                        fontSize: 15.0, color: AppColor.headingColor2),
+                      Icons.arrow_forward_ios_outlined,
+                      color: AppColor.lightIndigo,
+                      size: 20,
+                    ),
+                    titleWidget: Text(
+                      'Breakfast',
+                      style: TextStyle(
+                          fontSize: 15.0, color: AppColor.headingColor2),
+                    ),
+                    iconImage: Row(
+                      children: [SvgPicture.asset('breakfast_icon'.svg)],
+                    ),
                   ),
-                       iconImage: Row(children: [SvgPicture.asset('market_icon'.svg)],)),
-
+                  TextDecoratedContainer(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: AppColor.lightIndigo,
+                        size: 20,
+                      ),
+                      titleWidget: Text(
+                        'Lunch',
+                        style: TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ),
+                      iconImage: Row(
+                        children: [SvgPicture.asset('lunch_icon'.svg)],
+                      )),
+                  TextDecoratedContainer(
+                    icon: Icon(
+                      Icons.arrow_forward_ios_outlined,
+                      color: AppColor.lightIndigo,
+                      size: 20,
+                    ),
+                    titleWidget: Text(
+                      'Dinner',
+                      style: TextStyle(
+                          fontSize: 15.0, color: AppColor.headingColor2),
+                    ),
+                    iconImage: Row(
+                      children: [SvgPicture.asset('dinner_icon'.svg)],
+                    ),
+                  ),
+                  TextDecoratedContainer(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: AppColor.lightIndigo,
+                        size: 20,
+                      ),
+                      titleWidget: Text(
+                        'Coffee Shops Clubs & Lounges',
+                        style: TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ),
+                      iconImage: Row(
+                        children: [SvgPicture.asset('coffee_icon'.svg)],
+                      )),
+                  TextDecoratedContainer(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: AppColor.lightIndigo,
+                        size: 20,
+                      ),
+                      titleWidget: Text(
+                        'Market, Malls & Store',
+                        style: TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ),
+                      iconImage: Row(
+                        children: [SvgPicture.asset('market_icon'.svg)],
+                      )),
                 ],
               )),
         ),
       )),
     );
   }
-
-
 
 /*  TextFormField(
                 maxLines: 4,
