@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
 import 'package:sarya/customWidgets/dial_trip_estimation_cost.dart';
 import 'package:sarya/customWidgets/dialoge_select_trip_type.dart';
+import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
+
+import '../../customWidgets/text_decorated_icon.dart';
 
 class DesignIntineraryScreen extends StatefulWidget {
   const DesignIntineraryScreen({Key? key}) : super(key: key);
@@ -16,9 +23,18 @@ class DesignIntineraryScreen extends StatefulWidget {
 
 class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
 
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController summaryController = TextEditingController();
+  TextEditingController intineraryCostController = TextEditingController();
+  TextEditingController totalDaysController = TextEditingController();
+  TextEditingController tripEstimatedCostController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   late NavigationService _navigationService;
+
+  final ImagePicker _picker = ImagePicker();
+  String path = '';
+
   @override
   void initState() {
     super.initState();
@@ -39,13 +55,13 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
         appBar: AppBar(
           elevation: 0,
           toolbarHeight: 60,
-          /*   leading: IconButton(
+             leading: IconButton(
              icon: const Icon(
                Icons.arrow_back_ios,
                color: AppColor.subtitleColor,
              ),
              onPressed: () {},
-           ),*/
+           ),
           automaticallyImplyLeading: false,
           backgroundColor: AppColor.aquaCasper2,
           title: const Text(
@@ -127,8 +143,8 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                     size: size,
                     maxLine: 1,
                     textInputType: TextInputType.text,
-                    textEditingController: textEditingController,
-                      icon:const  Icon(Icons.question_mark)
+                    textEditingController: titleController,
+                      icon:Row(children: [SvgPicture.asset("t_icon".svg)],)
                   ),
                   const SizedBox(
                     height: 2.0,
@@ -138,8 +154,8 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                     size: size,
                     maxLine: 4,
                     textInputType: TextInputType.text,
-                    textEditingController: textEditingController,
-                      icon:const  Icon(Icons.question_mark)
+                    textEditingController: summaryController,
+                      icon:Row(children: [SvgPicture.asset("summary_icon".svg)]),
                   ),
                   const SizedBox(
                     height: 2.0,
@@ -149,9 +165,8 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                     size: size,
                     maxLine: 1,
                     textInputType: TextInputType.number,
-                    textEditingController: textEditingController,
-                      icon:const  Icon(Icons.question_mark)
-                  ),
+                    textEditingController: intineraryCostController,
+                    icon:Row(children: [SvgPicture.asset("cost_icon".svg)]),                  ),
                   const SizedBox(
                     height: 2.0,
                   ),
@@ -159,12 +174,17 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                     onTap: (){
                       showDialog(
                           context: context,
-                          builder: (BuildContext context) =>  TripEstimationCost(textEditingController: textEditingController,));
+                          builder: (BuildContext context) =>  TripEstimationCost(textEditingController: tripEstimatedCostController,));
 
                     },
-                    child: customWidget(
-                      title: 'Trip Estimated Cost',
-                      size: size,
+                    child: TextDecoratedContainer(
+                      titleWidget:     Text(
+                        'Trip Estimated Cost',
+                        style: const TextStyle(
+                            fontSize: 15.0, color: AppColor.headingColor2),
+                      ),
+                      iconImage: Row(children: [SvgPicture.asset("cost_icon".svg)]),
+
                     ),
                   ),
                   const SizedBox(
@@ -174,9 +194,20 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                       onTap: () {
                         showDialog(
                             context: context,
-                            builder: (BuildContext context) =>  SelectTripType(textEditingController: textEditingController,));
+                            builder: (BuildContext context) =>  SelectTripType(textEditingController: searchController,));
                       },
-                      child: customWidget(title: 'Select Trip Type', size: size)),
+                      child: TextDecoratedContainer(
+                        titleWidget:     Text(
+                          'Select Trip Type',
+                          style: const TextStyle(
+                              fontSize: 15.0, color: AppColor.headingColor2),
+                        ),
+                        iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
+                        icon: Icon(
+                          Icons.arrow_forward_ios_outlined,
+                          color: AppColor.lightIndigo,
+                          size: 20,
+                        ))),
                   const SizedBox(
                     height: 2.0,
                   ),
@@ -185,11 +216,8 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                     size: size,
                     maxLine: 1,
                     textInputType: TextInputType.number,
-                    textEditingController: textEditingController,
-                    icon: const Icon(
-                      Icons.question_mark,
-                      size: 15,
-                    ),
+                    textEditingController: totalDaysController,
+                    icon: Row(children: [SvgPicture.asset("days_icon".svg)]),
                   ),
                   const SizedBox(
                     height: 2.0,
@@ -198,22 +226,46 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                       onTap: (){
                         _navigationService.navigateTo(checkListRoute);
                       },
-                      child: customWidget(title: 'Checklist', size: size)),
+                      child: TextDecoratedContainer(
+                          titleWidget:     Text(
+                            'Checklist',
+                            style: const TextStyle(
+                                fontSize: 15.0, color: AppColor.headingColor2),
+                          ),
+                          iconImage: Row(children: [SvgPicture.asset("checklist_icon".svg)]),
+                          icon: Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: AppColor.lightIndigo,
+                            size: 20,
+                          ))
+
+
+                  ),
                   const SizedBox(
                     height: 5.0,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
+                    children:  [
+                      const Text(
                         'Upload Intinerary Profile Image.',
                         style:  TextStyle(
                             fontSize: 15.0, color: AppColor.headingColor2),
                       ),
-                      Icon(
-                        Icons.camera_alt_outlined,
-                        size: 30,
-                        color: AppColor.lightIndigo,
+                      InkWell(
+                        onTap: ()async{
+                          XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                          if(image != null){
+                            setState(() {
+                              path = image.path;
+                            });
+                          }
+                        },
+                        child: Icon(
+                          Icons.camera_alt_outlined,
+                          size: 30,
+                          color: AppColor.lightIndigo,
+                        ),
                       )
                     ],
                   ),
@@ -228,6 +280,9 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                                 width: 1, color: AppColor.borderColor)),
+                        child: path.isEmpty?
+                               SizedBox():
+                               Image.file(File(path)),
                       ),
                     ],
                   )
@@ -238,61 +293,6 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
     );
   }
 
-  Stack customWidget({required title, required Size size, }) {
-    return Stack(
-      children: [
-        SizedBox(
-          height: 80.0,
-          width: size.width,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Container(
-                    height: 54.0,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border:
-                            Border.all(color: AppColor.borderColor2, width: 1)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                              fontSize: 15.0, color: AppColor.headingColor2),
-                        ),
-                        const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          color: AppColor.lightIndigo,
-                          size: 20,
-                        )
-                      ],
-                    )),
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          bottom: 60,
-          left: 20,
-          child: Container(
-            color: AppColor.whiteColor,
-            height: 20,
-            width: 30,
-            child: const Icon(
-              Icons.question_mark,
-              size: 15,
-              color: AppColor.headingColor2,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
 
 

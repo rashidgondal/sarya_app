@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
 import 'package:sarya/customWidgets/text_decorated_icon.dart';
+import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 class ActivitiesExcursion extends StatefulWidget {
@@ -128,18 +131,19 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
               const SizedBox(
                 height: 20,
               ),
-              const Padding(
+               Padding(
                 padding:  EdgeInsets.symmetric(horizontal: 8.0),
-                child: TextDecoratedContainer(icon: Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  color: AppColor.lightIndigo,
-                  size: 20,
-                ), titleWidget:Text(
-                  'Select Location',
-                  style:  TextStyle(
-                      fontSize: 15.0, color: AppColor.headingColor2)), iconImage: Icon(Icons.question_mark ,color: AppColor.colorBlack,size: 15.0,),),
-
-              ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: CustomTextField(
+                    hintText: 'Search',
+                    size: size,
+                    maxLine: 1,
+                    textInputType: TextInputType.text,
+                    textEditingController: widget.textEditingController,
+                    icon: Row(children: [SvgPicture.asset('search_icon'.svg)],),
+                  ),
+                ),),
               Padding(
                 padding: const  EdgeInsets.symmetric(horizontal: 8.0),
                 child: Row(

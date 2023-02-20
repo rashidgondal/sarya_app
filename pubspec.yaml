@@ -57,6 +57,7 @@ dependencies:
   flutter_google_places: ^0.3.0
   awesome_snackbar_content: ^0.0.8
   geojson: ^1.0.0
+  image_picker: ^0.8.6+1
 
 dev_dependencies:
   flutter_test:

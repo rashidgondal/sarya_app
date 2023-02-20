@@ -10,6 +10,7 @@ import 'package:sarya/theme/color_scheme.dart';
 import '../../helper/shared_prefs.dart';
 import '../../locator.dart';
 import '../../navigation/navigation_service.dart';
+import '../../navigation/router_path.dart';
 
 class SelectDestination extends StatefulWidget {
   const SelectDestination({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _SelectDestinationState extends State<SelectDestination> {
   var list = [];
   var boolList = [];
   var tempCountryList = [];
-  late GoogleMapController c;
+  late GoogleMapController _mapController;
   TextEditingController searchController = TextEditingController();
   String searchKeyWord = '';
 
@@ -34,6 +35,7 @@ class _SelectDestinationState extends State<SelectDestination> {
   );
 
   Set<Polygon> _polygon = HashSet<Polygon>();
+  Set<Marker> _marker = HashSet<Marker>();
   List<GeoJsonFeature> features = [];
 
   bool loading = true;
@@ -48,44 +50,12 @@ class _SelectDestinationState extends State<SelectDestination> {
     super.initState();
     parseAndDrawAssetsOnMap();
     _navigationService = locator<NavigationService>();
-    //getUserInfo();
   }
 
-  addPolygon({required String polygonCountry, required List<LatLng> points}) {
-    _polygon.add(Polygon(
-      // given polygonId
-      polygonId: PolygonId(polygonCountry),
-      // initialize the list of points to display polygon
-      points: points,
-      // given color to polygon
-      fillColor: Colors.green.withOpacity(0.3),
-      // given border color to polygon
-      strokeColor: Colors.green,
-      geodesic: true,
-      // given width of border
-      strokeWidth: 4,
-    ));
-  }
 
-  void addPoints() {
-    /*   for( var i=0 ; i < GeoJson.AF.length ; i++ )
-    {
-      var ltlng= LatLng( GeoJson.AF[ i ][ 1 ], GeoJson.AF[ i ][ 0 ] );
-      point.add( ltlng );
-    }
-*/
-    setState(() {});
-  }
 
-/*  getUserInfo() async {
-    SharedPrefs pref = SharedPrefs();
-    list = await pref.getCountries();
-    boolList = List.filled(list.length, false);
-    print(
-        "tempList..1...........${boolList}......length....${boolList.length}");
 
-    setState(() {});
-  }*/
+
 
   Future<void> parseAndDrawAssetsOnMap() async {
     final geo = GeoJson();
@@ -133,7 +103,9 @@ class _SelectDestinationState extends State<SelectDestination> {
         color: AppColor.whiteColor,
         child: Center(
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              _navigationService.navigateTo(designIntineraryRoute);
+            },
             child: Container(
               height: 46.0,
               width: 200.0,
@@ -162,11 +134,12 @@ class _SelectDestinationState extends State<SelectDestination> {
               color: AppColor.aquaCasper2,
               child: GoogleMap(
                 mapType: MapType.normal,
+                markers: _marker,
                 initialCameraPosition: _kGoogle,
                 zoomControlsEnabled: true,
                 polygons: _polygon,
                 onMapCreated: (GoogleMapController controller) {
-                  c = controller;
+                  _mapController = controller;
                 },
               ),
             ),
@@ -273,9 +246,9 @@ class _SelectDestinationState extends State<SelectDestination> {
                                           contentPadding: EdgeInsets.zero,
                                           value: boolList[index],
                                           onChanged: (bool? value) {
+
                                             log('click');
                                             log('features = ${features[index].geometry}');
-                                            List<LatLng> pointAll = [];
 
                                             print("va.......$value");
                                             if (value == null) {
@@ -287,40 +260,143 @@ class _SelectDestinationState extends State<SelectDestination> {
                                               if(features[index].geometry is GeoJsonPolygon){
                                                 GeoJsonPolygon polygon =
                                                     features[index].geometry;
+                                                List<LatLng> latlng = [];
+
                                                 polygon.geoSeries
                                                     .forEach((element) {
-                                                  List<LatLng> latlng = [];
                                                   element.geoPoints.forEach((e) {
                                                     latlng.add(LatLng(
                                                         e.latitude, e.longitude));
                                                   });
-                                                  pointAll.addAll(latlng);
+                                              });
+                                               // _marker.add(Marker(markerId: MarkerId('$index'),position: latlng.first));
+                                                _polygon.add(Polygon(
+                                                  // given polygonId
+                                                  polygonId: PolygonId('$index'),
+                                                  // initialize the list of points to display polygon
+                                                  points: latlng,
+                                                  // given color to polygon
+                                                  fillColor: Colors.green.withOpacity(0.3),
+                                                  // given border color to polygon
+                                                  strokeColor: Colors.green,
+                                                  geodesic: true,
+                                                  // given width of border
+                                                  strokeWidth: 4,
+                                                ));
+                                                _mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latlng.first,zoom: 4)));
+
+                                              }
+                                              else{
+                                                GeoJsonMultiPolygon polygon =
+                                                    features[index].geometry;
+                                                List<LatLng> latlng = [];
+
+                                                polygon.polygons
+                                                    .forEach((element) {
+                                                  element.geoSeries.forEach((e) {
+                                                    e.geoPoints.forEach((e1) {
+                                                      latlng.add(LatLng(
+                                                          e1.latitude, e1.longitude));
+                                                    });
+
+                                                  });
                                                 });
-                                              }else{
+
+                                                _mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latlng.first,zoom: 4)));
+                                               // _marker.add(Marker(markerId: MarkerId('$index'),position: latlng[0]));
+                                                _polygon.add(Polygon(
+                                                  // given polygonId
+                                                  polygonId: PolygonId('$index'),
+                                                  // initialize the list of points to display polygon
+                                                  points: latlng,
+                                                  // given color to polygon
+                                                  fillColor: Colors.green.withOpacity(0.3),
+                                                  // given border color to polygon
+                                                  strokeColor: Colors.green,
+                                                  geodesic: true,
+                                                  // given width of border
+                                                  strokeWidth: 4,
+                                                ));
+                                                setState(() {});
+                                              }
+
+
+                                              setState(() {});
+
+                                            } else {
+
+                                              boolList[index] = false;
+
+                                              if(features[index].geometry is GeoJsonPolygon){
+                                                List<LatLng> latlng = [];
+
+                                                GeoJsonPolygon polygon =
+                                                    features[index].geometry;
+                                                polygon.geoSeries
+                                                    .forEach((element) {
+                                                  element.geoPoints.forEach((e) {
+                                                    latlng.add(LatLng(
+                                                        e.latitude, e.longitude));
+                                                  });
+                                                });
+
+                                              //  _marker.remove(Marker(markerId: MarkerId('$index'),position: latlng[0]));
+
+
+                                                _polygon.remove(Polygon(
+                                                  // given polygonId
+                                                  polygonId: PolygonId('$index'),
+                                                  // initialize the list of points to display polygon
+                                                  points: latlng,
+                                                  // given color to polygon
+                                                  fillColor: Colors.green.withOpacity(0.3),
+                                                  // given border color to polygon
+                                                  strokeColor: Colors.green,
+                                                  geodesic: true,
+                                                  // given width of border
+                                                  strokeWidth: 4,
+                                                ));
+
+                                              }
+                                              else{
+                                                List<LatLng> latlng = [];
+
                                                 GeoJsonMultiPolygon polygon =
                                                     features[index].geometry;
                                                 polygon.polygons
                                                     .forEach((element) {
                                                   element.geoSeries.forEach((e) {
-                                                    List<LatLng> latlng = [];
                                                     e.geoPoints.forEach((e1) {
                                                       latlng.add(LatLng(
                                                           e1.latitude, e1.longitude));
                                                     });
-                                                    pointAll.addAll(latlng);
+
+
                                                   });
                                                 });
+                                              //  _marker.remove(Marker(markerId: MarkerId('$index'),position: latlng[0]));
+
+                                                _polygon.remove(Polygon(
+                                                  // given polygonId
+                                                  polygonId: PolygonId('$index'),
+                                                  // initialize the list of points to display polygon
+                                                  points: latlng,
+                                                  // given color to polygon
+                                                  fillColor: Colors.green.withOpacity(0.3),
+                                                  // given border color to polygon
+                                                  strokeColor: Colors.green,
+                                                  geodesic: true,
+                                                  // given width of border
+                                                  strokeWidth: 4,
+                                                ));
                                               }
                                               setState(() {});
-                                            } else {
-                                              boolList[index] = false;
-                                              pointAll.removeAt(index);
+
+                                              return;
                                             }
 
-                                            addPolygon(
-                                              points: pointAll,
-                                              polygonCountry: '$index',
-                                            );
+
+
                                           },
                                           title: Text(
                                             features[index]

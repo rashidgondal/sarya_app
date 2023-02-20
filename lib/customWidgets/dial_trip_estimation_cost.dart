@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 import 'custom_text_field.dart';
@@ -25,7 +27,7 @@ class _TripEstimationCostState extends State<TripEstimationCost> {
           Container(
             padding:const  EdgeInsets.symmetric(horizontal: 1),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
                   onTap: () {
@@ -49,7 +51,6 @@ class _TripEstimationCostState extends State<TripEstimationCost> {
                     ),
                   ),
                 ),
-
                 InkWell(
                   onTap: () {},
                   child: Container(
@@ -101,14 +102,14 @@ class _TripEstimationCostState extends State<TripEstimationCost> {
                 height: 10,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: CustomTextField(
                   hintText: 'Add cost (\$)',
                   size: size,
                   maxLine: 1,
                   textInputType: TextInputType.text,
                   textEditingController: widget.textEditingController,
-                    icon:const  Icon(Icons.question_mark)
+                    icon:  Row(children: [SvgPicture.asset("cost_icon".svg)])
                 ),
               ),
             ],

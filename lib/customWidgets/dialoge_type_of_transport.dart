@@ -26,7 +26,7 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
               Container(
                 padding:const  EdgeInsets.symmetric(horizontal: 1),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     InkWell(
                       onTap: () {

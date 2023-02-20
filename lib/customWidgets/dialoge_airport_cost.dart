@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 import 'custom_text_field.dart';
@@ -25,7 +27,7 @@ class _AirportSelectionState extends State<AirportSelection> {
           Container(
             padding:const  EdgeInsets.symmetric(horizontal: 15),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
                   onTap: () {
@@ -71,7 +73,6 @@ class _AirportSelectionState extends State<AirportSelection> {
             ),
           ),
           const SizedBox(height: 10,)
-
         ],
         contentPadding: EdgeInsets.zero,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -105,7 +106,8 @@ class _AirportSelectionState extends State<AirportSelection> {
                   size: size,
                   maxLine: 1,
                   textInputType: TextInputType.text,
-                  textEditingController: widget.textEditingController, icon:const  Icon(Icons.question_mark),
+                  textEditingController: widget.textEditingController,
+                  icon: Row(children: [SvgPicture.asset('search_icon'.svg)],),
                 ),
               ),
               Expanded(

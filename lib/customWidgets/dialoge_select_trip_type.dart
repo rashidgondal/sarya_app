@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
+import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 class SelectTripType extends StatefulWidget {
@@ -46,12 +48,11 @@ class _SelectTripTypeState extends State<SelectTripType> {
               Container(
                 padding:const  EdgeInsets.symmetric(horizontal: 1),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     InkWell(
                       onTap: () {
                         Navigator.of(context).pop();
-
                       },
                       child: Container(
                         height: 46.0,
@@ -70,7 +71,6 @@ class _SelectTripTypeState extends State<SelectTripType> {
                         ),
                       ),
                     ),
-
                     InkWell(
                       onTap: () {},
                       child: Container(
@@ -130,7 +130,8 @@ class _SelectTripTypeState extends State<SelectTripType> {
                   size: size,
                   maxLine: 1,
                   textInputType: TextInputType.text,
-                  textEditingController: widget.textEditingController, icon:const  Icon(Icons.question_mark),
+                  textEditingController: widget.textEditingController,
+                  icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                 ),
               ),
               Expanded(
