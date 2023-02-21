@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
 import 'package:geojson/geojson.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,7 +12,8 @@ import '../../navigation/navigation_service.dart';
 import '../../navigation/router_path.dart';
 
 class SelectDestination extends StatefulWidget {
-  const SelectDestination({Key? key}) : super(key: key);
+  final Map map;
+  const SelectDestination({Key? key, required this.map}) : super(key: key);
 
   @override
   State<SelectDestination> createState() => _SelectDestinationState();
@@ -40,6 +40,8 @@ class _SelectDestinationState extends State<SelectDestination> {
 
   bool loading = true;
 
+
+
   @override
   void dispose() {
     super.dispose();
@@ -47,8 +49,9 @@ class _SelectDestinationState extends State<SelectDestination> {
 
   @override
   void initState() {
+    features  = widget.map['country'];
+    boolList  = widget.map['boolList'];
     super.initState();
-    parseAndDrawAssetsOnMap();
     _navigationService = locator<NavigationService>();
   }
 
@@ -57,20 +60,6 @@ class _SelectDestinationState extends State<SelectDestination> {
 
 
 
-  Future<void> parseAndDrawAssetsOnMap() async {
-    final geo = GeoJson();
-
-    final data =
-        await rootBundle.loadString('lib/assets/json_data/countries.geojson');
-    await geo.parse(data, verbose: true);
-
-    features = geo.features;
-    print("features ....${features.length}");
-    boolList = List.filled(features.length, false);
-    setState(() {
-      loading = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +93,8 @@ class _SelectDestinationState extends State<SelectDestination> {
         child: Center(
           child: InkWell(
             onTap: () {
-              _navigationService.navigateTo(designIntineraryRoute);
+              print("temp........${tempCountryList.length}");
+            //  _navigationService.navigateTo(designIntineraryRoute);
             },
             child: Container(
               height: 46.0,
@@ -218,11 +208,7 @@ class _SelectDestinationState extends State<SelectDestination> {
                                         ))));
                           })
                       : */
-                      loading
-                          ? Center(
-                              child: CupertinoActivityIndicator(),
-                            )
-                          : features.isEmpty
+                      features.isEmpty
                               ? Center(
                                   child: Text("Data not found."),
                                 )
@@ -256,6 +242,7 @@ class _SelectDestinationState extends State<SelectDestination> {
                                             }
 
                                             if (value == true) {
+                                              tempCountryList.add(features[index].properties!['ADMIN']);
                                               boolList[index] = true;
                                               if(features[index].geometry is GeoJsonPolygon){
                                                 GeoJsonPolygon polygon =
@@ -319,14 +306,11 @@ class _SelectDestinationState extends State<SelectDestination> {
                                                 ));
                                                 setState(() {});
                                               }
-
-
                                               setState(() {});
 
                                             } else {
-
+                                              tempCountryList.remove(features[index].properties!['ADMIN']);
                                               boolList[index] = false;
-
                                               if(features[index].geometry is GeoJsonPolygon){
                                                 List<LatLng> latlng = [];
 
@@ -391,7 +375,6 @@ class _SelectDestinationState extends State<SelectDestination> {
                                                 ));
                                               }
                                               setState(() {});
-
                                               return;
                                             }
 

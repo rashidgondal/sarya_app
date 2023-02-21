@@ -77,7 +77,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (context) =>    AvatarsTypesScreen(map: settings.arguments as Map,));
     case routes.destinationRout:
       return MaterialPageRoute(
-        builder: (context) =>  const SelectDestination(),
+        builder: (context) =>   SelectDestination(map: settings.arguments as Map,),
       );
     case routes.summaryRoutStart:
       return MaterialPageRoute(

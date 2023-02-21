@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geojson/geojson.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/locator.dart';
@@ -7,6 +8,7 @@ import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../customWidgets/drawer_screen.dart';
 import '../../navigation/navigation_service.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class ItineraryScreen extends StatefulWidget {
   const ItineraryScreen({Key? key}) : super(key: key);
@@ -20,14 +22,29 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   String? profilePath;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
    Map? map;
-
+  late List<GeoJsonFeature> features;
+  var boolList = [];
   @override
   void initState() {
+    parseAndDrawAssetsOnMap();
     super.initState();
     _navigationService = locator<NavigationService>();
     getUserInfo();
   }
 
+
+  Future<void> parseAndDrawAssetsOnMap() async {
+
+    final geo = GeoJson();
+    final data =
+    await rootBundle.loadString('lib/assets/json_data/countries.geojson');
+    await geo.parse(data, verbose: true);
+
+    features = geo.features;
+    print("features ....${features.length}");
+    boolList = List.filled(features.length, false);
+
+  }
 
 
   getUserInfo() async {
@@ -296,7 +313,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: InkWell(
                 onTap: () {
-                  _navigationService.navigateTo(destinationRout);
+                  _navigationService.navigateTo(destinationRout, arguments: {"country":features, "boolList": boolList});
                 },
                 child: Container(
                   height: 46.0,

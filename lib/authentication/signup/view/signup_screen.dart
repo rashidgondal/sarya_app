@@ -1420,7 +1420,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     valueListenable: valueNotifier,
                     builder: (BuildContext context, int value, Widget? child) {
                       current_position = value;
-                      if (value == 3) {}
+                   /*   if (value == 3) {}*/
                       return Column(
                         children: [
                           Row(

@@ -84,7 +84,7 @@ class SaryaAPI {
     try {
       String url = '';
       url = ApiRoutes.update;
-      return await _http.iPostRequest(url, data: body);
+      return await _http.iPut(url, data: body);
     } catch (e) {
       rethrow;
     }
