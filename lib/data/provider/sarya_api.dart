@@ -79,7 +79,6 @@ class SaryaAPI {
     }
   }
 
-
   Future<dynamic> update({required body}) async {
     try {
       String url = '';
@@ -89,4 +88,68 @@ class SaryaAPI {
       rethrow;
     }
   }
-}
+
+  /// Create Intinerary
+  Future<dynamic> createIntinerary({required body}) async{
+    try {
+      String url = '';
+      url = ApiRoutes.createIntinerary;
+      return await _http.iPost(url, data: body);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> updateIntinerary({required body, required String intineraryID}) async{
+    try {
+      String url = '';
+      url = ApiRoutes.update+intineraryID;
+      return await _http.iPut(url, data: body);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getActivity() async{
+    try {
+      String url = '';
+      url = ApiRoutes.activity;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
+  Future<dynamic> getTransport() async{
+    try {
+      String url = '';
+      url = ApiRoutes.transport;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
+  Future<dynamic> getTrip() async{
+    try {
+      String url = '';
+      url = ApiRoutes.trip;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getCheckList() async{
+    try {
+      String url = '';
+      url = ApiRoutes.checklist;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+ }

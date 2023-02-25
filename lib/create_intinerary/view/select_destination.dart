@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geojson/geojson.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/checklist_cubits.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../helper/shared_prefs.dart';
 import '../../locator.dart';
 import '../../navigation/navigation_service.dart';
 import '../../navigation/router_path.dart';
+import '../intinerary_view_model/trip_cubits.dart';
 
 class SelectDestination extends StatefulWidget {
   final Map map;
@@ -53,6 +56,9 @@ class _SelectDestinationState extends State<SelectDestination> {
     boolList  = widget.map['boolList'];
     super.initState();
     _navigationService = locator<NavigationService>();
+    context.read<TripCubits>().getTrip();
+    context.read<CheckListCubits>().getCheckList();
+
   }
 
 
@@ -94,7 +100,7 @@ class _SelectDestinationState extends State<SelectDestination> {
           child: InkWell(
             onTap: () {
               print("temp........${tempCountryList.length}");
-            //  _navigationService.navigateTo(designIntineraryRoute);
+            _navigationService.navigateTo(designIntineraryRoute);
             },
             child: Container(
               height: 46.0,

@@ -1,45 +1,60 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
+import '../../customWidgets/custom_text_field.dart';
+import '../intinerary_view_model/CheckList_states.dart';
+import '../intinerary_view_model/checklist_cubits.dart';
+
 class CheckListScreen extends StatefulWidget {
-  const CheckListScreen({Key? key}) : super(key: key);
+  final Map map;
+  CheckListScreen({Key? key, required this.map}) : super(key: key);
 
   @override
   State<CheckListScreen> createState() => _CheckListScreenState();
 }
 
 class _CheckListScreenState extends State<CheckListScreen> {
-
   late NavigationService _navigationService;
+  List<String> listOfCheckList = [];
+  List<bool> listOfBool = [];
+  TextEditingController addMoreController = TextEditingController();
+
   @override
   void initState() {
+    listOfBool = widget.map['listOfBool'];
+    listOfCheckList = widget.map['checklist'];
     super.initState();
     _navigationService = locator<NavigationService>();
-
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
       color: AppColor.whiteColor,
       child: SafeArea(
-        child:  Scaffold(
+        child: Scaffold(
           backgroundColor: AppColor.whiteColor,
           appBar: AppBar(
             elevation: 0,
             toolbarHeight: 60,
-               leading: IconButton(
-             icon: const Icon(
-               Icons.arrow_back_ios,
-               color: AppColor.subtitleColor,
-             ),
-             onPressed: () {
-               _navigationService.goBack();
-             },
-           ),
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: AppColor.subtitleColor,
+              ),
+              onPressed: () {
+                _navigationService.goBack();
+              },
+            ),
             backgroundColor: AppColor.aquaCasper2,
             title: const Text(
               "CheckList",
@@ -48,45 +63,77 @@ class _CheckListScreenState extends State<CheckListScreen> {
             centerTitle: true,
           ),
           bottomNavigationBar: Container(
-            height: 100,
+            height: 180,
             color: AppColor.whiteColor,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Column(
               children: [
-                InkWell(
-                  onTap: () {
-                    _navigationService.navigatePushReplace(designIntineraryRoute);
+                const SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: CustomTextField(
+                    hintText: 'Add more',
+                    size: size,
+                    maxLine: 1,
+                    textInputType: TextInputType.text,
+                    textEditingController: addMoreController,
+                    suffixIcon: IconButton(onPressed: (){
+                      listOfCheckList.add(addMoreController.text);
+                      listOfBool.add(true);
+                      addMoreController.clear();
+                      setState(() {
 
-                  },
-                  child: Container(
-                    height: 46.0,
-                    width: 150.0,
-                    decoration: BoxDecoration(
-                        color: AppColor.buttonColor,
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: const Center(
-                      child: Text(
-                        "Done",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.whiteColor),
+                      });
+                    },
+                      icon: Icon(
+                        Icons.send_outlined,
                       ),
                     ),
+                    icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                   ),
+
+                ),
+                const SizedBox(height: 30,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        _navigationService
+                            .navigatePushReplace(designIntineraryRoute);
+                      },
+                      child: Container(
+                        height: 46.0,
+                        width: 150.0,
+                        decoration: BoxDecoration(
+                            color: AppColor.buttonColor,
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: const Center(
+                          child: Text(
+                            "Done",
+                            style: TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.whiteColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
           body: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 35),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               children: [
-               const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 Expanded(
                   child: GridView.builder(
-                    itemCount: 100,
+                    itemCount: listOfCheckList.length,
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) => Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -94,7 +141,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                       children: [
                         Container(
                           height: 44.0,
-                          width: 150.0,
+                          width: 160.0,
                           padding: const EdgeInsets.only(left: 10),
                           decoration: BoxDecoration(
                               color: AppColor.whiteColor,
@@ -103,8 +150,8 @@ class _CheckListScreenState extends State<CheckListScreen> {
                                   color: AppColor.borderColor2, width: 1)),
                           child: Row(
                             children: [
-                              const Text(
-                                "Adventure",
+                              Text(
+                                "${listOfCheckList[index]}",
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
@@ -112,15 +159,30 @@ class _CheckListScreenState extends State<CheckListScreen> {
                               ),
                               const Spacer(),
                               Theme(
-                                
                                 data: Theme.of(context).copyWith(
-                                      unselectedWidgetColor:  AppColor.aquaCasper),
-                                child:Checkbox(
-                                  value: false,
-                                  onChanged: (bool? value) {},
-                                  focusColor:  AppColor.aquaCasper,
-                                  activeColor: AppColor.aquaCasper,
+                                    unselectedWidgetColor:
+                                    AppColor.aquaCasper),
+                                child: Checkbox(
+                                  value: listOfBool[index],
+                                  onChanged: (bool? value) {
+                                    if(value == null){
+                                      return;
+                                    }
+                                    if(value == true){
+                                      listOfBool[index] = true;
+                                      setState(() {
 
+                                      });
+                                    }else{
+                                      listOfBool[index] = false;
+                                      setState(() {
+
+                                      });
+                                    }
+
+                                  },
+                                  focusColor: AppColor.aquaCasper,
+                                  activeColor: AppColor.aquaCasper,
                                 ),
                               )
                             ],
@@ -128,7 +190,8 @@ class _CheckListScreenState extends State<CheckListScreen> {
                         ),
                       ],
                     ),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 10.0,
                         crossAxisSpacing: 20.0,
@@ -137,8 +200,9 @@ class _CheckListScreenState extends State<CheckListScreen> {
                 ),
               ],
             ),
+          )
 
-          ),
+
         ),
       ),
     );

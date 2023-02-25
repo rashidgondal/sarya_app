@@ -44,8 +44,6 @@ class _TripCompleteScreenState extends State<TripCompleteScreen> {
               },),
             backgroundColor: AppColor.aquaCasper2,
             title: const Text("Trip to UAE", style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),),
-
-
           ),
 
           body: Column(children: [
@@ -108,7 +106,6 @@ class _TripCompleteScreenState extends State<TripCompleteScreen> {
                     ),
                   ],
                 ),
-
               ],
             ))
           ],),

@@ -90,7 +90,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       child: Column(
                         children: [
                           SizedBox(
-                              height: size.height / 2.5,
+                              height: size.height / 2.9,
                               child: SizedBox(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -136,7 +136,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     color: AppColor.colorGrey,
                                     fontWeight: FontWeight.w500)),
                           ),
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 50.0),
                           TextFormField(
                             controller: passwordController,
                             validator: (v) {
@@ -146,13 +146,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 return null;
                               }
                             },
+                            onChanged: (v){
+
+                              setState(() {
+                                password = v;
+
+                              });
+                            },
                             maxLines: 1,
                             obscureText: showPassword,
                             style: const TextStyle(
                                 fontSize: 14.0,
                                 color: AppColor.lightIndigo,
                                 fontWeight: FontWeight.w500),
-
                             decoration:  InputDecoration(
                                 isDense: true,
                                 suffixIconConstraints:const BoxConstraints(
@@ -190,37 +196,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     color: AppColor.colorGrey,
                                     fontWeight: FontWeight.w500)),
                           ),
-
-                      /*    TextFormField(
-                            controller: passwordController,
-                            onChanged: (v){
-
-                              setState(() {
-                                password = v;
-
-                              });
-                            },
-                            style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
-                            decoration: const InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppColor.lightIndigo),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppColor.lightIndigo),
-                                ),
-                                hintText: "New password ",
-                                fillColor: AppColor.aquaCasper,
-                                contentPadding: EdgeInsets.zero,
-                                hintStyle: TextStyle(
-                                    fontSize: 13.0,
-                                    color: AppColor.colorGrey,
-                                    fontWeight: FontWeight.w500)),
-                          ),*/
                           const SizedBox(height: 30.0),
                           InkWell(
                             onTap: otp.isEmpty || password.isEmpty?null:() {
@@ -241,7 +216,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               height: 46.0,
                               width: 200.0,
                               decoration: BoxDecoration(
-                                  color: otp.isEmpty || password.isEmpty? AppColor.colorLiteGrey: AppColor.lightIndigo,
+                                  color: otp.isEmpty || password.isEmpty?
+                                  AppColor.colorLiteGrey:
+                                  AppColor.lightIndigo,
                                   borderRadius: BorderRadius.circular(8.0)),
                               child:  Center(
                                 child: Text(

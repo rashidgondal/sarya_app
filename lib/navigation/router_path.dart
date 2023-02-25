@@ -31,5 +31,7 @@ const String passwordSettingRoute       = "Password Setting Screen";
 const String birthdaySettingRoute       = "Birth Setting Screen";
 const String bankDetailRoute            = "Bank Detail Screen";
 const String bankUpdateRoute            = "Bank Update Screen";
+const String searchPlacesRoute          = "Search Places Screen";
+const String foodShoppingRoute          = "Food Shopping Screen";
 
 

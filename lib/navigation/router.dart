@@ -4,6 +4,7 @@ import 'package:sarya/authentication/forget_password/view/reset_password_screen.
 import 'package:sarya/authentication/signin/view/login_screen.dart';
 import 'package:sarya/authentication/signup/view/choose_avatar.dart';
 import 'package:sarya/authentication/signup/view/success_screen.dart';
+import 'package:sarya/search_places.dart';
 import 'package:sarya/settings/avatar/view/avatar_screen.dart';
 import 'package:sarya/settings/birthday/view/birthday_screen.dart';
 import 'package:sarya/settings/email/view/email_screen.dart';
@@ -19,6 +20,7 @@ import '../authentication/signup/view/avatars_screen.dart';
 import '../authentication/signup/view/signup_screen.dart';
 import '../create_intinerary/view/check_list.dart';
 import '../create_intinerary/view/design_intinerary.dart';
+import '../create_intinerary/view/foodAndShoppingInfo.dart';
 import '../create_intinerary/view/select_destination.dart';
 import '../customWidgets/share_intinerary.dart';
 import '../customWidgets/show_aimation.dart';
@@ -105,7 +107,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case routes.checkListRoute:
       return MaterialPageRoute(
-        builder: (context) =>  const CheckListScreen(),
+        builder: (context) =>   CheckListScreen(map:  settings.arguments as Map,),
       );
     case routes.soldIntineraryRoute:
       return MaterialPageRoute(
@@ -152,6 +154,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.bankUpdateRoute:
       return MaterialPageRoute(
           builder: (context) =>  const UpdateBankDetails());
+    case routes.searchPlacesRoute:
+      return MaterialPageRoute(
+          builder: (context) =>  const SearchPlacesScreen());
+    case routes.foodShoppingRoute:
+      return MaterialPageRoute(
+          builder: (context) => FoodAndShoppingInformation(map: settings.arguments as Map,));
 
     default:
       return MaterialPageRoute(

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
+import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 class TypeOfTransport extends StatefulWidget {
   final TextEditingController textEditingController;
+  final List<String> tripList;
+  final List<bool> boolList;
 
-  const TypeOfTransport({Key? key, required this.textEditingController})
+  const TypeOfTransport({Key? key, required this.textEditingController, required this.tripList, required this.boolList})
       : super(key: key);
 
   @override
@@ -13,6 +18,20 @@ class TypeOfTransport extends StatefulWidget {
 }
 
 class _TypeOfTransportState extends State<TypeOfTransport> {
+
+  List<String> list = [];
+  List<bool> boolList = [];
+  TextEditingController addMoreController = TextEditingController();
+
+
+  @override
+  void initState() {
+    list = widget.tripList.toList();
+    boolList = widget.boolList.toList();
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -22,7 +41,32 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
         actions: [
           Column(
             children: [
-              const SizedBox(height: 10,),
+              const SizedBox(height: 15,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: CustomTextField(
+                  hintText: 'Add more',
+                  size: size,
+                  maxLine: 1,
+                  textInputType: TextInputType.text,
+                  textEditingController: addMoreController,
+                  suffixIcon: IconButton(onPressed: (){
+                    list.add(addMoreController.text);
+                    boolList.add(true);
+                    addMoreController.clear();
+                    setState(() {
+
+                    });
+                  },
+                    icon: Icon(
+                      Icons.send_outlined,
+                    ),
+                  ),
+                  icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
+                ),
+
+              ),
+              const SizedBox(height: 30,),
               Container(
                 padding:const  EdgeInsets.symmetric(horizontal: 1),
                 child: Row(
@@ -50,9 +94,10 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
                         ),
                       ),
                     ),
-
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+
+                      },
                       child: Container(
                         height: 46.0,
                         width: 120.0,
@@ -74,7 +119,6 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
                 ),
               ),
               const SizedBox(height: 10,),
-
             ],
           )
         ],
@@ -106,7 +150,7 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
 
               Expanded(
                 child: GridView.builder(
-                  itemCount: 5,
+                  itemCount: list.length,
                   itemBuilder: (context, index) => Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,8 +166,8 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
                                 color: AppColor.borderColor2, width: 1)),
                         child: Row(
                           children: [
-                            const Text(
-                              "Adventure",
+                             Text(
+                              "${list[index]}",
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -134,8 +178,25 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
                               data: Theme.of(context).copyWith(
                                 unselectedWidgetColor:  AppColor.aquaCasper,),
                               child:Checkbox(
-                                value: true,
-                                onChanged: (bool? value) {},
+                                value: boolList[index],
+                                onChanged: (bool? value) {
+                                  if(value == null){
+                                    return;
+                                  }
+                                  if(value == true)
+                                  {
+                                    boolList[index] = true;
+                                    setState(() {
+
+                                    });
+                                  }
+                                  else{
+                                    boolList[index] = false;
+                                    setState(() {
+
+                                    });
+                                  }
+                                },
                                 focusColor:  AppColor.aquaCasper,
                                 activeColor: AppColor.aquaCasper,
 

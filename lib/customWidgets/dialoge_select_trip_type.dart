@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
+import '../create_intinerary/intinerary_view_model/Trip_states.dart';
+import '../create_intinerary/intinerary_view_model/trip_cubits.dart';
+
 class SelectTripType extends StatefulWidget {
+  final List<String> tripList;
+  final List<bool> boolList;
   final TextEditingController textEditingController;
 
-  const SelectTripType({Key? key, required this.textEditingController})
+  const SelectTripType({Key? key, required this.textEditingController, required this.tripList, required this.boolList})
       : super(key: key);
 
   @override
@@ -15,6 +21,19 @@ class SelectTripType extends StatefulWidget {
 }
 
 class _SelectTripTypeState extends State<SelectTripType> {
+
+  List<String> list = [];
+  List<bool> boolList = [];
+  TextEditingController addMoreController = TextEditingController();
+
+
+  @override
+  void initState() {
+    list = widget.tripList.toList();
+    boolList = widget.boolList.toList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -24,25 +43,30 @@ class _SelectTripTypeState extends State<SelectTripType> {
         actions: [
           Column(
             children: [
-              const SizedBox(height: 10,),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  height: 46.0,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                  border: Border.all(
-                  color: AppColor.borderColor2, width: 1), borderRadius: BorderRadius.circular(8.0)),
-                  child: const Center(
-                    child: Text(
-                      "Add another type",
-                      style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
-                          color: AppColor.colorBlack),
-                    ),
+              const SizedBox(height: 15,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: CustomTextField(
+                  hintText: 'Add more',
+                  size: size,
+                  maxLine: 1,
+                  textInputType: TextInputType.text,
+                  textEditingController: addMoreController,
+                  suffixIcon: IconButton(onPressed: (){
+                    list.add(addMoreController.text);
+                    boolList.add(true);
+                    addMoreController.clear();
+                    setState(() {
+
+                    });
+                  },
+                   icon: Icon(
+                     Icons.send_outlined,
+                   ),
                   ),
+                  icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                 ),
+
               ),
               const SizedBox(height: 30,),
               Container(
@@ -110,21 +134,19 @@ class _SelectTripTypeState extends State<SelectTripType> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+
               const SizedBox(
                 height: 20,
               ),
               const Text(
-                "Select Trip Type",
+                "Trip Type",
                 style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w700,
                     color: AppColor.lightIndigo),
               ),
-              const SizedBox(
-                height: 20,
-              ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: CustomTextField(
                   hintText: 'Search',
                   size: size,
@@ -136,14 +158,14 @@ class _SelectTripTypeState extends State<SelectTripType> {
               ),
               Expanded(
                 child: GridView.builder(
-                  itemCount: 100,
+                  itemCount: list.length,
                   itemBuilder: (context, index) => Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         height: 44.0,
-                        width: 130.0,
+                        width: 140.0,
                         padding: const EdgeInsets.only(left: 5),
                         decoration: BoxDecoration(
                             color: AppColor.whiteColor,
@@ -152,8 +174,8 @@ class _SelectTripTypeState extends State<SelectTripType> {
                                 color: AppColor.borderColor2, width: 1)),
                         child: Row(
                           children: [
-                            const Text(
-                              "Adventure",
+                             Text(
+                              "${list[index]}",
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -164,8 +186,23 @@ class _SelectTripTypeState extends State<SelectTripType> {
                               data: Theme.of(context).copyWith(
                                 unselectedWidgetColor:  AppColor.aquaCasper,),
                               child:Checkbox(
-                                value: true,
-                                onChanged: (bool? value) {},
+                                value: boolList[index],
+                                onChanged: (bool? value) {
+                                  if(value == null){
+                                    return;
+                                  }
+                                  if(value == true){
+                                    boolList[index] = true;
+                                    setState(() {
+
+                                    });
+                                  }else{
+                                    boolList[index] = false;
+                                    setState(() {
+
+                                    });
+                                  }
+                                },
                                 focusColor:  AppColor.aquaCasper,
                                 activeColor: AppColor.aquaCasper,
 
@@ -185,6 +222,7 @@ class _SelectTripTypeState extends State<SelectTripType> {
               ),
             ],
           ),
-        ));
+        )
+        );
   }
 }

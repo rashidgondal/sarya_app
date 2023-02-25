@@ -9,13 +9,15 @@ class CustomTextField extends StatefulWidget {
   final String hintText;
   final Size size;
   final Widget icon;
+  final Widget? suffixIcon;
   const CustomTextField({Key? key,
     required this.maxLine,
     required this.textEditingController,
     required this.size,
     required this.textInputType,
     required this.hintText,
-    required this.icon
+    required this.icon,
+    this.suffixIcon
   }) : super(key: key);
 
   @override
@@ -53,7 +55,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                             border: InputBorder.none,
                             hintText: widget.hintText,
                             hintStyle: const TextStyle(
-                                fontSize: 15.0, color: AppColor.headingColor2)),
+                                fontSize: 15.0, color: AppColor.headingColor2),
+                            suffixIcon: widget.suffixIcon
+                        ),
                       ),
                     )),
               ),

@@ -82,11 +82,13 @@ class _CustomSummaryImagesState extends State<CustomSummaryImages> {
                     Icons.arrow_forward_ios_outlined,
                     color: AppColor.lightIndigo,
                     size: 20,
-                  ), titleWidget: Text(
+                  ),
+                    titleWidget: Text(
                     'Search Location',
                     style:  TextStyle(
                         fontSize: 15.0, color: AppColor.headingColor2),
-                  ) , iconImage: Icon(Icons.question_mark ,color: AppColor.colorBlack,size: 15.0,),),
+                  ) ,
+                    iconImage: Icon(Icons.question_mark ,color: AppColor.colorBlack,size: 15.0,),),
                   Container(
                     height: 24.0,
                     padding: const EdgeInsets.symmetric(horizontal: 10),

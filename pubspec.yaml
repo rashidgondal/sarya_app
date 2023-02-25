@@ -58,6 +58,8 @@ dependencies:
   awesome_snackbar_content: ^0.0.8
   geojson: ^1.0.0
   image_picker: ^0.8.6+1
+  geocoding: ^2.0.5
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

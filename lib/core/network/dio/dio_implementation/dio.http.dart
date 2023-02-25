@@ -98,6 +98,24 @@ class HTTP implements IHTTP {
       rethrow;
     }
   }
+
+  @override
+  Future iGetRequest(String url, {Map<String, dynamic>? queryParameters})async {
+    try {
+
+      SharedPrefs prefs = SharedPrefs();
+    var token = await prefs.getToken();
+    var res = await dioInstance(token).get(url);
+    var result = ApiResponse().response(res);
+    return result;
+    } catch (e) {
+
+      log('data......0..${e.toString()}',
+          name: ' trip | CreateIntineraryRepository');
+
+      rethrow;
+    }
+  }
 }
 
 class HTTPAUTH with IHTTP {
@@ -170,16 +188,21 @@ class HTTPAUTH with IHTTP {
       {Map<String, dynamic>? data,
         Map<String, dynamic>? queryParameters}) async {
     try {
-
+/*
       SharedPrefs prefs = SharedPrefs();
       var token = await prefs.getToken();
       var res = await dioInstance(token).post(url, data: data);
 
       var result = ApiResponse().response(res);
-      return result;
+      return result;*/
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future iGetRequest(String url, {Map<String, dynamic>? queryParameters})async {
+
   }
 }
 

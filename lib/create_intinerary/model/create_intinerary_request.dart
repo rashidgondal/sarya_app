@@ -1,4 +1,4 @@
-class CreateIntinerary {
+class CreateIntineraryRequest {
   List<String>? destination;
   String? title;
   String? summary;
@@ -9,7 +9,7 @@ class CreateIntinerary {
   int? step;
   List<Days>? days;
 
-  CreateIntinerary(
+  CreateIntineraryRequest(
       {this.destination,
         this.title,
         this.summary,
@@ -20,7 +20,7 @@ class CreateIntinerary {
         this.step,
         this.days});
 
-  CreateIntinerary.fromJson(Map<String, dynamic> json) {
+  CreateIntineraryRequest.fromJson(Map<String, dynamic> json) {
     destination = json['destination'].cast<String>();
     title = json['title'];
     summary = json['summary'];

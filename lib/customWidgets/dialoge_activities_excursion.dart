@@ -7,9 +7,14 @@ import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 class ActivitiesExcursion extends StatefulWidget {
+  final List<String> listOfActivity;
+  final List<bool> listOfBool;
   final TextEditingController textEditingController;
 
-  const ActivitiesExcursion({Key? key, required this.textEditingController})
+  const ActivitiesExcursion({Key? key,
+                required this.textEditingController,
+                required this.listOfActivity,
+                required this.listOfBool})
       : super(key: key);
 
   @override
@@ -17,6 +22,19 @@ class ActivitiesExcursion extends StatefulWidget {
 }
 
 class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
+
+  List<String> list = [];
+  List<bool> boolList = [];
+  TextEditingController addMoreController = TextEditingController();
+
+
+  @override
+  void initState() {
+    list = widget.listOfActivity.toList();
+    boolList = widget.listOfBool.toList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -26,29 +44,30 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
         actions: [
           Column(
             children: [
-              const SizedBox(height: 10,),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  height: 46.0,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                  border: Border.all(
-                  color: AppColor.borderColor2, width: 1), borderRadius: BorderRadius.circular(8.0)),
-                  child:const  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        "Add Another Activity",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w400,
-                            color: AppColor.headingColor2),
-                      ),
+              const SizedBox(height: 15,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: CustomTextField(
+                  hintText: 'Add more',
+                  size: size,
+                  maxLine: 1,
+                  textInputType: TextInputType.text,
+                  textEditingController: addMoreController,
+                  suffixIcon: IconButton(onPressed: (){
+                    list.add(addMoreController.text);
+                    boolList.add(true);
+                    addMoreController.clear();
+                    setState(() {
+
+                    });
+                  },
+                    icon: Icon(
+                      Icons.send_outlined,
                     ),
                   ),
+                  icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                 ),
+
               ),
               const SizedBox(height: 30,),
               Container(
@@ -163,7 +182,7 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
               ),
               Expanded(
                 child: GridView.builder(
-                  itemCount: 10,
+                  itemCount: widget.listOfActivity.length,
                   itemBuilder: (context, index) => Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,8 +198,8 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
                                 color: AppColor.borderColor2, width: 1)),
                         child: Row(
                           children: [
-                            const Text(
-                              "Walking",
+                             Text(
+                              "${widget.listOfActivity[index]}",
                               style: TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.w400,
@@ -191,8 +210,24 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
                               data: Theme.of(context).copyWith(
                                 unselectedWidgetColor:  AppColor.aquaCasper,),
                               child:Checkbox(
-                                value: true,
-                                onChanged: (bool? value) {},
+                                value: widget.listOfBool[index],
+                                onChanged: (bool? value) {
+                                  if(value == null){
+                                    return;
+                                  }
+                                  if(value == true){
+                                    widget.listOfBool[index] = true;
+                                    setState(() {
+
+                                    });
+                                  }else{
+                                    widget.listOfBool[index] = false;
+                                    setState(() {
+
+                                    });
+                                  }
+
+                                },
                                 focusColor:  AppColor.aquaCasper,
                                 activeColor: AppColor.aquaCasper,
 

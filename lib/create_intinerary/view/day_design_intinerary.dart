@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/activity_cubits.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/activity_states.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/transport_cubits.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/transport_states.dart';
 import 'package:sarya/customWidgets/dialoge_activities_excursion.dart';
 import 'package:sarya/customWidgets/text_decorated_icon.dart';
 import 'package:sarya/extensions/string_extension.dart';
@@ -9,7 +14,7 @@ import 'package:sarya/theme/color_scheme.dart';
 import '../../customWidgets/dialoge_airport_cost.dart';
 import '../../customWidgets/dialoge_type_of_transport.dart';
 import '../../locator.dart';
-import '../model/create_intenerary.dart' as create_intenerary;
+import '../model/create_intinerary_request.dart' as create_intenerary;
 
 class DayDesignIntineraryScreen extends StatefulWidget {
   const DayDesignIntineraryScreen({Key? key}) : super(key: key);
@@ -24,6 +29,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   int dayLength = 5;
   late NavigationService _navigationService;
   List<create_intenerary.Days> list_of_days = [];
+
   @override
   void initState() {
     for (var i = 0; i < dayLength; i++) {
@@ -48,13 +54,15 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
               appBar: AppBar(
                 elevation: 0,
                 toolbarHeight: 90,
-                /*   leading: IconButton(
+                   leading: IconButton(
                    icon: const Icon(
                      Icons.arrow_back_ios,
                      color: AppColor.subtitleColor,
                    ),
-                   onPressed: () {},
-                 ),*/
+                   onPressed: () {
+                     _navigationService.goBack();
+                   },
+                 ),
                 automaticallyImplyLeading: false,
                 backgroundColor: AppColor.aquaCasper2,
                 title: const Text(
@@ -350,30 +358,45 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                                 iconImage: Row(
                                   children: [SvgPicture.asset('airplane_icon'.svg)],
                                 ))),
+                        BlocBuilder<TransportCubits, TransportStates>(
+                            builder: (context, state) {
+                              List<String> list = [];
+                              List<bool>    listOfBool = [];
+                              if(state is TransportLoaded){
+                                list = state.response.result??[];
+                                listOfBool = state.listOfBool;
+                              }
+                              return   InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) => TypeOfTransport(
+                                          textEditingController: textEditingController,
+                                          tripList: list,
+                                          boolList: listOfBool,
+                                        ));
+                                  },
+                                  child: TextDecoratedContainer(
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: AppColor.lightIndigo,
+                                        size: 20,
+                                      ),
+                                      titleWidget: Text(
+                                        'Type of transport',
+                                        style: TextStyle(
+                                            fontSize: 15.0, color: AppColor.headingColor2),
+                                      ),
+                                      iconImage: Row(
+                                        children: [SvgPicture.asset('transport_icoon'.svg)],
+                                      )));
+                            }
+
+                        ),
                         InkWell(
                             onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => TypeOfTransport(
-                                        textEditingController: textEditingController,
-                                      ));
+                              _navigationService.navigateTo(searchPlacesRoute);
                             },
-                            child: TextDecoratedContainer(
-                                icon: Icon(
-                                  Icons.arrow_forward_ios_outlined,
-                                  color: AppColor.lightIndigo,
-                                  size: 20,
-                                ),
-                                titleWidget: Text(
-                                  'Type of transport',
-                                  style: TextStyle(
-                                      fontSize: 15.0, color: AppColor.headingColor2),
-                                ),
-                                iconImage: Row(
-                                  children: [SvgPicture.asset('transport_icoon'.svg)],
-                                ))),
-                        InkWell(
-                            onTap: () {},
                             child: TextDecoratedContainer(
                                 icon: Icon(
                                   Icons.arrow_forward_ios_outlined,
@@ -388,102 +411,143 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                                 iconImage: Row(
                                   children: [SvgPicture.asset('accomadation'.svg)],
                                 ))),
+                        BlocBuilder<ActivityCubits, ActivityStates>(
+                            builder: (context, state) {
+                              List<String> list = [];
+                              List<bool> listOfBool = [];
+                              if(state is ActivityLoaded){
+                                list = state.activityTypeResponse.result??[];
+                                listOfBool = state.listOfBool;
+                              }
+                              return  InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            ActivitiesExcursion(
+                                              textEditingController: textEditingController,
+                                              listOfActivity: list,
+                                              listOfBool:listOfBool,
+                                            ));
+                                  },
+                                  child: TextDecoratedContainer(
+                                    icon: Icon(
+                                      Icons.arrow_forward_ios_outlined,
+                                      color: AppColor.lightIndigo,
+                                      size: 20,
+                                    ),
+                                    titleWidget: Text(
+                                      'Activities and Excursion',
+                                      style: TextStyle(
+                                          fontSize: 15.0, color: AppColor.headingColor2),
+                                    ),
+                                    iconImage: Row(
+                                      children: [SvgPicture.asset('activityy_Icon'.svg)],
+                                    ),
+                                  ));
+                            }
+
+                        ),
                         InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      ActivitiesExcursion(
-                                        textEditingController: textEditingController,
-                                      ));
-                            },
-                            child: TextDecoratedContainer(
+                          onTap: (){
+                            _navigationService.navigateTo(foodShoppingRoute, arguments: {"title":"Breakfast"});
+                          },
+                          child: TextDecoratedContainer(
+                            icon: Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: AppColor.lightIndigo,
+                              size: 20,
+                            ),
+                            titleWidget: Text(
+                              'Breakfast',
+                              style: TextStyle(
+                                  fontSize: 15.0, color: AppColor.headingColor2),
+                            ),
+                            iconImage: Row(
+                              children: [SvgPicture.asset('breakfast_icon'.svg)],
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: (){
+                            _navigationService.navigateTo(foodShoppingRoute, arguments: {"title":"Lunch"});
+
+                          },
+                          child: TextDecoratedContainer(
                               icon: Icon(
                                 Icons.arrow_forward_ios_outlined,
                                 color: AppColor.lightIndigo,
                                 size: 20,
                               ),
                               titleWidget: Text(
-                                'Activities and Excursion',
+                                'Lunch',
                                 style: TextStyle(
                                     fontSize: 15.0, color: AppColor.headingColor2),
                               ),
                               iconImage: Row(
-                                children: [SvgPicture.asset('activityy_Icon'.svg)],
+                                children: [SvgPicture.asset('lunch_icon'.svg)],
+                              )),
+                        ),
+                        InkWell(
+                          onTap: (){
+                            _navigationService.navigateTo(foodShoppingRoute, arguments: {"title":"Dinner"});
+                          },
+                          child: TextDecoratedContainer(
+                            icon: Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: AppColor.lightIndigo,
+                              size: 20,
+                            ),
+                            titleWidget: Text(
+                              'Dinner',
+                              style: TextStyle(
+                                  fontSize: 15.0, color: AppColor.headingColor2),
+                            ),
+                            iconImage: Row(
+                              children: [SvgPicture.asset('dinner_icon'.svg)],
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: (){
+                            _navigationService.navigateTo(foodShoppingRoute, arguments: {"title": "Coffee Shops Clubs & Lounges"});
+
+                          },
+                          child: TextDecoratedContainer(
+                              icon: Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                color: AppColor.lightIndigo,
+                                size: 20,
                               ),
-                            )),
-                        TextDecoratedContainer(
-                          icon: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: AppColor.lightIndigo,
-                            size: 20,
-                          ),
-                          titleWidget: Text(
-                            'Breakfast',
-                            style: TextStyle(
-                                fontSize: 15.0, color: AppColor.headingColor2),
-                          ),
-                          iconImage: Row(
-                            children: [SvgPicture.asset('breakfast_icon'.svg)],
-                          ),
+                              titleWidget: Text(
+                                'Coffee Shops Clubs & Lounges',
+                                style: TextStyle(
+                                    fontSize: 15.0, color: AppColor.headingColor2),
+                              ),
+                              iconImage: Row(
+                                children: [SvgPicture.asset('coffee_icon'.svg)],
+                              )),
                         ),
-                        TextDecoratedContainer(
-                            icon: Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: AppColor.lightIndigo,
-                              size: 20,
-                            ),
-                            titleWidget: Text(
-                              'Lunch',
-                              style: TextStyle(
-                                  fontSize: 15.0, color: AppColor.headingColor2),
-                            ),
-                            iconImage: Row(
-                              children: [SvgPicture.asset('lunch_icon'.svg)],
-                            )),
-                        TextDecoratedContainer(
-                          icon: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: AppColor.lightIndigo,
-                            size: 20,
-                          ),
-                          titleWidget: Text(
-                            'Dinner',
-                            style: TextStyle(
-                                fontSize: 15.0, color: AppColor.headingColor2),
-                          ),
-                          iconImage: Row(
-                            children: [SvgPicture.asset('dinner_icon'.svg)],
-                          ),
+                        InkWell(
+                          onTap: (){
+                            _navigationService.navigateTo(foodShoppingRoute, arguments: {"title": "Market, Malls & Store"});
+
+                          },
+                          child: TextDecoratedContainer(
+                              icon: Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                color: AppColor.lightIndigo,
+                                size: 20,
+                              ),
+                              titleWidget: Text(
+                                'Market, Malls & Store',
+                                style: TextStyle(
+                                    fontSize: 15.0, color: AppColor.headingColor2),
+                              ),
+                              iconImage: Row(
+                                children: [SvgPicture.asset('market_icon'.svg)],
+                              )),
                         ),
-                        TextDecoratedContainer(
-                            icon: Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: AppColor.lightIndigo,
-                              size: 20,
-                            ),
-                            titleWidget: Text(
-                              'Coffee Shops Clubs & Lounges',
-                              style: TextStyle(
-                                  fontSize: 15.0, color: AppColor.headingColor2),
-                            ),
-                            iconImage: Row(
-                              children: [SvgPicture.asset('coffee_icon'.svg)],
-                            )),
-                        TextDecoratedContainer(
-                            icon: Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: AppColor.lightIndigo,
-                              size: 20,
-                            ),
-                            titleWidget: Text(
-                              'Market, Malls & Store',
-                              style: TextStyle(
-                                  fontSize: 15.0, color: AppColor.headingColor2),
-                            ),
-                            iconImage: Row(
-                              children: [SvgPicture.asset('market_icon'.svg)],
-                            )),
                       ],
                     )),
               ),

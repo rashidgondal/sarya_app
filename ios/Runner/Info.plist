@@ -28,6 +28,36 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>Your Music Library is used to update Alerts.</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Your bluetooth is used for directions.</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>Your bluetooth is used for directions.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Your calendar is used to give precise date for messages.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Your camera is used to update your profile picture and add product images.</string>
+    <key>NSContactsUsageDescription</key>
+    <string>Your contact list is used to connect</string>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Dialboxx uses your local network for Server communication.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Your location is used to provide directions to the destination.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Your location is used to show you businesses nearby.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Your location is used to provide directions to the destination.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Dialboxx needs to access your device microphone for audio.</string>
+    <key>NSMotionUsageDescription</key>
+    <string>Dialboxx would like to access your motion.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Your photo library is used to update profile picture and add product images.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>The app uses speech recognition for dictating messages.</string>
+    <key>UIApplicationSupportsIndirectInputEvents</key>
+    <true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -47,5 +77,6 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+    
 </dict>
 </plist>

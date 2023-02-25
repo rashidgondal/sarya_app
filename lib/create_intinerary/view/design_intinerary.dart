@@ -1,8 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/CheckList_states.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/activity_cubits.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/checklist_cubits.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/transport_cubits.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/trip_cubits.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
 import 'package:sarya/customWidgets/dial_trip_estimation_cost.dart';
 import 'package:sarya/customWidgets/dialoge_select_trip_type.dart';
@@ -13,6 +19,7 @@ import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 import '../../customWidgets/text_decorated_icon.dart';
+import '../intinerary_view_model/Trip_states.dart';
 
 class DesignIntineraryScreen extends StatefulWidget {
   const DesignIntineraryScreen({Key? key}) : super(key: key);
@@ -38,7 +45,8 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
   void initState() {
     super.initState();
     _navigationService = locator<NavigationService>();
-
+    context.read<ActivityCubits>().getActivity();
+    context.read<TransportCubits>().getTransport();
   }
 
 
@@ -59,7 +67,9 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                Icons.arrow_back_ios,
                color: AppColor.subtitleColor,
              ),
-             onPressed: () {},
+             onPressed: () {
+               _navigationService.goBack();
+             },
            ),
           automaticallyImplyLeading: false,
           backgroundColor: AppColor.aquaCasper2,
@@ -189,24 +199,36 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                   const SizedBox(
                     height: 2.0,
                   ),
-                  InkWell(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>  SelectTripType(textEditingController: searchController,));
-                      },
-                      child: TextDecoratedContainer(
-                        titleWidget:     Text(
-                          'Select Trip Type',
-                          style: const TextStyle(
-                              fontSize: 15.0, color: AppColor.headingColor2),
-                        ),
-                        iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
-                        icon: Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          color: AppColor.lightIndigo,
-                          size: 20,
-                        ))),
+                  BlocBuilder<TripCubits, TripStates>(
+                      builder: (context, state) {
+                          List<String> list = [];
+                          List<bool> listOfBool = [];
+                          if(state is TripLoaded){
+                            list = state.response.result??[];
+                            listOfBool = state.listOfBool;
+                          }
+                        return InkWell(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>  SelectTripType(textEditingController: searchController,tripList:list ,boolList: listOfBool,));
+                            },
+                            child: TextDecoratedContainer(
+                                titleWidget:     Text(
+                                  'Select Trip Type',
+                                  style: const TextStyle(
+                                      fontSize: 15.0, color: AppColor.headingColor2),
+                                ),
+                                iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
+                                icon: Icon(
+                                  Icons.arrow_forward_ios_outlined,
+                                  color: AppColor.lightIndigo,
+                                  size: 20,
+                                )));
+                      }
+
+                  ),
+
                   const SizedBox(
                     height: 2.0,
                   ),
@@ -221,25 +243,35 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                   const SizedBox(
                     height: 2.0,
                   ),
-                  InkWell(
-                      onTap: (){
-                        _navigationService.navigateTo(checkListRoute);
-                      },
-                      child: TextDecoratedContainer(
-                          titleWidget:     Text(
-                            'Checklist',
-                            style: const TextStyle(
-                                fontSize: 15.0, color: AppColor.headingColor2),
-                          ),
-                          iconImage: Row(children: [SvgPicture.asset("checklist_icon".svg)]),
-                          icon: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: AppColor.lightIndigo,
-                            size: 20,
-                          ))
+                  BlocBuilder<CheckListCubits, CheckListStates>(
+                      builder: (context, state) {
+                        List<String> listOfCheckList = [];
+                        List<bool> listOfBool = [];
+                        if (state is CheckListLoaded) {
+                          listOfCheckList = state.response.result!.toList() ?? [];
+                          listOfBool = state.boolList.toList();
+                        }
+                        return   InkWell(
+                            onTap: (){
+                              _navigationService.navigateTo(checkListRoute,arguments: {"checklist":listOfCheckList, "listOfBool":listOfBool});
+                            },
+                            child: TextDecoratedContainer(
+                                titleWidget:     Text(
+                                  'Checklist',
+                                  style: const TextStyle(
+                                      fontSize: 15.0, color: AppColor.headingColor2),
+                                ),
+                                iconImage: Row(children: [SvgPicture.asset("checklist_icon".svg)]),
+                                icon: Icon(
+                                  Icons.arrow_forward_ios_outlined,
+                                  color: AppColor.lightIndigo,
+                                  size: 20,
+                                ))
 
 
-                  ),
+                        );
+                      }),
+
                   const SizedBox(
                     height: 5.0,
                   ),
@@ -294,21 +326,5 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
 
 
 
-
-/*  TextFormField(
-                maxLines: 4,
-                decoration: InputDecoration(
-                    label:const Icon(Icons.question_mark),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: AppColor.borderColor2, ),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    border: OutlineInputBorder(
-                        borderSide: const BorderSide(color: AppColor.aquaGreen, ),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    hintText: "Summary"
-                ),
-              ),*/
 
 }
