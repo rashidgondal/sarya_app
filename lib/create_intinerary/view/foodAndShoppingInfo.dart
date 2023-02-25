@@ -1,5 +1,7 @@
 import 'dart:io';
-
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,7 +11,6 @@ import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
-
 import '../../customWidgets/custom_text_field.dart';
 import '../../customWidgets/text_decorated_icon.dart';
 
@@ -32,6 +33,7 @@ class _FoodAndShoppingInformationState
 
   @override
   void initState() {
+    _configureAmplify();
     super.initState();
     _navigationService = locator<NavigationService>();
   }
@@ -42,14 +44,49 @@ class _FoodAndShoppingInformationState
     if (Images.isNotEmpty) {
       selectedImages!.addAll(Images);
     }
+    createAndUploadFile(selectedImages![0]);
     print("Image List Length:" + selectedImages!.length.toString());
     setState(() {});
+  }
+
+  Future<void> _configureAmplify() async {
+    var amplifyConfig = '''{"foo": "bar"}''';
+    try {
+      final auth = AmplifyAuthCognito();
+      final storage = AmplifyStorageS3();
+      await Amplify.addPlugins([auth, storage]);
+
+      // call Amplify.configure to use the initialized categories in your app
+      await Amplify.configure(amplifyConfig);
+      safePrint('Amplify connig now');
+    } on Exception catch (e) {
+      safePrint('An error occurred configuring Amplify: $e');
+    }
+  }
+
+  Future<void> createAndUploadFile(XFile file) async {
+    // Create a dummy file
+    const exampleString = 'sarya-assets/itinerary';
+    final exampleFile = File(file.path)
+      ..createSync()
+      ..writeAsStringSync(exampleString);
+    // Upload the file to S3
+    try {
+      final UploadFileResult result = await Amplify.Storage.uploadFile(
+          local: exampleFile,
+          key: 'AKIAUNGGSVHDAGLUFYNY',
+          onProgress: (progress) {
+            safePrint('Fraction completed: ${progress.getFractionCompleted()}');
+          });
+      safePrint('Successfully uploaded file: ${result.key}');
+    } on StorageException catch (e) {
+      safePrint('Error uploading file: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Container(
       color: AppColor.whiteColor,
       child: SafeArea(
@@ -221,9 +258,29 @@ class _FoodAndShoppingInformationState
                               child: Container(
                                 height: 100.0,
                                 width: 100.0,
-                                child: Image.file(
-                                    File(selectedImages![index].path),
-                                    fit: BoxFit.fill),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      height: 120.0,
+                                      width: 120.0,
+                                      child: Image.file(
+                                          File(selectedImages![index].path),
+                                          fit: BoxFit.fill),
+                                    ),
+                                    Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: Transform.translate(
+                                          offset: Offset(12, -12),
+                                          child: IconButton(
+                                              onPressed: () {
+                                                selectedImages!.removeAt(index);
+                                                setState(() {});
+                                              },
+                                              icon: Icon(Icons.cancel)),
+                                        ))
+                                  ],
+                                ),
                                 decoration: BoxDecoration(
                                     color: AppColor.aquaCasper2,
                                     borderRadius: BorderRadius.circular(8)),
