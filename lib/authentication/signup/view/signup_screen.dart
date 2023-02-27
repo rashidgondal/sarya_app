@@ -11,6 +11,7 @@ import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
+
 import '../../../customWidgets/custom_country_picker.dart';
 import '../../../helper/helper_methods.dart';
 import '../../../navigation/navigation_service.dart';
@@ -25,14 +26,12 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-
   final PageController _pageController = PageController(
     initialPage: 0,
     keepPage: true,
   );
 
   DateTime dateIos = DateTime(2016, 10, 26);
-
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
@@ -51,7 +50,6 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController accountNoController = TextEditingController();
   TextEditingController ibanNoController = TextEditingController();
   TextEditingController swiftCodeNoController = TextEditingController();
-
 
   late NavigationService _navigationService;
   List<Widget> list = [];
@@ -83,19 +81,20 @@ class _SignupScreenState extends State<SignupScreen> {
 
   String? selectedCountry;
 
-
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration(milliseconds: 300), () {
+      total_width = total_width + 80;
+      setState(() {});
+    });
     _navigationService = locator<NavigationService>();
-
   }
 
   DateTime selectedDate = DateTime.now();
 
-
   ValueNotifier<int> valueNotifier = ValueNotifier(0);
-  double total_width = 5.0;
+  double total_width = -150.0;
   int? current_position;
 
   @override
@@ -117,7 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               onPressed: () {
                 if (current_position != 0) {
-                  total_width = total_width - 50;
+                  total_width = total_width - 40;
                   setState(() {});
                   _pageController.animateToPage(current_position! - 1,
                       curve: Curves.decelerate,
@@ -128,7 +127,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 }
               },
             ),
-            backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             title: const Text(
               "Sign Up",
               style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
@@ -150,7 +149,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: Container(
                             width: size.width,
                             color: Theme.of(context).scaffoldBackgroundColor,
-                            child: SvgPicture.asset('star'.svg),
+                            child: SvgPicture.asset('Signup_Stars'.svg),
                           ),
                           top: 0,
                           right: 20,
@@ -158,42 +157,44 @@ class _SignupScreenState extends State<SignupScreen> {
                         Positioned(
                           child: Container(
                             height: 5,
-                            margin: EdgeInsets.symmetric(horizontal: 20),
                             width: size.width,
                             color: Color(0xff5E59ED),
                           ),
                           bottom: 10,
                         ),
-                        if (total_width >= 155.0)
+                        if (total_width >= 90.0)
                           Positioned(
                             child: FadeInUp(
                               child: Container(
                                 height: 70,
-                                color: Theme.of(context).scaffoldBackgroundColor,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                                 child: SvgPicture.asset('last_star'.svg),
                               ),
                             ),
                             right: 5,
                             bottom: 70,
                           ),
-                        if (total_width >= 105.0)
+                        if (total_width >= 90.0)
                           Positioned(
                             child: FadeInUp(
                               child: Container(
                                 height: 70,
-                                color: Theme.of(context).scaffoldBackgroundColor,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                                 child: SvgPicture.asset('slash'.svg),
                               ),
                             ),
                             left: 25,
                             bottom: 40,
                           ),
-                        if (total_width >= 155.0)
+                        if (total_width >= 90.0)
                           Positioned(
                             child: FadeInUp(
                               child: Container(
                                 height: 70,
-                                color: Theme.of(context).scaffoldBackgroundColor,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                                 child: SvgPicture.asset('flag'.svg),
                               ),
                             ),
@@ -286,7 +287,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                         ? AppColor.lightIndigo
                                         : AppColor.fogColor),
                               ),
-
                             ],
                           ),
                           const SizedBox(
@@ -306,10 +306,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 onPageChanged: (v) {
                   print("v..................$v");
                   valueNotifier.value = v;
-                  if( valueNotifier.value ==3){
-                  setState(() {
-
-                  });}
+                  if (valueNotifier.value == 3) {
+                    setState(() {});
+                  }
                 },
                 children: [
                   Form(
@@ -332,12 +331,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           TextFormField(
                             controller: userNameController,
-                            onChanged: (v){
+                            onChanged: (v) {
                               valueNotifier.value = 0;
 
-                              setState(() {
-
-                              });
+                              setState(() {});
                             },
                             style: const TextStyle(
                                 fontSize: 14.0,
@@ -345,10 +342,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontWeight: FontWeight.w500),
                             decoration: const InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 hintText: "Username",
                                 fillColor: AppColor.aquaCasper,
@@ -364,23 +363,22 @@ class _SignupScreenState extends State<SignupScreen> {
                           SizedBox(
                             child: TextFormField(
                               controller: firstNameController,
-                              onChanged: (v){
+                              onChanged: (v) {
                                 valueNotifier.value = 0;
-                                setState(() {
-
-                                });
+                                setState(() {});
                               },
-
                               style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
+                                  fontSize: 14.0,
+                                  color: AppColor.lightIndigo,
+                                  fontWeight: FontWeight.w500),
                               decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    borderSide:
+                                        BorderSide(color: AppColor.lightIndigo),
                                   ),
                                   focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: AppColor.lightIndigo),
+                                    borderSide:
+                                        BorderSide(color: AppColor.lightIndigo),
                                   ),
                                   hintText: "First Name",
                                   fillColor: AppColor.aquaCasper,
@@ -396,11 +394,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           TextFormField(
                             controller: lastNameController,
-                            onChanged: (v){
+                            onChanged: (v) {
                               valueNotifier.value = 0;
-                              setState(() {
-
-                              });
+                              setState(() {});
                             },
                             style: const TextStyle(
                                 fontSize: 14.0,
@@ -408,10 +404,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontWeight: FontWeight.w500),
                             decoration: const InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 hintText: "Last Name",
                                 fillColor: AppColor.aquaCasper,
@@ -455,35 +453,38 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           ValueListenableBuilder(
                               valueListenable: genderNotifier,
-                              builder: (BuildContext context, String value, Widget? child) {
+                              builder: (BuildContext context, String value,
+                                  Widget? child) {
                                 if (value.isEmpty) {
                                   return CustomCountryPicker(
                                     value: selectedGender,
                                     hint: 'Gender',
                                     items: listGender
                                         .map((value) => DropdownMenuItem(
-                                      value: value,
-                                      child: SizedBox(
-                                        width: MediaQuery.of(
-                                            locator<NavigationService>()
-                                                .navigatorKey
-                                                .currentContext!)
-                                            .size
-                                            .width /
-                                            1.2,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              value,
-                                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ))
+                                              value: value,
+                                              child: SizedBox(
+                                                width: MediaQuery.of(locator<
+                                                                NavigationService>()
+                                                            .navigatorKey
+                                                            .currentContext!)
+                                                        .size
+                                                        .width /
+                                                    1.2,
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      value,
+                                                      style: const TextStyle(
+                                                          fontSize: 14.0,
+                                                          color: AppColor
+                                                              .lightIndigo,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ))
                                         .toList(),
                                     onItemChanged: (v) {
                                       genderNotifier.value = v;
@@ -498,30 +499,32 @@ class _SignupScreenState extends State<SignupScreen> {
                                   hint: 'Gender',
                                   items: listGender
                                       .map((value) => DropdownMenuItem(
-                                    value: value,
-                                    child: SizedBox(
-                                      width: MediaQuery.of(
-                                          locator<NavigationService>()
-                                              .navigatorKey
-                                              .currentContext!)
-                                          .size
-                                          .width /
-                                          1.2,
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(width: 20),
-                                          Text(
-                                            value,
-                                            style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    onTap: () {},
-                                  ))
+                                            value: value,
+                                            child: SizedBox(
+                                              width: MediaQuery.of(locator<
+                                                              NavigationService>()
+                                                          .navigatorKey
+                                                          .currentContext!)
+                                                      .size
+                                                      .width /
+                                                  1.2,
+                                              child: Row(
+                                                children: [
+                                                  const SizedBox(width: 20),
+                                                  Text(
+                                                    value,
+                                                    style: const TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: AppColor
+                                                            .lightIndigo,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            onTap: () {},
+                                          ))
                                       .toList(),
                                   onItemChanged: (v) {
                                     genderNotifier.value = v;
@@ -539,7 +542,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           ValueListenableBuilder(
                               valueListenable: dateValueNotifier,
-                              builder: (BuildContext context, String value, Widget? child) {
+                              builder: (BuildContext context, String value,
+                                  Widget? child) {
                                 if (value.isEmpty) {
                                   return Align(
                                     alignment: Alignment.centerLeft,
@@ -550,10 +554,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                           mode: CupertinoDatePickerMode.date,
                                           use24hFormat: true,
                                           // This is called when the user changes the date.
-                                          onDateTimeChanged: (DateTime newDate) {
+                                          onDateTimeChanged:
+                                              (DateTime newDate) {
                                             String d = newDate.toString();
                                             var splitDate = d.split(" ");
-                                            dateValueNotifier.value = splitDate[0];
+                                            dateValueNotifier.value =
+                                                splitDate[0];
                                             dob = splitDate[0];
                                           },
                                         ),
@@ -584,7 +590,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                         onDateTimeChanged: (DateTime newDate) {
                                           String d = newDate.toString();
                                           var splitDate = d.split(" ");
-                                          dateValueNotifier.value = splitDate[0];
+                                          dateValueNotifier.value =
+                                              splitDate[0];
                                           dob = splitDate[0];
                                         },
                                       ),
@@ -616,8 +623,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               height: 50.0,
                               child: ValueListenableBuilder(
                                   valueListenable: nationalityNotifier,
-                                  builder:
-                                      (BuildContext context, String value, Widget? child) {
+                                  builder: (BuildContext context, String value,
+                                      Widget? child) {
                                     if (value.isEmpty) {
                                       return InkWell(
                                         onTap: () {
@@ -626,14 +633,19 @@ class _SignupScreenState extends State<SignupScreen> {
                                             backgroundColor: Colors.transparent,
                                             builder: (context) => Container(
                                                 color: Colors.white,
-                                                height: MediaQuery.of(context).size.height,
-                                                width: MediaQuery.of(context).size.width,
+                                                height: MediaQuery.of(context)
+                                                    .size
+                                                    .height,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
                                                 child: BottomSheetCountryPicker(
                                                   countries: widget.countries,
                                                   countryName: (v) {},
                                                   countryTel: (v) {},
                                                   nationality: (v) {
-                                                    nationalityNotifier.value = v;
+                                                    nationalityNotifier.value =
+                                                        v;
                                                     nationality = v;
                                                   },
                                                 )),
@@ -644,7 +656,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                         child: Align(
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
-                                            padding: const EdgeInsets.only(bottom: 16.0),
+                                            padding: const EdgeInsets.only(
+                                                bottom: 16.0),
                                             child: Row(
                                               children: const [
                                                 Text(
@@ -652,11 +665,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   style: TextStyle(
                                                       fontSize: 14.0,
                                                       color: AppColor.colorGrey,
-                                                      fontWeight: FontWeight.w500),
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                                 Spacer(),
                                                 Icon(
-                                                  Icons.keyboard_arrow_down_outlined,
+                                                  Icons
+                                                      .keyboard_arrow_down_outlined,
                                                   color: AppColor.headingColor2,
                                                 )
                                               ],
@@ -673,9 +688,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                           backgroundColor: Colors.transparent,
                                           builder: (context) => Container(
                                               color: Colors.white,
-                                              height:
-                                              MediaQuery.of(context).size.height / 1.2,
-                                              width: MediaQuery.of(context).size.width,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  1.2,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               child: BottomSheetCountryPicker(
                                                 countries: widget.countries,
                                                 countryName: (v) {},
@@ -692,7 +711,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 16.0),
+                                          padding: const EdgeInsets.only(
+                                              bottom: 16.0),
                                           child: Row(
                                             children: [
                                               Text(
@@ -700,11 +720,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 style: const TextStyle(
                                                     fontSize: 14.0,
                                                     color: AppColor.lightIndigo,
-                                                    fontWeight: FontWeight.w500),
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                               ),
                                               const Spacer(),
                                               const Icon(
-                                                Icons.keyboard_arrow_down_outlined,
+                                                Icons
+                                                    .keyboard_arrow_down_outlined,
                                                 color: AppColor.lightIndigo,
                                               )
                                             ],
@@ -724,8 +746,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               height: 50.0,
                               child: ValueListenableBuilder(
                                   valueListenable: corNotifier,
-                                  builder:
-                                      (BuildContext context, String value, Widget? child) {
+                                  builder: (BuildContext context, String value,
+                                      Widget? child) {
                                     if (value.isEmpty) {
                                       return InkWell(
                                         onTap: () {
@@ -734,8 +756,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                             backgroundColor: Colors.transparent,
                                             builder: (context) => Container(
                                                 color: Colors.white,
-                                                height: MediaQuery.of(context).size.height,
-                                                width: MediaQuery.of(context).size.width,
+                                                height: MediaQuery.of(context)
+                                                    .size
+                                                    .height,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
                                                 child: BottomSheetCountryPicker(
                                                   countries: widget.countries,
                                                   countryName: (v) {
@@ -752,7 +778,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                         child: Align(
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
-                                            padding: const EdgeInsets.only(bottom: 16.0),
+                                            padding: const EdgeInsets.only(
+                                                bottom: 16.0),
                                             child: Row(
                                               children: const [
                                                 Text(
@@ -760,11 +787,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   style: TextStyle(
                                                       fontSize: 14.0,
                                                       color: AppColor.colorGrey,
-                                                      fontWeight: FontWeight.w500),
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                                 Spacer(),
                                                 Icon(
-                                                  Icons.keyboard_arrow_down_outlined,
+                                                  Icons
+                                                      .keyboard_arrow_down_outlined,
                                                   color: AppColor.headingColor2,
                                                 )
                                               ],
@@ -781,9 +810,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                           backgroundColor: Colors.transparent,
                                           builder: (context) => Container(
                                               color: Colors.white,
-                                              height:
-                                              MediaQuery.of(context).size.height / 1.2,
-                                              width: MediaQuery.of(context).size.width,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  1.2,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               child: BottomSheetCountryPicker(
                                                 countries: widget.countries,
                                                 countryName: (v) {
@@ -800,7 +833,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 8.0),
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
                                           child: Row(
                                             children: [
                                               Text(
@@ -808,11 +842,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 style: const TextStyle(
                                                     fontSize: 14.0,
                                                     color: AppColor.lightIndigo,
-                                                    fontWeight: FontWeight.w500),
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                               ),
                                               const Spacer(),
                                               const Icon(
-                                                Icons.keyboard_arrow_down_outlined,
+                                                Icons
+                                                    .keyboard_arrow_down_outlined,
                                                 color: AppColor.lightIndigo,
                                               )
                                             ],
@@ -860,11 +896,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           TextFormField(
                             controller: emailNameController,
                             keyboardType: TextInputType.emailAddress,
-                            onChanged: (v){
-                              valueNotifier.value =  valueNotifier.value;
-                              setState(() {
-
-                              });
+                            onChanged: (v) {
+                              valueNotifier.value = valueNotifier.value;
+                              setState(() {});
                             },
                             style: const TextStyle(
                                 fontSize: 14.0,
@@ -872,10 +906,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontWeight: FontWeight.w500),
                             decoration: const InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 hintText: "Email",
                                 fillColor: AppColor.aquaCasper,
@@ -888,65 +924,65 @@ class _SignupScreenState extends State<SignupScreen> {
                           const SizedBox(
                             height: 40,
                           ),
-
                           ValueListenableBuilder(
                               valueListenable: showPasswordNotifier,
-                              builder:
-                                  (BuildContext context, bool value, Widget? child) {
-                                return  TextFormField(
+                              builder: (BuildContext context, bool value,
+                                  Widget? child) {
+                                return TextFormField(
                                   controller: passwordNameController,
-                                  onChanged: (v){
-                                    valueNotifier.value =  valueNotifier.value;
-                                    setState(() {
-
-                                    });
+                                  onChanged: (v) {
+                                    valueNotifier.value = valueNotifier.value;
+                                    setState(() {});
                                   },
                                   maxLines: 1,
                                   obscureText: showPasswordNotifier.value,
                                   style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
-                                  decoration:  InputDecoration(
+                                      fontSize: 14.0,
+                                      color: AppColor.lightIndigo,
+                                      fontWeight: FontWeight.w500),
+                                  decoration: InputDecoration(
                                       isDense: true,
-                                      suffixIconConstraints:const BoxConstraints(
+                                      suffixIconConstraints:
+                                          const BoxConstraints(
                                         minWidth: 20,
                                         minHeight: 30,
                                       ),
-
                                       enabledBorder: const UnderlineInputBorder(
-                                        borderSide: BorderSide(color: AppColor.lightIndigo),
+                                        borderSide: BorderSide(
+                                            color: AppColor.lightIndigo),
                                       ),
-                                      suffixIcon: showPasswordNotifier.value?
-                                      InkWell(
-                                          onTap: (){
-
-                                            showPasswordNotifier.value = false;
-
-                                          },
-                                          child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.colorGrey,)):
-                                      InkWell(
-                                          onTap: (){
-
-                                            showPasswordNotifier.value = true;
-                                          },
-                                          child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.lightIndigo,)),
-                                      focusedBorder:const UnderlineInputBorder(
-                                        borderSide:
-                                        BorderSide(color: AppColor.lightIndigo),
+                                      suffixIcon: showPasswordNotifier.value
+                                          ? InkWell(
+                                              onTap: () {
+                                                showPasswordNotifier.value =
+                                                    false;
+                                              },
+                                              child: const Icon(
+                                                Icons.remove_red_eye_outlined,
+                                                color: AppColor.colorGrey,
+                                              ))
+                                          : InkWell(
+                                              onTap: () {
+                                                showPasswordNotifier.value =
+                                                    true;
+                                              },
+                                              child: const Icon(
+                                                Icons.remove_red_eye_outlined,
+                                                color: AppColor.lightIndigo,
+                                              )),
+                                      focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: AppColor.lightIndigo),
                                       ),
                                       contentPadding: EdgeInsets.zero,
                                       hintText: "Password",
                                       fillColor: AppColor.aquaCasper,
-                                      hintStyle:const TextStyle(
+                                      hintStyle: const TextStyle(
                                           fontSize: 14.0,
                                           color: AppColor.colorGrey,
                                           fontWeight: FontWeight.w500)),
                                 );
-
                               }),
-
-
                           const SizedBox(
                             height: 30,
                           ),
@@ -959,8 +995,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                     width: 90,
                                     child: ValueListenableBuilder(
                                         valueListenable: telCodeNotifier,
-                                        builder: (BuildContext context, String value,
-                                            Widget? child) {
+                                        builder: (BuildContext context,
+                                            String value, Widget? child) {
                                           print("value............$value");
 
                                           if (value.isEmpty) {
@@ -968,53 +1004,70 @@ class _SignupScreenState extends State<SignupScreen> {
                                               onTap: () {
                                                 showMaterialModalBottomSheet(
                                                   context: context,
-                                                  backgroundColor: Colors.transparent,
-                                                  builder: (context) => Container(
-                                                      color: Colors.white,
-                                                      height: MediaQuery.of(context)
-                                                          .size
-                                                          .height,
-                                                      width:
-                                                      MediaQuery.of(context).size.width,
-                                                      child: BottomSheetCountryPicker(
-                                                        countries: widget.countries,
-                                                        countryName: (v) {},
-                                                        countryTel: (v) {
-                                                          print(
-                                                              "countryTel...1.........$telCode");
-                                                          telCodeNotifier.value = v;
-                                                          telCode = v;
-                                                        },
-                                                        nationality: (v) {},
-                                                      )),
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  builder: (context) =>
+                                                      Container(
+                                                          color: Colors.white,
+                                                          height: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .height,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          child:
+                                                              BottomSheetCountryPicker(
+                                                            countries: widget
+                                                                .countries,
+                                                            countryName: (v) {},
+                                                            countryTel: (v) {
+                                                              print(
+                                                                  "countryTel...1.........$telCode");
+                                                              telCodeNotifier
+                                                                  .value = v;
+                                                              telCode = v;
+                                                            },
+                                                            nationality: (v) {},
+                                                          )),
                                                 ).then((value) {
                                                   setState(() {});
                                                 });
                                               },
                                               child: Align(
-                                                alignment: Alignment.bottomCenter,
+                                                alignment:
+                                                    Alignment.bottomCenter,
                                                 child: Padding(
                                                   padding:
-                                                  const EdgeInsets.only(bottom: 12.0),
+                                                      const EdgeInsets.only(
+                                                          bottom: 12.0),
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: const [
                                                       Text(
                                                         "Country",
                                                         style: TextStyle(
                                                             fontSize: 14.0,
-                                                            color: AppColor.colorGrey,
-                                                            fontWeight: FontWeight.w500),
+                                                            color: AppColor
+                                                                .colorGrey,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
                                                       ),
                                                       SizedBox(
                                                         width: 5,
                                                       ),
                                                       Icon(
-                                                        Icons.keyboard_arrow_down_outlined,
-                                                        color: AppColor.headingColor2,
+                                                        Icons
+                                                            .keyboard_arrow_down_outlined,
+                                                        color: AppColor
+                                                            .headingColor2,
                                                       )
                                                     ],
                                                   ),
@@ -1027,22 +1080,30 @@ class _SignupScreenState extends State<SignupScreen> {
                                             onTap: () {
                                               showMaterialModalBottomSheet(
                                                 context: context,
-                                                backgroundColor: Colors.transparent,
+                                                backgroundColor:
+                                                    Colors.transparent,
                                                 builder: (context) => Container(
                                                     color: Colors.white,
                                                     height:
-                                                    MediaQuery.of(context).size.height /
-                                                        1.2,
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            1.2,
                                                     width:
-                                                    MediaQuery.of(context).size.width,
-                                                    child: BottomSheetCountryPicker(
-                                                      countries: widget.countries,
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child:
+                                                        BottomSheetCountryPicker(
+                                                      countries:
+                                                          widget.countries,
                                                       countryName: (v) {},
                                                       countryTel: (v) {
                                                         print(
                                                             "countryTel...1.........$telCode");
 
-                                                        telCodeNotifier.value = v;
+                                                        telCodeNotifier.value =
+                                                            v;
                                                         telCode = v;
                                                       },
                                                       nationality: (v) {},
@@ -1054,27 +1115,31 @@ class _SignupScreenState extends State<SignupScreen> {
                                             child: Align(
                                               alignment: Alignment.bottomCenter,
                                               child: Padding(
-                                                padding:
-                                                const EdgeInsets.only(bottom: 12.0),
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 12.0),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                      MainAxisAlignment.center,
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                                      CrossAxisAlignment.center,
                                                   children: [
                                                     Text(
                                                       telCode,
                                                       style: const TextStyle(
                                                           fontSize: 14.0,
-                                                          color: AppColor.lightIndigo,
-                                                          fontWeight: FontWeight.w500),
+                                                          color: AppColor
+                                                              .lightIndigo,
+                                                          fontWeight:
+                                                              FontWeight.w500),
                                                     ),
                                                     const SizedBox(
                                                       width: 5,
                                                     ),
                                                     const Icon(
-                                                      Icons.keyboard_arrow_down_outlined,
-                                                      color: AppColor.lightIndigo,
+                                                      Icons
+                                                          .keyboard_arrow_down_outlined,
+                                                      color:
+                                                          AppColor.lightIndigo,
                                                     )
                                                   ],
                                                 ),
@@ -1095,39 +1160,44 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               ValueListenableBuilder(
                                   valueListenable: telCodeNotifier,
-                                  builder:
-                                      (BuildContext context, String value, Widget? child) {
+                                  builder: (BuildContext context, String value,
+                                      Widget? child) {
                                     return Expanded(
                                       child: Padding(
-                                        padding: const EdgeInsets.only(top: 2.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 2.0),
                                         child: SizedBox(
                                           height: 50.0,
-                                          width: MediaQuery.of(locator<NavigationService>()
-                                              .navigatorKey
-                                              .currentContext!)
+                                          width: MediaQuery.of(
+                                                  locator<NavigationService>()
+                                                      .navigatorKey
+                                                      .currentContext!)
                                               .size
                                               .width,
                                           child: TextFormField(
                                             controller: phoneController,
                                             keyboardType: TextInputType.phone,
-                                            onChanged: (v){
-                                              valueNotifier.value =  valueNotifier.value;
-                                              setState(() {
-
-                                              });
+                                            onChanged: (v) {
+                                              valueNotifier.value =
+                                                  valueNotifier.value;
+                                              setState(() {});
                                             },
                                             style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
+                                                fontSize: 14.0,
+                                                color: AppColor.lightIndigo,
+                                                fontWeight: FontWeight.w500),
                                             decoration: const InputDecoration(
-                                                enabledBorder: UnderlineInputBorder(
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
                                                   borderSide: BorderSide(
-                                                      color: AppColor.lightIndigo),
+                                                      color:
+                                                          AppColor.lightIndigo),
                                                 ),
-                                                focusedBorder: UnderlineInputBorder(
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
                                                   borderSide: BorderSide(
-                                                      color: AppColor.lightIndigo),
+                                                      color:
+                                                          AppColor.lightIndigo),
                                                 ),
                                                 hintText: "Phone Number",
                                                 fillColor: AppColor.aquaCasper,
@@ -1135,7 +1205,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 hintStyle: TextStyle(
                                                     fontSize: 14.0,
                                                     color: AppColor.colorGrey,
-                                                    fontWeight: FontWeight.w500)),
+                                                    fontWeight:
+                                                        FontWeight.w500)),
                                           ),
                                         ),
                                       ),
@@ -1183,10 +1254,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontWeight: FontWeight.w500),
                             decoration: const InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 hintText: " Your Hobbies",
                                 fillColor: AppColor.aquaCasper,
@@ -1207,10 +1280,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontWeight: FontWeight.w500),
                             decoration: const InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 hintText: " Favourite Country",
                                 fillColor: AppColor.aquaCasper,
@@ -1231,10 +1306,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontWeight: FontWeight.w500),
                             decoration: const InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 hintText: " Want to tell us more?",
                                 fillColor: AppColor.aquaCasper,
@@ -1249,72 +1326,60 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           valueNotifier.value == 3
                               ? InkWell(
-                            onTap: () {
-                              int position = 1 + valueNotifier.value;
-                              total_width = total_width + 50;
-                              setState(() {});
-                              _pageController.animateToPage(position,
-                                  curve: Curves.decelerate,
-                                  duration: const Duration(
-                                      milliseconds: 300));
-                              // for animated jump. Requires a curve and a duration
-                              if (position == 4) {
-                                String phone = zeroLeadValue(
-                                    value: phoneController.text);
+                                  onTap: () {
+                                    int position = 1 + valueNotifier.value;
+                                    total_width = total_width + 50;
+                                    setState(() {});
+                                    _pageController.animateToPage(position,
+                                        curve: Curves.decelerate,
+                                        duration:
+                                            const Duration(milliseconds: 300));
+                                    // for animated jump. Requires a curve and a duration
+                                    if (position == 4) {
+                                      String phone = zeroLeadValue(
+                                          value: phoneController.text);
 
-                                context
-                                    .read<SignupCubits>()
-                                    .saveSignup(
-                                    signupRequest: SignupRequest(
-                                        firstName:
-                                        firstNameController
-                                            .text,
-                                        lastName:
-                                        lastNameController
-                                            .text,
-                                        userName:
-                                        userNameController
-                                            .text,
-                                        gender: selectedGender,
-                                        birthday: dob,
-                                        nationality: nationality,
-                                        country: _cor,
-                                        email: emailNameController
-                                            .text,
-                                        password:
-                                        passwordNameController
-                                            .text,
-                                        telCode: telCode,
-                                        phone: phone,
-                                        hobbies:
-                                        hobbyController.text,
-                                        favCountry:
-                                        favCountryController
-                                            .text,
-                                        extraInfo:
-                                        tellMoreController
-                                            .text));
+                                      context.read<SignupCubits>().saveSignup(
+                                          signupRequest: SignupRequest(
+                                              firstName:
+                                                  firstNameController.text,
+                                              lastName: lastNameController.text,
+                                              userName: userNameController.text,
+                                              gender: selectedGender,
+                                              birthday: dob,
+                                              nationality: nationality,
+                                              country: _cor,
+                                              email: emailNameController.text,
+                                              password:
+                                                  passwordNameController.text,
+                                              telCode: telCode,
+                                              phone: phone,
+                                              hobbies: hobbyController.text,
+                                              favCountry:
+                                                  favCountryController.text,
+                                              extraInfo:
+                                                  tellMoreController.text));
 
-                                _navigationService
-                                    .navigateTo(termRoutSecond);
-                                return;
-                              }
-                            },
-                            child: const Text(
-                              'Skip Now & Answer Later',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.aquaGreen,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          )
+                                      _navigationService
+                                          .navigateTo(termRoutSecond);
+                                      return;
+                                    }
+                                  },
+                                  child: const Text(
+                                    'Skip Now & Answer Later',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: AppColor.aquaGreen,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                )
                               : const Text(
-                            "Fields marked with (*) are mandatory.",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: AppColor.aquaGreen,
-                                fontWeight: FontWeight.w400),
-                          ),
+                                  "Fields marked with (*) are mandatory.",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: AppColor.aquaGreen,
+                                      fontWeight: FontWeight.w400),
+                                ),
                         ],
                       ),
                     ),
@@ -1339,8 +1404,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: 50.0,
                             child: ValueListenableBuilder(
                                 valueListenable: bankCountryNotifier,
-                                builder:
-                                    (BuildContext context, String value, Widget? child) {
+                                builder: (BuildContext context, String value,
+                                    Widget? child) {
                                   if (value.isEmpty) {
                                     return InkWell(
                                       onTap: () {
@@ -1349,8 +1414,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                           backgroundColor: Colors.transparent,
                                           builder: (context) => Container(
                                               color: Colors.white,
-                                              height: MediaQuery.of(context).size.height,
-                                              width: MediaQuery.of(context).size.width,
+                                              height: MediaQuery.of(context)
+                                                  .size
+                                                  .height,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               child: BottomSheetCountryPicker(
                                                 countries: widget.countries,
                                                 countryName: (v) {
@@ -1358,9 +1427,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   bankCountry = v;
                                                 },
                                                 countryTel: (v) {},
-                                                nationality: (v) {
-
-                                                },
+                                                nationality: (v) {},
                                               )),
                                         ).then((value) {
                                           setState(() {});
@@ -1369,7 +1436,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 16.0),
+                                          padding: const EdgeInsets.only(
+                                              bottom: 16.0),
                                           child: Row(
                                             children: const [
                                               Text(
@@ -1377,11 +1445,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 style: TextStyle(
                                                     fontSize: 14.0,
                                                     color: AppColor.colorGrey,
-                                                    fontWeight: FontWeight.w500),
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                               ),
                                               Spacer(),
                                               Icon(
-                                                Icons.keyboard_arrow_down_outlined,
+                                                Icons
+                                                    .keyboard_arrow_down_outlined,
                                                 color: AppColor.headingColor2,
                                               )
                                             ],
@@ -1398,9 +1468,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                         backgroundColor: Colors.transparent,
                                         builder: (context) => Container(
                                             color: Colors.white,
-                                            height:
-                                            MediaQuery.of(context).size.height / 1.2,
-                                            width: MediaQuery.of(context).size.width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                1.2,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
                                             child: BottomSheetCountryPicker(
                                               countries: widget.countries,
                                               countryName: (v) {},
@@ -1417,7 +1491,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Padding(
-                                        padding: const EdgeInsets.only(bottom: 16.0),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 16.0),
                                         child: Row(
                                           children: [
                                             Text(
@@ -1429,7 +1504,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                             ),
                                             const Spacer(),
                                             const Icon(
-                                              Icons.keyboard_arrow_down_outlined,
+                                              Icons
+                                                  .keyboard_arrow_down_outlined,
                                               color: AppColor.lightIndigo,
                                             )
                                           ],
@@ -1448,19 +1524,19 @@ class _SignupScreenState extends State<SignupScreen> {
                         TextFormField(
                           controller: bankNameController,
                           keyboardType: TextInputType.text,
-
                           style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
+                              fontSize: 14.0,
+                              color: AppColor.lightIndigo,
+                              fontWeight: FontWeight.w500),
                           decoration: const InputDecoration(
                               enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
-
                               hintText: "Bank Name",
                               fillColor: AppColor.aquaCasper,
                               contentPadding: EdgeInsets.zero,
@@ -1476,17 +1552,18 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: beneficiaryController,
                           keyboardType: TextInputType.text,
                           style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
+                              fontSize: 14.0,
+                              color: AppColor.lightIndigo,
+                              fontWeight: FontWeight.w500),
                           decoration: const InputDecoration(
                               enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
-
                               hintText: "Beneficiary Name",
                               fillColor: AppColor.aquaCasper,
                               contentPadding: EdgeInsets.zero,
@@ -1502,15 +1579,17 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: accountNoController,
                           keyboardType: TextInputType.emailAddress,
                           style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
+                              fontSize: 14.0,
+                              color: AppColor.lightIndigo,
+                              fontWeight: FontWeight.w500),
                           decoration: const InputDecoration(
                               enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
                               hintText: "Account No.",
                               fillColor: AppColor.aquaCasper,
@@ -1527,17 +1606,18 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: ibanNoController,
                           keyboardType: TextInputType.text,
                           style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
+                              fontSize: 14.0,
+                              color: AppColor.lightIndigo,
+                              fontWeight: FontWeight.w500),
                           decoration: const InputDecoration(
                               enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
-
                               hintText: "IBAN No.",
                               fillColor: AppColor.aquaCasper,
                               contentPadding: EdgeInsets.zero,
@@ -1553,17 +1633,18 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: swiftCodeNoController,
                           keyboardType: TextInputType.text,
                           style: const TextStyle(
-                                fontSize: 14.0,
-                                color: AppColor.lightIndigo,
-                                fontWeight: FontWeight.w500),
+                              fontSize: 14.0,
+                              color: AppColor.lightIndigo,
+                              fontWeight: FontWeight.w500),
                           decoration: const InputDecoration(
                               enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.lightIndigo),
+                                borderSide:
+                                    BorderSide(color: AppColor.lightIndigo),
                               ),
-
                               hintText: "Swift Code.",
                               fillColor: AppColor.aquaCasper,
                               contentPadding: EdgeInsets.zero,
@@ -1578,18 +1659,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       ],
                     ),
                   ),
-
                 ],
-              )
-
-          ),
+              )),
         ),
       ),
     );
   }
 
   Widget _buildButton({required int index}) {
-
     if (index == 0) {
       if (userNameController.text.isEmpty) {
         return Container(
@@ -1639,13 +1716,13 @@ class _SignupScreenState extends State<SignupScreen> {
       return InkWell(
         onTap: () {
           int position = 1 + index;
-          total_width = total_width + 50;
+          total_width = total_width + 40;
+          print('total_width = ${total_width}');
           setState(() {});
           _pageController.animateToPage(position,
               curve: Curves.decelerate,
               duration: const Duration(milliseconds: 300));
           // for animated jump. Requires a curve and a duration
-
         },
         child: Container(
           height: 46.0,
@@ -1661,8 +1738,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       );
-    }
-    else if (index == 1) {
+    } else if (index == 1) {
       if (selectedGender != null) {
         if (selectedGender!.isEmpty) {
           return Container(
@@ -1731,13 +1807,13 @@ class _SignupScreenState extends State<SignupScreen> {
       return InkWell(
         onTap: () {
           int position = 1 + index;
-          total_width = total_width + 50;
+          total_width = total_width + 40;
+          print('total_width = ${total_width}');
           setState(() {});
           _pageController.animateToPage(position,
               curve: Curves.decelerate,
               duration: const Duration(milliseconds: 300));
           // for animated jump. Requires a curve and a duration
-
         },
         child: Container(
           height: 46.0,
@@ -1753,8 +1829,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       );
-    }
-    else if (index == 2) {
+    } else if (index == 2) {
       if (emailNameController.text.isEmpty) {
         return Container(
           height: 46.0,
@@ -1819,13 +1894,13 @@ class _SignupScreenState extends State<SignupScreen> {
       return InkWell(
         onTap: () {
           int position = 1 + index;
-          total_width = total_width + 50;
+          total_width = total_width + 40;
+          print('total_width = ${total_width}');
           setState(() {});
           _pageController.animateToPage(position,
               curve: Curves.decelerate,
               duration: const Duration(milliseconds: 300));
           // for animated jump. Requires a curve and a duration
-
         },
         child: Container(
           height: 46.0,
@@ -1841,17 +1916,16 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       );
-    }
-    else if(index == 3){
+    } else if (index == 3) {
       return InkWell(
         onTap: () {
           int position = 1 + index;
-          total_width = total_width + 50;
+          total_width = total_width + 40;
+          print('total_width = ${total_width}');
           setState(() {});
           _pageController.animateToPage(position,
               curve: Curves.decelerate,
               duration: const Duration(milliseconds: 300));
-
         },
         child: Container(
           height: 46.0,
@@ -1867,12 +1941,12 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       );
-    }
-    else {
+    } else {
       return InkWell(
         onTap: () {
           int position = 1 + index;
-          total_width = total_width + 50;
+          total_width = total_width + 40;
+          print('total_width = ${total_width}');
           setState(() {});
           _pageController.animateToPage(position,
               curve: Curves.decelerate,
@@ -1887,8 +1961,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 beneficiary: beneficiaryController.text,
                 accountNo: accountNoController.text,
                 iban: ibanNoController.text,
-                swiftCode: swiftCodeNoController.text
-            );
+                swiftCode: swiftCodeNoController.text);
 
             context.read<SignupCubits>().saveSignup(
                 signupRequest: SignupRequest(
@@ -1906,12 +1979,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     hobbies: hobbyController.text,
                     favCountry: favCountryController.text,
                     extraInfo: tellMoreController.text,
-                    bankDetails: bankDetails
-                ));
+                    bankDetails: bankDetails));
 
             _navigationService.navigateTo(termRoutSecond);
             return;
-          }},
+          }
+        },
         child: Container(
           height: 46.0,
           width: 200.0,
@@ -1927,29 +2000,26 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       );
     }
-
-
   }
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
         context: context,
         builder: (BuildContext context) => Container(
-          height: 316,
-          padding: const EdgeInsets.only(top: 6.0),
-          // The Bottom margin is provided to align the popup above the system
-          // navigation bar.
-          margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          // Provide a background color for the popup.
-          color: CupertinoColors.systemBackground.resolveFrom(context),
-          // Use a SafeArea widget to avoid system overlaps.
-          child: SafeArea(
-            top: false,
-            child: child,
-          ),
-        ));
+              height: 316,
+              padding: const EdgeInsets.only(top: 6.0),
+              // The Bottom margin is provided to align the popup above the system
+              // navigation bar.
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              // Provide a background color for the popup.
+              color: CupertinoColors.systemBackground.resolveFrom(context),
+              // Use a SafeArea widget to avoid system overlaps.
+              child: SafeArea(
+                top: false,
+                child: child,
+              ),
+            ));
   }
-
 }
