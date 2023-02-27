@@ -10,11 +10,13 @@ import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/theme/color_scheme.dart';
-import 'create_intinerary/model/create_intinerary_request.dart' as create_intinerary;
-import 'customWidgets/dial_trip_estimation_cost.dart';
+import 'package:geolocator/geolocator.dart';
+
+import 'create_intinerary/model/day_design_intinerary_request.dart' as create_intinerary;
 
 class SearchPlacesScreen extends StatefulWidget {
-  const SearchPlacesScreen({Key? key}) : super(key: key);
+  final Map map;
+  const SearchPlacesScreen({Key? key,required this.map}) : super(key: key);
 
   @override
   State<SearchPlacesScreen> createState() => _SearchPlacesScreenState();
@@ -31,17 +33,66 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
   final Mode _mode = Mode.overlay;
    PlacesDetailsResponse? detail;
    String name = 'Search Places';
-
+   List list = [];
   List<create_intinerary.Accomodation> listOfAccommodation = [];
-  create_intinerary.Accomodation     accomodation   = create_intinerary.Accomodation();
+ // create_intinerary.Accomodation     accomodation   = create_intinerary.Accomodation();
   late NavigationService _navigationService;
   TextEditingController tripEstimatedCostController = TextEditingController();
 
+  Map map ={};
 
   @override
   void initState() {
+    currentLocation();
     super.initState();
     _navigationService = locator<NavigationService>();
+  }
+
+  currentLocation()async{
+    Position position = await  _determinePosition();
+    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(position.latitude, position.longitude), 14.0));
+      setState(() {
+
+      });
+  }
+
+
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -127,13 +178,16 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 50),
                   child: InkWell(
                     onTap: (){
-                      final lat = detail!.result.geometry!.location.lat;
-                      final lng = detail!.result.geometry!.location.lng;
-                      name = detail!.result.name;
-                      create_intinerary.Location location =  create_intinerary.Location(coordinates: [lng,lat]);
-                      listOfAccommodation.add(create_intinerary.Accomodation(name: name, location: location,));
-                      print("listOfAccommodation........${listOfAccommodation.length}....${listOfAccommodation[0].name}");
-                    },
+                      if(widget.map['from'] == 'day') {
+                        print("listOfAccommodation........${listOfAccommodation
+                            .length}");
+                        _navigationService.goBack(value: listOfAccommodation);
+                      }else {
+                        _navigationService.goBack(value: map);
+
+                      }
+
+                   },
                     child: Container(
                       height: 45,
                       width: size.width/2,
@@ -168,40 +222,62 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
   }
 
   void getLocationAddress({required LatLng latLng}) async{
+    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      "lib/assets/images/flag.png",
+    );
     //await Future.delayed(Duration(seconds: 2));
     List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
     print("placemarks...........${placemarks[0].name}");
     print("placemarks...........${placemarks[0].street}");
     name = '${placemarks[0].name??''}  ${placemarks[0].street??''}';
-    int c = 0;
-    int id = c +1;
-    markersList.add(Marker(
-        icon: BitmapDescriptor.defaultMarker,
-        markerId:  MarkerId("$id"),
-        position: LatLng(latLng.latitude, latLng.longitude),
-        infoWindow: InfoWindow(title: name),
-        onTap: (){
-          print("......press");
-          Marker marker = markersList.iterator.current;
-          showDialog(
-              context: context,
-              builder: (BuildContext context) =>  TripEstimationCost(textEditingController: tripEstimatedCostController,));
 
-        }
-    ));
-    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(latLng.latitude, latLng.longitude), 14.0));
-    listOfAccommodation.add(create_intinerary.Accomodation(name:name, location: create_intinerary.Location(coordinates: [
-                  latLng.longitude,
-                  latLng.latitude
-    ])));
+    if(widget.map['from'] == 'day') {
+      int c = 0;
+      int id = c + 1;
+      markersList.add(Marker(
+          icon: markerbitmap,
+          markerId: MarkerId("$id"),
+          position: LatLng(latLng.latitude, latLng.longitude),
+          infoWindow: InfoWindow(title: name),
+          onTap: () {
+            print("......press");
+            Marker marker = markersList.iterator.current;
+          }
+      ));
+      googleMapController.animateCamera(CameraUpdate.newLatLngZoom(
+          LatLng(latLng.latitude, latLng.longitude), 14.0));
+      listOfAccommodation.add(create_intinerary.Accomodation(
+          name: name, location: create_intinerary.Location(coordinates: [
+        latLng.longitude,
+        latLng.latitude
+      ])));
+    }else{
 
-    setState(() {
+      map ={"name":"$name","coordinate":[latLng.longitude,latLng.latitude,]};
 
-});
+      markersList.clear();
+      markersList.add(Marker(
+          icon: markerbitmap,
+          markerId: MarkerId("0"),
+          position: LatLng(latLng.latitude, latLng.longitude),
+          infoWindow: InfoWindow(title: name),
+          onTap: () {
+            print("......press");
+            Marker marker = markersList.iterator.current;
+          }
+      ));
+      googleMapController.animateCamera(CameraUpdate.newLatLngZoom(
+          LatLng(latLng.latitude, latLng.longitude), 14.0));
+
+    }
+
+    setState(() {});
 
   }
 
   Future<void> _handlePressButton() async {
+    String typeData = widget.map['type'];
     Prediction? p = await PlacesAutocomplete.show(
         context: context,
         apiKey: kGoogleApiKey,
@@ -209,7 +285,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         mode: _mode,
         language: 'en',
         strictbounds: false,
-        types: [""],
+        types: [typeData],
         decoration: InputDecoration(
             hintText: 'Search',
             focusedBorder:  OutlineInputBorder(borderRadius: BorderRadius.circular(20),
@@ -237,7 +313,10 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
   }
 
   Future<void> displayPrediction(Prediction p, ScaffoldState? currentState) async {
-
+    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      "lib/assets/images/flag.png",
+    );
     GoogleMapsPlaces places = GoogleMapsPlaces(
         apiKey: kGoogleApiKey,
         apiHeaders: await const GoogleApiHeaders().getHeaders()
@@ -252,13 +331,33 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
     final lat = detail!.result.geometry!.location.lat;
     final lng = detail!.result.geometry!.location.lng;
     name = detail!.result.name;
+    if(widget.map['from'] == 'day') {
+      markersList.clear();
+      markersList.add(Marker(icon: markerbitmap,
+          markerId: const MarkerId("0"),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(title: name)));
+      listOfAccommodation.add(create_intinerary.Accomodation(
+          name: name, location: create_intinerary.Location(coordinates: [
+        lng,
+        lat
+      ])));
+      print("listOfAccommodation........${listOfAccommodation.length}");
 
-    markersList.clear();
-    markersList.add(Marker(markerId: const MarkerId("0"),position: LatLng(lat, lng),infoWindow: InfoWindow(title: name)));
+    }else {
+      map = {"name": "$name", "coordinate": [lng, lat,]};
 
-    setState(() {});
+      markersList.clear();
+      markersList.add(Marker(icon: markerbitmap,
+          markerId: const MarkerId("0"),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(title: name)));
+    }
+      setState(() {});
 
-    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
+      googleMapController.animateCamera(
+          CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
+
 
 
   }

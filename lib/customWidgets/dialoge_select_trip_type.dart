@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
-import '../create_intinerary/intinerary_view_model/Trip_states.dart';
-import '../create_intinerary/intinerary_view_model/trip_cubits.dart';
 
 class SelectTripType extends StatefulWidget {
   final List<String> tripList;
   final List<bool> boolList;
-  final TextEditingController textEditingController;
 
-  const SelectTripType({Key? key, required this.textEditingController, required this.tripList, required this.boolList})
+  const SelectTripType({Key? key,required this.tripList, required this.boolList})
       : super(key: key);
 
   @override
@@ -25,7 +21,9 @@ class _SelectTripTypeState extends State<SelectTripType> {
   List<String> list = [];
   List<bool> boolList = [];
   TextEditingController addMoreController = TextEditingController();
-
+  String search = '';
+  List<String> selectedList = [];
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -50,6 +48,7 @@ class _SelectTripTypeState extends State<SelectTripType> {
                   hintText: 'Add more',
                   size: size,
                   maxLine: 1,
+
                   textInputType: TextInputType.text,
                   textEditingController: addMoreController,
                   suffixIcon: IconButton(onPressed: (){
@@ -64,6 +63,7 @@ class _SelectTripTypeState extends State<SelectTripType> {
                      Icons.send_outlined,
                    ),
                   ),
+
                   icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                 ),
 
@@ -96,7 +96,10 @@ class _SelectTripTypeState extends State<SelectTripType> {
                       ),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).pop(selectedList);
+
+                      },
                       child: Container(
                         height: 46.0,
                         width: 120.0,
@@ -151,68 +154,82 @@ class _SelectTripTypeState extends State<SelectTripType> {
                   hintText: 'Search',
                   size: size,
                   maxLine: 1,
+                  onChange: (v){
+                    search = v;
+                    setState(() {
+
+                    });
+                  },
                   textInputType: TextInputType.text,
-                  textEditingController: widget.textEditingController,
+                  textEditingController: searchController,
                   icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                 ),
               ),
               Expanded(
                 child: GridView.builder(
                   itemCount: list.length,
-                  itemBuilder: (context, index) => Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 44.0,
-                        width: 140.0,
-                        padding: const EdgeInsets.only(left: 5),
-                        decoration: BoxDecoration(
-                            color: AppColor.whiteColor,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: AppColor.borderColor2, width: 1)),
-                        child: Row(
-                          children: [
-                             Text(
-                              "${list[index]}",
-                              style: TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColor.headingColor2),
-                            ),
-                            const Spacer(),
-                            Theme(
-                              data: Theme.of(context).copyWith(
-                                unselectedWidgetColor:  AppColor.aquaCasper,),
-                              child:Checkbox(
-                                value: boolList[index],
-                                onChanged: (bool? value) {
-                                  if(value == null){
-                                    return;
-                                  }
-                                  if(value == true){
-                                    boolList[index] = true;
-                                    setState(() {
-
-                                    });
-                                  }else{
-                                    boolList[index] = false;
-                                    setState(() {
-
-                                    });
-                                  }
-                                },
-                                focusColor:  AppColor.aquaCasper,
-                                activeColor: AppColor.aquaCasper,
-
+                  itemBuilder: (context, index) {
+                    if(search.isNotEmpty && !list[index].toString().toLowerCase().contains(search.toLowerCase())){
+                      return SizedBox();
+                    }
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 44.0,
+                          width: 140.0,
+                          padding: const EdgeInsets.only(left: 5),
+                          decoration: BoxDecoration(
+                              color: AppColor.whiteColor,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: AppColor.borderColor2, width: 1)),
+                          child: Row(
+                            children: [
+                              Text(
+                                "${list[index]}",
+                                style: TextStyle(
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColor.headingColor2),
                               ),
-                            )
-                          ],
+                              const Spacer(),
+                              Theme(
+                                data: Theme.of(context).copyWith(
+                                  unselectedWidgetColor:  AppColor.aquaCasper,),
+                                child:Checkbox(
+                                  value: boolList[index],
+                                  onChanged: (bool? value) {
+                                    if(value == null){
+                                      return;
+                                    }
+                                    if(value == true){
+                                      selectedList.add(list[index]);
+                                      boolList[index] = true;
+                                      setState(() {
+
+                                      });
+                                    }else{
+                                      selectedList.remove(list[index]);
+
+                                      boolList[index] = false;
+                                      setState(() {
+
+                                      });
+                                    }
+                                  },
+                                  focusColor:  AppColor.aquaCasper,
+                                  activeColor: AppColor.aquaCasper,
+
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    );
+                  },
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 10.0,

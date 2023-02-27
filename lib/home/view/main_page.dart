@@ -6,6 +6,8 @@ import 'package:sarya/home/view/itinerary_home_screen.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import 'package:sarya/theme/custom_navi_bar.dart';
 
+import '../../shop/view/shop_home_screen.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -27,7 +29,7 @@ class _MainPageState extends State<MainPage> {
       screens: [
         Container(),
         const ItineraryScreen(),
-        Container(),
+        const ShopScreen(),
         Container(),
         Container(),
 

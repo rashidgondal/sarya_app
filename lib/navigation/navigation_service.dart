@@ -39,8 +39,16 @@ class NavigationService {
     }
   }
 
-  goBack() {
-    return navigatorKey.currentState!.pop();
+  goBack({dynamic value}) {
+    if(value != null)
+      {
+        return navigatorKey.currentState!.pop(value);
+
+      }else{
+
+      return navigatorKey.currentState!.pop();
+
+    }
   }
 
   maybeGoBack() {

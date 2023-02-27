@@ -33,5 +33,6 @@ const String bankDetailRoute            = "Bank Detail Screen";
 const String bankUpdateRoute            = "Bank Update Screen";
 const String searchPlacesRoute          = "Search Places Screen";
 const String foodShoppingRoute          = "Food Shopping Screen";
+const String searchItineraryRoute       = "Search Screen";
 
 

@@ -22,6 +22,7 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
   List<String> list = [];
   List<bool> boolList = [];
   TextEditingController addMoreController = TextEditingController();
+  List<String> tempList = [];
 
 
   @override
@@ -96,7 +97,7 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
                     ),
                     InkWell(
                       onTap: () {
-
+                        Navigator.of(context).pop(tempList);
                       },
                       child: Container(
                         height: 46.0,
@@ -185,15 +186,16 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
                                   }
                                   if(value == true)
                                   {
+                                    tempList.add(list[index]);
                                     boolList[index] = true;
                                     setState(() {
-
                                     });
                                   }
                                   else{
+                                    tempList.remove(list[index]);
+
                                     boolList[index] = false;
                                     setState(() {
-
                                     });
                                   }
                                 },

@@ -8,9 +8,22 @@ class SharedPrefs {
    final String _profilePathKey        = 'Profile pic path';
    final String _saveUserDataKey       = 'Save user';
    final String _tokenKey              = 'Save token';
+   final String _itineraryIDKey        = 'Save Key';
+   final String _destinationCountryKey  = 'Destination Country Key';
 
 
-    Future getUser() async {
+
+   Future getDestinationCountries() async {
+     final prefs = await SharedPreferences.getInstance();
+     return json.decode(prefs.getString(_destinationCountryKey)!);
+   }
+
+   Future<void> saveDestinationCountries(dynamic value) async {
+     final prefs = await SharedPreferences.getInstance();
+     prefs.setString(_destinationCountryKey, json.encode(value));
+   }
+
+   Future getUser() async {
     final prefs = await SharedPreferences.getInstance();
     return json.decode(prefs.getString(_saveUserDataKey)!);
   }
@@ -50,6 +63,20 @@ class SharedPrefs {
      final prefs = await SharedPreferences.getInstance();
      prefs.setString(_tokenKey, value);
    }
+
+   Future getItineraryID() async {
+     final prefs = await SharedPreferences.getInstance();
+     return prefs.getString(_itineraryIDKey);
+   }
+
+   Future<void> saveItineraryID(dynamic value) async {
+     final prefs = await SharedPreferences.getInstance();
+     prefs.setString(_itineraryIDKey, value);
+   }
+
+
+
+
 
    Future<void> clearCache() async {
      final prefs = await SharedPreferences.getInstance();

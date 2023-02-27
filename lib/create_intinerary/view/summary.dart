@@ -1,4 +1,10 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sarya/extensions/string_extension.dart';
+import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/utils/constant.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
@@ -8,7 +14,8 @@ import '../../locator.dart';
 
 class SummaryScreen extends StatefulWidget {
   final String routeName;
-  const SummaryScreen({Key? key, required this.routeName}) : super(key: key);
+  final Map map;
+  const SummaryScreen({Key? key, required this.routeName,required this.map}) : super(key: key);
 
   @override
   State<SummaryScreen> createState() => _SummaryScreenState();
@@ -17,14 +24,37 @@ class SummaryScreen extends StatefulWidget {
 class _SummaryScreenState extends State<SummaryScreen> {
 
 
+  // on below line we have set the camera position
+  static final CameraPosition _kGoogle = const CameraPosition(
+    target: LatLng(19.0759837, 72.8776559),
+    zoom: 1,
+  );
+
+  Set<Marker> _marker = HashSet<Marker>();
+  late GoogleMapController _mapController;
 
   late NavigationService _navigationService;
+  List listIncluded =[{"title":"Checklist","icon":"checklist_icon"},{"title":"Airport","icon":"airplane_icon"},{"title":"Transport","icon":"transport_icoon"},{"title":"Accommodation","icon":"accomadation"},
+    {"title":"Activities","icon":"activityy_Icon"},{"title":"Breakfast","icon":"lunch_icon"},{"title":"Lunch","icon":"lunch_icon"},{"title":"Dinner","icon":"lunch_icon"},{"title":"Shopping","icon":"market_icon"},{"title":"Restaurant","icon":"coffee_icon"}
+  ];
+
+  var listOfCountries = [];
+
+  SharedPrefs sharedPrefs = SharedPrefs();
 
   @override
   void initState() {
+    getSelectedCountries();
     super.initState();
     _navigationService = locator<NavigationService>();
 
+  }
+
+  getSelectedCountries()async{
+    listOfCountries =await sharedPrefs.getDestinationCountries();
+    setState(() {
+
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -168,50 +198,50 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 Container(
                   height: size.height * 0.200,
                   width: size.width,
-                  color: AppColor.lightIndigo,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: AssetImage('lib/assets/images/img3.jpeg'),fit: BoxFit.fill)
+                  ),
                 ),
                const SizedBox(height: 10.0,),
                 SizedBox(
                   height: 91.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          SizedBox(
-                            height: 60.0,
-                            width: 70.0,
-                            child: Icon(Icons.question_mark, ),
-                          ),
-                          SizedBox(height: 5,),
-                          Text("Malaysia", style: TextStyle(fontSize: 13,color: AppColor.headingColor2, fontWeight: FontWeight.w500),)
-
-
-                        ],
-                      ),
-                      const SizedBox(width: 20,),
-                      Column(
-
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          SizedBox(
-                            height: 60.0,
-                            width: 70.0,
-                            child: Icon(Icons.question_mark, ),
-                          ),
-                          SizedBox(height: 5,),
-                          Text("Dubai", style: TextStyle(fontSize: 13,color: AppColor.colorBlue,fontWeight: FontWeight.w500),)
-
-
-                        ],
-                      ),
-
-
-                    ],
+                  child:  ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: listOfCountries.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children:  [
+                            SizedBox(
+                              height: 60.0,
+                              width: 70.0,
+                              child: Icon(
+                                Icons.question_mark,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "${listOfCountries[index]}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppColor.headingColor2,
+                                  fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        width: 20,
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 15.0,),
@@ -297,6 +327,22 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               blurRadius: 3)
                         ]
                     ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: GoogleMap(
+                        mapType: MapType.normal,
+                        markers: _marker,
+                        initialCameraPosition: _kGoogle,
+                        mapToolbarEnabled: false,
+                        myLocationButtonEnabled: true,
+                        myLocationEnabled: true,
+                        zoomControlsEnabled: true,
+
+                        onMapCreated: (GoogleMapController controller) {
+                          _mapController = controller;
+                        },
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 15.0,),
@@ -307,14 +353,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       child:  Text("Summary", style: TextStyle(fontSize: 14.0,color: AppColor.colorBlue,fontWeight: FontWeight.w500),)),
                 ),
                 const SizedBox(height: 5.0,),
-                const Padding(
+                 Padding(
                   padding:  EdgeInsets.only(left: 29.0, right: 27.0),
                   child:  Align(
                       alignment: Alignment.centerLeft,
-                      child:  Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero", style: TextStyle(fontSize: 12.0,color: AppColor.headingColor2,fontWeight: FontWeight.w400),)),
+                      child:  Text("${widget.map['summary']}", style: TextStyle(fontSize: 12.0,color: AppColor.headingColor2,fontWeight: FontWeight.w400),)),
                 ),
                 const SizedBox(height: 15.0,),
-                const Padding(
+                 Padding(
                   padding:  EdgeInsets.only(left: 29.0, right: 27.0),
                   child:  Align(
                     alignment: Alignment.centerLeft,
@@ -327,7 +373,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                 style:TextStyle(fontSize: 14.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
                               ),
                               TextSpan(
-                                text: '\$1.5',
+                                text: '\$${"${widget.map['tripCost']}"}',
                                 style:TextStyle(fontSize: 13.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
                               )
                             ]
@@ -336,7 +382,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   ),
                 ),
                 const SizedBox(height: 10.0,),
-                const Padding(
+                 Padding(
                   padding:  EdgeInsets.only(left: 29.0, right: 27.0),
                   child:  Align(
                     alignment: Alignment.centerLeft,
@@ -349,7 +395,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                 style:TextStyle(fontSize: 14.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
                               ),
                               TextSpan(
-                                text: '3',
+                                text: '${"${widget.map['totalDays']}"}',
                                 style:TextStyle(fontSize: 13.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
                               )
                             ]
@@ -358,7 +404,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   ),
                 ),
                 const SizedBox(height: 10.0,),
-                const Padding(
+                 Padding(
                   padding:  EdgeInsets.only(left: 29.0, right: 27.0),
                   child:  Align(
                     alignment: Alignment.centerLeft,
@@ -367,11 +413,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             text: '',
                             children: <InlineSpan>[
                               TextSpan(
-                                text: 'Trip Days: ',
+                                text: 'Trip type: ',
                                 style:TextStyle(fontSize: 14.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
                               ),
                               TextSpan(
-                                text: '3',
+                                text: '${"${widget.map['tripType']}"}',
                                 style:TextStyle(fontSize: 13.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
                               )
                             ]
@@ -386,44 +432,45 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       alignment: Alignment.centerLeft,
                       child:  Text("Included", style: TextStyle(fontSize: 14.0,color: AppColor.colorBlue,fontWeight: FontWeight.w500),)),
                 ),
-                const SizedBox(height: 15.0,),
+                const SizedBox(height: 10.0,),
                       Padding(
-                  padding:const  EdgeInsets.only(left: 20.0, right: 27.0),
-                  child: Expanded(
-                    child: GridView.builder(
-                      itemCount: 10,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics:const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 65.0,
-                            width: 65.0,
-                            decoration: BoxDecoration(
-                                color: AppColor.whiteColor,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    color: AppColor.borderColor2, width: 1)),
+                          padding:const  EdgeInsets.only(left: 20.0, right: 27.0),
+                          child: GridView.builder(
+                            itemCount: listIncluded.length,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics:const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) => Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 65.0,
+                                  width: 65.0,
+                                  decoration: BoxDecoration(
+                                      color: AppColor.aquaCasper2,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: AppColor.borderColor2, width: 1)),
+                                  child: Center(
+                                    child: SvgPicture.asset("${listIncluded[index]['icon']}".svg),
+                                  ),
 
+                                ),
+                                const SizedBox(height: 5,),
+                                 Text("${listIncluded[index]['title']}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                          ]),
+
+
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              mainAxisSpacing: 10.0,
+                              crossAxisSpacing: 0.0,
+                            ),
                           ),
-                          const SizedBox(height: 5,),
-                          const Text("Accomodation",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 10.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
-                    ]),
-
-
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 0.0,
-                      ),
-                    ),
-                  ),
                 ),
 
 

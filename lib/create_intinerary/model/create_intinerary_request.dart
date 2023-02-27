@@ -8,6 +8,9 @@ class CreateIntineraryRequest {
   int? totalDays;
   int? step;
   List<Days>? days;
+  List<String>? checklist;
+  bool? live;
+
 
   CreateIntineraryRequest(
       {this.destination,
@@ -18,11 +21,17 @@ class CreateIntineraryRequest {
         this.tripType,
         this.totalDays,
         this.step,
-        this.days});
+        this.checklist,
+        this.days,
+        this.live,
+      });
 
   CreateIntineraryRequest.fromJson(Map<String, dynamic> json) {
     destination = json['destination'].cast<String>();
+    checklist = json['checklist'].cast<String>();
     title = json['title'];
+    live = json['live'];
+
     summary = json['summary'];
     cost = json['cost'];
     tripCost = json['tripCost'];
@@ -40,6 +49,8 @@ class CreateIntineraryRequest {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['destination'] = this.destination;
+    data['live'] = this.live;
+    data['checklist'] = this.checklist;
     data['title'] = this.title;
     data['summary'] = this.summary;
     data['cost'] = this.cost;
@@ -58,13 +69,13 @@ class Days {
   String? country;
   String? airport;
   List<String>? transportation;
-  Accomodation? accomodation;
+  List<Accomodation>? accomodation;
   List<String>? activities;
   Breakfast? breakfast;
   Breakfast? lunch;
   Breakfast? dinner;
-  String? shops;
-  String? market;
+  Breakfast? coffeeClubsLounges;
+  Breakfast? marketMallsStores;
 
   Days(
       {this.country,
@@ -75,16 +86,20 @@ class Days {
         this.breakfast,
         this.lunch,
         this.dinner,
-        this.shops,
-        this.market});
+        this.coffeeClubsLounges,
+        this.marketMallsStores
+      });
 
   Days.fromJson(Map<String, dynamic> json) {
     country = json['country'];
     airport = json['airport'];
     transportation = json['transportation'].cast<String>();
-    accomodation = json['accomodation'] != null
-        ? new Accomodation.fromJson(json['accomodation'])
-        : null;
+    if (json['accomodation'] != null) {
+      accomodation = <Accomodation>[];
+      json['accomodation'].forEach((v) {
+        accomodation!.add(new Accomodation.fromJson(v));
+      });
+    }
     activities = json['activities'].cast<String>();
     breakfast = json['breakfast'] != null
         ? new Breakfast.fromJson(json['breakfast'])
@@ -93,8 +108,12 @@ class Days {
     json['lunch'] != null ? new Breakfast.fromJson(json['lunch']) : null;
     dinner =
     json['dinner'] != null ? new Breakfast.fromJson(json['dinner']) : null;
-    shops = json['shops'];
-    market = json['market'];
+    coffeeClubsLounges = json['coffeeClubsLounges'] != null
+        ? new Breakfast.fromJson(json['coffeeClubsLounges'])
+        : null;
+    marketMallsStores = json['marketMallsStores'] != null
+        ? new Breakfast.fromJson(json['marketMallsStores'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -103,7 +122,7 @@ class Days {
     data['airport'] = this.airport;
     data['transportation'] = this.transportation;
     if (this.accomodation != null) {
-      data['accomodation'] = this.accomodation!.toJson();
+      data['accomodation'] = this.accomodation!.map((v) => v.toJson()).toList();
     }
     data['activities'] = this.activities;
     if (this.breakfast != null) {
@@ -115,8 +134,12 @@ class Days {
     if (this.dinner != null) {
       data['dinner'] = this.dinner!.toJson();
     }
-    data['shops'] = this.shops;
-    data['market'] = this.market;
+    if (this.coffeeClubsLounges != null) {
+      data['coffeeClubsLounges'] = this.coffeeClubsLounges!.toJson();
+    }
+    if (this.marketMallsStores != null) {
+      data['marketMallsStores'] = this.marketMallsStores!.toJson();
+    }
     return data;
   }
 }

@@ -16,27 +16,27 @@ class CreateIntineraryRepository {
 
   final SaryaAPI _saryaAPI = SaryaAPI();
 
-  Future<CreateIntineraryResponse> createIntinerary({var body}) async {
+  Future<dynamic> createIntinerary({var body}) async {
     try {
-      log('body......$body',
-          name: ' createIntinerary | CreateIntineraryRepository');
+
       var data = await _saryaAPI.createIntinerary(body: body);
-      log('data......$data',
-          name: ' createIntinerary | CreateIntineraryRepository');
-      return CreateIntineraryResponse.fromJson(data);
+
+
+      return data;
     } catch (e) {
+
       rethrow;
     }
   }
 
-  Future<CreateIntineraryResponse> updateIntinerary({required body, required String id}) async {
+  Future<dynamic> updateIntinerary({required body, required String id}) async {
     try {
       log('body......$body',
-          name: ' createIntinerary | CreateIntineraryRepository');
+          name: ' updateIntinerary | CreateIntineraryRepository');
       var data = await _saryaAPI.updateIntinerary(body: body, intineraryID: id);
       log('data......$data',
-          name: ' createIntinerary | CreateIntineraryRepository');
-      return CreateIntineraryResponse.fromJson(data);
+          name: ' updateIntinerary | CreateIntineraryRepository');
+      return data;
     } catch (e) {
       rethrow;
     }
@@ -86,6 +86,16 @@ class CreateIntineraryRepository {
       return CheckListResponse.fromJson(data);
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<dynamic> getAirport() async{
+    try{
+      var result  = await _saryaAPI.getAirport();
+      print("getAirport .............$result");
+      return result;
+    }catch(e){
+      return e;
     }
   }
 

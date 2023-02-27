@@ -13,6 +13,7 @@ import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../customWidgets/custom_text_field.dart';
 import '../../customWidgets/text_decorated_icon.dart';
+import '../model/day_design_intinerary_request.dart'as create_intenerary;
 
 class FoodAndShoppingInformation extends StatefulWidget {
   final Map map;
@@ -30,9 +31,13 @@ class _FoodAndShoppingInformationState
   final ImagePicker _picker = ImagePicker();
   TextEditingController taxController = TextEditingController();
   TextEditingController commentController = TextEditingController();
+  double ratingData =0.0;
+  String nameOfPlace ='';
+  create_intenerary.Location location = create_intenerary.Location();
 
   @override
   void initState() {
+
     _configureAmplify();
     super.initState();
     _navigationService = locator<NavigationService>();
@@ -119,33 +124,23 @@ class _FoodAndShoppingInformationState
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+
                 InkWell(
                   onTap: () {
-                    // _navigationService.navigateTo(draftIntineraryRoute);
-                  },
-                  child: Container(
-                    height: 46.0,
-                    width: 150.0,
-                    decoration: BoxDecoration(
-                        color: AppColor.colorLiteBlack4,
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: const Center(
-                      child: Text(
-                        "Save",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.colorBlack),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                InkWell(
-                  onTap: () {
-                    _navigationService.navigateTo(summaryRoutSold);
+
+                    int rate = ratingData.toInt();
+                    create_intenerary.Breakfast? breakfast = create_intenerary.Breakfast(
+                        location: location,
+                        name: nameOfPlace,
+                        comments: commentController.text,
+                        coupon:taxController.text,
+                        images: [],
+                        imagesPublic:[],
+                        rating: rate
+
+                    );
+
+                    _navigationService.goBack(value: breakfast);
                   },
                   child: Container(
                     height: 46.0,
@@ -155,7 +150,7 @@ class _FoodAndShoppingInformationState
                         borderRadius: BorderRadius.circular(8.0)),
                     child: const Center(
                       child: Text(
-                        "Continue",
+                        "Done",
                         style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w500,
@@ -164,6 +159,7 @@ class _FoodAndShoppingInformationState
                     ),
                   ),
                 ),
+
               ],
             ),
           ),
@@ -179,7 +175,18 @@ class _FoodAndShoppingInformationState
                   ),
                   InkWell(
                       onTap: () {
-                        _navigationService.navigateTo(searchPlacesRoute);
+                        _navigationService.navigateTo(searchPlacesRoute, arguments: {"type":"", "from":"food"})!.then((value){
+                          if(value != null){
+                            Map map = value;
+                            print("name.......${map['name']}");
+                            print("locat.......${map['coordinate']}");
+                            location.coordinates = map['coordinate'];
+                            nameOfPlace = map['name'];
+                            setState(() {
+
+                            });
+                          }
+                        });
                       },
                       child: TextDecoratedContainer(
                           icon: Icon(
@@ -188,7 +195,7 @@ class _FoodAndShoppingInformationState
                             size: 20,
                           ),
                           titleWidget: Text(
-                            'Search Location',
+                            nameOfPlace.isEmpty?'Search Location':nameOfPlace,
                             style: TextStyle(
                                 fontSize: 15.0, color: AppColor.headingColor2),
                           ),
@@ -336,6 +343,10 @@ class _FoodAndShoppingInformationState
                             ),
                             onRatingUpdate: (rating) {
                               print(rating);
+                              ratingData = rating;
+                              setState(() {
+
+                              });
                             },
                           ),
                         ],

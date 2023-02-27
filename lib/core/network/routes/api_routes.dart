@@ -23,7 +23,16 @@ class ApiRoutes {
   static const String transport         = '${_base_URL}transport';
   static const String trip              = '${_base_URL}trip';
   static const String checklist         = '${_base_URL}checklist';
+  static const String updateItinerary   = '${_base_URL}itinerary/';
 
+  // created intineraries
 
+  static const String getAllIntinerary        = '${_base_URL}itinerary';
+  static const String getIntineraryByStatus   = '${_base_URL}itinerary?live=';
+  static const String publicIntinerary        = '${_base_URL}itinerary/public';
+  static const String searchIntinerary        = '${_base_URL}itinerary/public?search=';
+
+  //airport data api
+  static const String airport        = 'https://airlabs.co/api/v9/airports?iata_code=CDG&api_key=44d8a4aa-4c02-4a5b-9fd2-f21717ee9d4c';
 
 }

@@ -94,7 +94,8 @@ class SaryaAPI {
     try {
       String url = '';
       url = ApiRoutes.createIntinerary;
-      return await _http.iPost(url, data: body);
+      var result = await _http.iPost(url, data: body);
+      return result;
     } catch (e) {
       rethrow;
     }
@@ -103,7 +104,7 @@ class SaryaAPI {
   Future<dynamic> updateIntinerary({required body, required String intineraryID}) async{
     try {
       String url = '';
-      url = ApiRoutes.update+intineraryID;
+      url = ApiRoutes.updateItinerary+intineraryID;
       return await _http.iPut(url, data: body);
     } catch (e) {
       rethrow;
@@ -152,4 +153,57 @@ class SaryaAPI {
     }
   }
 
- }
+
+  Future<dynamic> getAllItinerary() async{
+    try {
+      String url = '';
+      url = ApiRoutes.getAllIntinerary;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getItineraryByStatus({required bool status}) async{
+    try {
+      String url = '';
+      url = ApiRoutes.getIntineraryByStatus+"$status";
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getPublicItinerary() async{
+    try {
+      String url = '';
+      url = ApiRoutes.publicIntinerary;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getSearchItinerary({required String searchedKeyword}) async{
+    try {
+      String url = '';
+      url = ApiRoutes.searchIntinerary+searchedKeyword;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getAirport() async{
+    try {
+      String url = '';
+      url = ApiRoutes.airport;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
+
+}

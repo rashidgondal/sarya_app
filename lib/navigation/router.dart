@@ -31,10 +31,12 @@ import '../payments/view/bank_detail.dart';
 import '../payments/view/bank_update.dart';
 import '../settings/avatar/view/update_avatar.dart';
 import '../settings/view/settings_home_screen.dart';
+import '../shop/view/search_screen.dart';
 import 'router_path.dart' as routes;
 
 Route<dynamic> generateRoute(RouteSettings settings) {
 
+  print("setting......${settings.name}");
   switch (settings.name) {
     case routes.loginRout:
       return MaterialPageRoute(
@@ -83,15 +85,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case routes.summaryRoutStart:
       return MaterialPageRoute(
-        builder: (context) =>  const SummaryScreen(routeName: start,),
+        builder: (context) =>   SummaryScreen(routeName: start, map: settings.arguments as Map,),
       );
     case routes.summaryRoutSold:
       return MaterialPageRoute(
-        builder: (context) =>  const SummaryScreen(routeName: sold,),
+        builder: (context) =>   SummaryScreen(routeName: sold, map: settings.arguments as Map,),
       );
     case routes.summaryRoutEdit:
       return MaterialPageRoute(
-        builder: (context) =>  const SummaryScreen(routeName: edit,),
+        builder: (context) =>   SummaryScreen(routeName: edit, map: settings.arguments as Map,),
       );
     case routes.designIntineraryRoute:
       return MaterialPageRoute(
@@ -103,7 +105,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case routes.dayDesignRoute:
       return MaterialPageRoute(
-        builder: (context) =>  const DayDesignIntineraryScreen(),
+        builder: (context) =>   DayDesignIntineraryScreen(map: settings.arguments as Map,),
       );
     case routes.checkListRoute:
       return MaterialPageRoute(
@@ -156,10 +158,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (context) =>  const UpdateBankDetails());
     case routes.searchPlacesRoute:
       return MaterialPageRoute(
-          builder: (context) =>  const SearchPlacesScreen());
+          builder: (context) =>   SearchPlacesScreen(map: settings.arguments as Map,));
     case routes.foodShoppingRoute:
       return MaterialPageRoute(
           builder: (context) => FoodAndShoppingInformation(map: settings.arguments as Map,));
+    case routes.searchItineraryRoute:
+      return MaterialPageRoute(
+          builder: (context) =>  const SearchItineraryScreen());
 
     default:
       return MaterialPageRoute(

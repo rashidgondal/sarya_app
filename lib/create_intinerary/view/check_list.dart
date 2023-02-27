@@ -25,13 +25,24 @@ class _CheckListScreenState extends State<CheckListScreen> {
   List<String> listOfCheckList = [];
   List<bool> listOfBool = [];
   TextEditingController addMoreController = TextEditingController();
+  List<String> selectedCheckList = [];
 
   @override
   void initState() {
     listOfBool = widget.map['listOfBool'];
     listOfCheckList = widget.map['checklist'];
+    print("listOfBool............");
     super.initState();
     _navigationService = locator<NavigationService>();
+  }
+
+  @override
+  void dispose() {
+    listOfBool.clear();
+    listOfCheckList.clear();
+    super.dispose();
+
+
   }
 
   @override
@@ -99,8 +110,8 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        _navigationService
-                            .navigatePushReplace(designIntineraryRoute);
+                        _navigationService.goBack(value: selectedCheckList);
+
                       },
                       child: Container(
                         height: 46.0,
@@ -169,11 +180,14 @@ class _CheckListScreenState extends State<CheckListScreen> {
                                       return;
                                     }
                                     if(value == true){
+                                      selectedCheckList.add(listOfCheckList[index]);
                                       listOfBool[index] = true;
                                       setState(() {
 
                                       });
                                     }else{
+                                      selectedCheckList.remove(listOfCheckList[index]);
+
                                       listOfBool[index] = false;
                                       setState(() {
 

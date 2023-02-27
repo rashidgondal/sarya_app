@@ -6,9 +6,9 @@ import 'package:sarya/theme/color_scheme.dart';
 import 'custom_text_field.dart';
 
 class TripEstimationCost extends StatefulWidget {
-  final TextEditingController textEditingController;
 
-  const TripEstimationCost({Key? key, required this.textEditingController})
+
+  const TripEstimationCost({Key? key,})
       : super(key: key);
 
   @override
@@ -16,6 +16,8 @@ class TripEstimationCost extends StatefulWidget {
 }
 
 class _TripEstimationCostState extends State<TripEstimationCost> {
+  TextEditingController tripEstimatedCostController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -31,7 +33,7 @@ class _TripEstimationCostState extends State<TripEstimationCost> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(0);
 
                   },
                   child: Container(
@@ -52,7 +54,11 @@ class _TripEstimationCostState extends State<TripEstimationCost> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    int cost = int.parse(tripEstimatedCostController.text);
+                    Navigator.of(context).pop(cost);
+
+                  },
                   child: Container(
                     height: 46.0,
                     width: 120.0,
@@ -107,8 +113,8 @@ class _TripEstimationCostState extends State<TripEstimationCost> {
                   hintText: 'Add cost (\$)',
                   size: size,
                   maxLine: 1,
-                  textInputType: TextInputType.text,
-                  textEditingController: widget.textEditingController,
+                  textInputType: TextInputType.number,
+                  textEditingController: tripEstimatedCostController,
                     icon:  Row(children: [SvgPicture.asset("cost_icon".svg)])
                 ),
               ),

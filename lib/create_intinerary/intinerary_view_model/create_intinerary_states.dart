@@ -27,7 +27,7 @@ class CreateIntineraryLoading extends CreateIntineraryStates {
 }
 
 class CreateIntineraryLoaded extends CreateIntineraryStates {
-  final CreateIntineraryResponse createIntineraryResponse;
-  const CreateIntineraryLoaded({required this.createIntineraryResponse});
+
+  const CreateIntineraryLoaded();
 }
 

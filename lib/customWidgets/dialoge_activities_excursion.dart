@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
-import 'package:sarya/customWidgets/text_decorated_icon.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 class ActivitiesExcursion extends StatefulWidget {
   final List<String> listOfActivity;
   final List<bool> listOfBool;
-  final TextEditingController textEditingController;
 
   const ActivitiesExcursion({Key? key,
-                required this.textEditingController,
                 required this.listOfActivity,
                 required this.listOfBool})
       : super(key: key);
@@ -26,7 +22,10 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
   List<String> list = [];
   List<bool> boolList = [];
   TextEditingController addMoreController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+  String search = '';
 
+  List<String> tempList = [];
 
   @override
   void initState() {
@@ -73,7 +72,7 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
               Container(
                 padding:const  EdgeInsets.symmetric(horizontal: 1),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     InkWell(
                       onTap: () {
@@ -97,9 +96,11 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
                         ),
                       ),
                     ),
-
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).pop(tempList);
+
+                      },
                       child: Container(
                         height: 46.0,
                         width: 120.0,
@@ -158,8 +159,12 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
                     hintText: 'Search',
                     size: size,
                     maxLine: 1,
-                    textInputType: TextInputType.text,
-                    textEditingController: widget.textEditingController,
+                    onChange: (v){
+                      search = v;
+                      setState(() {
+                      });
+                    },textInputType: TextInputType.text,
+                    textEditingController: searchController,
                     icon: Row(children: [SvgPicture.asset('search_icon'.svg)],),
                   ),
                 ),),
@@ -183,7 +188,11 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
               Expanded(
                 child: GridView.builder(
                   itemCount: widget.listOfActivity.length,
-                  itemBuilder: (context, index) => Row(
+                  itemBuilder: (context, index) {
+                    if(search.isNotEmpty && !list[index].toString().toLowerCase().contains(search.toLowerCase())){
+                      return SizedBox();
+                    }
+                    return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -237,7 +246,8 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
                         ),
                       ),
                     ],
-                  ),
+                  );
+                    },
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 10.0,

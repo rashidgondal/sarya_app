@@ -17,6 +17,7 @@ import 'package:sarya/authentication/signup/signup_view_model/signup_cubits.dart
 import 'package:sarya/create_intinerary/intinerary_view_model/activity_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/checklist_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/transport_cubits.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/update_intinerary_cubits.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/payments/payments_view_model/update_bank_cubits.dart';
@@ -25,8 +26,13 @@ import 'package:sarya/settings/avatar/view_model/update_avatar_cubits.dart';
 import 'package:sarya/settings/email/view_model/email_cubits.dart';
 import 'package:sarya/settings/name/view_model/name_cubits.dart';
 import 'package:sarya/settings/phone/view_model/phone_cubits.dart';
+import 'package:sarya/shop/shop_view_model/public_cubits.dart';
+import 'package:sarya/shop/shop_view_model/status_itinerary_cubits.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import 'authentication/signin/signin_view_model/signin_cubits.dart';
+import 'create_intinerary/intinerary_view_model/airport_cubits.dart';
+import 'create_intinerary/intinerary_view_model/create_intinerary_cubits.dart';
+import 'create_intinerary/intinerary_view_model/day_update_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/trip_cubits.dart';
 import 'navigation/navigation_service.dart';
 import  'navigation/router.dart' as routes;
@@ -64,6 +70,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => CheckListCubits()),
         BlocProvider(create: (context) => ActivityCubits()),
         BlocProvider(create: (context) => TransportCubits()),
+        BlocProvider(create: (context) => PublicItineraryCubits()),
+        BlocProvider(create: (context) => CreateIntineraryCubits()),
+        BlocProvider(create: (context) => UpdateIntineraryCubits()),
+        BlocProvider(create: (context) => AirportCubits()),
+        BlocProvider(create: (context) => StatusItineraryCubits()),
+        BlocProvider(create: (context) => DayUpdateIntineraryCubits()),
       ],
       child: MaterialApp(
         title: 'Sarya',
