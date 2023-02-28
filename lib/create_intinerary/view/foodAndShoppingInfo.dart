@@ -1,19 +1,21 @@
 import 'dart:io';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:minio/minio.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
+
 import '../../customWidgets/custom_text_field.dart';
 import '../../customWidgets/text_decorated_icon.dart';
-import '../model/day_design_intinerary_request.dart'as create_intenerary;
+import '../model/day_design_intinerary_request.dart' as create_intenerary;
 
 class FoodAndShoppingInformation extends StatefulWidget {
   final Map map;
@@ -31,14 +33,12 @@ class _FoodAndShoppingInformationState
   final ImagePicker _picker = ImagePicker();
   TextEditingController taxController = TextEditingController();
   TextEditingController commentController = TextEditingController();
-  double ratingData =0.0;
-  String nameOfPlace ='';
+  double ratingData = 0.0;
+  String nameOfPlace = '';
   create_intenerary.Location location = create_intenerary.Location();
 
   @override
   void initState() {
-
-    _configureAmplify();
     super.initState();
     _navigationService = locator<NavigationService>();
   }
@@ -49,44 +49,44 @@ class _FoodAndShoppingInformationState
     if (Images.isNotEmpty) {
       selectedImages!.addAll(Images);
     }
-    createAndUploadFile(selectedImages![0]);
+    UploadFile(selectedImages![0]);
     print("Image List Length:" + selectedImages!.length.toString());
     setState(() {});
   }
 
-  Future<void> _configureAmplify() async {
-    var amplifyConfig = '''{"foo": "bar"}''';
-    try {
-      final auth = AmplifyAuthCognito();
-      final storage = AmplifyStorageS3();
-      await Amplify.addPlugins([auth, storage]);
-
-      // call Amplify.configure to use the initialized categories in your app
-      await Amplify.configure(amplifyConfig);
-      safePrint('Amplify connig now');
-    } on Exception catch (e) {
-      safePrint('An error occurred configuring Amplify: $e');
-    }
+  double percentage = 0.0;
+  UploadFile(XFile file) async {
+    final minio = Minio(
+        endPoint: 's3.me-south-1.amazonaws.com',
+        accessKey: 'AKIAUNGGSVHDAGLUFYNY',
+        secretKey: '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',
+        region: 'me-south-1');
+    // String result =
+    //     await minio.fPutObject('testingsarya', '${file.name}', '${file.path}');
+    Uint8List bytes = File(file.path).readAsBytesSync();
+    print(bytes.length);
+    String result = await minio.putObject(
+      'sarya-assets',
+      'itinerary/${file.name}',
+      Stream<Uint8List>.value(bytes),
+      onProgress: (result) {
+        percentage = result / bytes.length;
+        print('$percentage');
+        setState(() {});
+      },
+    );
+    print('result......$result');
   }
 
-  Future<void> createAndUploadFile(XFile file) async {
-    // Create a dummy file
-    const exampleString = 'sarya-assets/itinerary';
-    final exampleFile = File(file.path)
-      ..createSync()
-      ..writeAsStringSync(exampleString);
-    // Upload the file to S3
-    try {
-      final UploadFileResult result = await Amplify.Storage.uploadFile(
-          local: exampleFile,
-          key: 'AKIAUNGGSVHDAGLUFYNY',
-          onProgress: (progress) {
-            safePrint('Fraction completed: ${progress.getFractionCompleted()}');
-          });
-      safePrint('Successfully uploaded file: ${result.key}');
-    } on StorageException catch (e) {
-      safePrint('Error uploading file: $e');
-    }
+  DeleteFile() async {
+    final minio = Minio(
+        endPoint: 's3.amazonaws.com',
+        accessKey: 'AKIAUNGGSVHDAGLUFYNY',
+        secretKey: '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',
+        region: 'us-east-1');
+    await minio.removeObject('testingsarya',
+        'image_picker_C6FC3806-B891-4DBE-B302-C559A0B4FA0B-33504-000046866EF40265.jpg');
+    print('Delete file');
   }
 
   @override
@@ -124,21 +124,18 @@ class _FoodAndShoppingInformationState
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-
                 InkWell(
                   onTap: () {
-
                     int rate = ratingData.toInt();
-                    create_intenerary.Breakfast? breakfast = create_intenerary.Breakfast(
-                        location: location,
-                        name: nameOfPlace,
-                        comments: commentController.text,
-                        coupon:taxController.text,
-                        images: [],
-                        imagesPublic:[],
-                        rating: rate
-
-                    );
+                    create_intenerary.Breakfast? breakfast =
+                        create_intenerary.Breakfast(
+                            location: location,
+                            name: nameOfPlace,
+                            comments: commentController.text,
+                            coupon: taxController.text,
+                            images: [],
+                            imagesPublic: [],
+                            rating: rate);
 
                     _navigationService.goBack(value: breakfast);
                   },
@@ -159,7 +156,6 @@ class _FoodAndShoppingInformationState
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
@@ -175,16 +171,18 @@ class _FoodAndShoppingInformationState
                   ),
                   InkWell(
                       onTap: () {
-                        _navigationService.navigateTo(searchPlacesRoute, arguments: {"type":"", "from":"food"})!.then((value){
-                          if(value != null){
+                        _navigationService.navigateTo(searchPlacesRoute,
+                            arguments: {
+                              "type": "",
+                              "from": "food"
+                            })!.then((value) {
+                          if (value != null) {
                             Map map = value;
                             print("name.......${map['name']}");
                             print("locat.......${map['coordinate']}");
                             location.coordinates = map['coordinate'];
                             nameOfPlace = map['name'];
-                            setState(() {
-
-                            });
+                            setState(() {});
                           }
                         });
                       },
@@ -195,7 +193,9 @@ class _FoodAndShoppingInformationState
                             size: 20,
                           ),
                           titleWidget: Text(
-                            nameOfPlace.isEmpty?'Search Location':nameOfPlace,
+                            nameOfPlace.isEmpty
+                                ? 'Search Location'
+                                : nameOfPlace,
                             style: TextStyle(
                                 fontSize: 15.0, color: AppColor.headingColor2),
                           ),
@@ -285,7 +285,28 @@ class _FoodAndShoppingInformationState
                                                 setState(() {});
                                               },
                                               icon: Icon(Icons.cancel)),
-                                        ))
+                                        )),
+                                    Visibility(
+                                      visible:
+                                          (percentage * 100).toInt() != 100,
+                                      child: Center(
+                                        child: CircularPercentIndicator(
+                                          radius: 25.0,
+                                          lineWidth: 4.0,
+                                          percent: percentage,
+                                          center: Text(
+                                              (percentage * 100)
+                                                      .toInt()
+                                                      .toString() +
+                                                  '%',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.green)),
+                                          progressColor: Color(0xFF5e59ed),
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 ),
                                 decoration: BoxDecoration(
@@ -344,9 +365,7 @@ class _FoodAndShoppingInformationState
                             onRatingUpdate: (rating) {
                               print(rating);
                               ratingData = rating;
-                              setState(() {
-
-                              });
+                              setState(() {});
                             },
                           ),
                         ],
