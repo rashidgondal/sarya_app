@@ -23,7 +23,6 @@ import '../../customWidgets/text_decorated_icon.dart';
 import '../intinerary_view_model/Trip_states.dart';
 import '../intinerary_view_model/update_intinerary_cubits.dart';
 import '../intinerary_view_model/update_intinerary_states.dart';
-import '../model/create_intinerary_request.dart';
 import '../model/design_intinerary_request.dart';
 
 
@@ -63,7 +62,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
       color: AppColor.whiteColor,
       child: SafeArea(
           child:  BlocBuilder<UpdateIntineraryCubits, UpdateIntineraryStates>(
-        builder: (context, state) {
+          builder: (context, state) {
           bool loading = false;
 
           if (state is UpdateIntineraryInitial) {
@@ -78,7 +77,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
             loading = false;
           }
 
-          return   DataLoading(
+          return DataLoading(
 
             isLoading: loading,
             child: Scaffold(

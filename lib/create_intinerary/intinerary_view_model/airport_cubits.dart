@@ -7,16 +7,17 @@ import 'package:sarya/helper/shared_prefs.dart';
 class AirportCubits extends Cubit<AirportStates> {
   AirportCubits(): super(AirportInitial());
 
-  Future getAirport() async{
+  Future getAirport({required searchKey}) async{
     try{
       emit(AirportLoading());
 
-      final List<AirportResponse>  res = await CreateIntineraryRepository.instance.getAirport();
-      List<bool> listOfBool = await List.filled(res.length, false);
+      var  res = await CreateIntineraryRepository.instance.getAirport(searchAirport: searchKey);
+      var  listOfAirport  = res["response"];
+      List<bool> listOfBool = await List.filled(listOfAirport.length, false);
 
       SharedPrefs pref = SharedPrefs();
 
-      emit(AirportLoaded(airportResponse: res, listOfBool: listOfBool));
+      emit(AirportLoaded(airportResponse: listOfAirport, listOfBool: listOfBool));
 
     }catch(e){
       emit(const AirportFailure(error: ''));

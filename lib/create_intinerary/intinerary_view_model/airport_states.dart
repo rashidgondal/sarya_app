@@ -25,8 +25,8 @@ class AirportLoading extends AirportStates {
 }
 
 class AirportLoaded extends AirportStates {
-  final List<AirportResponse> airportResponse;
+  var airportResponse;
   final List<bool> listOfBool;
-  const AirportLoaded({required this.airportResponse, required this.listOfBool});
+   AirportLoaded({required this.airportResponse, required this.listOfBool});
 }
 

@@ -10,6 +10,7 @@ import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../create_intinerary/intinerary_view_model/airport_cubits.dart';
 import '../../customWidgets/drawer_screen.dart';
+import '../../helper/helper_methods.dart';
 import '../../navigation/navigation_service.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -30,13 +31,14 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
    Map? map;
   late List<GeoJsonFeature> features;
   var boolList = [];
+
+
   @override
   void initState() {
     context.read<StatusItineraryCubits>().getStatusItinerary(status: true);
-
+    Flags.getImages();
     parseAndDrawAssetsOnMap();
     super.initState();
-    context.read<AirportCubits>().getAirport();
     _navigationService = locator<NavigationService>();
     getUserInfo();
   }
@@ -64,6 +66,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     setState(() {});
 
   }
+
+
 
   @override
   void didChangeDependencies() {

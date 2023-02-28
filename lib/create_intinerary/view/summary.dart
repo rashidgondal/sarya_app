@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarya/extensions/string_extension.dart';
@@ -10,7 +11,12 @@ import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
+import '../../customWidgets/data_loading.dart';
+import '../../helper/helper_methods.dart';
 import '../../locator.dart';
+import '../intinerary_view_model/summary_update_intinerary_cubits.dart';
+import '../intinerary_view_model/summary_update_intinerary_states.dart';
+import '../model/summary_update_intinerary_request.dart';
 
 class SummaryScreen extends StatefulWidget {
   final String routeName;
@@ -42,6 +48,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   SharedPrefs sharedPrefs = SharedPrefs();
 
+
   @override
   void initState() {
     getSelectedCountries();
@@ -50,8 +57,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   }
 
+
   getSelectedCountries()async{
     listOfCountries =await sharedPrefs.getDestinationCountries();
+
+
     setState(() {
 
     });
@@ -63,20 +73,38 @@ class _SummaryScreenState extends State<SummaryScreen> {
     return Container(
       color: AppColor.whiteColor,
       child: SafeArea(
+        child:  BlocBuilder<SummaryUpdateIntineraryCubits, SummaryUpdateIntineraryStates>(
+        builder: (context, state) {
+      bool loading = false;
+
+            if (state is SummaryUpdateIntineraryInitial) {
+              loading = false;
+            }
+
+            if (state is SummaryUpdateIntineraryLoading) {
+              loading = true;
+            }
+
+            if (state is SummaryUpdateIntineraryLoaded) {
+              loading = false;
+            }
+
+           return DataLoading(
+        isLoading: loading,
         child: Scaffold(
           backgroundColor: AppColor.whiteColor,
           appBar: AppBar(
             elevation: 0,
             toolbarHeight: 60,
             leading: IconButton(
-             icon: const Icon(
-               Icons.arrow_back_ios,
-               color: AppColor.lightIndigo,
-             ),
-             onPressed: () {
-               _navigationService.goBack();
-             },
-           ),
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: AppColor.lightIndigo,
+              ),
+              onPressed: () {
+                _navigationService.goBack();
+              },
+            ),
             backgroundColor: AppColor.aquaCasper2,
             title:const Text(
               "Summary",
@@ -96,100 +124,103 @@ class _SummaryScreenState extends State<SummaryScreen> {
             ],
           ),
           bottomNavigationBar: Container(
-            height: 120,
-            color: AppColor.whiteColor,
-            child:
-            widget.routeName  == sold ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-                    _navigationService.navigateTo(draftIntineraryRoute);
-                  },
-                  child: Container(
-                    height: 46.0,
-                    width: 150.0,
-                    decoration: BoxDecoration(
-                        color: AppColor.colorLiteBlack4,
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: const Center(
-                      child: Text(
-                        "Save",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.colorBlack),
+              height: 120,
+              color: AppColor.whiteColor,
+              child:
+              widget.routeName  == sold ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      SummaryUpdateIntineraryRequest summary = SummaryUpdateIntineraryRequest(live: true,step: 4);
+                      context.read<SummaryUpdateIntineraryCubits>().summaryUpdateIntinerary(summaryUpdateIntineraryRequest:summary, navigationService:  _navigationService, route:"Save");
+                      // _navigationService.navigateTo(draftIntineraryRoute);
+                    },
+                    child: Container(
+                      height: 46.0,
+                      width: 150.0,
+                      decoration: BoxDecoration(
+                          color: AppColor.colorLiteBlack4,
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: const Center(
+                        child: Text(
+                          "Save",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.colorBlack),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                InkWell(
-                  onTap: () {
-                    _navigationService.navigateTo(soldIntineraryRoute);
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      SummaryUpdateIntineraryRequest summary = SummaryUpdateIntineraryRequest(live: true,step: 4);
+                      context.read<SummaryUpdateIntineraryCubits>().summaryUpdateIntinerary(summaryUpdateIntineraryRequest:summary, navigationService:  _navigationService, route:"Sold");
 
-                  },
-                  child: Container(
-                    height: 46.0,
-                    width: 150.0,
-                    decoration: BoxDecoration(
-                        color: AppColor.buttonColor,
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: const Center(
-                      child: Text(
-                        "Sell",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.whiteColor),
+                    },
+                    child: Container(
+                      height: 46.0,
+                      width: 150.0,
+                      decoration: BoxDecoration(
+                          color: AppColor.buttonColor,
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: const Center(
+                        child: Text(
+                          "Sell",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.whiteColor),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ):
-            widget.routeName  == start ?
-            Center(child: InkWell(
-              onTap: () {},
-              child: Container(
-                height: 46.0,
-                width: 150.0,
-                decoration: BoxDecoration(
-                    color: AppColor.buttonColor,
-                    borderRadius: BorderRadius.circular(8.0)),
-                child: const Center(
-                  child: Text(
-                    "Start",
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.whiteColor),
+                ],
+              ):
+              widget.routeName  == start ?
+              Center(child: InkWell(
+                onTap: () {},
+                child: Container(
+                  height: 46.0,
+                  width: 150.0,
+                  decoration: BoxDecoration(
+                      color: AppColor.buttonColor,
+                      borderRadius: BorderRadius.circular(8.0)),
+                  child: const Center(
+                    child: Text(
+                      "Start",
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.whiteColor),
+                    ),
                   ),
                 ),
-              ),
-            ) ):
-            Center(child: InkWell(
-              onTap: () {},
-              child: Container(
-                height: 46.0,
-                width: 150.0,
-                decoration: BoxDecoration(
-                    color: AppColor.buttonColor,
-                    borderRadius: BorderRadius.circular(8.0)),
-                child: const Center(
-                  child: Text(
-                    "Edit",
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.whiteColor),
+              ) ):
+              Center(child: InkWell(
+                onTap: () {},
+                child: Container(
+                  height: 46.0,
+                  width: 150.0,
+                  decoration: BoxDecoration(
+                      color: AppColor.buttonColor,
+                      borderRadius: BorderRadius.circular(8.0)),
+                  child: const Center(
+                    child: Text(
+                      "Edit",
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.whiteColor),
+                    ),
                   ),
                 ),
-              ),
-            ) )
+              ) )
           ),
           body: SingleChildScrollView(
             physics:const BouncingScrollPhysics(),
@@ -199,10 +230,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   height: size.height * 0.200,
                   width: size.width,
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage('lib/assets/images/img3.jpeg'),fit: BoxFit.fill)
+                      image: DecorationImage(image: AssetImage('lib/assets/images/img3.jpeg'),fit: BoxFit.fill)
                   ),
                 ),
-               const SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
                 SizedBox(
                   height: 91.0,
                   child:  ListView.separated(
@@ -210,6 +241,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     physics: BouncingScrollPhysics(),
                     itemCount: listOfCountries.length,
                     itemBuilder: (BuildContext context, int index) {
+
+                      var image_index = Flags.listOfFlag.indexWhere(
+                              (element) =>
+                          element ==
+                              "lib/assets/flags/${listOfCountries[index]}.png");
+
                       return Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Column(
@@ -217,12 +254,16 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children:  [
                             SizedBox(
-                              height: 60.0,
-                              width: 70.0,
-                              child: Icon(
-                                Icons.question_mark,
-                              ),
-                            ),
+                                height: 60.0,
+                                width: 70.0,
+                                child: image_index != -1
+                                    ? Image.asset(Flags
+                                    .listOfFlag[image_index])
+                                    : Icon(
+                                  Icons.flag,
+                                  size: 40,
+                                  color: AppColor.lightIndigo,
+                                )),
                             SizedBox(
                               height: 5,
                             ),
@@ -251,18 +292,18 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     height: 76,
                     width: size.width,
                     decoration: BoxDecoration(
-                      color: AppColor.whiteColor,
-                      borderRadius:BorderRadius.circular(15) ,
-                      boxShadow: [
-                        BoxShadow(
-                            offset: const Offset(2, 2),
-                            color: Colors.grey.withOpacity(0.6),
-                            blurRadius: 3),
-                        BoxShadow(
-                            offset: const Offset(-3, -3),
-                            color: Colors.grey.withOpacity(0.1),
-                            blurRadius: 3)
-                      ]
+                        color: AppColor.whiteColor,
+                        borderRadius:BorderRadius.circular(15) ,
+                        boxShadow: [
+                          BoxShadow(
+                              offset: const Offset(2, 2),
+                              color: Colors.grey.withOpacity(0.6),
+                              blurRadius: 3),
+                          BoxShadow(
+                              offset: const Offset(-3, -3),
+                              color: Colors.grey.withOpacity(0.1),
+                              blurRadius: 3)
+                        ]
                     ),
                     child: ListTile(
                       title: const Text.rich(
@@ -293,12 +334,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         height: 30,
                         width: 50.0,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: AppColor.aquaCasper.withOpacity(0.5)
+                            borderRadius: BorderRadius.circular(15),
+                            color: AppColor.aquaCasper.withOpacity(0.5)
                         ),
-                        child:const Center(
+                        child: Center(
                           child: Text(
-                            "\$155",
+                            "\$${widget.map['itineraryCost']}",
                             style:  TextStyle(fontSize: 13.0, color: AppColor.lightIndigo),
                           ),
 
@@ -353,14 +394,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       child:  Text("Summary", style: TextStyle(fontSize: 14.0,color: AppColor.colorBlue,fontWeight: FontWeight.w500),)),
                 ),
                 const SizedBox(height: 5.0,),
-                 Padding(
+                Padding(
                   padding:  EdgeInsets.only(left: 29.0, right: 27.0),
                   child:  Align(
                       alignment: Alignment.centerLeft,
                       child:  Text("${widget.map['summary']}", style: TextStyle(fontSize: 12.0,color: AppColor.headingColor2,fontWeight: FontWeight.w400),)),
                 ),
                 const SizedBox(height: 15.0,),
-                 Padding(
+                Padding(
                   padding:  EdgeInsets.only(left: 29.0, right: 27.0),
                   child:  Align(
                     alignment: Alignment.centerLeft,
@@ -382,7 +423,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   ),
                 ),
                 const SizedBox(height: 10.0,),
-                 Padding(
+                Padding(
                   padding:  EdgeInsets.only(left: 29.0, right: 27.0),
                   child:  Align(
                     alignment: Alignment.centerLeft,
@@ -404,7 +445,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   ),
                 ),
                 const SizedBox(height: 10.0,),
-                 Padding(
+                Padding(
                   padding:  EdgeInsets.only(left: 29.0, right: 27.0),
                   child:  Align(
                     alignment: Alignment.centerLeft,
@@ -433,44 +474,44 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       child:  Text("Included", style: TextStyle(fontSize: 14.0,color: AppColor.colorBlue,fontWeight: FontWeight.w500),)),
                 ),
                 const SizedBox(height: 10.0,),
-                      Padding(
-                          padding:const  EdgeInsets.only(left: 20.0, right: 27.0),
-                          child: GridView.builder(
-                            itemCount: listIncluded.length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            physics:const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) => Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 65.0,
-                                  width: 65.0,
-                                  decoration: BoxDecoration(
-                                      color: AppColor.aquaCasper2,
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: AppColor.borderColor2, width: 1)),
-                                  child: Center(
-                                    child: SvgPicture.asset("${listIncluded[index]['icon']}".svg),
-                                  ),
-
-                                ),
-                                const SizedBox(height: 5,),
-                                 Text("${listIncluded[index]['title']}",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
-                          ]),
-
-
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              mainAxisSpacing: 10.0,
-                              crossAxisSpacing: 0.0,
+                Padding(
+                  padding:const  EdgeInsets.only(left: 20.0, right: 27.0),
+                  child: GridView.builder(
+                    itemCount: listIncluded.length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    physics:const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) => Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 65.0,
+                            width: 65.0,
+                            decoration: BoxDecoration(
+                                color: AppColor.aquaCasper2,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: AppColor.borderColor2, width: 1)),
+                            child: Center(
+                              child: SvgPicture.asset("${listIncluded[index]['icon']}".svg),
                             ),
+
                           ),
+                          const SizedBox(height: 5,),
+                          Text("${listIncluded[index]['title']}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                        ]),
+
+
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 0.0,
+                    ),
+                  ),
                 ),
 
 
@@ -479,6 +520,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
           ),
 
         ),
+
+      );})
+
       ),
     );
   }

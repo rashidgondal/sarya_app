@@ -37,7 +37,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool showPassword = true;
-
+@override
+  void dispose() {
+    userNameController.dispose();
+    passController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

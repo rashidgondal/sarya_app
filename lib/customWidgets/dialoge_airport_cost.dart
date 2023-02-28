@@ -1,14 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/Airport_states.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
+import '../create_intinerary/intinerary_view_model/airport_cubits.dart';
 import 'custom_text_field.dart';
 
 class AirportSelection extends StatefulWidget {
-  final TextEditingController textEditingController;
-
-  const AirportSelection({Key? key, required this.textEditingController})
+  const AirportSelection({Key? key})
       : super(key: key);
 
   @override
@@ -16,6 +18,11 @@ class AirportSelection extends StatefulWidget {
 }
 
 class _AirportSelectionState extends State<AirportSelection> {
+
+  final TextEditingController textEditingController = TextEditingController();
+
+  List<String> tempList = [];
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -51,7 +58,10 @@ class _AirportSelectionState extends State<AirportSelection> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop(tempList);
+
+                  },
                   child: Container(
                     height: 40.0,
                     width: 120.0,
@@ -78,7 +88,7 @@ class _AirportSelectionState extends State<AirportSelection> {
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
         content: Container(
           width: size.width,
-          height: size.height / 4.5,
+          height: size.height / 3.5,
           decoration: BoxDecoration(
               color: AppColor.whiteColor,
               borderRadius: BorderRadius.circular(12.0)),
@@ -105,44 +115,91 @@ class _AirportSelectionState extends State<AirportSelection> {
                   hintText: 'Search',
                   size: size,
                   maxLine: 1,
+                  onChange: (v){
+                    if(v.isEmpty){
+                      return;
+                    }
+                    context.read<AirportCubits>().getAirport(searchKey: v);
+                    setState(() {
+
+                    });
+                  },
                   textInputType: TextInputType.text,
-                  textEditingController: widget.textEditingController,
+                  textEditingController: textEditingController,
                   icon: Row(children: [SvgPicture.asset('search_icon'.svg)],),
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: 2,
+                child: BlocBuilder<AirportCubits, AirportStates>(
+                    builder: (context, state) {
 
-                  itemBuilder: (context, index) =>  Container(
-                    height: 44.0,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: const BoxDecoration(
-                      color: AppColor.whiteColor,
-                    ),
-                    child: Row(
-                      children: [
-                       const Icon(Icons.airplanemode_active_outlined, color: AppColor.colorBlue,),
-                        const SizedBox(width: 10,),
-                        const Text(
-                          "Dubai Internation airport",
-                          style: TextStyle(
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.w400,
-                              color: AppColor.headingColor),
-                        ),
-                        const Spacer(),
-                        Checkbox(
-                          value: true,
+                      if (state is AirportInitial) {
+                        return SizedBox();
+                      }
 
-                          onChanged: (bool? value) {},
-                        )
-                      ],
-                    ),
-                  ),
+                      if (state is AirportLoading) {
+                        Center(child: CupertinoActivityIndicator());
+                      }
 
-                ),
-              ),
+                      if (state is AirportLoaded) {
+                        var list = state.airportResponse;
+                        List<bool> listOfBool = state.listOfBool;
+                        return   ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (context, index) =>  Container(
+                            height: 44.0,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: const BoxDecoration(
+                              color: AppColor.whiteColor,
+                            ),
+                            child: CheckboxListTile(
+                              title:Text(
+                                "${list[index]["name"]}",
+                                style: TextStyle(
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColor.headingColor),
+                              ),
+                              onChanged:  (bool? value) {
+
+                                if(value == null){
+                                  return;
+                                }
+
+                                if(value){
+                                  listOfBool[index] = true;
+                                  tempList.add(list[index]['name']);
+                                  setState(() {
+
+                                  });
+                                }else{
+
+                                  listOfBool[index] = false;
+                                  tempList.remove(list[index]['name']);
+                                  setState(() {
+
+                                  });
+                                }
+
+                              } ,
+                              value: listOfBool[index],
+                              secondary: const Icon(Icons.airplanemode_active_outlined, color: AppColor.colorBlue,),
+
+                            )
+
+                          ),
+
+                        );
+                      }
+
+                      return Center(child: Text("data not found"),);
+                    }
+
+                )),
+
+
+
+
             ],
           ),
         ));

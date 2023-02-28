@@ -68,6 +68,10 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                       child: TextFormField(
                         controller: searchController,
                         onChanged: (v){
+                          context.read<SearchItineraryCubits>().getSearchItinerary(searchKeyWord: v);
+                            setState(() {
+
+                            });
                         },
                         keyboardType: TextInputType.text,
                         style: const TextStyle(
@@ -117,6 +121,7 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                           SearchItineraryResponse response = state.searchItineraryResponse;
                           list = response.result?? [];
                         }
+
                         if(list.isEmpty){
                           return Center(
                             child: Text(
@@ -126,6 +131,7 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                             ),
                           );
                         }
+
                         return  ListView.builder(
                             itemCount: list.length,
                             shrinkWrap: true,
