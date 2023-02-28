@@ -1,16 +1,8 @@
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geojson/geojson.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarya/authentication/forget_password/forget_password_viewmodel/forget_password_cubits.dart';
 import 'package:sarya/authentication/forget_password/forget_password_viewmodel/reset_password_cubits.dart';
-import 'package:sarya/authentication/signin/view/login_screen.dart';
 import 'package:sarya/authentication/signup/signup_view_model/avatar_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/country_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/signup_cubits.dart';
@@ -21,7 +13,6 @@ import 'package:sarya/create_intinerary/intinerary_view_model/update_intinerary_
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/payments/payments_view_model/update_bank_cubits.dart';
-import 'package:sarya/search_places.dart';
 import 'package:sarya/settings/avatar/view_model/update_avatar_cubits.dart';
 import 'package:sarya/settings/email/view_model/email_cubits.dart';
 import 'package:sarya/settings/name/view_model/name_cubits.dart';
@@ -29,16 +20,16 @@ import 'package:sarya/settings/phone/view_model/phone_cubits.dart';
 import 'package:sarya/shop/shop_view_model/public_cubits.dart';
 import 'package:sarya/shop/shop_view_model/status_itinerary_cubits.dart';
 import 'package:sarya/theme/color_scheme.dart';
+
 import 'authentication/signin/signin_view_model/signin_cubits.dart';
 import 'create_intinerary/intinerary_view_model/airport_cubits.dart';
 import 'create_intinerary/intinerary_view_model/create_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/day_update_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/trip_cubits.dart';
+import 'create_intinerary/view/foodAndShoppingInfo.dart';
 import 'navigation/navigation_service.dart';
-import  'navigation/router.dart' as routes;
+import 'navigation/router.dart' as routes;
 import 'navigation/router_path.dart';
-
-
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +37,6 @@ void main() {
   setupLocator();
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -83,7 +73,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MyHomePage(),
+        home: FoodAndShoppingInformation(
+          map: {},
+        ),
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: routes.generateRoute,
       ),
@@ -92,16 +84,15 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key,});
-
+  const MyHomePage({
+    super.key,
+  });
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
   late NavigationService _navigationService;
 
   @override
@@ -109,28 +100,26 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _navigationService = locator<NavigationService>();
 
-    Future.delayed(Duration(seconds: 3),(){
-
+    Future.delayed(Duration(seconds: 3), () {
       _navigationService.navigatePushReplace(loginRout);
-  });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            backgroundColor: AppColor.colorBlue,
+      backgroundColor: AppColor.colorBlue,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SvgPicture.asset('app_icon'.svg, color: AppColor.whiteColor,)
+            SvgPicture.asset(
+              'app_icon'.svg,
+              color: AppColor.whiteColor,
+            )
           ],
         ),
       ),
     );
   }
 }
-
-
-
-

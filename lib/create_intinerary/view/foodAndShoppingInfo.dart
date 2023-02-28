@@ -43,19 +43,24 @@ class _FoodAndShoppingInformationState
     _navigationService = locator<NavigationService>();
   }
 
-  List<XFile>? selectedImages = [];
+  List<ListOfFilesModel>? selectedImages = [];
   void selectImages() async {
     List<XFile>? Images = await _picker.pickMultiImage();
-    if (Images.isNotEmpty) {
-      selectedImages!.addAll(Images);
-    }
-    UploadFile(selectedImages![0]);
+    Images.forEach((element) {
+      ListOfFilesModel model = ListOfFilesModel(
+          file: File(element.path),
+          percentage: 0.0,
+          name_of_file:
+              '${DateTime.now().toUtc().millisecondsSinceEpoch}${element.name}');
+      selectedImages!.add(model);
+      UploadFile(model);
+    });
     print("Image List Length:" + selectedImages!.length.toString());
     setState(() {});
   }
 
-  double percentage = 0.0;
-  UploadFile(XFile file) async {
+  UploadFile(ListOfFilesModel file_model) async {
+    int index = selectedImages!.indexOf(file_model);
     final minio = Minio(
         endPoint: 's3.me-south-1.amazonaws.com',
         accessKey: 'AKIAUNGGSVHDAGLUFYNY',
@@ -63,29 +68,27 @@ class _FoodAndShoppingInformationState
         region: 'me-south-1');
     // String result =
     //     await minio.fPutObject('testingsarya', '${file.name}', '${file.path}');
-    Uint8List bytes = File(file.path).readAsBytesSync();
+    Uint8List bytes = File(file_model.file!.path).readAsBytesSync();
     print(bytes.length);
     String result = await minio.putObject(
       'sarya-assets',
-      'itinerary/${file.name}',
+      'itinerary/${file_model.name_of_file}',
       Stream<Uint8List>.value(bytes),
       onProgress: (result) {
-        percentage = result / bytes.length;
-        print('$percentage');
+        selectedImages![index].percentage = result / bytes.length;
         setState(() {});
       },
     );
     print('result......$result');
   }
 
-  DeleteFile() async {
+  DeleteFile(ListOfFilesModel model) async {
     final minio = Minio(
-        endPoint: 's3.amazonaws.com',
+        endPoint: 's3.me-south-1.amazonaws.com',
         accessKey: 'AKIAUNGGSVHDAGLUFYNY',
         secretKey: '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',
-        region: 'us-east-1');
-    await minio.removeObject('testingsarya',
-        'image_picker_C6FC3806-B891-4DBE-B302-C559A0B4FA0B-33504-000046866EF40265.jpg');
+        region: 'me-south-1');
+    await minio.removeObject('sarya-assets', 'itinerary/${model.name_of_file}');
     print('Delete file');
   }
 
@@ -112,7 +115,8 @@ class _FoodAndShoppingInformationState
             automaticallyImplyLeading: false,
             backgroundColor: AppColor.aquaCasper2,
             title: Text(
-              widget.map['title'],
+              //widget.map['title'],
+              '',
               style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
             ),
             centerTitle: true,
@@ -271,7 +275,9 @@ class _FoodAndShoppingInformationState
                                       height: 120.0,
                                       width: 120.0,
                                       child: Image.file(
-                                          File(selectedImages![index].path),
+                                          File(selectedImages![index]
+                                              .file!
+                                              .path),
                                           fit: BoxFit.fill),
                                     ),
                                     Positioned(
@@ -281,6 +287,8 @@ class _FoodAndShoppingInformationState
                                           offset: Offset(12, -12),
                                           child: IconButton(
                                               onPressed: () {
+                                                DeleteFile(
+                                                    selectedImages![index]);
                                                 selectedImages!.removeAt(index);
                                                 setState(() {});
                                               },
@@ -288,14 +296,20 @@ class _FoodAndShoppingInformationState
                                         )),
                                     Visibility(
                                       visible:
-                                          (percentage * 100).toInt() != 100,
+                                          (selectedImages![index].percentage! *
+                                                      100)
+                                                  .toInt() !=
+                                              100,
                                       child: Center(
                                         child: CircularPercentIndicator(
                                           radius: 25.0,
                                           lineWidth: 4.0,
-                                          percent: percentage,
+                                          percent: selectedImages![index]
+                                              .percentage!,
                                           center: Text(
-                                              (percentage * 100)
+                                              (selectedImages![index]
+                                                              .percentage! *
+                                                          100)
                                                       .toInt()
                                                       .toString() +
                                                   '%',
@@ -399,4 +413,11 @@ class _FoodAndShoppingInformationState
       ),
     );
   }
+}
+
+class ListOfFilesModel {
+  File? file;
+  double? percentage;
+  String? name_of_file;
+  ListOfFilesModel({this.file, this.percentage = 0.0, this.name_of_file});
 }
