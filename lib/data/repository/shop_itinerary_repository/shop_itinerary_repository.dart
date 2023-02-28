@@ -45,6 +45,8 @@ class ShopIntineraryRepository {
   Future<dynamic> getSearchItinerary({required String searchedKeyword}) async{
     try{
       var result  =   await _saryaAPI.getSearchItinerary(searchedKeyword: searchedKeyword);
+      print("getSearchItinerary .............$result");
+
       return result;
 
     }catch(e){

@@ -94,6 +94,7 @@ flutter:
   assets:
   - lib/assets/svgs/
   - lib/assets/images/
+  - lib/assets/flags/
   - lib/assets/map/
   - lib/assets/json_data/
   #   - images/a_dot_ham.jpeg

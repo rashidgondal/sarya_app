@@ -194,10 +194,10 @@ class SaryaAPI {
     }
   }
 
-  Future<dynamic> getAirport() async{
+  Future<dynamic> getAirport({required String search}) async{
     try {
       String url = '';
-      url = ApiRoutes.airport;
+      url = 'https://airlabs.co/api/v9/airports?iata_code=$search&api_key=44d8a4aa-4c02-4a5b-9fd2-f21717ee9d4c';
       return await _http.iGet(url);
     } catch (e) {
       rethrow;

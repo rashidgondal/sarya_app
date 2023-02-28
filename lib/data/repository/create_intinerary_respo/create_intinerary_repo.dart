@@ -89,9 +89,9 @@ class CreateIntineraryRepository {
     }
   }
 
-  Future<dynamic> getAirport() async{
+  Future<dynamic> getAirport({required searchAirport}) async{
     try{
-      var result  = await _saryaAPI.getAirport();
+      var result  = await _saryaAPI.getAirport(search: searchAirport);
       print("getAirport .............$result");
       return result;
     }catch(e){

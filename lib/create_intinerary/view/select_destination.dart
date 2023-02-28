@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/checklist_cubits.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../customWidgets/data_loading.dart';
+import '../../helper/helper_methods.dart';
 import '../../helper/shared_prefs.dart';
 import '../../locator.dart';
 import '../../navigation/navigation_service.dart';
@@ -17,6 +18,8 @@ import '../intinerary_view_model/create_intinerary_cubits.dart';
 import '../intinerary_view_model/create_intinerary_states.dart';
 import '../intinerary_view_model/trip_cubits.dart';
 import '../model/create_intinerary_request.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
 
 class SelectDestination extends StatefulWidget {
   final Map map;
@@ -43,8 +46,8 @@ class _SelectDestinationState extends State<SelectDestination> {
   Set<Polygon> _polygon = HashSet<Polygon>();
   Set<Marker> _marker = HashSet<Marker>();
   List<GeoJsonFeature> features = [];
-
   bool loading = true;
+
 
 
 
@@ -55,14 +58,15 @@ class _SelectDestinationState extends State<SelectDestination> {
 
   @override
   void initState() {
+
     features  = widget.map['country'];
     boolList  = widget.map['boolList'];
     super.initState();
     _navigationService = locator<NavigationService>();
     context.read<TripCubits>().getTrip();
     context.read<CheckListCubits>().getCheckList();
-
   }
+
 
 
   @override
@@ -98,7 +102,7 @@ class _SelectDestinationState extends State<SelectDestination> {
                 child: InkWell(
                   onTap:tempCountryList.isEmpty? null:() {
 
-                    CreateIntineraryRequest createIntineraryRequest = CreateIntineraryRequest(destination: tempCountryList, live: false);
+                    CreateIntineraryRequest createIntineraryRequest = CreateIntineraryRequest(destination: tempCountryList, live: false,step: 1);
                    context.read<CreateIntineraryCubits>().createIntinerary(createIntineraryRequest: createIntineraryRequest, navigationService: _navigationService, context: context);
                    // _navigationService.navigateTo(designIntineraryRoute);
 
@@ -203,7 +207,7 @@ class _SelectDestinationState extends State<SelectDestination> {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         print("searchKeyWord....$searchKeyWord");
-                                            if(searchKeyWord.isNotEmpty && !features[index].toString().toLowerCase().contains(searchKeyWord.toLowerCase())){
+                                            if(searchKeyWord.isNotEmpty && !features[index].properties!['ADMIN'].toString().toLowerCase().contains(searchKeyWord.toLowerCase())){
                                               return SizedBox();
                                             }
                                         return Padding(
