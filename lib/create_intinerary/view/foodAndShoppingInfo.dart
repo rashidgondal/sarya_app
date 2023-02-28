@@ -43,6 +43,7 @@ class _FoodAndShoppingInformationState
     _navigationService = locator<NavigationService>();
   }
 
+  List<ListOfFilesModel>? selected_public_Images = [];
   List<ListOfFilesModel>? selectedImages = [];
   void selectImages() async {
     List<XFile>? Images = await _picker.pickMultiImage();
@@ -264,68 +265,91 @@ class _FoodAndShoppingInformationState
                         itemBuilder: (context, index) {
                           int legnth = selectedImages!.length;
                           if (index + 1 <= legnth) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                height: 100.0,
-                                width: 100.0,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      height: 120.0,
-                                      width: 120.0,
-                                      child: Image.file(
-                                          File(selectedImages![index]
-                                              .file!
-                                              .path),
-                                          fit: BoxFit.fill),
-                                    ),
-                                    Positioned(
-                                        top: 0,
-                                        right: 0,
-                                        child: Transform.translate(
-                                          offset: Offset(12, -12),
-                                          child: IconButton(
-                                              onPressed: () {
-                                                DeleteFile(
-                                                    selectedImages![index]);
-                                                selectedImages!.removeAt(index);
-                                                setState(() {});
-                                              },
-                                              icon: Icon(Icons.cancel)),
-                                        )),
-                                    Visibility(
-                                      visible:
-                                          (selectedImages![index].percentage! *
-                                                      100)
-                                                  .toInt() !=
-                                              100,
-                                      child: Center(
-                                        child: CircularPercentIndicator(
-                                          radius: 25.0,
-                                          lineWidth: 4.0,
-                                          percent: selectedImages![index]
-                                              .percentage!,
-                                          center: Text(
-                                              (selectedImages![index]
-                                                              .percentage! *
-                                                          100)
-                                                      .toInt()
-                                                      .toString() +
-                                                  '%',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.green)),
-                                          progressColor: Color(0xFF5e59ed),
-                                        ),
+                            return InkWell(
+                              onTap: () {
+                                print('Click');
+                                if (selected_public_Images!
+                                    .contains(selectedImages![index])) {
+                                  selected_public_Images!
+                                      .remove(selectedImages![index]);
+                                } else {
+                                  selected_public_Images!
+                                      .add(selectedImages![index]);
+                                }
+                                setState(() {});
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  height: 100.0,
+                                  width: 100.0,
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height: 120.0,
+                                        width: 120.0,
+                                        child: Image.file(
+                                            File(selectedImages![index]
+                                                .file!
+                                                .path),
+                                            fit: BoxFit.fill),
                                       ),
-                                    )
-                                  ],
+                                      Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Transform.translate(
+                                            offset: Offset(12, -12),
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  DeleteFile(
+                                                      selectedImages![index]);
+                                                  selectedImages!
+                                                      .removeAt(index);
+                                                  setState(() {});
+                                                },
+                                                icon: Icon(Icons.cancel)),
+                                          )),
+                                      Visibility(
+                                        visible: (selectedImages![index]
+                                                        .percentage! *
+                                                    100)
+                                                .toInt() !=
+                                            100,
+                                        child: Center(
+                                          child: CircularPercentIndicator(
+                                            radius: 25.0,
+                                            lineWidth: 4.0,
+                                            percent: selectedImages![index]
+                                                .percentage!,
+                                            center: Text(
+                                                (selectedImages![index]
+                                                                .percentage! *
+                                                            100)
+                                                        .toInt()
+                                                        .toString() +
+                                                    '%',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.green)),
+                                            progressColor: Color(0xFF5e59ed),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  decoration: BoxDecoration(
+                                      border: selected_public_Images!
+                                              .contains(selectedImages![index])
+                                          ? Border.all(
+                                              width: 4,
+                                              color: Color(0xFF00d18c))
+                                          : Border.all(
+                                              width: 0,
+                                              color: Colors.transparent),
+                                      color: AppColor.aquaCasper2,
+                                      borderRadius: BorderRadius.circular(8)),
                                 ),
-                                decoration: BoxDecoration(
-                                    color: AppColor.aquaCasper2,
-                                    borderRadius: BorderRadius.circular(8)),
                               ),
                             );
                           }

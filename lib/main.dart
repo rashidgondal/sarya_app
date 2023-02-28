@@ -26,7 +26,6 @@ import 'create_intinerary/intinerary_view_model/airport_cubits.dart';
 import 'create_intinerary/intinerary_view_model/create_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/day_update_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/trip_cubits.dart';
-import 'create_intinerary/view/foodAndShoppingInfo.dart';
 import 'navigation/navigation_service.dart';
 import 'navigation/router.dart' as routes;
 import 'navigation/router_path.dart';
@@ -73,9 +72,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: FoodAndShoppingInformation(
-          map: {},
-        ),
+        home: MyHomePage(),
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: routes.generateRoute,
       ),
