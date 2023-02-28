@@ -18,6 +18,7 @@ import 'package:sarya/settings/email/view_model/email_cubits.dart';
 import 'package:sarya/settings/name/view_model/name_cubits.dart';
 import 'package:sarya/settings/phone/view_model/phone_cubits.dart';
 import 'package:sarya/shop/shop_view_model/public_cubits.dart';
+import 'package:sarya/shop/shop_view_model/search_cubits.dart';
 import 'package:sarya/shop/shop_view_model/status_itinerary_cubits.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
@@ -25,6 +26,7 @@ import 'authentication/signin/signin_view_model/signin_cubits.dart';
 import 'create_intinerary/intinerary_view_model/airport_cubits.dart';
 import 'create_intinerary/intinerary_view_model/create_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/day_update_intinerary_cubits.dart';
+import 'create_intinerary/intinerary_view_model/summary_update_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/trip_cubits.dart';
 import 'navigation/navigation_service.dart';
 import 'navigation/router.dart' as routes;
@@ -65,6 +67,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AirportCubits()),
         BlocProvider(create: (context) => StatusItineraryCubits()),
         BlocProvider(create: (context) => DayUpdateIntineraryCubits()),
+        BlocProvider(create: (context) => SummaryUpdateIntineraryCubits()),
+        BlocProvider(create: (context) => SearchItineraryCubits()),
       ],
       child: MaterialApp(
         title: 'Sarya',
