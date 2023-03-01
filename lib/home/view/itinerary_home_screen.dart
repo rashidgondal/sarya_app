@@ -5,17 +5,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geojson/geojson.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
+import 'package:sarya/home/home_view_model/created_itinerary_states.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
-import '../../create_intinerary/intinerary_view_model/airport_cubits.dart';
 import '../../customWidgets/drawer_screen.dart';
 import '../../helper/helper_methods.dart';
 import '../../navigation/navigation_service.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-import '../../shop/shop_view_model/Status_itinerary_states.dart';
-import '../../shop/shop_view_model/status_itinerary_cubits.dart';
+import '../home_view_model/created_itinerary_cubits.dart';
 
 class ItineraryScreen extends StatefulWidget {
   const ItineraryScreen({Key? key}) : super(key: key);
@@ -35,7 +34,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
   @override
   void initState() {
-    context.read<StatusItineraryCubits>().getStatusItinerary(status: true);
+    context.read<CreatedItineraryCubits>().getCreatedItinerary();
     Flags.getImages();
     parseAndDrawAssetsOnMap();
     super.initState();
@@ -128,22 +127,20 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                               fontSize: 17.0, color: AppColor.colorLiteBlack5),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
                       SizedBox(
                         height: 125,
-                        child: BlocBuilder<StatusItineraryCubits, StatusItineraryStates>(
+                        child: BlocBuilder<CreatedItineraryCubits, CreatedItineraryStates>(
                         builder: (context, state) {
-                          if (state is StatusItineraryInitial) {
+
+                          if (state is CreatedItineraryInitial) {
                             return SizedBox();
                           }
 
-                          if (state is StatusItineraryLoading) {
+                          if (state is CreatedItineraryLoading) {
                             Center(child: CupertinoActivityIndicator());
                           }
 
-                          if (state is StatusItineraryLoaded) {
+                          if (state is CreatedItineraryLoaded) {
                             var list = state.list;
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.start,

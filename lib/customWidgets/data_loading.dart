@@ -20,7 +20,7 @@ class _DataLoadingState extends State<DataLoading> {
     return Stack(
       children: [
         widget.child,
-        widget.isLoading?
+        false?
         Container(
           width: size.width,
           height: size.height,

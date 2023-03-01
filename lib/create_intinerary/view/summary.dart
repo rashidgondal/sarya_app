@@ -11,6 +11,7 @@ import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
+import '../../authentication/signin/models/signin_response_model.dart';
 import '../../customWidgets/data_loading.dart';
 import '../../helper/helper_methods.dart';
 import '../../locator.dart';
@@ -47,7 +48,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
   var listOfCountries = [];
 
   SharedPrefs sharedPrefs = SharedPrefs();
-
+  String userName = '';
+  String nationality = '';
 
   @override
   void initState() {
@@ -60,9 +62,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   getSelectedCountries()async{
     listOfCountries =await sharedPrefs.getDestinationCountries();
-
-
-    setState(() {
+    Map signInResponse =await sharedPrefs.getUser();
+      userName = "${signInResponse['firstName']} ${signInResponse['lastName']}";
+      nationality = "${signInResponse['nationality']}";
+     setState(() {
 
     });
   }
@@ -73,25 +76,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     return Container(
       color: AppColor.whiteColor,
       child: SafeArea(
-        child:  BlocBuilder<SummaryUpdateIntineraryCubits, SummaryUpdateIntineraryStates>(
-        builder: (context, state) {
-      bool loading = false;
-
-            if (state is SummaryUpdateIntineraryInitial) {
-              loading = false;
-            }
-
-            if (state is SummaryUpdateIntineraryLoading) {
-              loading = true;
-            }
-
-            if (state is SummaryUpdateIntineraryLoaded) {
-              loading = false;
-            }
-
-           return DataLoading(
-        isLoading: loading,
-        child: Scaffold(
+        child:  Scaffold(
           backgroundColor: AppColor.whiteColor,
           appBar: AppBar(
             elevation: 0,
@@ -112,7 +97,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
             ),
             centerTitle: true,
             actions: [
-              IconButton(
+              /*        IconButton(
                 icon: const Icon(
                   Icons.question_mark,
                   color: AppColor.lightIndigo,
@@ -120,7 +105,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 onPressed: () {
                   _navigationService.navigateTo(shareIntineraryRoute);
                 },
-              ),
+              ),*/
             ],
           ),
           bottomNavigationBar: Container(
@@ -306,26 +291,25 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         ]
                     ),
                     child: ListTile(
-                      title: const Text.rich(
+                      title:  Text.rich(
                           TextSpan(
                               text: '',
                               children: <InlineSpan>[
                                 TextSpan(
-                                  text: 'Trip to UAE ',
+                                  text: 'Trip to ${listOfCountries[0]} ',
                                   style:TextStyle(fontSize: 13.0, color: AppColor.lightIndigo, fontWeight: FontWeight.w500),
                                 ),
                                 TextSpan(
-                                  text: 'by Elina',
+                                  text: 'by $userName',
                                   style:TextStyle(fontSize: 13.0, color: AppColor.colorBlack, fontWeight: FontWeight.w500),
                                 )
                               ]
                           )
                       ),
                       subtitle: Row(
-                        children: const[
-                          Icon(Icons.question_mark),
+                        children: [
                           Text(
-                            " United Arab Emirate",
+                            "$nationality",
                             style:  TextStyle(fontSize: 12.0, color: AppColor.colorLiteBlack5),
                           ),
                         ],
@@ -520,9 +504,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
           ),
 
         ),
-
-      );})
-
       ),
     );
   }

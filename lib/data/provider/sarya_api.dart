@@ -204,6 +204,25 @@ class SaryaAPI {
     }
   }
 
+  Future<dynamic> deleteItineraryById({required String id}) async{
+    try {
+      String url = '';
+      url = ApiRoutes.deleteIntinerary+id;
+      return await _http.iDelete(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> allDraftDeleteItinerary() async{
+    try {
+      String url = '';
+      url = ApiRoutes.allDraftDeleteIntinerary;
+      return await _http.iDelete(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
 
 }

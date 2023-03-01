@@ -8,7 +8,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController textEditingController;
   final String hintText;
   final Size size;
-  final Widget icon;
+  final Widget? icon;
   final Widget? suffixIcon;
   final Function(String)? onChange;
   const CustomTextField({Key? key,
@@ -17,7 +17,7 @@ class CustomTextField extends StatefulWidget {
     required this.size,
     required this.textInputType,
     required this.hintText,
-    required this.icon,
+    this.icon,
     this.onChange,
     this.suffixIcon
   }) : super(key: key);
@@ -73,7 +73,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           child: Container(
             color: AppColor.whiteColor,
             height: 20,
-            child: widget.icon
+            child: widget.icon == null? SizedBox(): widget.icon
           ),
         ),
       ],

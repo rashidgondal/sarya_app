@@ -8,9 +8,10 @@ import 'package:sarya/theme/color_scheme.dart';
 class TypeOfTransport extends StatefulWidget {
   final TextEditingController textEditingController;
   final List<String> tripList;
+  final List<String> preTripList;
   final List<bool> boolList;
 
-  const TypeOfTransport({Key? key, required this.textEditingController, required this.tripList, required this.boolList})
+  const TypeOfTransport({Key? key, required this.textEditingController, required this.preTripList ,required this.tripList, required this.boolList})
       : super(key: key);
 
   @override
@@ -23,12 +24,27 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
   List<bool> boolList = [];
   TextEditingController addMoreController = TextEditingController();
   List<String> tempList = [];
+  List<String> preSelectedCheckList = [];
 
 
   @override
   void initState() {
     list = widget.tripList.toList();
     boolList = widget.boolList.toList();
+    preSelectedCheckList = widget.preTripList;
+    Future.delayed(Duration(microseconds: 500), (){
+      list.forEach((element) {
+        if(preSelectedCheckList.contains(element)){
+          int index = list.indexOf(element);
+          boolList[index] = true;
+          tempList.add(element);
+          setState(() {
+          });
+        }
+      });
+
+    });
+
     super.initState();
   }
 
@@ -53,6 +69,7 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
                   textEditingController: addMoreController,
                   suffixIcon: IconButton(onPressed: (){
                     list.add(addMoreController.text);
+                    tempList.add(addMoreController.text);
                     boolList.add(true);
                     addMoreController.clear();
                     setState(() {
@@ -63,7 +80,6 @@ class _TypeOfTransportState extends State<TypeOfTransport> {
                       Icons.send_outlined,
                     ),
                   ),
-                  icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                 ),
 
               ),

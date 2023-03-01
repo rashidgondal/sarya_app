@@ -7,9 +7,10 @@ import 'package:sarya/theme/color_scheme.dart';
 
 class SelectTripType extends StatefulWidget {
   final List<String> tripList;
+  final List<String> preTripList;
   final List<bool> boolList;
 
-  const SelectTripType({Key? key,required this.tripList, required this.boolList})
+  const SelectTripType({Key? key,required this.tripList, required this.boolList, required this.preTripList})
       : super(key: key);
 
   @override
@@ -24,11 +25,25 @@ class _SelectTripTypeState extends State<SelectTripType> {
   String search = '';
   List<String> selectedList = [];
   TextEditingController searchController = TextEditingController();
+  List<String> preSelectedCheckList = [];
 
   @override
   void initState() {
     list = widget.tripList.toList();
     boolList = widget.boolList.toList();
+    preSelectedCheckList = widget.preTripList;
+    Future.delayed(Duration(microseconds: 500), (){
+      list.forEach((element) {
+        if(preSelectedCheckList.contains(element)){
+          int index = list.indexOf(element);
+          boolList[index] = true;
+          selectedList.add(element);
+          setState(() {
+          });
+        }
+      });
+
+    });
     super.initState();
   }
 
@@ -64,7 +79,6 @@ class _SelectTripTypeState extends State<SelectTripType> {
                    ),
                   ),
 
-                  icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                 ),
 
               ),

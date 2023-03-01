@@ -1,15 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sarya/helper/shared_prefs.dart';
-import 'package:sarya/shop/model/status_itinerary_response.dart';
-import 'package:sarya/shop/shop_view_model/Status_itinerary_states.dart';
 import '../../data/repository/shop_itinerary_repository/shop_itinerary_repository.dart';
+import '../../home/home_view_model/draft_itinerary_states.dart';
 
-class StatusItineraryCubits extends Cubit<StatusItineraryStates> {
-  StatusItineraryCubits(): super(StatusItineraryInitial());
+class StatusItineraryCubits extends Cubit<DraftItineraryStates> {
+  StatusItineraryCubits(): super(DraftItineraryInitial());
 
   Future getStatusItinerary({required bool status}) async{
     try{
-      emit(StatusItineraryLoading());
+      emit(DraftItineraryLoading());
 
       final  result = await ShopIntineraryRepository.instance.getItineraryByStatus(status: status);
       var dataList = result['result'];
@@ -17,11 +16,11 @@ class StatusItineraryCubits extends Cubit<StatusItineraryStates> {
       //StatusItineraryResponse statusItineraryResponse = StatusItineraryResponse.fromJson(result);
       SharedPrefs pref = SharedPrefs();
 
-      emit(StatusItineraryLoaded(list: dataList));
+      emit(DraftItineraryLoaded(list: dataList));
 
     }catch(e){
       print("catch.............${e.toString()}");
-      emit(const StatusItineraryFailure(error: ''));
+      emit(const DraftItineraryFailure(error: ''));
     }
   }
 

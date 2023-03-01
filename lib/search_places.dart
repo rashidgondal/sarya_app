@@ -11,12 +11,14 @@ import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import 'package:geolocator/geolocator.dart';
-
-import 'create_intinerary/model/day_design_intinerary_request.dart' as create_intinerary;
+import 'create_intinerary/model/day_design_intinerary_request.dart'
+    as create_intinerary;
+import 'create_intinerary/model/day_design_intinerary_request.dart';
 
 class SearchPlacesScreen extends StatefulWidget {
   final Map map;
-  const SearchPlacesScreen({Key? key,required this.map}) : super(key: key);
+
+  const SearchPlacesScreen({Key? key, required this.map}) : super(key: key);
 
   @override
   State<SearchPlacesScreen> createState() => _SearchPlacesScreenState();
@@ -26,37 +28,60 @@ const kGoogleApiKey = 'AIzaSyDSVdO9CElCUNqNhzFEwHw_QQF4TP6Pvds';
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
-
-  static const CameraPosition initialCameraPosition = CameraPosition(target: LatLng(37.42796, -122.08574), zoom: 4.0);
+  static const CameraPosition initialCameraPosition =
+      CameraPosition(target: LatLng(37.42796, -122.08574), zoom: 4.0);
   Set<Marker> markersList = {};
   late GoogleMapController googleMapController;
   final Mode _mode = Mode.overlay;
-   PlacesDetailsResponse? detail;
-   String name = 'Search Places';
-   List list = [];
+  PlacesDetailsResponse? detail;
+  String name = 'Search Places';
+  List list = [];
   List<create_intinerary.Accomodation> listOfAccommodation = [];
- // create_intinerary.Accomodation     accomodation   = create_intinerary.Accomodation();
+
+  // create_intinerary.Accomodation     accomodation   = create_intinerary.Accomodation();
   late NavigationService _navigationService;
   TextEditingController tripEstimatedCostController = TextEditingController();
 
-  Map map ={};
+  Map map = {};
 
   @override
   void initState() {
-    currentLocation();
+    perSelected();
+   // currentLocation();
     super.initState();
     _navigationService = locator<NavigationService>();
   }
 
-  currentLocation()async{
-    Position position = await  _determinePosition();
-    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(position.latitude, position.longitude), 14.0));
+  perSelected() async {
+    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      "lib/assets/images/flag.png",
+    );
+
+    print("widget.map['preSelected'].......${widget.map['preSelected'].length}");
+    listOfAccommodation = widget.map['preSelected'];
+    for (int i = 0; i < listOfAccommodation.length; i++) {
+      markersList.add(Marker(
+          icon: markerbitmap,
+          markerId: MarkerId("$i"),
+          position: LatLng(listOfAccommodation[i].location!.coordinates![1],
+              listOfAccommodation[i].location!.coordinates![0]),
+          infoWindow: InfoWindow(title: listOfAccommodation[i].name),
+          onTap: () {
+          }));
+    }
       setState(() {
 
-      });
+    });
   }
 
+  currentLocation() async {
+    Position position = await _determinePosition();
+    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(
+        LatLng(position.latitude, position.longitude), 14.0));
 
+    setState(() {});
+  }
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -107,7 +132,13 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
           appBar: AppBar(
             backgroundColor: AppColor.aquaCasper2,
             elevation: 0,
-            title: const Text("Location",style: TextStyle(fontWeight: FontWeight.w500, color: AppColor.colorBlack, fontSize: 16.0),),
+            title: const Text(
+              "Location",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.colorBlack,
+                  fontSize: 16.0),
+            ),
             leading: IconButton(
               icon: const Icon(
                 Icons.arrow_back_ios,
@@ -127,74 +158,26 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                 mapType: MapType.normal,
                 onMapCreated: (GoogleMapController controller) {
                   googleMapController = controller;
-
                 },
-                onTap: (latlng){
+                onTap: (latlng) {
                   getLocationAddress(latLng: latlng);
                 },
-
               ),
-
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
                 child: InkWell(
                   onTap: _handlePressButton,
                   child: Container(
-                    height: 45,
-                    width: size.width,
-                    padding: EdgeInsets.symmetric(horizontal: 10,),
-                    decoration: BoxDecoration(
-                      color: AppColor.whiteColor,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColor.lightIndigo,width: 2),
-                      boxShadow: [
-                        BoxShadow(
-                            offset: Offset(1, 1),
-                            color: Colors.grey.withOpacity(0.6),
-                            blurRadius: 2),
-                        BoxShadow(
-                            offset: Offset(-1, -1),
-                            color: Colors.white.withOpacity(0.8),
-                            blurRadius: 2)
-                      ]
-                    ),
-
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset("search_icon".svg),
-                        SizedBox(width: 10,),
-                        Text(name, style: TextStyle(fontWeight: FontWeight.w500, color: AppColor.lightIndigo, fontSize: 16.0),),
-                      ],
-                    )
-
-
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 50),
-                  child: InkWell(
-                    onTap: (){
-                      if(widget.map['from'] == 'day') {
-                        print("listOfAccommodation........${listOfAccommodation
-                            .length}");
-                        _navigationService.goBack(value: listOfAccommodation);
-                      }else {
-                        _navigationService.goBack(value: map);
-
-                      }
-
-                   },
-                    child: Container(
                       height: 45,
-                      width: size.width/2,
+                      width: size.width,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
                       decoration: BoxDecoration(
-                          color: AppColor.lightIndigo,
+                          color: AppColor.whiteColor,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColor.lightIndigo,width: 2),
+                          border:
+                              Border.all(color: AppColor.lightIndigo, width: 2),
                           boxShadow: [
                             BoxShadow(
                                 offset: Offset(1, 1),
@@ -204,16 +187,69 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                                 offset: Offset(-1, -1),
                                 color: Colors.white.withOpacity(0.8),
                                 blurRadius: 2)
-                          ]
-                      ),
-
-                      child: Center(child: Text("Add", style: TextStyle(fontWeight: FontWeight.w500, color: AppColor.whiteColor, fontSize: 16.0),),)
-
-                    ),
+                          ]),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset("search_icon".svg),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.lightIndigo,
+                                fontSize: 16.0),
+                          ),
+                        ],
+                      )),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 50),
+                  child: InkWell(
+                    onTap: () {
+                      if (widget.map['from'] == 'day') {
+                        print(
+                            "listOfAccommodation........${listOfAccommodation.length}");
+                        _navigationService.goBack(value: listOfAccommodation);
+                      } else {
+                        _navigationService.goBack(value: map);
+                      }
+                    },
+                    child: Container(
+                        height: 45,
+                        width: size.width / 2,
+                        decoration: BoxDecoration(
+                            color: AppColor.lightIndigo,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: AppColor.lightIndigo, width: 2),
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(1, 1),
+                                  color: Colors.grey.withOpacity(0.6),
+                                  blurRadius: 2),
+                              BoxShadow(
+                                  offset: Offset(-1, -1),
+                                  color: Colors.white.withOpacity(0.8),
+                                  blurRadius: 2)
+                            ]),
+                        child: Center(
+                          child: Text(
+                            "Add",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.whiteColor,
+                                fontSize: 16.0),
+                          ),
+                        )),
                   ),
                 ),
               )
-
             ],
           ),
         ),
@@ -221,18 +257,20 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
     );
   }
 
-  void getLocationAddress({required LatLng latLng}) async{
+  void getLocationAddress({required LatLng latLng}) async {
     BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
       "lib/assets/images/flag.png",
     );
     //await Future.delayed(Duration(seconds: 2));
-    List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
     print("placemarks...........${placemarks[0].name}");
     print("placemarks...........${placemarks[0].street}");
-    name = '${placemarks[0].name??''}  ${placemarks[0].street??''}';
+    name = '${placemarks[0].name ?? ''}  ${placemarks[0].street ?? ''}';
 
-    if(widget.map['from'] == 'day') {
+    if (widget.map['from'] == 'day') {
+      print("if...........");
       int c = 0;
       int id = c + 1;
       markersList.add(Marker(
@@ -240,21 +278,23 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
           markerId: MarkerId("$id"),
           position: LatLng(latLng.latitude, latLng.longitude),
           infoWindow: InfoWindow(title: name),
-          onTap: () {
-            print("......press");
-            Marker marker = markersList.iterator.current;
-          }
-      ));
+          ));
       googleMapController.animateCamera(CameraUpdate.newLatLngZoom(
           LatLng(latLng.latitude, latLng.longitude), 14.0));
       listOfAccommodation.add(create_intinerary.Accomodation(
-          name: name, location: create_intinerary.Location(coordinates: [
-        latLng.longitude,
-        latLng.latitude
-      ])));
-    }else{
+          name: name,
+          location: create_intinerary.Location(
+              coordinates: [latLng.longitude, latLng.latitude])));
+    } else {
+      print("else...........");
 
-      map ={"name":"$name","coordinate":[latLng.longitude,latLng.latitude,]};
+      map = {
+        "name": "$name",
+        "coordinate": [
+          latLng.longitude,
+          latLng.latitude,
+        ]
+      };
 
       markersList.clear();
       markersList.add(Marker(
@@ -265,15 +305,12 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
           onTap: () {
             print("......press");
             Marker marker = markersList.iterator.current;
-          }
-      ));
+          }));
       googleMapController.animateCamera(CameraUpdate.newLatLngZoom(
           LatLng(latLng.latitude, latLng.longitude), 14.0));
-
     }
 
     setState(() {});
-
   }
 
   Future<void> _handlePressButton() async {
@@ -288,16 +325,18 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         types: [typeData],
         decoration: InputDecoration(
             hintText: 'Search',
-            focusedBorder:  OutlineInputBorder(borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Colors.white))),
-        components: [Component(Component.country,"pk"),Component(Component.country,"usa")]);
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(color: Colors.white))),
+        components: [
+          Component(Component.country, "pk"),
+          Component(Component.country, "usa")
+        ]);
 
-
-    displayPrediction(p!,homeScaffoldKey.currentState);
+    displayPrediction(p!, homeScaffoldKey.currentState);
   }
 
-  void onError(PlacesAutocompleteResponse response){
-
+  void onError(PlacesAutocompleteResponse response) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       elevation: 0,
       behavior: SnackBarBehavior.floating,
@@ -319,47 +358,49 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
     );
     GoogleMapsPlaces places = GoogleMapsPlaces(
         apiKey: kGoogleApiKey,
-        apiHeaders: await const GoogleApiHeaders().getHeaders()
-    );
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
 
-     detail = await places.getDetailsByPlaceId(p.placeId!);
+    detail = await places.getDetailsByPlaceId(p.placeId!);
     print("geometry..................${detail!.result.geometry}");
-    print("geometry type..................${detail!.result.geometry!.location}");
+    print(
+        "geometry type..................${detail!.result.geometry!.location}");
     print("geometry type..................${detail!.result.geometry!.bounds}");
     print("result type..................${detail!.result.types}");
 
     final lat = detail!.result.geometry!.location.lat;
     final lng = detail!.result.geometry!.location.lng;
     name = detail!.result.name;
-    if(widget.map['from'] == 'day') {
+    if (widget.map['from'] == 'day') {
       markersList.clear();
-      markersList.add(Marker(icon: markerbitmap,
+      markersList.add(Marker(
+          icon: markerbitmap,
           markerId: const MarkerId("0"),
           position: LatLng(lat, lng),
           infoWindow: InfoWindow(title: name)));
       listOfAccommodation.add(create_intinerary.Accomodation(
-          name: name, location: create_intinerary.Location(coordinates: [
-        lng,
-        lat
-      ])));
+          name: name,
+          location: create_intinerary.Location(coordinates: [lng, lat])));
       print("listOfAccommodation........${listOfAccommodation.length}");
-
-    }else {
-      map = {"name": "$name", "coordinate": [lng, lat,]};
+    } else {
+      map = {
+        "name": "$name",
+        "coordinate": [
+          lng,
+          lat,
+        ]
+      };
 
       markersList.clear();
-      markersList.add(Marker(icon: markerbitmap,
+      markersList.add(Marker(
+          icon: markerbitmap,
           markerId: const MarkerId("0"),
           position: LatLng(lat, lng),
           infoWindow: InfoWindow(title: name)));
     }
-      setState(() {});
+    setState(() {});
 
-      googleMapController.animateCamera(
-          CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
-
-
-
+    googleMapController
+        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
   }
 
 }

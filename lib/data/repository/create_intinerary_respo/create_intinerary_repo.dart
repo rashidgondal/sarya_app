@@ -1,7 +1,6 @@
 import 'dart:developer';
 import '../../../create_intinerary/model/activity_type_response.dart';
 import '../../../create_intinerary/model/checklist_response.dart';
-import '../../../create_intinerary/model/create_intinerary_response.dart';
 import '../../../create_intinerary/model/transport_response.dart';
 import '../../../create_intinerary/model/trip_response.dart';
 import '../../provider/sarya_api.dart';
@@ -93,6 +92,25 @@ class CreateIntineraryRepository {
     try{
       var result  = await _saryaAPI.getAirport(search: searchAirport);
       print("getAirport .............$result");
+      return result;
+    }catch(e){
+      return e;
+    }
+  }
+  Future<dynamic> deleteItinerary({required itineraryID}) async{
+    try{
+      var result  = await _saryaAPI.deleteItineraryById(id: itineraryID);
+      print("getDeleteItinerary .............$result");
+      return result;
+    }catch(e){
+      return e;
+    }
+  }
+
+  Future<dynamic> allDraftDeleteItinerary() async{
+    try{
+      var result  = await _saryaAPI.allDraftDeleteItinerary();
+      print("allDraftDeleteItinerary .............$result");
       return result;
     }catch(e){
       return e;

@@ -22,14 +22,15 @@ class SignInCubits extends Cubit<SignInStates> {
       String? url = res.avatar;
       pref.saveProfilePath(url);
       pref.saveUser(res);
-
-      print("res.token...............${res.userName}");
+      Map  signInResponse = await pref.getUser();
+      print("res.token...............${signInResponse['nationality']}");
 
       pref.saveToken(res.token);
       emit(SignInLoaded(signInResponse: res));
       navigationService.navigatePushReplace(dashboardRout);
 
     }catch(e){
+      print("e........${e.toString()}");
       emit(const SignInFailure(error: ''));
 
     }

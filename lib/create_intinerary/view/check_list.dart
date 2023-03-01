@@ -26,12 +26,26 @@ class _CheckListScreenState extends State<CheckListScreen> {
   List<bool> listOfBool = [];
   TextEditingController addMoreController = TextEditingController();
   List<String> selectedCheckList = [];
+  List<String> preSelectedCheckList = [];
 
   @override
   void initState() {
     listOfBool = widget.map['listOfBool'];
     listOfCheckList = widget.map['checklist'];
-    print("listOfBool............");
+    preSelectedCheckList = widget.map['selectedCheckList'];
+    Future.delayed(Duration(microseconds: 500), (){
+      listOfCheckList.forEach((element) {
+        if(preSelectedCheckList.contains(element)){
+          int index = listOfCheckList.indexOf(element);
+          listOfBool[index] = true;
+          selectedCheckList.add(element);
+          setState(() {
+
+          });
+        }
+      });
+
+    });
     super.initState();
     _navigationService = locator<NavigationService>();
   }
@@ -99,7 +113,6 @@ class _CheckListScreenState extends State<CheckListScreen> {
                         Icons.send_outlined,
                       ),
                     ),
-                    icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                   ),
 
                 ),

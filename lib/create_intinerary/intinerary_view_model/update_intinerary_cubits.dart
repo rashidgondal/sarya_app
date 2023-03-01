@@ -28,7 +28,7 @@ class UpdateIntineraryCubits extends Cubit<UpdateIntineraryStates> {
       if(route == "Continue") {
         navigationService.navigateTo(dayDesignRoute, arguments: {"country":country, "totalDays": createIntineraryRequest.totalDays, "itineraryCost":"${createIntineraryRequest.cost}","tripCost":"${createIntineraryRequest.tripCost}","summary":"${createIntineraryRequest.summary}","tripType": "${createIntineraryRequest.tripType}"});
       }else{
-        navigationService.navigateTo(draftIntineraryRoute);
+        navigationService.navigatePushReplace(draftIntineraryRoute);
 
       }
 

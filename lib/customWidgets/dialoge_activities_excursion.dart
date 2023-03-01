@@ -6,10 +6,12 @@ import 'package:sarya/theme/color_scheme.dart';
 
 class ActivitiesExcursion extends StatefulWidget {
   final List<String> listOfActivity;
+  final List<String> preListOfActivity;
   final List<bool> listOfBool;
 
   const ActivitiesExcursion({Key? key,
                 required this.listOfActivity,
+                required this.preListOfActivity,
                 required this.listOfBool})
       : super(key: key);
 
@@ -24,13 +26,26 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
   TextEditingController addMoreController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   String search = '';
-
+  List<String> preSelectedCheckList = [];
   List<String> tempList = [];
 
   @override
   void initState() {
     list = widget.listOfActivity.toList();
     boolList = widget.listOfBool.toList();
+    preSelectedCheckList = widget.preListOfActivity;
+    Future.delayed(Duration(microseconds: 500), (){
+      list.forEach((element) {
+        if(preSelectedCheckList.contains(element)){
+          int index = list.indexOf(element);
+          boolList[index] = true;
+          tempList.add(element);
+          setState(() {
+          });
+        }
+      });
+
+    });
     super.initState();
   }
 
@@ -64,7 +79,6 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
                       Icons.send_outlined,
                     ),
                   ),
-                  icon:Row(children: [SvgPicture.asset("search_icon".svg)]),
                 ),
 
               ),
@@ -122,7 +136,6 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
                 ),
               ),
               const SizedBox(height: 10,),
-
             ],
           )
         ],
@@ -168,7 +181,7 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
                     icon: Row(children: [SvgPicture.asset('search_icon'.svg)],),
                   ),
                 ),),
-              Padding(
+                Padding(
                 padding: const  EdgeInsets.symmetric(horizontal: 8.0),
                 child: Row(
                   children: const[
@@ -225,11 +238,14 @@ class _ActivitiesExcursionState extends State<ActivitiesExcursion> {
                                     return;
                                   }
                                   if(value == true){
+                                    tempList.add(list[index]);
                                     widget.listOfBool[index] = true;
                                     setState(() {
 
                                     });
                                   }else{
+                                    tempList.remove(list[index]);
+
                                     widget.listOfBool[index] = false;
                                     setState(() {
 
