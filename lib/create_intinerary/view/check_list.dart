@@ -88,34 +88,11 @@ class _CheckListScreenState extends State<CheckListScreen> {
             centerTitle: true,
           ),
           bottomNavigationBar: Container(
-            height: 180,
+            height: 90,
             color: AppColor.whiteColor,
             child: Column(
               children: [
-                const SizedBox(height: 15,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: CustomTextField(
-                    hintText: 'Add more',
-                    size: size,
-                    maxLine: 1,
-                    textInputType: TextInputType.text,
-                    textEditingController: addMoreController,
-                    suffixIcon: IconButton(onPressed: (){
-                      listOfCheckList.add(addMoreController.text);
-                      listOfBool.add(true);
-                      addMoreController.clear();
-                      setState(() {
 
-                      });
-                    },
-                      icon: Icon(
-                        Icons.send_outlined,
-                      ),
-                    ),
-                  ),
-
-                ),
                 const SizedBox(height: 30,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -145,6 +122,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                     ),
                   ],
                 ),
+                SizedBox(height: 10,)
               ],
             ),
           ),
@@ -224,6 +202,30 @@ class _CheckListScreenState extends State<CheckListScreen> {
                         crossAxisSpacing: 20.0,
                         mainAxisExtent: 50.0),
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: CustomTextField(
+                    hintText: 'Add more',
+                    size: size,
+                    maxLine: 1,
+                    textInputType: TextInputType.text,
+                    textEditingController: addMoreController,
+                    suffixIcon: IconButton(onPressed: (){
+                      listOfCheckList.add(addMoreController.text);
+                      listOfBool.add(true);
+                      selectedCheckList.add(addMoreController.text);
+                      addMoreController.clear();
+                      setState(() {
+
+                      });
+                    },
+                      icon: Icon(
+                        Icons.send_outlined,
+                      ),
+                    ),
+                  ),
+
                 ),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/activity_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/activity_states.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/day_update_intinerary_cubits.dart';
@@ -13,12 +14,9 @@ import 'package:sarya/helper/helper_methods.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
-import '../../customWidgets/data_loading.dart';
 import '../../customWidgets/dialoge_airport_cost.dart';
 import '../../customWidgets/dialoge_type_of_transport.dart';
 import '../../locator.dart';
-import '../intinerary_view_model/day_update_intinerary_states.dart';
-import '../intinerary_view_model/update_intinerary_cubits.dart';
 import '../model/day_design_intinerary_request.dart' as create_intenerary;
 
 class DayDesignIntineraryScreen extends StatefulWidget {
@@ -38,6 +36,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   List<create_intenerary.Days> list_of_days = [];
   List<create_intenerary.Accomodation> list_of_accommodation = [];
   var countryList = [];
+  List<LatLng> listOfLatLng = [];
 
   create_intenerary.Accomodation accomodation =
       create_intenerary.Accomodation();
@@ -218,7 +217,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 5, ),
                                 decoration: BoxDecoration(
-                                    color:selected_flag == index? AppColor.aquaCasper2: AppColor.borderColor2,
+                                    color:selected_flag == index? AppColor.aquaCasper2: AppColor.whiteColor,
                                     borderRadius: BorderRadius.circular(10),
                                ),
                                 child: Column(
@@ -311,13 +310,38 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
               ),
               InkWell(
                 onTap: () {
+                  print("selected index.....$selected_index");
                   //_navigationService.navigateTo(summaryRoutSold);
                   if (selected_index < list_of_days.length) {
                     if (list_of_days[selected_index].airport!.isEmpty) {
-                      selected_index++;
-                      print("selected_index.......$selected_index");
                       setState(() {});
-                    } else {
+                    }
+                    else if(list_of_days[selected_index].transportation!.isEmpty){
+
+                    }
+                    else if(list_of_days[selected_index].accomodation!.isEmpty){
+
+                    }
+                    else if(list_of_days[selected_index].accomodation!.isEmpty){
+
+                    }
+                    else if(list_of_days[selected_index].breakfast == null){
+
+                    }
+                    else if(list_of_days[selected_index].lunch == null){
+
+                    }
+                    else if(list_of_days[selected_index].dinner == null){
+
+                    }
+                    else if(list_of_days[selected_index].marketMallsStores == null){
+
+                    }
+                    else if(list_of_days[selected_index].coffeeClubsLounges == null){
+
+                    }
+                    else {
+
                       create_intenerary.DayDesignIntineraryRequest
                       request =
                       create_intenerary.DayDesignIntineraryRequest(
@@ -325,6 +349,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         days: list_of_days,
                         live: false,
                       );
+
+                      widget.map['location'] = listOfLatLng;
+
                       context
                           .read<DayUpdateIntineraryCubits>()
                           .dayUpdateIntinerary(
@@ -333,6 +360,8 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           route: "Continue",
                           map: widget.map);
                     }
+                  }else{
+                    selected_index ++;
                   }
                 },
                 child: Container(
@@ -670,6 +699,8 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].breakfast = value;
+
+                          listOfLatLng.add(LatLng(list_of_days[selected_index].breakfast!.location!.coordinates![1], list_of_days[selected_index].breakfast!.location!.coordinates![0]));
                         }
                       });
                     },
@@ -698,6 +729,8 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           arguments: {"title": "Lunch"})!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].lunch = value;
+                          listOfLatLng.add(LatLng(list_of_days[selected_index].lunch!.location!.coordinates![1], list_of_days[selected_index].lunch!.location!.coordinates![0]));
+
                         }
                       });
                     },
@@ -723,6 +756,8 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           arguments: {"title": "Dinner"})!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].dinner = value;
+                          listOfLatLng.add(LatLng(list_of_days[selected_index].dinner!.location!.coordinates![1], list_of_days[selected_index].dinner!.location!.coordinates![0]));
+
                         }
                       });
                     },
@@ -752,6 +787,8 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         if (value != null) {
                           list_of_days[selected_index]
                               .coffeeClubsLounges = value;
+                          listOfLatLng.add(LatLng(list_of_days[selected_index].coffeeClubsLounges!.location!.coordinates![1], list_of_days[selected_index].coffeeClubsLounges!.location!.coordinates![0]));
+
                         }
                       });
                     },
@@ -780,6 +817,8 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         if (value != null) {
                           list_of_days[selected_index].marketMallsStores =
                               value;
+                          listOfLatLng.add(LatLng(list_of_days[selected_index].marketMallsStores!.location!.coordinates![1], list_of_days[selected_index].marketMallsStores!.location!.coordinates![0]));
+
                         }
                       });
                     },

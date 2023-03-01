@@ -7,12 +7,15 @@ class DeleteIntineraryCubits extends Cubit<DeleteIntineraryStates> {
   DeleteIntineraryCubits() : super(DeleteIntineraryInitial());
 
   Future deleteIntineraryByID(
-      {required itineraryId}) async {
+      {required itineraryId, Function()? onDelete = null}) async {
     try {
       emit(DeleteIntineraryLoading());
 
       var data = await CreateIntineraryRepository
           .instance.deleteItinerary(itineraryID: itineraryId);
+      if(onDelete != null){
+        onDelete.call();
+      }
       emit(DeleteIntineraryLoaded());
 
     } catch (e) {

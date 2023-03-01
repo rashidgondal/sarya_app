@@ -131,6 +131,28 @@ class _FoodAndShoppingInformationState
               children: [
                 InkWell(
                   onTap: () {
+                    List<String> publicImageName = [];
+                    List<String> imageName = [];
+                    if(selected_public_Images == null){
+                      return;
+                    }
+                    if(selected_public_Images!.isEmpty){
+                      return;
+                    }
+                    selected_public_Images!.forEach((element) {
+                      publicImageName.add(element.name_of_file!);
+                    });
+
+                    if(selectedImages == null){
+                      return;
+                    }
+                    if(selectedImages!.isEmpty){
+                      return;
+                    }
+                    selectedImages!.forEach((element) {
+                      imageName.add(element.name_of_file!);
+                    });
+
                     int rate = ratingData.toInt();
                     create_intenerary.Breakfast? breakfast =
                         create_intenerary.Breakfast(
@@ -138,8 +160,8 @@ class _FoodAndShoppingInformationState
                             name: nameOfPlace,
                             comments: commentController.text,
                             coupon: taxController.text,
-                            images: [],
-                            imagesPublic: [],
+                            images: imageName,
+                            imagesPublic: publicImageName,
                             rating: rate);
 
                     _navigationService.goBack(value: breakfast);

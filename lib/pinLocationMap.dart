@@ -30,9 +30,9 @@ class _PinLocationMapState extends State<PinLocationMap> {
           markers: [
             Marker(
               point: element,
-              width: 80,
-              height: 80,
-              builder: (context) => FlutterLogo(),
+              width: 20,
+              height: 20,
+              builder: (context) => Image.asset("lib/assets/images/flag.png",),
             ),
           ],
         ),
@@ -52,10 +52,7 @@ class _PinLocationMapState extends State<PinLocationMap> {
             zoom: 10.2,
             boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(100))),
         nonRotatedChildren: [
-          AttributionWidget.defaultWidget(
-            source: 'OpenStreetMap contributors',
-            onSourceTapped: null,
-          ),
+
         ],
         children: [
           TileLayer(

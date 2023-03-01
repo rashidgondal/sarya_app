@@ -42,7 +42,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
   late NavigationService _navigationService;
   TextEditingController tripEstimatedCostController = TextEditingController();
 
-  Map map = {};
+  Map mapOfFood = {};
 
   @override
   void initState() {
@@ -217,7 +217,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                             "listOfAccommodation........${listOfAccommodation.length}");
                         _navigationService.goBack(value: listOfAccommodation);
                       } else {
-                        _navigationService.goBack(value: map);
+                        _navigationService.goBack(value: mapOfFood);
                       }
                     },
                     child: Container(
@@ -281,14 +281,16 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
           ));
       googleMapController.animateCamera(CameraUpdate.newLatLngZoom(
           LatLng(latLng.latitude, latLng.longitude), 14.0));
+
       listOfAccommodation.add(create_intinerary.Accomodation(
           name: name,
           location: create_intinerary.Location(
               coordinates: [latLng.longitude, latLng.latitude])));
-    } else {
+    }
+    else {
       print("else...........");
 
-      map = {
+      mapOfFood = {
         "name": "$name",
         "coordinate": [
           latLng.longitude,
@@ -382,7 +384,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
           location: create_intinerary.Location(coordinates: [lng, lat])));
       print("listOfAccommodation........${listOfAccommodation.length}");
     } else {
-      map = {
+      mapOfFood = {
         "name": "$name",
         "coordinate": [
           lng,

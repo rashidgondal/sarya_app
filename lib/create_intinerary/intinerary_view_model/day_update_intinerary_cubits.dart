@@ -30,7 +30,7 @@ class DayUpdateIntineraryCubits extends Cubit<DayUpdateIntineraryStates> {
       if(route == "Continue") {
         navigationService.navigateTo(summaryRoutSold,arguments: map);
       }else{
-        navigationService.navigateTo(draftIntineraryRoute);
+        navigationService.navigatePushReplace(draftIntineraryRoute);
 
       }
 

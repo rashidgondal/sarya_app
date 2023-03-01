@@ -23,12 +23,10 @@ class SummaryUpdateIntineraryCubits extends Cubit<SummaryUpdateIntineraryStates>
 
       emit(SummaryUpdateIntineraryLoaded());
       if(route == "Save") {
-        navigationService.navigateTo(dashboardRout);
+        navigationService.navigatePushReplace(draftIntineraryRoute);
       }else{
-        navigationService.navigateTo(summaryRoutSold);
-
+        navigationService.navigatePushReplace(summaryRoutSold);
       }
-
 
     } catch (e) {
 

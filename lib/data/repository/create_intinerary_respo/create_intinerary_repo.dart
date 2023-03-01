@@ -97,6 +97,7 @@ class CreateIntineraryRepository {
       return e;
     }
   }
+
   Future<dynamic> deleteItinerary({required itineraryID}) async{
     try{
       var result  = await _saryaAPI.deleteItineraryById(id: itineraryID);

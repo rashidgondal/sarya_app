@@ -26,7 +26,7 @@ class UpdateIntineraryCubits extends Cubit<UpdateIntineraryStates> {
       var country = await sharedPrefs.getDestinationCountries() ;
       emit(UpdateIntineraryLoaded(createIntineraryResponse: res));
       if(route == "Continue") {
-        navigationService.navigateTo(dayDesignRoute, arguments: {"country":country, "totalDays": createIntineraryRequest.totalDays, "itineraryCost":"${createIntineraryRequest.cost}","tripCost":"${createIntineraryRequest.tripCost}","summary":"${createIntineraryRequest.summary}","tripType": "${createIntineraryRequest.tripType}"});
+        navigationService.navigateTo(dayDesignRoute, arguments: {"country":country, "totalDays": createIntineraryRequest.totalDays, "itineraryCost":"${createIntineraryRequest.cost}","tripCost":"${createIntineraryRequest.tripCost}","summary":"${createIntineraryRequest.summary}","tripType": "${createIntineraryRequest.tripType}","location":[]});
       }else{
         navigationService.navigatePushReplace(draftIntineraryRoute);
 

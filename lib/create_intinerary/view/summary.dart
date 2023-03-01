@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
+import 'package:sarya/pinLocationMap.dart';
 import 'package:sarya/utils/constant.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
@@ -18,6 +19,7 @@ import '../../locator.dart';
 import '../intinerary_view_model/summary_update_intinerary_cubits.dart';
 import '../intinerary_view_model/summary_update_intinerary_states.dart';
 import '../model/summary_update_intinerary_request.dart';
+import 'package:latlong2/latlong.dart' as latlng;
 
 class SummaryScreen extends StatefulWidget {
   final String routeName;
@@ -45,6 +47,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     {"title":"Activities","icon":"activityy_Icon"},{"title":"Breakfast","icon":"lunch_icon"},{"title":"Lunch","icon":"lunch_icon"},{"title":"Dinner","icon":"lunch_icon"},{"title":"Shopping","icon":"market_icon"},{"title":"Restaurant","icon":"coffee_icon"}
   ];
 
+
   var listOfCountries = [];
 
   SharedPrefs sharedPrefs = SharedPrefs();
@@ -53,6 +56,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   @override
   void initState() {
+
     getSelectedCountries();
     super.initState();
     _navigationService = locator<NavigationService>();
@@ -72,6 +76,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    print("location...................${widget.map['location'].toString()}");
 
     return Container(
       color: AppColor.whiteColor,
@@ -144,7 +150,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      SummaryUpdateIntineraryRequest summary = SummaryUpdateIntineraryRequest(live: true,step: 4);
+                      SummaryUpdateIntineraryRequest summary = SummaryUpdateIntineraryRequest(live: false,step: 4);
                       context.read<SummaryUpdateIntineraryCubits>().summaryUpdateIntinerary(summaryUpdateIntineraryRequest:summary, navigationService:  _navigationService, route:"Sold");
 
                     },
@@ -221,10 +227,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 const SizedBox(height: 10.0,),
                 SizedBox(
                   height: 91.0,
-                  child:  ListView.separated(
+                  child: listOfCountries.isEmpty? SizedBox.shrink() :ListView.separated(
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
                     itemCount: listOfCountries.length,
+                    shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
 
                       var image_index = Flags.listOfFlag.indexWhere(
@@ -253,7 +260,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               height: 5,
                             ),
                             Text(
-                              "${listOfCountries[index]}",
+                              "${ listOfCountries.isEmpty? "":listOfCountries[index]}",
                               style: TextStyle(
                                   fontSize: 16,
                                   color: AppColor.headingColor2,
@@ -335,7 +342,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 const SizedBox(height: 25.0,),
                 Padding(
                   padding: const EdgeInsets.only(left: 27.0, right: 27.0),
-                  child: Container(
+                  child: PinLocationMap(
+                    height: 146,
+                    width: size.width,
+                    list_of_marker: widget.map['location'],
+                  )
+
+                  /*Container(
                     height: 146,
                     width: size.width,
                     decoration: BoxDecoration(
@@ -368,7 +381,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         },
                       ),
                     ),
-                  ),
+                  )*/,
                 ),
                 const SizedBox(height: 15.0,),
                 const Padding(

@@ -1,14 +1,18 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:minio/minio.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/CheckList_states.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/activity_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/airport_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/checklist_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/transport_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/trip_cubits.dart';
+import 'package:sarya/create_intinerary/view/foodAndShoppingInfo.dart';
 import 'package:sarya/customWidgets/custom_text_field.dart';
 import 'package:sarya/customWidgets/data_loading.dart';
 import 'package:sarya/customWidgets/dial_trip_estimation_cost.dart';
@@ -43,7 +47,6 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
   List<String> checkList = [];
   List<String> tripType = [];
   final ImagePicker _picker = ImagePicker();
-  String path = '';
 
   @override
   void initState() {
@@ -147,13 +150,14 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) =>  TripEstimationCost()).then((value){
+                              if(value != null) {
+                                print("tripCost.........$value");
 
-                            print("tripCost.........$value");
+                                tripCost = value;
+                                setState(() {
 
-                            tripCost = value;
-                            setState(() {
-
-                            });
+                                });
+                              }
                           });
 
                         },
@@ -363,9 +367,15 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                           InkWell(
                             onTap: ()async{
                               XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
                               if(image != null){
                                 setState(() {
-                                  path = image.path;
+                                  filesModel = ListOfFilesModel(
+                                      file: File(image.path),
+                                      percentage: 0.0,
+                                      name_of_file:  '${DateTime.now().toUtc().millisecondsSinceEpoch}${image.name}'
+                                  );
+                                  UploadFile(filesModel!);
                                 });
                               }
                             },
@@ -381,16 +391,80 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            height: 55.0,
-                            width: 55.0,
+                            height: 100.0,
+                            width: 100.0,
                             decoration: BoxDecoration(
                                 color: AppColor.aquaCasper,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                     width: 1, color: AppColor.borderColor)),
-                            child: path.isEmpty?
+                            child: filesModel ==null?
                             SizedBox():
-                            Image.file(File(path)),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                height: 100.0,
+                                width: 100.0,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      height: 120.0,
+                                      width: 120.0,
+                                      child: Image.file(
+                                          File(filesModel!
+                                              .file!
+                                              .path),
+                                          fit: BoxFit.fill),
+                                    ),
+                                    Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: Transform.translate(
+                                          offset: Offset(12, -12),
+                                          child: IconButton(
+                                              onPressed: () {
+                                                DeleteFile(
+                                                    filesModel!);
+                                                filesModel = null;
+                                                setState(() {});
+                                              },
+                                              icon: Icon(Icons.cancel)),
+                                        )),
+                                    Visibility(
+                                      visible: (filesModel!
+                                          .percentage! *
+                                          100)
+                                          .toInt() !=
+                                          100,
+                                      child: Center(
+                                        child: CircularPercentIndicator(
+                                          radius: 25.0,
+                                          lineWidth: 4.0,
+                                          percent: filesModel!
+                                              .percentage!,
+                                          center: Text(
+                                              (filesModel!
+                                                  .percentage! *
+                                                  100)
+                                                  .toInt()
+                                                  .toString() +
+                                                  '%',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.green)),
+                                          progressColor: Color(0xFF5e59ed),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                decoration: BoxDecoration(
+
+                                    color: AppColor.aquaCasper2,
+                                    borderRadius: BorderRadius.circular(8)),
+                              ),
+                            ),
                           ),
                         ],
                       )
@@ -545,8 +619,39 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
 
   }
 
+  ListOfFilesModel? filesModel;
 
+  UploadFile(ListOfFilesModel file_model) async {
+    final minio = Minio(
+        endPoint: 's3.me-south-1.amazonaws.com',
+        accessKey: 'AKIAUNGGSVHDAGLUFYNY',
+        secretKey: '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',
+        region: 'me-south-1');
+    // String result =
+    //     await minio.fPutObject('testingsarya', '${file.name}', '${file.path}');
+    Uint8List bytes = File(file_model.file!.path).readAsBytesSync();
+    print(bytes.length);
+    String result = await minio.putObject(
+      'sarya-assets',
+      'itinerary/${file_model.name_of_file}',
+      Stream<Uint8List>.value(bytes),
+      onProgress: (result) {
+        filesModel!.percentage = result / bytes.length;
+        setState(() {});
+      },
+    );
+    print('result......$result');
+  }
 
+  DeleteFile(ListOfFilesModel model) async {
+    final minio = Minio(
+        endPoint: 's3.me-south-1.amazonaws.com',
+        accessKey: 'AKIAUNGGSVHDAGLUFYNY',
+        secretKey: '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',
+        region: 'me-south-1');
+    await minio.removeObject('sarya-assets', 'itinerary/${model.name_of_file}');
+    print('Delete file');
+  }
 
 
 }
