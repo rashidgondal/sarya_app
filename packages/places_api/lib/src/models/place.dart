@@ -12,7 +12,7 @@ class Place extends Equatable {
     return Place(
       geometry: Geometry.fromJson(json['geometry'] as Map<String, dynamic>),
       name: json['name'] as String,
-      vicinity: json['vicinity'] as String,
+      vicinity: json['vicinity'] == null ? '' : json['vicinity'] as String,
     );
   }
 

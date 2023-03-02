@@ -11,7 +11,6 @@ import 'package:sarya/theme/color_scheme.dart';
 import '../../../customWidgets/data_loading.dart';
 import '../../../locator.dart';
 import '../../../navigation/navigation_service.dart';
-import '../../../shop/shop_view_model/public_cubits.dart';
 import '../../signup/signup_view_model/country_cubits.dart';
 import '../models/signin_request_model.dart';
 

@@ -16,13 +16,15 @@ class PlacesSearchModal extends StatefulWidget {
     required this.passedContext,
     required this.modalContext,
     required this.title,
+    required this.signleSearch,
     required this.onPlaceSelected,
   }) : super(key: key);
 
   final BuildContext passedContext;
   final BuildContext modalContext;
   final String title;
-  final Function(Place?) onPlaceSelected;
+  final Function(List<Place>?) onPlaceSelected;
+  final bool? signleSearch;
 
   @override
   _PlacesSearchModalState createState() => _PlacesSearchModalState();
@@ -46,21 +48,45 @@ class _PlacesSearchModalState extends State<PlacesSearchModal> {
     super.initState();
   }
 
+  List<Place> list_of_all_selected_places = [];
   var markers = <MarkerId, Marker>{};
   void _goToPlace(Place place) {
-    widget.onPlaceSelected.call(place);
+    if (widget.signleSearch!) {
+      widget.onPlaceSelected.call([place]);
+    } else {
+      list_of_all_selected_places.add(place);
+      widget.onPlaceSelected.call(list_of_all_selected_places);
+    }
     if (_googleMapController != null) {
-      final markerIdVal =
-          'marker_id_${place.geometry.location.lat}_${place.geometry.location.lng}';
-      final markerId = MarkerId(markerIdVal);
-      final marker = Marker(
-        markerId: markerId,
-        position:
-            LatLng(place.geometry.location.lat, place.geometry.location.lng),
-        icon: flagIcon!,
-      );
-      markers[markerId] = marker;
-      setState(() {});
+      if (widget.signleSearch!) {
+        final markerIdVal =
+            'marker_id_${place.geometry.location.lat}_${place.geometry.location.lng}';
+        final markerId = MarkerId(markerIdVal);
+        final marker = Marker(
+          markerId: markerId,
+          position:
+              LatLng(place.geometry.location.lat, place.geometry.location.lng),
+          icon: flagIcon!,
+        );
+        markers[markerId] = marker;
+        setState(() {});
+      } else {
+        markers.clear();
+        list_of_all_selected_places.forEach((element) {
+          final markerIdVal =
+              'marker_id_${element.geometry.location.lat}_${element.geometry.location.lng}';
+          final markerId = MarkerId(markerIdVal);
+          final marker = Marker(
+            markerId: markerId,
+            position: LatLng(
+                element.geometry.location.lat, element.geometry.location.lng),
+            icon: flagIcon!,
+          );
+          final iceGiants = {markerId: marker};
+          markers.addEntries(iceGiants.entries);
+        });
+        setState(() {});
+      }
       _googleMapController!.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
@@ -148,7 +174,12 @@ class _PlacesSearchModalState extends State<PlacesSearchModal> {
                         onDeleted: () {
                           selected_places.remove(result);
                           setState(() {});
-                          widget.onPlaceSelected.call(null);
+                          if (widget.signleSearch!) {
+                            widget.onPlaceSelected.call(null);
+                          } else {
+                            widget.onPlaceSelected
+                                .call(list_of_all_selected_places);
+                          }
                         },
                       ),
                     )
@@ -167,7 +198,11 @@ class _PlacesSearchModalState extends State<PlacesSearchModal> {
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   onTap: () async {
-                    selected_places = [searchResults[index]];
+                    if (widget.signleSearch!) {
+                      selected_places = [searchResults[index]];
+                    } else {
+                      selected_places.add(searchResults[index]);
+                    }
                     setState(() {});
                     final placesApi = PlacesApi();
                     final response =
