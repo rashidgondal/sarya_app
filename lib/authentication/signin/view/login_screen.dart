@@ -7,6 +7,7 @@ import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
+
 import '../../../customWidgets/data_loading.dart';
 import '../../../locator.dart';
 import '../../../navigation/navigation_service.dart';
@@ -37,12 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool showPassword = true;
-@override
+  @override
   void dispose() {
     userNameController.dispose();
     passController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -137,40 +139,45 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontSize: 14.0,
                                 color: AppColor.lightIndigo,
                                 fontWeight: FontWeight.w500),
-
-                            decoration:  InputDecoration(
+                            decoration: InputDecoration(
                                 isDense: true,
-                                suffixIconConstraints:const BoxConstraints(
+                                suffixIconConstraints: const BoxConstraints(
                                   minWidth: 20,
                                   minHeight: 30,
                                 ),
-
                                 enabledBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.lightIndigo),
+                                  borderSide:
+                                      BorderSide(color: AppColor.lightIndigo),
                                 ),
-                                suffixIcon: showPassword?
-                                InkWell(
-                                  onTap: (){
-                                    setState(() {
-                                      showPassword = false;
-                                    });
-                                  },
-                                    child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.colorGrey,)):
-                                InkWell(
-                                    onTap: (){
-                                      setState(() {
-                                        showPassword = true;
-                                      });
-                                    },
-                                    child: const Icon(Icons.remove_red_eye_outlined,color: AppColor.lightIndigo,)),
-                                focusedBorder:const UnderlineInputBorder(
+                                suffixIcon: showPassword
+                                    ? InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            showPassword = false;
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.remove_red_eye_outlined,
+                                          color: AppColor.colorGrey,
+                                        ))
+                                    : InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            showPassword = true;
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.remove_red_eye_outlined,
+                                          color: AppColor.lightIndigo,
+                                        )),
+                                focusedBorder: const UnderlineInputBorder(
                                   borderSide:
                                       BorderSide(color: AppColor.lightIndigo),
                                 ),
                                 contentPadding: EdgeInsets.zero,
                                 hintText: "Password",
                                 fillColor: AppColor.aquaCasper,
-                                hintStyle:const TextStyle(
+                                hintStyle: const TextStyle(
                                     fontSize: 14.0,
                                     color: AppColor.colorGrey,
                                     fontWeight: FontWeight.w500)),
@@ -181,7 +188,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               InkWell(
                                   onTap: () {
-                                    _navigationService.navigateTo(forgetRout,arguments: {"isFromLogin": true});
+                                    _navigationService.navigateTo(forgetRout,
+                                        arguments: {"isFromLogin": true});
                                   },
                                   child: const SizedBox(
                                       height: 40.0,
@@ -264,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         fontWeight: FontWeight.w400),
                                   )),
                               InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     _navigationService.navigateTo(termRout);
                                   },
                                   child: const SizedBox(
