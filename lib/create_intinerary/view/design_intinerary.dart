@@ -25,6 +25,7 @@ import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 import '../../customWidgets/text_decorated_icon.dart';
+import '../../helper/helper_methods.dart';
 import '../intinerary_view_model/Trip_states.dart';
 import '../intinerary_view_model/update_intinerary_cubits.dart';
 import '../intinerary_view_model/update_intinerary_states.dart';
@@ -51,17 +52,21 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
   final ImagePicker _picker = ImagePicker();
   String itineraryCost ='', totalDays = '';
   SharedPrefs pref = SharedPrefs();
+  List<Widget> widgetList = [];
+
 
   @override
   void initState() {
+    widgetList = List<Widget>.generate(99, (int index){
+      int i = index +1;
+      return Text("$i");
+    }, growable: true);
 
     super.initState();
     _navigationService = locator<NavigationService>();
     context.read<ActivityCubits>().getActivity();
     context.read<TransportCubits>().getTransport();
   }
-
-
 
 
   @override
@@ -276,25 +281,49 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                       const SizedBox(
                         height: 2.0,
                       ),
-                      CustomTextField(
-                        hintText: 'Total Days ',
-                        size: size,
-                        maxLine: 1,
-                        onChange: (v){
-                          totalDays = v;
-                          setState(() {
+                      InkWell(
+                        onTap: (){
+
+                          cupertino_picker_sheet(context: context, child_items: widgetList, selected_index: (int i ) {
+                            int ii = i+1;
+                            totalDays = ii.toString();
+
+                            setState(() {
+                            });
                           });
                         },
-                        prefix: totalDays.isEmpty? null: Text(
-                          'Total Days ',
-                          style:TextStyle(
-                              fontSize: 15.0, color: AppColor.headingColor2),
-                        ),
-
-                        textInputType: TextInputType.number,
-                        textEditingController: totalDaysController,
-                        icon: Row(children: [SvgPicture.asset("days_icon".svg)]),
+                        child: TextDecoratedContainer(
+                            titleWidget:     Text(
+                              'Total Days: $totalDays ',
+                              style: const TextStyle(
+                                  fontSize: 15.0, color: AppColor.headingColor2),
+                            ),
+                            iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
+                            icon: Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: AppColor.lightIndigo,
+                              size: 20,
+                            )),
                       ),
+                      // CustomTextField(
+                      //   hintText: 'Total Days ',
+                      //   size: size,
+                      //   maxLine: 1,
+                      //   onChange: (v){
+                      //     totalDays = v;
+                      //     setState(() {
+                      //     });
+                      //   },
+                      //   prefix: totalDays.isEmpty? null: Text(
+                      //     'Total Days ',
+                      //     style:TextStyle(
+                      //         fontSize: 15.0, color: AppColor.headingColor2),
+                      //   ),
+                      //
+                      //   textInputType: TextInputType.number,
+                      //   textEditingController: totalDaysController,
+                      //   icon: Row(children: [SvgPicture.asset("days_icon".svg)]),
+                      // ),
                       const SizedBox(
                         height: 2.0,
                       ),
@@ -302,13 +331,12 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                           builder: (context, state) {
                             List<bool> listOfBool = [];
                             if (state is CheckListLoaded) {
-                              var list = state.response.result!.toList() ?? [];
-                              listOfCheckList.addAll(list);
+                              listOfCheckList = state.response.result!.toList() ?? [];
                               listOfBool = state.boolList.toList();
                             }
                             return   InkWell(
                                 onTap: (){
-                                  if(checkList.isNotEmpty){
+                                 /* if(checkList.isNotEmpty){
                                     checkList.forEach((element) {
                                       if(listOfCheckList.contains(element)){
 
@@ -317,7 +345,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                                         listOfBool.add(true);
                                       }
                                     });
-                                  }
+                                  }*/
                                   _navigationService.navigateTo(checkListRoute,
                                       arguments:{ "checklist": listOfCheckList,
                                                   "listOfBool": listOfBool,
