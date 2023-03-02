@@ -30,12 +30,12 @@ class PublicItineraryResponse {
 class PublicResult {
   String? sId;
   String? userName;
-  List<String>? destination;
+ List? destination;
   String? title;
   String? summary;
   int? cost;
   int? tripCost;
-  List<String>? tripType;
+ List? tripType;
   int? totalDays;
   int? step;
   List<Days>? days;
@@ -43,6 +43,7 @@ class PublicResult {
   String? updatedAt;
   int? iV;
   bool? live;
+ List? checklist;
 
   PublicResult(
       {this.sId,
@@ -59,7 +60,8 @@ class PublicResult {
         this.createdAt,
         this.updatedAt,
         this.iV,
-        this.live});
+        this.live,
+        this.checklist});
 
   PublicResult.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -82,6 +84,7 @@ class PublicResult {
     updatedAt = json['updatedAt'];
     iV = json['__v'];
     live = json['live'];
+    checklist = json['checklist'];
   }
 
   Map<String, dynamic> toJson() {
@@ -103,6 +106,7 @@ class PublicResult {
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
     data['live'] = this.live;
+    data['checklist'] = this.checklist;
     return data;
   }
 }
@@ -110,14 +114,16 @@ class PublicResult {
 class Days {
   String? country;
   String? airport;
-  List<String>? transportation;
+ List? transportation;
   Accomodation? accomodation;
-  List<String>? activities;
+ List? activities;
   Breakfast? breakfast;
   Breakfast? lunch;
   Breakfast? dinner;
   String? shops;
   String? market;
+  CoffeeClubsLounges? coffeeClubsLounges;
+  CoffeeClubsLounges? marketMallsStores;
 
   Days(
       {this.country,
@@ -129,16 +135,18 @@ class Days {
         this.lunch,
         this.dinner,
         this.shops,
-        this.market});
+        this.market,
+        this.coffeeClubsLounges,
+        this.marketMallsStores});
 
   Days.fromJson(Map<String, dynamic> json) {
     country = json['country'];
     airport = json['airport'];
-    transportation = json['transportation'].cast<String>();
-    accomodation = json['accomodation'] != null
+    transportation = json['transportation'];
+    accomodation = json['accomodation'] != null && json['accomodation'] is Map
         ? new Accomodation.fromJson(json['accomodation'])
         : null;
-    activities = json['activities'].cast<String>();
+    activities = json['activities'];
     breakfast = json['breakfast'] != null
         ? new Breakfast.fromJson(json['breakfast'])
         : null;
@@ -148,6 +156,12 @@ class Days {
     json['dinner'] != null ? new Breakfast.fromJson(json['dinner']) : null;
     shops = json['shops'];
     market = json['market'];
+    coffeeClubsLounges = json['coffeeClubsLounges'] != null
+        ? new CoffeeClubsLounges.fromJson(json['coffeeClubsLounges'])
+        : null;
+    marketMallsStores = json['marketMallsStores'] != null
+        ? new CoffeeClubsLounges.fromJson(json['marketMallsStores'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -170,6 +184,12 @@ class Days {
     }
     data['shops'] = this.shops;
     data['market'] = this.market;
+    if (this.coffeeClubsLounges != null) {
+      data['coffeeClubsLounges'] = this.coffeeClubsLounges!.toJson();
+    }
+    if (this.marketMallsStores != null) {
+      data['marketMallsStores'] = this.marketMallsStores!.toJson();
+    }
     return data;
   }
 }
@@ -199,10 +219,11 @@ class Accomodation {
 class Breakfast {
   String? name;
   String? coordinates;
-  List<String>? imagesPublic;
+ List? imagesPublic;
   String? coupon;
   int? rating;
   String? comments;
+  Location? location;
 
   Breakfast(
       {this.name,
@@ -210,15 +231,19 @@ class Breakfast {
         this.imagesPublic,
         this.coupon,
         this.rating,
-        this.comments});
+        this.comments,
+        this.location});
 
   Breakfast.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     coordinates = json['coordinates'];
-    imagesPublic = json['imagesPublic'].cast<String>();
+    imagesPublic = json['imagesPublic'];
     coupon = json['coupon'];
     rating = json['rating'];
     comments = json['comments'];
+    location = json['location'] != null
+        ? new Location.fromJson(json['location'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -229,6 +254,73 @@ class Breakfast {
     data['coupon'] = this.coupon;
     data['rating'] = this.rating;
     data['comments'] = this.comments;
+    if (this.location != null) {
+      data['location'] = this.location!.toJson();
+    }
+    return data;
+  }
+}
+
+class Location {
+  String? type;
+  List<double>? coordinates;
+
+  Location({this.type, this.coordinates});
+
+  Location.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    coordinates = json['coordinates'].cast<double>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = this.type;
+    data['coordinates'] = this.coordinates;
+    return data;
+  }
+}
+
+class CoffeeClubsLounges {
+  String? name;
+ List? images;
+ List? imagesPublic;
+  String? coupon;
+  int? rating;
+  String? comments;
+  Location? location;
+
+  CoffeeClubsLounges(
+      {this.name,
+        this.images,
+        this.imagesPublic,
+        this.coupon,
+        this.rating,
+        this.comments,
+        this.location});
+
+  CoffeeClubsLounges.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    images = json['images'];
+    imagesPublic = json['imagesPublic'];
+    coupon = json['coupon'];
+    rating = json['rating'];
+    comments = json['comments'];
+    location = json['location'] != null
+        ? new Location.fromJson(json['location'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['images'] = this.images;
+    data['imagesPublic'] = this.imagesPublic;
+    data['coupon'] = this.coupon;
+    data['rating'] = this.rating;
+    data['comments'] = this.comments;
+    if (this.location != null) {
+      data['location'] = this.location!.toJson();
+    }
     return data;
   }
 }

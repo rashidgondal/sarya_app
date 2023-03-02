@@ -39,7 +39,7 @@ class _ShopScreenState extends State<ShopScreen> {
     getUserInfo();
     super.initState();
     _navigationService = locator<NavigationService>();
-    context.read<PublicItineraryCubits>().getPublicItinerary();
+
 
   }
 
@@ -58,334 +58,339 @@ class _ShopScreenState extends State<ShopScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: AppColor.whiteColor,
-          drawer: DrawerScreen(),
-          appBar: AppBar(
-            elevation: 0,
-            toolbarHeight: 60,
-            leading: IconButton(
-                icon: map == null
-                    ? SvgPicture.asset('user'.svg, height: 26.0, width: 26.0,)
-                    : SvgPicture.network(map!['avatar'], height: 26.0, width: 26.0,),
-                onPressed: () {
-                  _scaffoldKey.currentState!.openDrawer();
-                }),
-            backgroundColor: AppColor.aquaCasper2,
-            title: const Text(
-              "Shop",
-              style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
+    return RefreshIndicator(
+      onRefresh: ()async{
+        context.read<PublicItineraryCubits>().getPublicItinerary();
+      },
+      child: SafeArea(
+          child: Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: AppColor.whiteColor,
+            drawer: DrawerScreen(),
+            appBar: AppBar(
+              elevation: 0,
+              toolbarHeight: 60,
+              leading: IconButton(
+                  icon: map == null
+                      ? SvgPicture.asset('user'.svg, height: 26.0, width: 26.0,)
+                      : SvgPicture.network(map!['avatar'], height: 26.0, width: 26.0,),
+                  onPressed: () {
+                    _scaffoldKey.currentState!.openDrawer();
+                  }),
+              backgroundColor: AppColor.aquaCasper2,
+              title: const Text(
+                "Shop",
+                style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
+              ),
+              centerTitle: true,
+
             ),
-            centerTitle: true,
-
-          ),
-          body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 30.0,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 30.0),
-                  child: Text(
-                    "Please tell us where you\n want to Travel",
-                    style: TextStyle(
-                        fontSize: 25.0, color: AppColor.colorBlack, fontWeight: FontWeight.w700),
+            body: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 30.0,
                   ),
-                ),
-                const SizedBox(
-                  height:10.0,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 30.0),
-                  child: Text(
-                    "Let's find a suitable package for you",
-                    style: TextStyle(
-                        fontSize: 14.0, color: AppColor.colorLiteBlack2, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                const SizedBox(height: 20,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 30.0, right: 30),
-                  child: InkWell(
-                    onTap: (){
-                      _navigationService.navigateTo(searchItineraryRoute);
-                    },
-                    child: Container(
-                      height: 48,
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: AppColor.bgColor,
-                        borderRadius: BorderRadius.circular(24)
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                        Text(
-                          "Search for Location",
-                          style: TextStyle(
-                              fontSize: 15.0, color: AppColor.colorLiteBlack2, fontWeight: FontWeight.w400),
-                        ),
-
-                        SvgPicture.asset("search_icon".svg, height: 25, width: 25,),
-
-                      ],)
-
+                  const Padding(
+                    padding: EdgeInsets.only(left: 30.0),
+                    child: Text(
+                      "Please tell us where you\n want to Travel",
+                      style: TextStyle(
+                          fontSize: 25.0, color: AppColor.colorBlack, fontWeight: FontWeight.w700),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10,),
-                const Padding(
-                  padding: EdgeInsets.only(left: 30.0),
-                  child: Text(
-                    "Recommended",
-                    style: TextStyle(
-                        fontSize: 25.0, color: AppColor.colorBlack, fontWeight: FontWeight.w700),
+                  const SizedBox(
+                    height:10.0,
                   ),
-                ),
-                const SizedBox(height: 10,),
-                BlocBuilder<PublicItineraryCubits, PublicItineraryStates>(
-                builder: (context, state) {
-                  List<PublicResult> list = [];
-                  if (state is PublicItineraryInitial) {
-                    return Center(child: SizedBox(),);
-                  }
+                  const Padding(
+                    padding: EdgeInsets.only(left: 30.0),
+                    child: Text(
+                      "Let's find a suitable package for you",
+                      style: TextStyle(
+                          fontSize: 14.0, color: AppColor.colorLiteBlack2, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 20,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30.0, right: 30),
+                    child: InkWell(
+                      onTap: (){
+                        _navigationService.navigateTo(searchItineraryRoute);
+                      },
+                      child: Container(
+                        height: 48,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: AppColor.bgColor,
+                          borderRadius: BorderRadius.circular(24)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                          Text(
+                            "Search for Location",
+                            style: TextStyle(
+                                fontSize: 15.0, color: AppColor.colorLiteBlack2, fontWeight: FontWeight.w400),
+                          ),
 
-                  if (state is PublicItineraryLoading) {
-                    return Center(child: CupertinoActivityIndicator(),);
-                  }
+                          SvgPicture.asset("search_icon".svg, height: 25, width: 25,),
 
-                  if (state is PublicItineraryLoaded) {
-                    PublicItineraryResponse response = state.publicItineraryResponse;
-                     list = response.result?? [];
-                  }
-                  if(list.isEmpty){
-                    return Center(
-                      child: Text(
-                        "Data not found",
-                        style: TextStyle(
-                            fontSize: 14.0, color: AppColor.colorLiteBlack2, fontWeight: FontWeight.w500),
+                        ],)
+
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 30.0),
+                    child: Text(
+                      "Recommended",
+                      style: TextStyle(
+                          fontSize: 25.0, color: AppColor.colorBlack, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+                  BlocBuilder<PublicItineraryCubits, PublicItineraryStates>(
+                  builder: (context, state) {
+                    List<PublicResult> list = [];
+                    if (state is PublicItineraryInitial) {
+                      return Center(child: SizedBox(),);
+                    }
+
+                    if (state is PublicItineraryLoading) {
+                      return Center(child: CupertinoActivityIndicator(),);
+                    }
+
+                    if (state is PublicItineraryLoaded) {
+                      PublicItineraryResponse response = state.publicItineraryResponse;
+                       list = response.result?? [];
+                    }
+                    if(list.isEmpty){
+                      return Center(
+                        child: Text(
+                          "Data not found",
+                          style: TextStyle(
+                              fontSize: 14.0, color: AppColor.colorLiteBlack2, fontWeight: FontWeight.w500),
+                        ),
+                      );
+                    }
+                    return CarouselSlider.builder(
+                      itemCount: list.length,
+                      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
+                          InkWell(
+                            onTap: () {
+                              _navigationService.navigateTo(summaryRoutStart);
+                            },
+                            child: Padding(
+                              padding:
+                              const EdgeInsets.only(right: 15.0, left: 30),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: AppColor.aquaCasper2,
+                                    image: DecorationImage(image: AssetImage("lib/assets/images/img2.jpeg"),fit: BoxFit.fill),
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          offset: const Offset(2, 2),
+                                          color: Colors.grey.withOpacity(0.6),
+                                          blurRadius: 3),
+                                      BoxShadow(
+                                          offset: const Offset(-3, -3),
+                                          color: Colors.grey.withOpacity(0.1),
+                                          blurRadius: 3)
+                                    ]
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Row(children: [
+                                      Icon(Icons.location_on,color: AppColor.whiteColor,),
+                                      SizedBox(
+                                        width: 120,
+                                        child: Text(
+                                          "${list[itemIndex].title}",
+                                          style: TextStyle(
+                                              fontSize: 14.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
+                                        ),
+                                      )
+                                    ],),
+                                    SizedBox(height: 10,),
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                      options: CarouselOptions(
+                          viewportFraction: 0.48,
+                          aspectRatio: 2/1,
+                          enableInfiniteScroll: true,
+                          enlargeFactor: 0.5,
+                          autoPlay: true
                       ),
                     );
-                  }
-                  return CarouselSlider.builder(
-                    itemCount: list.length,
-                    itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
-                        InkWell(
+
+                  }),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 30.0),
+                    child: Text(
+                      "Top Rated",
+                      style: TextStyle(
+                          fontSize: 25.0, color: AppColor.colorBlack, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  ListView.builder(
+                      itemCount: 10,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
                           onTap: () {
                             _navigationService.navigateTo(summaryRoutStart);
                           },
                           child: Padding(
-                            padding:
-                            const EdgeInsets.only(right: 15.0, left: 30),
+                            padding: const EdgeInsets.only(
+                                right: 30.0, left: 30, top: 10),
                             child: Container(
-                              decoration: BoxDecoration(
-                                  color: AppColor.aquaCasper2,
-                                  image: DecorationImage(image: AssetImage("lib/assets/images/img2.jpeg"),fit: BoxFit.fill),
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        offset: const Offset(2, 2),
-                                        color: Colors.grey.withOpacity(0.6),
-                                        blurRadius: 3),
-                                    BoxShadow(
-                                        offset: const Offset(-3, -3),
-                                        color: Colors.grey.withOpacity(0.1),
-                                        blurRadius: 3)
-                                  ]
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Row(children: [
-                                    Icon(Icons.location_on,color: AppColor.whiteColor,),
-                                    SizedBox(
-                                      width: 120,
-                                      child: Text(
-                                        "${list[itemIndex].title}",
-                                        style: TextStyle(
-                                            fontSize: 14.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
-                                      ),
-                                    )
-                                  ],),
-                                  SizedBox(height: 10,),
+                                height: 86.0,
+                                width: 101.0,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: Border.all(
+                                        width: 1, color: AppColor.borderColor)),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      height: 72.0,
+                                      width: 72.0,
+                                      decoration: BoxDecoration(
+                                          color: AppColor.aquaCasper2,
+                                          borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Alina Fahim",
+                                          style: TextStyle(
+                                              fontSize: 13.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColor.headingColor),
+                                        ),
+                                        const SizedBox(
+                                          height: 3.0,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: const [
+                                            Icon(
+                                              Icons.question_mark,
+                                              size: 10.0,
+                                            ),
+                                            Text(
+                                              " United Arab Emirate",
+                                              style: TextStyle(
+                                                  fontSize: 11.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: AppColor.subtitleColor),
+                                            ),
+                                          ],
+                                        ),
+                                        const Text(
+                                          "3 months Ago, 5 days Package",
+                                          style: TextStyle(
+                                              fontSize: 11.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColor.headingColor2),
+                                        ),
+                                        const SizedBox(
+                                          height: 3.0,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: const [
+                                            Icon(
+                                              Icons.star,
+                                              color: AppColor.borderColor,
+                                              size: 15.0,
+                                            ),
+                                            Icon(
+                                              Icons.star,
+                                              color: AppColor.borderColor,
+                                              size: 15.0,
+                                            ),
+                                            Icon(
+                                              Icons.star,
+                                              color: AppColor.borderColor,
+                                              size: 15.0,
+                                            ),
+                                            Icon(
+                                              Icons.star,
+                                              color: AppColor.borderColor,
+                                              size: 15.0,
+                                            ),
+                                            Icon(
+                                              Icons.star,
+                                              color: AppColor.borderColor,
+                                              size: 15.0,
+                                            ),
+                                            Text(
+                                              "(5)",
+                                              style: TextStyle(
+                                                  fontSize: 11.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: AppColor.headingColor2),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                     Container(
+                                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                       decoration: BoxDecoration(
+                                         color: AppColor.aquaCasper2,
+                                         borderRadius: BorderRadius.circular(20),
 
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                    options: CarouselOptions(
-                        viewportFraction: 0.48,
-                        aspectRatio: 2/1,
-                        enableInfiniteScroll: true,
-                        enlargeFactor: 0.5,
-                        autoPlay: true
-                    ),
-                  );
-
-                }),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 30.0),
-                  child: Text(
-                    "Top Rated",
-                    style: TextStyle(
-                        fontSize: 25.0, color: AppColor.colorBlack, fontWeight: FontWeight.w700),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                ListView.builder(
-                    itemCount: 10,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
-                        onTap: () {
-                          _navigationService.navigateTo(summaryRoutStart);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              right: 30.0, left: 30, top: 10),
-                          child: Container(
-                              height: 86.0,
-                              width: 101.0,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(
-                                      width: 1, color: AppColor.borderColor)),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Container(
-                                    height: 72.0,
-                                    width: 72.0,
-                                    decoration: BoxDecoration(
-                                        color: AppColor.aquaCasper2,
-                                        borderRadius:
-                                        BorderRadius.circular(10.0)),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Alina Fahim",
-                                        style: TextStyle(
-                                            fontSize: 13.0,
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColor.headingColor),
-                                      ),
-                                      const SizedBox(
-                                        height: 3.0,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.question_mark,
-                                            size: 10.0,
-                                          ),
-                                          Text(
-                                            " United Arab Emirate",
-                                            style: TextStyle(
-                                                fontSize: 11.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.subtitleColor),
-                                          ),
-                                        ],
-                                      ),
-                                      const Text(
-                                        "3 months Ago, 5 days Package",
-                                        style: TextStyle(
-                                            fontSize: 11.0,
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColor.headingColor2),
-                                      ),
-                                      const SizedBox(
-                                        height: 3.0,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: const [
-                                          Icon(
-                                            Icons.star,
-                                            color: AppColor.borderColor,
-                                            size: 15.0,
-                                          ),
-                                          Icon(
-                                            Icons.star,
-                                            color: AppColor.borderColor,
-                                            size: 15.0,
-                                          ),
-                                          Icon(
-                                            Icons.star,
-                                            color: AppColor.borderColor,
-                                            size: 15.0,
-                                          ),
-                                          Icon(
-                                            Icons.star,
-                                            color: AppColor.borderColor,
-                                            size: 15.0,
-                                          ),
-                                          Icon(
-                                            Icons.star,
-                                            color: AppColor.borderColor,
-                                            size: 15.0,
-                                          ),
-                                          Text(
-                                            "(5)",
-                                            style: TextStyle(
-                                                fontSize: 11.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.headingColor2),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                   Container(
-                                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                     decoration: BoxDecoration(
-                                       color: AppColor.aquaCasper2,
-                                       borderRadius: BorderRadius.circular(20),
-
+                                       ),
+                                       child: Text("\$111", style: TextStyle(fontWeight: FontWeight.w500,fontSize: 10,color: AppColor.lightIndigo),) ,
                                      ),
-                                     child: Text("\$111", style: TextStyle(fontWeight: FontWeight.w500,fontSize: 10,color: AppColor.lightIndigo),) ,
-                                   ),
-                                  SizedBox(width: 5,)
-                                ],
-                              )),
-                        ),
-                      );
-                    }),
-              ],
+                                    SizedBox(width: 5,)
+                                  ],
+                                )),
+                          ),
+                        );
+                      }),
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
