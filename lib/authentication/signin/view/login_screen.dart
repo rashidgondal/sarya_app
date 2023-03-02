@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:places_api/places_api.dart';
 import 'package:sarya/authentication/signin/signin_view_model/signin_cubits.dart';
 import 'package:sarya/authentication/signin/signin_view_model/signin_states.dart';
 import 'package:sarya/extensions/string_extension.dart';
@@ -10,7 +8,6 @@ import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
-import '../../../Search_Places/SearchPlacesMap.dart';
 import '../../../customWidgets/data_loading.dart';
 import '../../../locator.dart';
 import '../../../navigation/navigation_service.dart';
@@ -274,28 +271,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   )),
                               InkWell(
                                   onTap: () async {
-                                    //_navigationService.navigateTo(termRout);
-                                    await showCupertinoModalBottomSheet(
-                                      expand: true,
-                                      useRootNavigator: true,
-                                      context: context,
-                                      builder: (modalContext) =>
-                                          PlacesSearchModal(
-                                        passedContext: context,
-                                        modalContext: modalContext,
-                                        title: 'Breakfast',
-                                        signleSearch: false,
-                                        onPlaceSelected: (List<Place>? place) {
-                                          if (place != null) {
-                                            print('length ${place.length}');
-                                            print(
-                                                'marker_id_${place[0].geometry.location.lat}_${place[0].geometry.location.lng}');
-                                            print('${place[0].name}');
-                                            print('${place[0].vicinity}');
-                                          }
-                                        },
-                                      ),
-                                    );
+                                    _navigationService.navigateTo(termRout);
                                   },
                                   child: const SizedBox(
                                       height: 40.0,
