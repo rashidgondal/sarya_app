@@ -64,12 +64,12 @@ class PublicResult {
   PublicResult.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     userName = json['userName'];
-    destination = json['destination'].cast<String>();
+    destination = json['destination'];
     title = json['title'];
     summary = json['summary'];
     cost = json['cost'];
     tripCost = json['tripCost'];
-    tripType = json['tripType'].cast<String>();
+    tripType = json['tripType'];
     totalDays = json['totalDays'];
     step = json['step'];
     if (json['days'] != null) {

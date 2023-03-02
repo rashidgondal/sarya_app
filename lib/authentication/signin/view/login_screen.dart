@@ -32,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     context.read<CountryCubits>().getCountries();
-    context.read<PublicItineraryCubits>().getPublicItinerary();
     _navigationService = locator<NavigationService>();
   }
 

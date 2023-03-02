@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/shop/model/public_itinerary_response.dart';
@@ -16,10 +15,11 @@ class PublicItineraryCubits extends Cubit<PublicItineraryStates> {
       final  result = await ShopIntineraryRepository.instance.getPublicItinerary();
       log("result.........$result", name: "getPublicItinerary | PublicItineraryCubits");
       PublicItineraryResponse publicItineraryResponse = PublicItineraryResponse.fromJson(result);
-      SharedPrefs pref = SharedPrefs();
       emit(PublicItineraryLoaded(publicItineraryResponse: publicItineraryResponse));
 
     }catch(e){
+      log("result.........${e.toString()}", name: "catch | PublicItineraryCubits");
+
       emit(const PublicItineraryFailure(error: ''));
     }
   }

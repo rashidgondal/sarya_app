@@ -39,6 +39,8 @@ class _ShopScreenState extends State<ShopScreen> {
     getUserInfo();
     super.initState();
     _navigationService = locator<NavigationService>();
+    context.read<PublicItineraryCubits>().getPublicItinerary();
+
   }
 
   getUserInfo() async {
