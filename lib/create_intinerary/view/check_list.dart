@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sarya/extensions/string_extension.dart';
+import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
@@ -27,6 +28,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
   TextEditingController addMoreController = TextEditingController();
   List<String> selectedCheckList = [];
   List<String> preSelectedCheckList = [];
+  List<String> tempCheckList = [];
 
   @override
   void initState() {
@@ -55,8 +57,6 @@ class _CheckListScreenState extends State<CheckListScreen> {
     listOfBool.clear();
     listOfCheckList.clear();
     super.dispose();
-
-
   }
 
   @override
@@ -100,8 +100,9 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   children: [
                     InkWell(
                       onTap: () {
+                        SharedPrefs pref = SharedPrefs();
+                        pref.saveTempCheckList(tempCheckList);
                         _navigationService.goBack(value: selectedCheckList);
-
                       },
                       child: Container(
                         height: 46.0,
@@ -215,6 +216,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                       listOfCheckList.add(addMoreController.text);
                       listOfBool.add(true);
                       selectedCheckList.add(addMoreController.text);
+                      tempCheckList.add(addMoreController.text);
                       addMoreController.clear();
                       setState(() {
 

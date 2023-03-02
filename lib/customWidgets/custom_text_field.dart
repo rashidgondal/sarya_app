@@ -10,6 +10,7 @@ class CustomTextField extends StatefulWidget {
   final Size size;
   final Widget? icon;
   final Widget? suffixIcon;
+  final Widget? prefix;
   final Function(String)? onChange;
   const CustomTextField({Key? key,
     required this.maxLine,
@@ -19,7 +20,8 @@ class CustomTextField extends StatefulWidget {
     required this.hintText,
     this.icon,
     this.onChange,
-    this.suffixIcon
+    this.suffixIcon,
+    this.prefix
   }) : super(key: key);
 
   @override
@@ -73,7 +75,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
           child: Container(
             color: AppColor.whiteColor,
             height: 20,
-            child: widget.icon == null? SizedBox(): widget.icon
+            child: Row(
+              children: [
+                widget.icon == null? SizedBox(): widget.icon!,
+                SizedBox(width: 5,),
+               Container(
+                  color: AppColor.whiteColor,
+                  child: widget.prefix,
+                ),
+              ],
+            )
           ),
         ),
       ],

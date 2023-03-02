@@ -18,6 +18,7 @@ import 'package:sarya/customWidgets/data_loading.dart';
 import 'package:sarya/customWidgets/dial_trip_estimation_cost.dart';
 import 'package:sarya/customWidgets/dialoge_select_trip_type.dart';
 import 'package:sarya/extensions/string_extension.dart';
+import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
@@ -42,19 +43,25 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
   TextEditingController summaryController = TextEditingController();
   TextEditingController intineraryCostController = TextEditingController();
   TextEditingController totalDaysController = TextEditingController();
+  List<String> listOfCheckList = [];
   late NavigationService _navigationService;
   int tripCost = 0;
   List<String> checkList = [];
   List<String> tripType = [];
   final ImagePicker _picker = ImagePicker();
+  String itineraryCost ='', totalDays = '';
+  SharedPrefs pref = SharedPrefs();
 
   @override
   void initState() {
+
     super.initState();
     _navigationService = locator<NavigationService>();
     context.read<ActivityCubits>().getActivity();
     context.read<TransportCubits>().getTransport();
   }
+
+
 
 
   @override
@@ -136,10 +143,21 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                         height: 2.0,
                       ),
                       CustomTextField(
-                        hintText: 'Intinerary Cost',
+                        hintText: 'Itinerary Cost ',
                         size: size,
                         maxLine: 1,
+                        prefix: itineraryCost.isEmpty? null :Text(
+                          'Itinerary Cost ',
+                          style:TextStyle(
+                              fontSize: 12.0, color: AppColor.headingColor2),
+                        ),
                         textInputType: TextInputType.number,
+                        onChange: (v){
+                          itineraryCost =v;
+                          setState(() {
+
+                          });
+                        },
                         textEditingController: intineraryCostController,
                         icon:Row(children: [SvgPicture.asset("cost_icon".svg)]),                  ),
                       const SizedBox(
@@ -163,7 +181,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                         },
                         child: TextDecoratedContainer(
                           titleWidget:     Text(
-                            tripCost == 0 ?'Trip Estimated Cost': '$tripCost',
+                            tripCost == 0 ?'Trip Estimated Cost': 'Trip Cost $tripCost',
                             style: const TextStyle(
                                 fontSize: 15.0, color: AppColor.headingColor2),
                           ),
@@ -259,9 +277,20 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                         height: 2.0,
                       ),
                       CustomTextField(
-                        hintText: 'Total Days',
+                        hintText: 'Total Days ',
                         size: size,
                         maxLine: 1,
+                        onChange: (v){
+                          totalDays = v;
+                          setState(() {
+                          });
+                        },
+                        prefix: totalDays.isEmpty? null: Text(
+                          'Total Days ',
+                          style:TextStyle(
+                              fontSize: 15.0, color: AppColor.headingColor2),
+                        ),
+
                         textInputType: TextInputType.number,
                         textEditingController: totalDaysController,
                         icon: Row(children: [SvgPicture.asset("days_icon".svg)]),
@@ -271,22 +300,33 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                       ),
                       BlocBuilder<CheckListCubits, CheckListStates>(
                           builder: (context, state) {
-                            List<String> listOfCheckList = [];
                             List<bool> listOfBool = [];
                             if (state is CheckListLoaded) {
-                              listOfCheckList = state.response.result!.toList() ?? [];
+                              var list = state.response.result!.toList() ?? [];
+                              listOfCheckList.addAll(list);
                               listOfBool = state.boolList.toList();
                             }
                             return   InkWell(
                                 onTap: (){
-                                  _navigationService.navigateTo(checkListRoute,
-                                      arguments:{"checklist":listOfCheckList, "listOfBool":listOfBool, "selectedCheckList":checkList})!.then((value) {
+                                  if(checkList.isNotEmpty){
+                                    checkList.forEach((element) {
+                                      if(listOfCheckList.contains(element)){
 
+                                      }else{
+                                        listOfCheckList.add(element);
+                                        listOfBool.add(true);
+                                      }
+                                    });
+                                  }
+                                  _navigationService.navigateTo(checkListRoute,
+                                      arguments:{ "checklist": listOfCheckList,
+                                                  "listOfBool": listOfBool,
+                                                   "selectedCheckList": checkList})!.then((value) {
+                                            //getCheckList();
                                     if(value != null){
                                       checkList = value;
-                                      setState(() {
+                                      setState(() {});
 
-                                      });
                                     }else{
                                       setState(() {
 

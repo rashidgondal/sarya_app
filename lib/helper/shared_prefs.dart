@@ -9,9 +9,21 @@ class SharedPrefs {
    final String _saveUserDataKey       = 'Save user';
    final String _tokenKey              = 'Save token';
    final String _itineraryIDKey        = 'Save Key';
-   final String _destinationCountryKey  = 'Destination Country Key';
+   final String _destinationCountryKey = 'Destination Country Key';
+   final String _checkListKey          = 'CheckListKey';
 
 
+
+
+   Future getTempCheckList() async {
+     final prefs = await SharedPreferences.getInstance();
+     return json.decode(prefs.getString(_checkListKey)!);
+   }
+
+   Future<void> saveTempCheckList(dynamic value) async {
+     final prefs = await SharedPreferences.getInstance();
+     prefs.setString(_checkListKey, json.encode(value));
+   }
 
    Future getDestinationCountries() async {
      final prefs = await SharedPreferences.getInstance();

@@ -27,9 +27,6 @@ class CreateIntineraryCubits extends Cubit<CreateIntineraryStates> {
       pref.saveDestinationCountries(destination);
       print("3.........");
 
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Itinerary Created")));
-
       emit(CreateIntineraryLoaded());
       navigationService.navigateTo(designIntineraryRoute);
 
