@@ -54,7 +54,6 @@ dependencies:
   flutter_launcher_icons: ^0.11.0
   google_maps_flutter: ^2.2.3
   geolocator: ^9.0.1
-  flutter_google_places: ^0.3.0
   awesome_snackbar_content: ^0.0.8
   geojson: ^1.0.0
   image_picker: ^0.8.6+1
@@ -68,9 +67,15 @@ dependencies:
   latlong2: ^0.8.1
   places_api:
     path: packages/places_api
+  story_view:
+    path: packages/story_view-master
   common:
     path: packages/common
+  flutter_google_places:
+    path: packages/flutter_google_places-master
   flutter_windowmanager: ^0.2.0
+  dismissible_page: ^1.0.1
+  flutter_native_splash: any
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +91,11 @@ flutter_icons:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_native_splash: ^2.2.18
+flutter_native_splash:
+  color: "#5F58EC"
+  image: "lib/assets/images/launcher_icon.png"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

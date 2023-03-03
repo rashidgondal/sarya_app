@@ -200,6 +200,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      sha256: b36c7f7e24c0bdf1bf9a3da461c837d1de64b9f8beb190c9011d8c72a3dfd745
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.17.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -224,6 +232,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.6"
+  dismissible_page:
+    dependency: "direct main"
+    description:
+      name: dismissible_page
+      sha256: "5cec709b6a8dc517382640ed2c62edfa4e8d566901ef4fa48c941e999ca39cb5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   equatable:
     dependency: "direct main"
     description:
@@ -296,11 +312,10 @@ packages:
   flutter_google_places:
     dependency: "direct main"
     description:
-      name: flutter_google_places
-      sha256: e9fb23ceacdc7359aa759627550146f7fd3ae6c067d16f39f3c50d8feebf4809
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
+      path: "packages/flutter_google_places-master"
+      relative: true
+    source: path
+    version: "0.4.0"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
@@ -317,6 +332,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  flutter_native_splash:
+    dependency: "direct main"
+    description:
+      name: flutter_native_splash
+      sha256: bd36d1a7f05ff8378cad17d20c33ca904630bfd3fcf8b15c9e8237efbccfad0a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0+1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -567,6 +590,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.20-nullsafety.5"
+  html:
+    dependency: transitive
+    description:
+      name: html
+      sha256: "79d498e6d6761925a34ee5ea8fa6dfef38607781d2fa91e37523474282af55cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.2"
   http:
     dependency: transitive
     description:
@@ -671,6 +702,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.8.1"
+  lint:
+    dependency: transitive
+    description:
+      name: lint
+      sha256: "4a539aa34ec5721a2c7574ae2ca0336738ea4adc2a34887d54b7596310b33c85"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.10.0"
   lists:
     dependency: transitive
     description:
@@ -986,10 +1025,10 @@ packages:
     dependency: transitive
     description:
       name: rxdart
-      sha256: "2ef8b4e91cb3b55d155e0e34eeae0ac7107974e451495c955ac04ddee8cc21fd"
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.26.0"
+    version: "0.27.7"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -1091,6 +1130,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  story_view:
+    dependency: "direct main"
+    description:
+      path: "packages/story_view-master"
+      relative: true
+    source: path
+    version: "0.13.2"
   stream_channel:
     dependency: transitive
     description:
@@ -1163,6 +1209,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1"
+  universal_io:
+    dependency: transitive
+    description:
+      name: universal_io
+      sha256: "06866290206d196064fd61df4c7aea1ffe9a4e7c4ccaa8fcded42dd41948005d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   uuid:
     dependency: transitive
     description:
@@ -1187,6 +1241,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  video_player:
+    dependency: transitive
+    description:
+      name: video_player
+      sha256: "58dc3d6ceb199b82e652ec27f16485e33167ef021fe4221a954ff1aa12b1a5c0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.3"
+  video_player_android:
+    dependency: transitive
+    description:
+      name: video_player_android
+      sha256: "0fc42778d794465f12456ccdade3e729e4339c8a112f9e58d170dc00f17b75f2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.11"
+  video_player_avfoundation:
+    dependency: transitive
+    description:
+      name: video_player_avfoundation
+      sha256: c29bdae387091ee988a29bbb6f94341e2134a337d0bf7f6b8a087b4ba49d4d2f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
+  video_player_platform_interface:
+    dependency: transitive
+    description:
+      name: video_player_platform_interface
+      sha256: "72ba04ad0eff76123c6d782ac46621cb8be476a89c33c89173fce982b6ec049b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.2"
+  video_player_web:
+    dependency: transitive
+    description:
+      name: video_player_web
+      sha256: d635bb2834f2b14cfd52c7fc9307a95dffbe768d116dd6047a4ecbba203289c8
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.14"
   win32:
     dependency: transitive
     description:
