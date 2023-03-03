@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:sarya/authentication/forget_password/forget_password_viewmodel/forget_password_cubits.dart';
 import 'package:sarya/authentication/forget_password/forget_password_viewmodel/reset_password_cubits.dart';
 import 'package:sarya/authentication/signup/signup_view_model/avatar_cubits.dart';
@@ -12,6 +13,7 @@ import 'package:sarya/create_intinerary/intinerary_view_model/delete_all_intiner
 import 'package:sarya/create_intinerary/intinerary_view_model/transport_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/update_intinerary_cubits.dart';
 import 'package:sarya/extensions/string_extension.dart';
+import 'package:sarya/home/home_view_model/draft_itinerary_cubits.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/payments/payments_view_model/update_bank_cubits.dart';
 import 'package:sarya/settings/avatar/view_model/update_avatar_cubits.dart';
@@ -20,7 +22,6 @@ import 'package:sarya/settings/name/view_model/name_cubits.dart';
 import 'package:sarya/settings/phone/view_model/phone_cubits.dart';
 import 'package:sarya/shop/shop_view_model/public_cubits.dart';
 import 'package:sarya/shop/shop_view_model/search_cubits.dart';
-import 'package:sarya/home/home_view_model/draft_itinerary_cubits.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 import 'authentication/signin/signin_view_model/signin_cubits.dart';
@@ -107,8 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _navigationService = locator<NavigationService>();
 
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 3), () async {
       _navigationService.navigatePushReplace(loginRout);
+      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
     });
   }
 

@@ -70,7 +70,7 @@ dependencies:
     path: packages/places_api
   common:
     path: packages/common
-
+  flutter_windowmanager: ^0.2.0
 
 dev_dependencies:
   flutter_test:
