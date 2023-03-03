@@ -9,11 +9,13 @@ class CreateIntineraryRequest {
   int? step;
   List<Days>? days;
   List<String>? checklist;
+  String? profileImg;
   bool? live;
 
 
   CreateIntineraryRequest(
       {this.destination,
+        this.profileImg,
         this.title,
         this.summary,
         this.cost,
@@ -31,7 +33,7 @@ class CreateIntineraryRequest {
     checklist = json['checklist'].cast<String>();
     title = json['title'];
     live = json['live'];
-
+    profileImg = json['profileImg'];
     summary = json['summary'];
     cost = json['cost'];
     tripCost = json['tripCost'];
@@ -58,6 +60,7 @@ class CreateIntineraryRequest {
     data['tripType'] = this.tripType;
     data['totalDays'] = this.totalDays;
     data['step'] = this.step;
+    data['profileImg'] = this.profileImg;
     if (this.days != null) {
       data['days'] = this.days!.map((v) => v.toJson()).toList();
     }

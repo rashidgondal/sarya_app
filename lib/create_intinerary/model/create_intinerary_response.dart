@@ -37,9 +37,12 @@ class Result {
   String? createdAt;
   String? updatedAt;
   int? iV;
+  String? profileImg;
+
 
   Result(
       {this.userName,
+        this.profileImg,
         this.destination,
         this.title,
         this.summary,
@@ -77,6 +80,8 @@ class Result {
     sId = json['_id'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    profileImg = json['profileImg'];
+
     iV = json['__v'];
   }
 
@@ -99,6 +104,7 @@ class Result {
     data['_id'] = this.sId;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+    data['profileImg'] = this.profileImg;
     data['__v'] = this.iV;
     return data;
   }

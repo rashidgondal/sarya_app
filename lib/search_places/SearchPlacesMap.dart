@@ -6,6 +6,7 @@ import 'package:sarya/search_places/sarya_map.dart';
 import 'package:sarya/search_places/sarya_search_feild.dart';
 import 'package:sarya/search_places/sarya_spacing.dart';
 import 'package:sarya/search_places/sarya_text.dart';
+import 'package:sarya/theme/color_scheme.dart';
 
 import 'Sarya_color.dart';
 import 'sarya_chip.dart';
@@ -38,7 +39,7 @@ class _PlacesSearchModalState extends State<PlacesSearchModal> {
   void initState() {
     BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(
-        size: Size(4, 4),
+        size: Size(20, 20),
       ),
       'lib/assets/svgs/flag_icon.png',
     ).then((onValue) {
@@ -115,12 +116,15 @@ class _PlacesSearchModalState extends State<PlacesSearchModal> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: SaryaColors.appbar,
-        automaticallyImplyLeading: false,
+        leading:   IconButton(onPressed: (){
+          Navigator.of(context).pop();
+        }, icon: Icon(Icons.arrow_back_ios, color: AppColor.lightIndigo,)),
         title: SaryaText(
           text: widget.title,
           style: TextStyle(
               fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
         ),
+
       ),
       body: Column(
         children: [

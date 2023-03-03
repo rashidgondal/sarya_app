@@ -30,12 +30,12 @@ class PublicItineraryResponse {
 class PublicResult {
   String? sId;
   String? userName;
- List? destination;
+  List? destination;
   String? title;
   String? summary;
   int? cost;
   int? tripCost;
- List? tripType;
+  List? tripType;
   int? totalDays;
   int? step;
   List<Days>? days;
@@ -43,11 +43,14 @@ class PublicResult {
   String? updatedAt;
   int? iV;
   bool? live;
- List? checklist;
+  List? checklist;
+  String? profileImg;
+
 
   PublicResult(
       {this.sId,
         this.userName,
+        this.profileImg,
         this.destination,
         this.title,
         this.summary,
@@ -66,6 +69,7 @@ class PublicResult {
   PublicResult.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     userName = json['userName'];
+    profileImg = json['profileImg'];
     destination = json['destination'];
     title = json['title'];
     summary = json['summary'];
@@ -107,6 +111,7 @@ class PublicResult {
     data['__v'] = this.iV;
     data['live'] = this.live;
     data['checklist'] = this.checklist;
+    data['profileImg'] = this.profileImg;
     return data;
   }
 }
@@ -115,7 +120,7 @@ class Days {
   String? country;
   String? airport;
  List? transportation;
-  Accomodation? accomodation;
+ Accomodation? accomodation;
  List? activities;
   Breakfast? breakfast;
   Breakfast? lunch;

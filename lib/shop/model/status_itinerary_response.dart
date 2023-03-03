@@ -41,6 +41,7 @@ class DraftResult {
   List<Days>? days;
   String? createdAt;
   String? updatedAt;
+  String? profileImg;
   int? iV;
   bool? live;
 
@@ -71,6 +72,7 @@ class DraftResult {
     tripCost = json['tripCost'];
     tripType = json['tripType'].cast<String>();
     totalDays = json['totalDays'];
+    profileImg = json['profileImg'];
     step = json['step'];
     if (json['days'] != null) {
       days = <Days>[];
@@ -95,6 +97,7 @@ class DraftResult {
     data['tripCost'] = this.tripCost;
     data['tripType'] = this.tripType;
     data['totalDays'] = this.totalDays;
+    data['profileImg'] = this.profileImg;
     data['step'] = this.step;
     if (this.days != null) {
       data['days'] = this.days!.map((v) => v.toJson()).toList();

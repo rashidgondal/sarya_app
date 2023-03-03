@@ -6,11 +6,14 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:minio/minio.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:places_api/places_api.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
+import 'package:sarya/search_places/SearchPlacesMap.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 import '../../customWidgets/custom_text_field.dart';
@@ -116,8 +119,7 @@ class _FoodAndShoppingInformationState
             automaticallyImplyLeading: false,
             backgroundColor: AppColor.aquaCasper2,
             title: Text(
-              //widget.map['title'],
-              '',
+            widget.map['title'],
               style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
             ),
             centerTitle: true,
@@ -197,21 +199,31 @@ class _FoodAndShoppingInformationState
                     height: 10,
                   ),
                   InkWell(
-                      onTap: () {
-                        _navigationService.navigateTo(searchPlacesRoute,
-                            arguments: {
-                              "type": "",
-                              "from": "food"
-                            })!.then((value) {
-                          if (value != null) {
-                            Map map = value;
-                            print("name.......${map['name']}");
-                            print("locat.......${map['coordinate']}");
-                            location.coordinates = map['coordinate'];
-                            nameOfPlace = map['name'];
-                            setState(() {});
-                          }
+                      onTap: () async{
+
+                        await showCupertinoModalBottomSheet(
+                        expand: true,
+                        useRootNavigator: true,
+                        context: context,
+                        builder: (modalContext) =>
+                            PlacesSearchModal(
+                              passedContext: context,
+                              modalContext: modalContext,
+                              title: widget.map['title'],
+                              signleSearch: true,
+                              onPlaceSelected: (List<Place>? places) {
+                                if (places != null) {
+
+                                  location.coordinates = [places[0].geometry.location.lng,places![0].geometry.location.lat];
+                                  nameOfPlace = places![0].name;
+
+                                }
+                              },
+                            ),
+                        ).then((value) {
+
                         });
+
                       },
                       child: TextDecoratedContainer(
                           icon: Icon(

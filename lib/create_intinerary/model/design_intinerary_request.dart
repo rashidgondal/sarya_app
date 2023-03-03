@@ -9,11 +9,13 @@ class DesignIntineraryRequest {
   List<Days>? days;
   List<String>? checklist;
   bool? live;
+  String? profileImg;
 
 
   DesignIntineraryRequest(
       {
         this.title,
+        this.profileImg,
         this.summary,
         this.cost,
         this.tripCost,
@@ -27,6 +29,7 @@ class DesignIntineraryRequest {
 
   DesignIntineraryRequest.fromJson(Map<String, dynamic> json) {
     checklist = json['checklist'].cast<String>();
+    profileImg = json['profileImg'];
     title = json['title'];
     live = json['live'];
     summary = json['summary'];
@@ -53,6 +56,7 @@ class DesignIntineraryRequest {
     data['tripCost'] = this.tripCost;
     data['tripType'] = this.tripType;
     data['totalDays'] = this.totalDays;
+    data['profileImg'] = this.profileImg;
     data['step'] = this.step;
     if (this.days != null) {
       data['days'] = this.days!.map((v) => v.toJson()).toList();

@@ -43,10 +43,13 @@ class AllItineraryResult {
   String? updatedAt;
   int? iV;
   bool? live;
+  String? profileImg;
+
 
   AllItineraryResult(
       {this.sId,
         this.userName,
+        this.profileImg,
         this.destination,
         this.title,
         this.summary,
@@ -81,6 +84,7 @@ class AllItineraryResult {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    profileImg = json['profileImg'];
     live = json['live'];
   }
 
@@ -103,6 +107,8 @@ class AllItineraryResult {
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
     data['live'] = this.live;
+    data['profileImg'] = this.profileImg;
+
     return data;
   }
 }

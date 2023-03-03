@@ -23,7 +23,7 @@ class ShopIntineraryRepository {
   Future<dynamic> getItineraryByStatus({required bool status}) async{
     try{
       var result  =  await _saryaAPI.getItineraryByStatus(status: status);
-      print("getItineraryByStatus .............$result");
+      print("getItineraryByStatus .............${result.toString()}");
 
       return result;
 

@@ -42,6 +42,7 @@ class SearchResult {
   List<Days>? days;
   String? createdAt;
   String? updatedAt;
+  String? profileImg;
   int? iV;
   bool? live;
 
@@ -60,6 +61,7 @@ class SearchResult {
         this.days,
         this.createdAt,
         this.updatedAt,
+        this.profileImg,
         this.iV,
         this.live});
 
@@ -83,6 +85,7 @@ class SearchResult {
     }
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    profileImg = json['profileImg'];
     iV = json['__v'];
     live = json['live'];
   }
@@ -107,6 +110,7 @@ class SearchResult {
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
     data['live'] = this.live;
+    data['profileImg'] = this.profileImg;
     return data;
   }
 }

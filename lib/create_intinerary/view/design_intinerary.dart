@@ -305,25 +305,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                               size: 20,
                             )),
                       ),
-                      // CustomTextField(
-                      //   hintText: 'Total Days ',
-                      //   size: size,
-                      //   maxLine: 1,
-                      //   onChange: (v){
-                      //     totalDays = v;
-                      //     setState(() {
-                      //     });
-                      //   },
-                      //   prefix: totalDays.isEmpty? null: Text(
-                      //     'Total Days ',
-                      //     style:TextStyle(
-                      //         fontSize: 15.0, color: AppColor.headingColor2),
-                      //   ),
-                      //
-                      //   textInputType: TextInputType.number,
-                      //   textEditingController: totalDaysController,
-                      //   icon: Row(children: [SvgPicture.asset("days_icon".svg)]),
-                      // ),
+
                       const SizedBox(
                         height: 2.0,
                       ),
@@ -552,7 +534,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
         intineraryCostController.text.isEmpty ||
         tripCost ==0 ||
         tripType.isEmpty ||
-        totalDaysController.text.isEmpty ||
+            totalDays.isEmpty ||
         checkList.isEmpty
     ){
      return Container(
@@ -576,7 +558,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
 
     return InkWell(
       onTap: () {
-        int totalDay = int.parse(totalDaysController.text);
+        int totalDay = int.parse(totalDays);
         int itineraryCost = int.parse(intineraryCostController.text);
 
         DesignIntineraryRequest createIntineraryRequest = DesignIntineraryRequest(
@@ -589,6 +571,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
             totalDays: totalDay,
             checklist: checkList,
             live: false,
+            profileImg: filesModel!.name_of_file,
             days: []
         );
 
@@ -623,7 +606,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
         intineraryCostController.text.isEmpty ||
         tripCost ==0 ||
         tripType.isEmpty ||
-        totalDaysController.text.isEmpty ||
+        totalDays.isEmpty ||
         checkList.isEmpty
     ){
       return Container(
@@ -647,7 +630,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
 
     return InkWell(
       onTap: () {
-        int totalDay = int.parse(totalDaysController.text);
+        int totalDay = int.parse(totalDays);
         int itineraryCost = int.parse(intineraryCostController.text);
 
         DesignIntineraryRequest createIntineraryRequest = DesignIntineraryRequest(
@@ -659,6 +642,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
             tripType: tripType,
             totalDays: totalDay,
             checklist: checkList,
+            profileImg: filesModel == null? "":filesModel!.name_of_file,
             live: false,
 
             days: []

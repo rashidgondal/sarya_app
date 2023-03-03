@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:places_api/places_api.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/activity_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/activity_states.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/day_update_intinerary_cubits.dart';
@@ -17,6 +19,7 @@ import 'package:sarya/theme/color_scheme.dart';
 import '../../customWidgets/dialoge_airport_cost.dart';
 import '../../customWidgets/dialoge_type_of_transport.dart';
 import '../../locator.dart';
+import '../../search_places/SearchPlacesMap.dart';
 import '../model/day_design_intinerary_request.dart' as create_intenerary;
 
 class DayDesignIntineraryScreen extends StatefulWidget {
@@ -37,7 +40,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   List<create_intenerary.Accomodation> list_of_accommodation = [];
   var countryList = [];
   List<LatLng> listOfLatLng = [];
-
+  List<Place> listOfSelectedPlaces = [];
   create_intenerary.Accomodation accomodation =
       create_intenerary.Accomodation();
 
@@ -522,22 +525,36 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         }),
                   ),
                   InkWell(
-                      onTap: () {
-                        _navigationService.navigateTo(searchPlacesRoute,
-                            arguments: {
-                              "type": "",
-                              "from": "day",
-                              "preSelected": list_of_days[selected_index].accomodation??[]
-                            })!.then((value) {
-                          if (value != null) {
-                            list_of_days[selected_index].accomodation =
-                            value!;
-                          } else {
+                      onTap: () async{
+                        await showCupertinoModalBottomSheet(
+                        expand: true,
+                        useRootNavigator: true,
+                        context: context,
+                        builder: (modalContext) =>
+                            PlacesSearchModal(
+                              passedContext: context,
+                              modalContext: modalContext,
+                              title: 'Accommodation',
+                              signleSearch: false,
+                              onPlaceSelected: (List<Place>? places) {
+                                if (places != null) {
 
-                          }
-                          setState(() {
+                                  var list = places.map((e) => create_intenerary.Accomodation(name: e.name, location:create_intenerary.Location(coordinates: [e.geometry.location.lng,e.geometry.location.lat]) )).toList();
+                                  print('length................... ${list!.length}');
 
-                          });
+                                  list_of_days[selected_index].accomodation = list;
+
+                                  /*  listOfSelectedPlaces = places!;
+                                  //list_of_accommodation.add(create_intenerary.Accomodation());
+                                  print('length ${places!.length}');
+                                  print('marker_id_${places![0].geometry.location.lat}_${places[0].geometry.location.lng}');
+                                  print('${places![0].name}');
+                                  print('${places![0].vicinity}');*/
+                                }
+                              },
+                            ),
+                        ).then((value) {
+
                         });
                       },
                       child: TextDecoratedContainer(
@@ -711,7 +728,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         size: 20,
                       ),
                       titleWidget: Text(
-                        'Breakfast',
+                        'Breakfast ${list_of_days[selected_index].breakfast!.name??''}',
                         style: TextStyle(
                             fontSize: 15.0,
                             color: AppColor.headingColor2),
@@ -730,7 +747,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         if (value != null) {
                           list_of_days[selected_index].lunch = value;
                           listOfLatLng.add(LatLng(list_of_days[selected_index].lunch!.location!.coordinates![1], list_of_days[selected_index].lunch!.location!.coordinates![0]));
+                          setState(() {
 
+                          });
                         }
                       });
                     },
@@ -741,7 +760,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           size: 20,
                         ),
                         titleWidget: Text(
-                          'Lunch',
+                          'Lunch ${list_of_days[selected_index].dinner!.name??''}',
                           style: TextStyle(
                               fontSize: 15.0,
                               color: AppColor.headingColor2),
@@ -768,7 +787,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         size: 20,
                       ),
                       titleWidget: Text(
-                        'Dinner',
+                        'Dinner ${ list_of_days[selected_index].dinner!.name??''}',
                         style: TextStyle(
                             fontSize: 15.0,
                             color: AppColor.headingColor2),
@@ -799,7 +818,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           size: 20,
                         ),
                         titleWidget: Text(
-                          'Coffee Shops Clubs & Lounges',
+                          'Coffee Shops Clubs & Lounges ${list_of_days[selected_index].coffeeClubsLounges!.name??''}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontSize: 15.0,
                               color: AppColor.headingColor2),
@@ -829,7 +850,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           size: 20,
                         ),
                         titleWidget: Text(
-                          'Market, Malls & Store',
+                          'Market, Malls & Store ${list_of_days[selected_index].marketMallsStores!.name??''}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontSize: 15.0,
                               color: AppColor.headingColor2),
