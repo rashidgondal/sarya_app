@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:sarya/authentication/forget_password/forget_password_viewmodel/forget_password_cubits.dart';
 import 'package:sarya/authentication/forget_password/forget_password_viewmodel/reset_password_cubits.dart';
@@ -15,7 +14,6 @@ import 'package:sarya/create_intinerary/intinerary_view_model/checklist_cubits.d
 import 'package:sarya/create_intinerary/intinerary_view_model/delete_all_intinerary_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/transport_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/update_intinerary_cubits.dart';
-import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/home/home_view_model/draft_itinerary_cubits.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/payments/payments_view_model/update_bank_cubits.dart';
@@ -113,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _navigationService = locator<NavigationService>();
 
-    Future.delayed(Duration(seconds: 3), () async {
+    Future.delayed(Duration(milliseconds: 3400), () async {
       _navigationService.navigatePushReplace(loginRout);
       if (Platform.isAndroid) {
         await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
@@ -125,15 +123,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.colorBlue,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(
-              'app_icon'.svg,
-              color: AppColor.whiteColor,
-            )
-          ],
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.all(120),
+        child: Center(
+          child: Image.asset(
+            'lib/assets/images/Sarya_White_SP.gif',
+            color: AppColor.whiteColor,
+          ),
         ),
       ),
     );
