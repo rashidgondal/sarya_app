@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:sarya/authentication/forget_password/forget_password_viewmodel/forget_password_cubits.dart';
@@ -38,7 +41,8 @@ import 'navigation/router_path.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   setupLocator();
   runApp(const MyApp());
 }
@@ -105,12 +109,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    FlutterNativeSplash.remove();
     super.initState();
     _navigationService = locator<NavigationService>();
 
     Future.delayed(Duration(seconds: 3), () async {
       _navigationService.navigatePushReplace(loginRout);
-      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+      if (Platform.isAndroid) {
+        await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+      }
     });
   }
 
