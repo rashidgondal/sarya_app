@@ -9,6 +9,7 @@ import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/home/home_view_model/draft_itinerary_cubits.dart';
 import 'package:sarya/theme/color_scheme.dart';
+import '../../core/network/routes/api_routes.dart';
 import '../../create_intinerary/intinerary_view_model/delete_intinerary_cubits.dart';
 import '../../customWidgets/delete_all_confirm_dialoge_.dart';
 import '../../navigation/navigation_service.dart';
@@ -152,9 +153,14 @@ class _DraftItineraryScreenState extends State<DraftItineraryScreen> {
                                               width: 72.0,
                                               decoration: BoxDecoration(
                                                   color: AppColor.aquaCasper2,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0)),
+                                                  borderRadius: BorderRadius.circular(
+                                                          10.0),
+                                              image: DecorationImage(image: NetworkImage(
+                                                "${ApiRoutes.picBaseURL}${list[index]['profileImg']}"
+                                              ))
+                                              ),
+                                              
+                                              
                                             ),
                                             const SizedBox(
                                               width: 10,
