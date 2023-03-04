@@ -97,7 +97,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case routes.designIntineraryRoute:
       return MaterialPageRoute(
-        builder: (context) =>  const DesignIntineraryScreen(),
+        builder: (context) =>   DesignIntineraryScreen(map: settings.arguments as Map,),
       );
     case routes.draftIntineraryRoute:
       return MaterialPageRoute(

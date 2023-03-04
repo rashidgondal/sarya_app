@@ -12,21 +12,16 @@ import '../model/design_intinerary_request.dart';
 class UpdateIntineraryCubits extends Cubit<UpdateIntineraryStates> {
   UpdateIntineraryCubits() : super(UpdateIntineraryInitial());
 
-  Future doCreateIntinerary(
-      {required DesignIntineraryRequest createIntineraryRequest, required NavigationService navigationService, required String route}) async {
+  Future updateDesignIntineraryPage(
+      {required DesignIntineraryRequest createIntineraryRequest, required NavigationService navigationService, required String route, List<String>? destination, required String itineraryId}) async {
     try {
       emit(UpdateIntineraryLoading());
 
-      SharedPrefs sharedPrefs = SharedPrefs();
-      String itineraryId = await sharedPrefs.getItineraryID();
-
-      var data = await CreateIntineraryRepository
-          .instance.updateIntinerary(body: createIntineraryRequest.toJson(), id: itineraryId);
+      var data = await CreateIntineraryRepository.instance.updateIntinerary(body: createIntineraryRequest.toJson(), id: itineraryId);
       CreateIntineraryResponse res = CreateIntineraryResponse.fromJson(data);
-      var country = await sharedPrefs.getDestinationCountries() ;
       emit(UpdateIntineraryLoaded(createIntineraryResponse: res));
       if(route == "Continue") {
-        navigationService.navigateTo(dayDesignRoute, arguments: {"country":country, "totalDays": createIntineraryRequest.totalDays, "itineraryCost":"${createIntineraryRequest.cost}","tripCost":"${createIntineraryRequest.tripCost}","summary":"${createIntineraryRequest.summary}","tripType": "${createIntineraryRequest.tripType}","location":[]});
+        navigationService.navigateTo(dayDesignRoute, arguments: {"country":destination, "totalDays": createIntineraryRequest.totalDays, "itineraryCost":"${createIntineraryRequest.cost}","tripCost":"${createIntineraryRequest.tripCost}","summary":"${createIntineraryRequest.summary}","tripType": "${createIntineraryRequest.tripType}","location":[]});
       }else{
         navigationService.navigatePushReplace(draftIntineraryRoute);
 

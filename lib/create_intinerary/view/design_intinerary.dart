@@ -33,7 +33,8 @@ import '../model/design_intinerary_request.dart';
 
 
 class DesignIntineraryScreen extends StatefulWidget {
-  const DesignIntineraryScreen({Key? key}) : super(key: key);
+  final Map map;
+  const DesignIntineraryScreen({Key? key, required this.map}) : super(key: key);
   @override
   State<DesignIntineraryScreen> createState() => _DesignIntineraryScreenState();
 }
@@ -305,7 +306,6 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                               size: 20,
                             )),
                       ),
-
                       const SizedBox(
                         height: 2.0,
                       ),
@@ -526,17 +526,18 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
     );
   }
 
+
+
   Widget _builtContinue(){
 
-    if(
-        titleController.text.isEmpty ||
-        summaryController.text.isEmpty ||
-        intineraryCostController.text.isEmpty ||
-        tripCost ==0 ||
-        tripType.isEmpty ||
+    if( titleController.text.isEmpty ||
+            summaryController.text.isEmpty ||
+            intineraryCostController.text.isEmpty ||
+            tripCost ==0 ||
+            tripType.isEmpty ||
             totalDays.isEmpty ||
-        checkList.isEmpty
-    ){
+            checkList.isEmpty ||
+                filesModel == null){
      return Container(
         height: 46.0,
         width: 150.0,
@@ -562,6 +563,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
         int itineraryCost = int.parse(intineraryCostController.text);
 
         DesignIntineraryRequest createIntineraryRequest = DesignIntineraryRequest(
+
             title: titleController.text,
             summary: summaryController.text,
             cost: itineraryCost,
@@ -575,7 +577,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
             days: []
         );
 
-        context.read<UpdateIntineraryCubits>().doCreateIntinerary(createIntineraryRequest: createIntineraryRequest, navigationService: _navigationService,route: "Continue");
+        context.read<UpdateIntineraryCubits>().updateDesignIntineraryPage(createIntineraryRequest: createIntineraryRequest, navigationService: _navigationService,route: "Continue", destination: widget.map['destination'], itineraryId: widget.map['id']);
 
       },
       child: Container(
@@ -607,8 +609,8 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
         tripCost ==0 ||
         tripType.isEmpty ||
         totalDays.isEmpty ||
-        checkList.isEmpty
-    ){
+        checkList.isEmpty ||
+        filesModel == null ){
       return Container(
         height: 46.0,
         width: 150.0,
@@ -627,9 +629,9 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
       );
     }
 
-
     return InkWell(
       onTap: () {
+
         int totalDay = int.parse(totalDays);
         int itineraryCost = int.parse(intineraryCostController.text);
 
@@ -647,8 +649,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
 
             days: []
         );
-
-        context.read<UpdateIntineraryCubits>().doCreateIntinerary(createIntineraryRequest: createIntineraryRequest, navigationService: _navigationService,route: "Save");
+        context.read<UpdateIntineraryCubits>().updateDesignIntineraryPage(createIntineraryRequest: createIntineraryRequest, navigationService: _navigationService,route: "Save", itineraryId: widget.map['id']);
 
       },
       child: Container(
@@ -668,7 +669,6 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
         ),
       ),
     );
-
   }
 
   ListOfFilesModel? filesModel;

@@ -99,9 +99,20 @@ class _DraftItineraryScreenState extends State<DraftItineraryScreen> {
                             physics: BouncingScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
                               print(" list[index]['step']........${ list[index]['step']}");
+                              print(" list[index]['_id']........${ list[index]['_id']}");
                               return InkWell(
                                 onTap: () {
-                                  //_navigationService.navigateTo(summaryRoutEdit);
+                                  if(list[index]['step'] == 4) {
+                                    _navigationService.navigateTo(
+                                        summaryRoutEdit);
+                                  } else if(list[index]['step'] == 1){
+
+                                    String id = list[index]['_id'];
+                                    List<dynamic> destination = list[index]['destination'];
+                                    print("id..................$id");
+                                    _navigationService.navigateTo(
+                                        designIntineraryRoute, arguments:  {"id":"$id", "destination": destination});
+                                  }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(

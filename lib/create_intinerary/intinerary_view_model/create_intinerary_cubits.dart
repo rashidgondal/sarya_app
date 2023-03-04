@@ -28,7 +28,7 @@ class CreateIntineraryCubits extends Cubit<CreateIntineraryStates> {
       print("3.........");
 
       emit(CreateIntineraryLoaded());
-      navigationService.navigateTo(designIntineraryRoute);
+      navigationService.navigateTo(designIntineraryRoute, arguments: {"id":"$id", "destination": destination});
 
     }catch(e){
       print("1.........${e.toString()}");

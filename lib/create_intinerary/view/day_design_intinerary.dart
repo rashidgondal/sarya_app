@@ -41,8 +41,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   var countryList = [];
   List<LatLng> listOfLatLng = [];
   List<Place> listOfSelectedPlaces = [];
-  create_intenerary.Accomodation accomodation =
-      create_intenerary.Accomodation();
+  create_intenerary.Accomodation accomodation = create_intenerary.Accomodation();
 
   @override
   void initState() {
@@ -276,114 +275,11 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
-                onTap: () {
-                  create_intenerary.DayDesignIntineraryRequest request =
-                  create_intenerary.DayDesignIntineraryRequest(
-                    step: 3,
-                    days: list_of_days,
-                    live: false,
-                  );
-                  context
-                      .read<DayUpdateIntineraryCubits>()
-                      .dayUpdateIntinerary(
-                      dayDesignIntineraryRequest: request,
-                      navigationService: _navigationService,
-                      route: "Save");
-                },
-                child: Container(
-                  height: 46.0,
-                  width: 150.0,
-                  decoration: BoxDecoration(
-                      color: AppColor.colorLiteBlack4,
-                      borderRadius: BorderRadius.circular(8.0)),
-                  child: const Center(
-                    child: Text(
-                      "Save",
-                      style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
-                          color: AppColor.colorBlack),
-                    ),
-                  ),
-                ),
-              ),
+              _buildSave(),
               const SizedBox(
                 width: 20,
               ),
-              InkWell(
-                onTap: () {
-                  print("selected index.....$selected_index");
-                  //_navigationService.navigateTo(summaryRoutSold);
-                  if (selected_index < list_of_days.length) {
-                    if (list_of_days[selected_index].airport!.isEmpty) {
-                      setState(() {});
-                    }
-                    else if(list_of_days[selected_index].transportation!.isEmpty){
-
-                    }
-                    else if(list_of_days[selected_index].accomodation!.isEmpty){
-
-                    }
-                    else if(list_of_days[selected_index].accomodation!.isEmpty){
-
-                    }
-                    else if(list_of_days[selected_index].breakfast == null){
-
-                    }
-                    else if(list_of_days[selected_index].lunch == null){
-
-                    }
-                    else if(list_of_days[selected_index].dinner == null){
-
-                    }
-                    else if(list_of_days[selected_index].marketMallsStores == null){
-
-                    }
-                    else if(list_of_days[selected_index].coffeeClubsLounges == null){
-
-                    }
-                    else {
-
-                      create_intenerary.DayDesignIntineraryRequest
-                      request =
-                      create_intenerary.DayDesignIntineraryRequest(
-                        step: 3,
-                        days: list_of_days,
-                        live: false,
-                      );
-
-                      widget.map['location'] = listOfLatLng;
-
-                      context
-                          .read<DayUpdateIntineraryCubits>()
-                          .dayUpdateIntinerary(
-                          dayDesignIntineraryRequest: request,
-                          navigationService: _navigationService,
-                          route: "Continue",
-                          map: widget.map);
-                    }
-                  }else{
-                    selected_index ++;
-                  }
-                },
-                child: Container(
-                  height: 46.0,
-                  width: 150.0,
-                  decoration: BoxDecoration(
-                      color: AppColor.buttonColor,
-                      borderRadius: BorderRadius.circular(8.0)),
-                  child: const Center(
-                    child: Text(
-                      "Continue",
-                      style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w500,
-                          color: AppColor.whiteColor),
-                    ),
-                  ),
-                ),
-              ),
+              _buildContinue()
             ],
           ),
         ),
@@ -868,4 +764,161 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
            ),
     );
   }
+
+  Widget _buildSave(){
+
+
+      if (list_of_days[selected_index].airport!.isEmpty ||
+          list_of_days[selected_index].transportation!.isEmpty||
+          list_of_days[selected_index].accomodation!.isEmpty ||
+          list_of_days[selected_index].accomodation!.isEmpty ||
+          list_of_days[selected_index].breakfast == null ||
+          list_of_days[selected_index].lunch == null ||
+          list_of_days[selected_index].dinner == null ||
+          list_of_days[selected_index].marketMallsStores == null ||
+          list_of_days[selected_index].coffeeClubsLounges == null
+      ) {
+        return Container(
+          height: 46.0,
+          width: 150.0,
+          decoration: BoxDecoration(
+              color: AppColor.colorLiteBlack4,
+              borderRadius: BorderRadius.circular(8.0)),
+          child: const Center(
+            child: Text(
+              "Save",
+              style: TextStyle(
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.colorBlack),
+            ),
+          ),
+        );
+      }
+
+      return InkWell(
+      onTap: () {
+        print("selected index.....$selected_index");
+
+
+        if (selected_index < list_of_days.length) {
+            create_intenerary.DayDesignIntineraryRequest
+            request = create_intenerary.DayDesignIntineraryRequest(
+              step: 3,
+              days: list_of_days,
+              live: false,
+            );
+
+            widget.map['location'] = listOfLatLng;
+
+            context
+                .read<DayUpdateIntineraryCubits>()
+                .dayUpdateIntineraryPage(
+                itineraryId: '',
+                dayDesignIntineraryRequest: request,
+                navigationService: _navigationService,
+                route: "Save",
+                map: widget.map);
+
+        }else{
+          selected_index++;
+        }
+      },
+      child: Container(
+        height: 46.0,
+        width: 150.0,
+        decoration: BoxDecoration(
+            color: AppColor.buttonColor,
+            borderRadius: BorderRadius.circular(8.0)),
+        child: const Center(
+          child: Text(
+            "Save",
+            style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.w500,
+                color: AppColor.colorBlack),
+          ),
+        ),
+      ),
+    );
+
+  }
+
+  Widget _buildContinue(){
+
+    if (list_of_days[selected_index].airport!.isEmpty ||
+        list_of_days[selected_index].transportation!.isEmpty||
+        list_of_days[selected_index].accomodation!.isEmpty ||
+        list_of_days[selected_index].accomodation!.isEmpty ||
+        list_of_days[selected_index].breakfast == null ||
+        list_of_days[selected_index].lunch == null ||
+        list_of_days[selected_index].dinner == null ||
+        list_of_days[selected_index].marketMallsStores == null ||
+        list_of_days[selected_index].coffeeClubsLounges == null
+    ) {
+      return Container(
+        height: 46.0,
+        width: 150.0,
+        decoration: BoxDecoration(
+            color: AppColor.colorLiteBlack4,
+            borderRadius: BorderRadius.circular(8.0)),
+        child: const Center(
+          child: Text(
+            "Continue",
+            style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.w500,
+                color: AppColor.colorBlack),
+          ),
+        ),
+      );
+    }
+
+    return InkWell(
+      onTap: () {
+        print("selected index.....$selected_index");
+
+
+        if (selected_index < list_of_days.length) {
+          create_intenerary.DayDesignIntineraryRequest
+          request = create_intenerary.DayDesignIntineraryRequest(
+            step: 3,
+            days: list_of_days,
+            live: false,
+          );
+
+          widget.map['location'] = listOfLatLng;
+
+          context
+              .read<DayUpdateIntineraryCubits>()
+              .dayUpdateIntineraryPage(
+              itineraryId: '',
+              dayDesignIntineraryRequest: request,
+              navigationService: _navigationService,
+              route: "Save",
+              map: widget.map);
+
+        }else{
+          selected_index++;
+        }
+      },
+      child: Container(
+        height: 46.0,
+        width: 150.0,
+        decoration: BoxDecoration(
+            color: AppColor.buttonColor,
+            borderRadius: BorderRadius.circular(8.0)),
+        child: const Center(
+          child: Text(
+            "Continue",
+            style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.w500,
+                color: AppColor.colorBlack),
+          ),
+        ),
+      ),
+    );
+  }
+
 }

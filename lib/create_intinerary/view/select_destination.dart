@@ -63,8 +63,7 @@ class _SelectDestinationState extends State<SelectDestination> {
     boolList  = widget.map['boolList'];
     super.initState();
     _navigationService = locator<NavigationService>();
-    context.read<TripCubits>().getTrip();
-    context.read<CheckListCubits>().getCheckList();
+
   }
 
 

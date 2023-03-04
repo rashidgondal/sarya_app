@@ -14,24 +14,21 @@ import '../model/design_intinerary_request.dart';
 class DayUpdateIntineraryCubits extends Cubit<DayUpdateIntineraryStates> {
   DayUpdateIntineraryCubits() : super(DayUpdateIntineraryInitial());
 
-  Future dayUpdateIntinerary(
-      {required DayDesignIntineraryRequest dayDesignIntineraryRequest, required NavigationService navigationService, required String route, Map? map}) async {
+  Future dayUpdateIntineraryPage(
+      {required DayDesignIntineraryRequest dayDesignIntineraryRequest, required NavigationService navigationService, required String route, Map? map, required String itineraryId}) async {
     try {
       emit(DayUpdateIntineraryLoading());
 
-      SharedPrefs sharedPrefs = SharedPrefs();
-      String itineraryId = await sharedPrefs.getItineraryID();
+      var res = await CreateIntineraryRepository.instance.updateIntinerary(body: dayDesignIntineraryRequest.toJson(), id: itineraryId);
 
-      var res = await CreateIntineraryRepository
-          .instance.updateIntinerary(body: dayDesignIntineraryRequest.toJson(), id: itineraryId);
-
-      var country = await sharedPrefs.getDestinationCountries() ;
       emit(DayUpdateIntineraryLoaded());
-      if(route == "Continue") {
+      if(route == "Continue")
+      {
         navigationService.navigateTo(summaryRoutSold,arguments: map);
-      }else{
+      }
+      else
+      {
         navigationService.navigatePushReplace(draftIntineraryRoute);
-
       }
 
 
