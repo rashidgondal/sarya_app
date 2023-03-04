@@ -15,6 +15,7 @@ import '../../../customWidgets/drawer_screen.dart';
 import '../../../navigation/navigation_service.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+import '../../core/network/routes/api_routes.dart';
 import '../model/public_itinerary_response.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -39,6 +40,7 @@ class _ShopScreenState extends State<ShopScreen> {
     getUserInfo();
     super.initState();
     _navigationService = locator<NavigationService>();
+    context.read<PublicItineraryCubits>().getPublicItinerary();
 
 
   }
@@ -183,7 +185,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
                           InkWell(
                             onTap: () {
-                              _navigationService.navigateTo(summaryRoutStart);
+                              _navigationService.navigateTo(summaryRoutStart,arguments: {"id": list[itemIndex].sId});
                             },
                             child: Padding(
                               padding:
@@ -191,7 +193,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               child: Container(
                                 decoration: BoxDecoration(
                                     color: AppColor.aquaCasper2,
-                                    image: DecorationImage(image: AssetImage("lib/assets/images/img2.jpeg"),fit: BoxFit.fill),
+                                    image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[itemIndex].profileImg}"),fit: BoxFit.fill),
                                     borderRadius: BorderRadius.circular(16.0),
                                     boxShadow: [
                                       BoxShadow(

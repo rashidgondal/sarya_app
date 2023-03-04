@@ -102,16 +102,34 @@ class _DraftItineraryScreenState extends State<DraftItineraryScreen> {
                               print(" list[index]['_id']........${ list[index]['_id']}");
                               return InkWell(
                                 onTap: () {
-                                  if(list[index]['step'] == 4) {
+                                  if(list[index]['step'] == 3) {
+                                    String id = list[index]['_id'];
                                     _navigationService.navigateTo(
-                                        summaryRoutEdit);
+                                        summaryRoutSold, arguments:{ "id": id});
+
+                                  }else if(list[index]['step'] == 4) {
+                                    String id = list[index]['_id'];
+                                    _navigationService.navigateTo(
+                                        summaryRoutSold, arguments:{ "id": id});
+
                                   } else if(list[index]['step'] == 1){
+                                    String id = list[index]['_id'];
+                                    List<dynamic> destination = list[index]['destination'];
+
+                                    _navigationService.navigateTo(
+                                        designIntineraryRoute,
+                                        arguments:{"id":"$id", "destination": destination});
+
+                                  }else if(list[index]['step'] == 2){
 
                                     String id = list[index]['_id'];
                                     List<dynamic> destination = list[index]['destination'];
-                                    print("id..................$id");
+                                    int totalDays = list[index]['totalDays'];
+
                                     _navigationService.navigateTo(
-                                        designIntineraryRoute, arguments:  {"id":"$id", "destination": destination});
+                                        dayDesignRoute,
+                                        arguments: {"country":destination, "totalDays": totalDays, "id": id, });
+
                                   }
                                 },
                                 child: Padding(
@@ -168,10 +186,12 @@ class _DraftItineraryScreenState extends State<DraftItineraryScreen> {
                                                           10.0),
                                               image: DecorationImage(image: NetworkImage(
                                                 "${ApiRoutes.picBaseURL}${list[index]['profileImg']}"
-                                              ))
                                               ),
-                                              
-                                              
+                                                  fit: BoxFit.fill
+                                              )
+                                              ),
+
+
                                             ),
                                             const SizedBox(
                                               width: 10,
@@ -281,7 +301,8 @@ class _DraftItineraryScreenState extends State<DraftItineraryScreen> {
                 return Center(
                   child: Text("data not found"),
                 );
-              })),
+              })
+          ),
         ));
   }
 }

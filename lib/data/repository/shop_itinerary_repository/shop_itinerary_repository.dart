@@ -54,7 +54,17 @@ class ShopIntineraryRepository {
     }
   }
 
+  Future<dynamic> getItineraryByID({required String id}) async{
+    try{
+      var result  =  await _saryaAPI.getItineraryByID(id: id);
+      print("getItineraryByID .............${result.toString()}");
 
+      return result;
+
+    }catch(e){
+      return e;
+    }
+  }
 
 
 }

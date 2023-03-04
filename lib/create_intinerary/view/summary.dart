@@ -1,18 +1,24 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
+import 'package:sarya/home/home_view_model/itinerary_by_id_cubits.dart';
+import 'package:sarya/home/home_view_model/itinerary_by_id_states.dart';
+import 'package:sarya/home/itineraryByIDResponse.dart';
 import 'package:sarya/pinLocationMap.dart';
+import 'package:sarya/story_view/story_view.dart';
 import 'package:sarya/utils/constant.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 import '../../authentication/signin/models/signin_response_model.dart';
+import '../../core/network/routes/api_routes.dart';
 import '../../customWidgets/data_loading.dart';
 import '../../helper/helper_methods.dart';
 import '../../locator.dart';
@@ -48,7 +54,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
   ];
 
 
-  var listOfCountries = [];
 
   SharedPrefs sharedPrefs = SharedPrefs();
   String userName = '';
@@ -56,28 +61,28 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   @override
   void initState() {
-
+    String id = widget.map['id'];
     getSelectedCountries();
+    context.read<ItineraryByIDCubits>().getItineraryByID(itineraryID: id);
     super.initState();
     _navigationService = locator<NavigationService>();
-
   }
 
 
   getSelectedCountries()async{
-    listOfCountries =await sharedPrefs.getDestinationCountries();
     Map signInResponse =await sharedPrefs.getUser();
       userName = "${signInResponse['firstName']} ${signInResponse['lastName']}";
       nationality = "${signInResponse['nationality']}";
      setState(() {
 
     });
+
   }
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    print("location...................${widget.map['location'].toString()}");
 
     return Container(
       color: AppColor.whiteColor,
@@ -124,8 +129,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 children: [
                   InkWell(
                     onTap: () {
+                      String id = widget.map['id'];
                       SummaryUpdateIntineraryRequest summary = SummaryUpdateIntineraryRequest(live: true,step: 4);
-                      context.read<SummaryUpdateIntineraryCubits>().summaryUpdateIntinerary(summaryUpdateIntineraryRequest:summary, navigationService:  _navigationService, route:"Save");
+                      context.read<SummaryUpdateIntineraryCubits>().summaryUpdateIntineraryPage(summaryUpdateIntineraryRequest:summary, navigationService:  _navigationService, route:"Save", id: id);
                       // _navigationService.navigateTo(draftIntineraryRoute);
                     },
                     child: Container(
@@ -150,8 +156,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      SummaryUpdateIntineraryRequest summary = SummaryUpdateIntineraryRequest(live: false,step: 4);
-                      context.read<SummaryUpdateIntineraryCubits>().summaryUpdateIntinerary(summaryUpdateIntineraryRequest:summary, navigationService:  _navigationService, route:"Sold");
+                      String id = widget.map['id'];
+
+                      SummaryUpdateIntineraryRequest summary = SummaryUpdateIntineraryRequest(live: true,step: 4);
+                      context.read<SummaryUpdateIntineraryCubits>().summaryUpdateIntineraryPage(summaryUpdateIntineraryRequest:summary, navigationService:  _navigationService, route:"Sold", id: id);
 
                     },
                     child: Container(
@@ -215,140 +223,155 @@ class _SummaryScreenState extends State<SummaryScreen> {
           ),
           body: SingleChildScrollView(
             physics:const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                Container(
-                  height: size.height * 0.200,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage('lib/assets/images/img3.jpeg'),fit: BoxFit.fill)
-                  ),
-                ),
-                const SizedBox(height: 10.0,),
-                SizedBox(
-                  height: 91.0,
-                  child: listOfCountries.isEmpty? SizedBox.shrink() :ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
-                    itemCount: listOfCountries.length,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
+            child: BlocBuilder<ItineraryByIDCubits, ItineraryByIDStates>(
+                builder: (context, state) {
+                  if (state is ItineraryByIDInitial) {
+                    return SizedBox();
+                  }
 
-                      var image_index = Flags.listOfFlag.indexWhere(
-                              (element) =>
-                          element ==
-                              "lib/assets/flags/${listOfCountries[index]}.png");
+                  if (state is ItineraryByIDLoading) {
+                    Center(child: CupertinoActivityIndicator());
+                  }
 
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children:  [
-                            SizedBox(
-                                height: 60.0,
-                                width: 70.0,
-                                child: image_index != -1
-                                    ? Image.asset(Flags
-                                    .listOfFlag[image_index])
-                                    : Icon(
-                                  Icons.flag,
-                                  size: 40,
-                                  color: AppColor.lightIndigo,
-                                )),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "${ listOfCountries.isEmpty? "":listOfCountries[index]}",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: AppColor.headingColor2,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
+                  if (state is ItineraryByIDLoaded) {
+                    ByIDResult byIDResult = state.byIDResult;
+                    var destination = byIDResult.destination;
+                    List<latlng.LatLng> list = state.listOfLatLng;
+
+                    return Column(
+                      children: [
+                        Container(
+                          height: size.height * 0.200,
+                          width: size.width,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${byIDResult.profileImg}"),fit: BoxFit.fill)
+                          ),
                         ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(
-                        width: 20,
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 15.0,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 27.0, right: 27.0),
-                  child: Container(
-                    height: 76,
-                    width: size.width,
-                    decoration: BoxDecoration(
-                        color: AppColor.whiteColor,
-                        borderRadius:BorderRadius.circular(15) ,
-                        boxShadow: [
-                          BoxShadow(
-                              offset: const Offset(2, 2),
-                              color: Colors.grey.withOpacity(0.6),
-                              blurRadius: 3),
-                          BoxShadow(
-                              offset: const Offset(-3, -3),
-                              color: Colors.grey.withOpacity(0.1),
-                              blurRadius: 3)
-                        ]
-                    ),
-                    child: ListTile(
-                      title:  Text.rich(
-                          TextSpan(
-                              text: '',
-                              children: <InlineSpan>[
-                                TextSpan(
-                                  text: 'Trip to ${listOfCountries[0]} ',
-                                  style:TextStyle(fontSize: 13.0, color: AppColor.lightIndigo, fontWeight: FontWeight.w500),
+                        const SizedBox(height: 10.0,),
+                        SizedBox(
+                          height: 91.0,
+                          child:destination == null? SizedBox.shrink() :destination.isEmpty? SizedBox.shrink() :ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            physics: BouncingScrollPhysics(),
+                            itemCount: destination.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+
+                              var image_index = Flags.listOfFlag.indexWhere(
+                                      (element) =>
+                                  element ==
+                                      "lib/assets/flags/${destination[index]}.png");
+
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children:  [
+                                    SizedBox(
+                                        height: 60.0,
+                                        width: 70.0,
+                                        child: image_index != -1
+                                            ? Image.asset(Flags
+                                            .listOfFlag[image_index])
+                                            : Icon(
+                                          Icons.flag,
+                                          size: 40,
+                                          color: AppColor.lightIndigo,
+                                        )),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "${ destination.isEmpty? "":destination[index]}",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: AppColor.headingColor2,
+                                          fontWeight: FontWeight.w500),
+                                    )
+                                  ],
                                 ),
-                                TextSpan(
-                                  text: 'by $userName',
-                                  style:TextStyle(fontSize: 13.0, color: AppColor.colorBlack, fontWeight: FontWeight.w500),
-                                )
-                              ]
+                              );
+                            },
+                            separatorBuilder: (BuildContext context, int index) {
+                              return SizedBox(
+                                width: 20,
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 15.0,),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 27.0, right: 27.0),
+                          child: Container(
+                            height: 76,
+                            width: size.width,
+                            decoration: BoxDecoration(
+                                color: AppColor.whiteColor,
+                                borderRadius:BorderRadius.circular(15) ,
+                                boxShadow: [
+                                  BoxShadow(
+                                      offset: const Offset(2, 2),
+                                      color: Colors.grey.withOpacity(0.6),
+                                      blurRadius: 3),
+                                  BoxShadow(
+                                      offset: const Offset(-3, -3),
+                                      color: Colors.grey.withOpacity(0.1),
+                                      blurRadius: 3)
+                                ]
+                            ),
+                            child: ListTile(
+                              title:  Text.rich(
+                                  TextSpan(
+                                      text: '',
+                                      children: <InlineSpan>[
+                                        TextSpan(
+                                          text: 'Trip to ${destination![0]} ',
+                                          style:TextStyle(fontSize: 13.0, color: AppColor.lightIndigo, fontWeight: FontWeight.w500),
+                                        ),
+                                        TextSpan(
+                                          text: 'by $userName',
+                                          style:TextStyle(fontSize: 13.0, color: AppColor.colorBlack, fontWeight: FontWeight.w500),
+                                        )
+                                      ]
+                                  )
+                              ),
+                              subtitle: Row(
+                                children: [
+                                  Text(
+                                    "$nationality",
+                                    style:  TextStyle(fontSize: 12.0, color: AppColor.colorLiteBlack5),
+                                  ),
+                                ],
+                              ),
+                              trailing: Container(
+                                height: 30,
+                                width: 50.0,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: AppColor.aquaCasper.withOpacity(0.5)
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "\$${byIDResult.cost??''}",
+                                    style:  TextStyle(fontSize: 13.0, color: AppColor.lightIndigo),
+                                  ),
+
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 25.0,),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 27.0, right: 27.0),
+                          child: PinLocationMap(
+                            height: 146,
+                            width: size.width,
+                            list_of_marker: list,
                           )
-                      ),
-                      subtitle: Row(
-                        children: [
-                          Text(
-                            "$nationality",
-                            style:  TextStyle(fontSize: 12.0, color: AppColor.colorLiteBlack5),
-                          ),
-                        ],
-                      ),
-                      trailing: Container(
-                        height: 30,
-                        width: 50.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: AppColor.aquaCasper.withOpacity(0.5)
-                        ),
-                        child: Center(
-                          child: Text(
-                            "\$${widget.map['itineraryCost']}",
-                            style:  TextStyle(fontSize: 13.0, color: AppColor.lightIndigo),
-                          ),
 
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 25.0,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 27.0, right: 27.0),
-                  child: PinLocationMap(
-                    height: 146,
-                    width: size.width,
-                    list_of_marker: widget.map['location'],
-                  )
-
-                  /*Container(
+                          /*Container(
                     height: 146,
                     width: size.width,
                     decoration: BoxDecoration(
@@ -382,138 +405,155 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       ),
                     ),
                   )*/,
-                ),
-                const SizedBox(height: 15.0,),
-                const Padding(
-                  padding:  EdgeInsets.only(left: 29.0, right: 27.0),
-                  child:  Align(
-                      alignment: Alignment.centerLeft,
-                      child:  Text("Summary", style: TextStyle(fontSize: 14.0,color: AppColor.colorBlue,fontWeight: FontWeight.w500),)),
-                ),
-                const SizedBox(height: 5.0,),
-                Padding(
-                  padding:  EdgeInsets.only(left: 29.0, right: 27.0),
-                  child:  Align(
-                      alignment: Alignment.centerLeft,
-                      child:  Text("${widget.map['summary']}", style: TextStyle(fontSize: 12.0,color: AppColor.headingColor2,fontWeight: FontWeight.w400),)),
-                ),
-                const SizedBox(height: 15.0,),
-                Padding(
-                  padding:  EdgeInsets.only(left: 29.0, right: 27.0),
-                  child:  Align(
-                    alignment: Alignment.centerLeft,
-                    child:  Text.rich(
-                        TextSpan(
-                            text: '',
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: 'Trip Cost ',
-                                style:TextStyle(fontSize: 14.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
-                              ),
-                              TextSpan(
-                                text: '\$${"${widget.map['tripCost']}"}',
-                                style:TextStyle(fontSize: 13.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
-                              )
-                            ]
-                        )
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10.0,),
-                Padding(
-                  padding:  EdgeInsets.only(left: 29.0, right: 27.0),
-                  child:  Align(
-                    alignment: Alignment.centerLeft,
-                    child:  Text.rich(
-                        TextSpan(
-                            text: '',
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: 'Trip Days: ',
-                                style:TextStyle(fontSize: 14.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
-                              ),
-                              TextSpan(
-                                text: '${"${widget.map['totalDays']}"}',
-                                style:TextStyle(fontSize: 13.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
-                              )
-                            ]
-                        )
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10.0,),
-                Padding(
-                  padding:  EdgeInsets.only(left: 29.0, right: 27.0),
-                  child:  Align(
-                    alignment: Alignment.centerLeft,
-                    child:  Text.rich(
-                        TextSpan(
-                            text: '',
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: 'Trip type: ',
-                                style:TextStyle(fontSize: 14.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
-                              ),
-                              TextSpan(
-                                text: '${"${widget.map['tripType']}"}',
-                                style:TextStyle(fontSize: 13.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
-                              )
-                            ]
-                        )
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 15.0,),
-                const Padding(
-                  padding:  EdgeInsets.only(left: 29.0, right: 27.0),
-                  child:  Align(
-                      alignment: Alignment.centerLeft,
-                      child:  Text("Included", style: TextStyle(fontSize: 14.0,color: AppColor.colorBlue,fontWeight: FontWeight.w500),)),
-                ),
-                const SizedBox(height: 10.0,),
-                Padding(
-                  padding:const  EdgeInsets.only(left: 20.0, right: 27.0),
-                  child: GridView.builder(
-                    itemCount: listIncluded.length,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    physics:const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 65.0,
-                            width: 65.0,
-                            decoration: BoxDecoration(
-                                color: AppColor.aquaCasper2,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    color: AppColor.borderColor2, width: 1)),
-                            child: Center(
-                              child: SvgPicture.asset("${listIncluded[index]['icon']}".svg),
+                        ),
+                        const SizedBox(height: 15.0,),
+                        const Padding(
+                          padding:  EdgeInsets.only(left: 29.0, right: 27.0),
+                          child:  Align(
+                              alignment: Alignment.centerLeft,
+                              child:  Text("Summary", style: TextStyle(fontSize: 14.0,color: AppColor.colorBlue,fontWeight: FontWeight.w500),)),
+                        ),
+                        const SizedBox(height: 5.0,),
+                        Padding(
+                          padding:  EdgeInsets.only(left: 29.0, right: 27.0),
+                          child:  Align(
+                              alignment: Alignment.centerLeft,
+                              child:  Text("${byIDResult.summary??''}", style: TextStyle(fontSize: 12.0,color: AppColor.headingColor2,fontWeight: FontWeight.w400),)),
+                        ),
+                        const SizedBox(height: 15.0,),
+                        Padding(
+                          padding:  EdgeInsets.only(left: 29.0, right: 27.0),
+                          child:  Align(
+                            alignment: Alignment.centerLeft,
+                            child:  Text.rich(
+                                TextSpan(
+                                    text: '',
+                                    children: <InlineSpan>[
+                                      TextSpan(
+                                        text: 'Trip Cost ',
+                                        style:TextStyle(fontSize: 14.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
+                                      ),
+                                      TextSpan(
+                                        text: '\$${"${byIDResult.tripCost??''}"}',
+                                        style:TextStyle(fontSize: 13.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
+                                      )
+                                    ]
+                                )
                             ),
-
                           ),
-                          const SizedBox(height: 5,),
-                          Text("${listIncluded[index]['title']}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
-                        ]),
+                        ),
+                        const SizedBox(height: 10.0,),
+                        Padding(
+                          padding:  EdgeInsets.only(left: 29.0, right: 27.0),
+                          child:  Align(
+                            alignment: Alignment.centerLeft,
+                            child:  Text.rich(
+                                TextSpan(
+                                    text: '',
+                                    children: <InlineSpan>[
+                                      TextSpan(
+                                        text: 'Trip Days: ',
+                                        style:TextStyle(fontSize: 14.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
+                                      ),
+                                      TextSpan(
+                                        text: '${"${byIDResult.totalDays??''}"}',
+                                        style:TextStyle(fontSize: 13.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
+                                      )
+                                    ]
+                                )
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10.0,),
+                        Padding(
+                          padding:  EdgeInsets.only(left: 29.0, right: 27.0),
+                          child:  Align(
+                            alignment: Alignment.centerLeft,
+                            child:  Text.rich(
+                                TextSpan(
+                                    text: '',
+                                    children: <InlineSpan>[
+                                      TextSpan(
+                                        text: 'Trip type: ',
+                                        style:TextStyle(fontSize: 14.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
+                                      ),
+                                      TextSpan(
+                                        text: '${"${byIDResult.tripType == null?"":byIDResult.tripType![0]}"}',
+                                        style:TextStyle(fontSize: 13.0, color: AppColor.headingColor2, fontWeight: FontWeight.w500),
+                                      )
+                                    ]
+                                )
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 15.0,),
+                        const Padding(
+                          padding:  EdgeInsets.only(left: 29.0, right: 27.0),
+                          child:  Align(
+                              alignment: Alignment.centerLeft,
+                              child:  Text("Included", style: TextStyle(fontSize: 14.0,color: AppColor.colorBlue,fontWeight: FontWeight.w500),)),
+                        ),
+                        const SizedBox(height: 10.0,),
+                        Padding(
+                          padding:const  EdgeInsets.only(left: 20.0, right: 27.0),
+                          child: GridView.builder(
+                            itemCount: listIncluded.length,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics:const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) => Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+
+                                      List<String> nameOfImage = byIDResult.days![0].breakfast!.imagesPublic!;
+                                      List<String> linkPath = List<String>.generate(nameOfImage.length, (index) => '${ApiRoutes.picBaseURL}${nameOfImage[index]}');
+
+                                      _navigationService.navigateTo(storyViewRoute, arguments: linkPath);
+
+                                    },
+                                    child: Container(
+                                      height: 65.0,
+                                      width: 65.0,
+                                      decoration: BoxDecoration(
+                                          color: AppColor.aquaCasper2,
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: AppColor.borderColor2, width: 1)),
+                                      child: Center(
+                                        child: SvgPicture.asset("${listIncluded[index]['icon']}".svg),
+                                      ),
+
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5,),
+                                  Text("${listIncluded[index]['title']}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                ]),
 
 
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 0.0,
-                    ),
-                  ),
-                ),
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              mainAxisSpacing: 10.0,
+                              crossAxisSpacing: 0.0,
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    );
+                  }
+
+                  return SizedBox();
+
+                })
 
 
-              ],
-            ),
+            ,
           ),
 
         ),

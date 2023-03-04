@@ -15,7 +15,7 @@ class DayUpdateIntineraryCubits extends Cubit<DayUpdateIntineraryStates> {
   DayUpdateIntineraryCubits() : super(DayUpdateIntineraryInitial());
 
   Future dayUpdateIntineraryPage(
-      {required DayDesignIntineraryRequest dayDesignIntineraryRequest, required NavigationService navigationService, required String route, Map? map, required String itineraryId}) async {
+      {required DayDesignIntineraryRequest dayDesignIntineraryRequest, required NavigationService navigationService, required String route, required String itineraryId}) async {
     try {
       emit(DayUpdateIntineraryLoading());
 
@@ -24,7 +24,7 @@ class DayUpdateIntineraryCubits extends Cubit<DayUpdateIntineraryStates> {
       emit(DayUpdateIntineraryLoaded());
       if(route == "Continue")
       {
-        navigationService.navigateTo(summaryRoutSold,arguments: map);
+        navigationService.navigateTo(summaryRoutSold,arguments: {"id":itineraryId});
       }
       else
       {

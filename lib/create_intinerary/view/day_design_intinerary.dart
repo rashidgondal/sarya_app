@@ -768,10 +768,10 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   Widget _buildSave(){
 
 
-      if (list_of_days[selected_index].airport!.isEmpty ||
-          list_of_days[selected_index].transportation!.isEmpty||
-          list_of_days[selected_index].accomodation!.isEmpty ||
-          list_of_days[selected_index].accomodation!.isEmpty ||
+      if (list_of_days[selected_index].airport ==null ||
+          list_of_days[selected_index].transportation == null ||
+          list_of_days[selected_index].accomodation == null ||
+          list_of_days[selected_index].accomodation == null ||
           list_of_days[selected_index].breakfast == null ||
           list_of_days[selected_index].lunch == null ||
           list_of_days[selected_index].dinner == null ||
@@ -809,19 +809,18 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
               live: false,
             );
 
-            widget.map['location'] = listOfLatLng;
-
+            String id = widget.map['id'];
             context
                 .read<DayUpdateIntineraryCubits>()
                 .dayUpdateIntineraryPage(
-                itineraryId: '',
+                itineraryId: id,
                 dayDesignIntineraryRequest: request,
                 navigationService: _navigationService,
-                route: "Save",
-                map: widget.map);
+                route: "Save",);
 
         }else{
           selected_index++;
+          setState(() {});
         }
       },
       child: Container(
@@ -836,7 +835,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
             style: TextStyle(
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: AppColor.colorBlack),
+                color: AppColor.whiteColor),
           ),
         ),
       ),
@@ -846,10 +845,10 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
 
   Widget _buildContinue(){
 
-    if (list_of_days[selected_index].airport!.isEmpty ||
-        list_of_days[selected_index].transportation!.isEmpty||
-        list_of_days[selected_index].accomodation!.isEmpty ||
-        list_of_days[selected_index].accomodation!.isEmpty ||
+    if (list_of_days[selected_index].airport ==null ||
+        list_of_days[selected_index].transportation == null ||
+        list_of_days[selected_index].accomodation == null ||
+        list_of_days[selected_index].accomodation == null ||
         list_of_days[selected_index].breakfast == null ||
         list_of_days[selected_index].lunch == null ||
         list_of_days[selected_index].dinner == null ||
@@ -876,7 +875,6 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
 
     return InkWell(
       onTap: () {
-        print("selected index.....$selected_index");
 
 
         if (selected_index < list_of_days.length) {
@@ -887,19 +885,21 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
             live: false,
           );
 
-          widget.map['location'] = listOfLatLng;
-
+          String id = widget.map['id'];
           context
               .read<DayUpdateIntineraryCubits>()
               .dayUpdateIntineraryPage(
-              itineraryId: '',
+              itineraryId: id,
               dayDesignIntineraryRequest: request,
               navigationService: _navigationService,
-              route: "Save",
-              map: widget.map);
+              route: "Continue",
+          );
 
         }else{
           selected_index++;
+          setState(() {
+
+          });
         }
       },
       child: Container(
@@ -914,7 +914,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
             style: TextStyle(
                 fontSize: 15.0,
                 fontWeight: FontWeight.w500,
-                color: AppColor.colorBlack),
+                color: AppColor.whiteColor),
           ),
         ),
       ),

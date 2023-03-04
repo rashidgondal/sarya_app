@@ -33,6 +33,7 @@ import 'create_intinerary/intinerary_view_model/delete_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/summary_update_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/trip_cubits.dart';
 import 'home/home_view_model/created_itinerary_cubits.dart';
+import 'home/home_view_model/itinerary_by_id_cubits.dart';
 import 'navigation/navigation_service.dart';
 import 'navigation/router.dart' as routes;
 import 'navigation/router_path.dart';
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AllDeleteIntineraryCubits()),
         BlocProvider(create: (context) => DeleteIntineraryCubits()),
         BlocProvider(create: (context) => CreatedItineraryCubits()),
+        BlocProvider(create: (context) => ItineraryByIDCubits()),
       ],
       child: MaterialApp(
         title: 'Sarya',

@@ -1,11 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sarya/create_intinerary/intinerary_view_model/create_intinerary_states.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/update_intinerary_states.dart';
 import 'package:sarya/data/repository/create_intinerary_respo/create_intinerary_repo.dart';
-import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
-import '../model/create_intinerary_request.dart';
 import '../model/create_intinerary_response.dart';
 import '../model/design_intinerary_request.dart';
 
@@ -21,10 +18,9 @@ class UpdateIntineraryCubits extends Cubit<UpdateIntineraryStates> {
       CreateIntineraryResponse res = CreateIntineraryResponse.fromJson(data);
       emit(UpdateIntineraryLoaded(createIntineraryResponse: res));
       if(route == "Continue") {
-        navigationService.navigateTo(dayDesignRoute, arguments: {"country":destination, "totalDays": createIntineraryRequest.totalDays, "itineraryCost":"${createIntineraryRequest.cost}","tripCost":"${createIntineraryRequest.tripCost}","summary":"${createIntineraryRequest.summary}","tripType": "${createIntineraryRequest.tripType}","location":[]});
+        navigationService.navigateTo(dayDesignRoute, arguments: {"country":destination, "totalDays": createIntineraryRequest.totalDays, "id":"$itineraryId"});
       }else{
         navigationService.navigatePushReplace(draftIntineraryRoute);
-
       }
 
 

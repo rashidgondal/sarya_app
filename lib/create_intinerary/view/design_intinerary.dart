@@ -526,8 +526,6 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
     );
   }
 
-
-
   Widget _builtContinue(){
 
     if( titleController.text.isEmpty ||
@@ -576,7 +574,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
             profileImg: filesModel!.name_of_file,
             days: []
         );
-
+        print("createIntineraryRequest ......${createIntineraryRequest.toJson()}");
         context.read<UpdateIntineraryCubits>().updateDesignIntineraryPage(createIntineraryRequest: createIntineraryRequest, navigationService: _navigationService,route: "Continue", destination: widget.map['destination'], itineraryId: widget.map['id']);
 
       },
@@ -683,6 +681,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
     //     await minio.fPutObject('testingsarya', '${file.name}', '${file.path}');
     Uint8List bytes = File(file_model.file!.path).readAsBytesSync();
     print(bytes.length);
+    print('name_of_file...........${file_model.name_of_file}');
     String result = await minio.putObject(
       'sarya-assets',
       'itinerary/${file_model.name_of_file}',

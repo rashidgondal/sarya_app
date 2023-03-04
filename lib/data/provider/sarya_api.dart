@@ -225,4 +225,15 @@ class SaryaAPI {
   }
 
 
+  Future<dynamic> getItineraryByID({required String id}) async {
+    try {
+      String url = '';
+      url = ApiRoutes.getIntineraryByID + "$id";
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
 }

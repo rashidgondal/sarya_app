@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sarya/core/network/routes/api_routes.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/shop/shop_view_model/search_cubits.dart';
@@ -148,6 +149,8 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                                       width: 101.0,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(10.0),
+                                          image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index].profileImg}"),fit: BoxFit.fill),
+
                                           border: Border.all(
                                               width: 1, color: AppColor.borderColor)),
                                       child: Row(

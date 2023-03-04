@@ -11,6 +11,7 @@ import 'package:sarya/settings/email/view/email_screen.dart';
 import 'package:sarya/settings/name/view/name_screen.dart';
 import 'package:sarya/settings/password/view/password_screen.dart';
 import 'package:sarya/settings/phone/view/phone_screen.dart';
+import 'package:sarya/story_view/story_view.dart';
 import 'package:sarya/utils/constant.dart';
 import 'package:sarya/create_intinerary/view/day_design_intinerary.dart';
 import 'package:sarya/create_intinerary/view/summary.dart';
@@ -165,7 +166,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.searchItineraryRoute:
       return MaterialPageRoute(
           builder: (context) =>  const SearchItineraryScreen());
-
+    case routes.storyViewRoute:
+      return MaterialPageRoute(
+          builder: (context) =>   StoryViewModel(images: settings.arguments as List<String>,));
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

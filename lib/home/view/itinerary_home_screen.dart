@@ -9,6 +9,7 @@ import 'package:sarya/home/home_view_model/created_itinerary_states.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
+import '../../core/network/routes/api_routes.dart';
 import '../../create_intinerary/intinerary_view_model/checklist_cubits.dart';
 import '../../create_intinerary/intinerary_view_model/trip_cubits.dart';
 import '../../customWidgets/drawer_screen.dart';
@@ -71,12 +72,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   }
 
 
-
-  @override
-  void didChangeDependencies() {
-
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +161,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                                   width: 101.0,
                                                   decoration: BoxDecoration(
                                                       color: AppColor.aquaCasper2,
-                                                      image: DecorationImage(image: AssetImage("lib/assets/images/img2.jpeg"),
+                                                      image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index]['profileImg']}"),
                                                           fit: BoxFit.fill),
                                                       borderRadius: BorderRadius.circular(8.0),
                                                       boxShadow: [

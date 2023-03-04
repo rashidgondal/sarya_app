@@ -10,22 +10,20 @@ import '../model/summary_update_intinerary_request.dart';
 class SummaryUpdateIntineraryCubits extends Cubit<SummaryUpdateIntineraryStates> {
   SummaryUpdateIntineraryCubits() : super(SummaryUpdateIntineraryInitial());
 
-  Future summaryUpdateIntinerary(
-      {required SummaryUpdateIntineraryRequest summaryUpdateIntineraryRequest, required NavigationService navigationService, required String route,}) async {
+  Future summaryUpdateIntineraryPage(
+      {required SummaryUpdateIntineraryRequest summaryUpdateIntineraryRequest, required NavigationService navigationService, required String route, required String id}) async {
     try {
       emit(SummaryUpdateIntineraryLoading());
 
-      SharedPrefs sharedPrefs = SharedPrefs();
-      String itineraryId = await sharedPrefs.getItineraryID();
 
       var res = await CreateIntineraryRepository
-          .instance.updateIntinerary(body: summaryUpdateIntineraryRequest.toJson(), id: itineraryId);
+          .instance.updateIntinerary(body: summaryUpdateIntineraryRequest.toJson(), id: id);
 
       emit(SummaryUpdateIntineraryLoaded());
       if(route == "Save") {
         navigationService.navigatePushReplace(draftIntineraryRoute);
       }else{
-        navigationService.navigatePushReplace(summaryRoutSold);
+        navigationService.navigatePushReplace(dashboardRout);
       }
 
     } catch (e) {
