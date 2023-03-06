@@ -16,13 +16,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  PersistentTabController  controller = PersistentTabController(initialIndex: 1);
-
-
+  PersistentTabController controller = PersistentTabController(initialIndex: 1);
 
   @override
   Widget build(BuildContext context) {
-
     return PersistentTabView.custom(
       context,
       controller: controller,
@@ -32,17 +29,16 @@ class _MainPageState extends State<MainPage> {
         const ShopScreen(),
         Container(),
         Container(),
-
       ],
       confineInSafeArea: true,
       backgroundColor: AppColor.whiteColor,
-      onWillPop: (v)async{
+      onWillPop: (v) async {
         return true;
       },
-      screenTransitionAnimation: const  ScreenTransitionAnimation(
+      screenTransitionAnimation: const ScreenTransitionAnimation(
         animateTabTransition: true,
         curve: Curves.ease,
-        duration:  Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 500),
       ),
       customWidget: MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 0.8),
@@ -50,7 +46,7 @@ class _MainPageState extends State<MainPage> {
           items: _navBarsItems(),
           onItemSelected: (index) {
             setState(() {
-             controller.index = index;
+              controller.index = index;
             });
           },
           selectedIndex: controller.index,
@@ -63,35 +59,35 @@ class _MainPageState extends State<MainPage> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon:SvgPicture.asset('home_plus_icon'.svg),
+        icon: SvgPicture.asset('home_plus_icon'.svg),
         title: "",
         textStyle: const TextStyle(fontSize: 12),
         activeColorPrimary: AppColor.whiteColor,
         inactiveColorPrimary: AppColor.colorGrey,
       ),
       PersistentBottomNavBarItem(
-        icon:SvgPicture.asset('home_icon_1'.svg),
+        icon: SvgPicture.asset('home_icon_1'.svg),
         title: "",
         textStyle: const TextStyle(fontSize: 12),
         activeColorPrimary: AppColor.whiteColor,
         inactiveColorPrimary: AppColor.colorGrey,
       ),
       PersistentBottomNavBarItem(
-        icon:SvgPicture.asset('home_icon_2'.svg),
+        icon: SvgPicture.asset('home_icon_2'.svg),
         title: "",
         textStyle: const TextStyle(fontSize: 12),
         activeColorPrimary: AppColor.whiteColor,
         inactiveColorPrimary: AppColor.colorGrey,
       ),
       PersistentBottomNavBarItem(
-        icon:SvgPicture.asset('home_icon_3'.svg),
+        icon: SvgPicture.asset('home_icon_3'.svg),
         title: "",
         textStyle: const TextStyle(fontSize: 12),
         activeColorPrimary: AppColor.whiteColor,
         inactiveColorPrimary: AppColor.colorGrey,
       ),
       PersistentBottomNavBarItem(
-        icon:SvgPicture.asset('home_icon_4'.svg),
+        icon: SvgPicture.asset('home_icon_4'.svg),
         title: "",
         textStyle: const TextStyle(fontSize: 12),
         activeColorPrimary: AppColor.whiteColor,
@@ -99,5 +95,4 @@ class _MainPageState extends State<MainPage> {
       ),
     ];
   }
-
 }
