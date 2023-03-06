@@ -76,6 +76,8 @@ dependencies:
   flutter_windowmanager: ^0.2.0
   dismissible_page: ^1.0.1
   flutter_native_splash: any
+  intl: any
+  timeago_flutter: any
 
 dev_dependencies:
   flutter_test:
