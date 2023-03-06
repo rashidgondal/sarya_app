@@ -6,10 +6,12 @@ class PinLocationMap extends StatefulWidget {
   final List<LatLng> list_of_marker;
   final double height;
   final double width;
+  final Function()? onTap;
   const PinLocationMap(
       {Key? key,
       required this.list_of_marker,
       required this.height,
+        this.onTap,
       required this.width})
       : super(key: key);
 
@@ -49,6 +51,11 @@ class _PinLocationMapState extends State<PinLocationMap> {
       child: FlutterMap(
         options: MapOptions(
             bounds: latLngBounds,
+            onTap: (t,v){
+              if(widget.onTap != null){
+                widget.onTap!.call();
+              }
+            },
             zoom: 10.2,
             boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(100))),
         nonRotatedChildren: [

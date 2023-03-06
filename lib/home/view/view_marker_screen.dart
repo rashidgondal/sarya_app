@@ -18,7 +18,7 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> {
     return PinLocationMap(
       height: size.height,
       width: size.width,
-      list_of_marker: [],
+      list_of_marker: widget.map['listOfMarker'],
     );
   }
 }

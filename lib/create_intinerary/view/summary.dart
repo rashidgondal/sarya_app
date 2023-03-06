@@ -370,15 +370,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         const SizedBox(height: 25.0,),
                         Padding(
                           padding: const EdgeInsets.only(left: 27.0, right: 27.0),
-                          child: InkWell(
+                          child: PinLocationMap(
+                            height: 146,
+                            width: size.width,
                             onTap: (){
-                            _navigationService.navigateTo(mapViewRoute,);
+                              _navigationService.navigateTo(mapViewRoute,arguments: {"listOfMarker":list});
+
                             },
-                            child: PinLocationMap(
-                              height: 146,
-                              width: size.width,
-                              list_of_marker: list,
-                            ),
+                            list_of_marker: list,
                           )
 
                           /*Container(
