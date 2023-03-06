@@ -153,88 +153,103 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (BuildContext context, int index){
                                             if(index == 0){
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 30.0,right: 10,top: 0),
-                                                child: Container(
-                                                  height: 111.0,
-                                                  width: 101.0,
-                                                  decoration: BoxDecoration(
-                                                      color: AppColor.aquaCasper2,
-                                                      image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index]['profileImg']}"),
-                                                          fit: BoxFit.fill),
-                                                      borderRadius: BorderRadius.circular(8.0),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                            offset: const Offset(2, 2),
-                                                            color: Colors.grey.withOpacity(0.6),
-                                                            blurRadius: 3),
-                                                        BoxShadow(
-                                                            offset: const Offset(-3, -3),
-                                                            color: Colors.grey.withOpacity(0.1),
-                                                            blurRadius: 3)
-                                                      ]
-                                                  ),
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                      Row(children: [
-                                                        Icon(Icons.location_on,color: AppColor.whiteColor,),
-                                                        SizedBox(
-                                                          width: 70,
-                                                          child: Text(
-                                                            "${list[index]['title']??''}",
-                                                            style: TextStyle(
-                                                                fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
-                                                          ),
-                                                        )
-                                                      ],),
-                                                      SizedBox(height: 10,),
+                                              return InkWell(
+                                                onTap: (){
+                                                  String id = list[index]['_id'];
+                                                  _navigationService.navigateTo(summaryRoutStart,
+                                                      arguments:{ "id": id});
+                                                  },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 30.0,right: 10,top: 0),
+                                                  child: Container(
+                                                    height: 111.0,
+                                                    width: 101.0,
+                                                    decoration: BoxDecoration(
+                                                        color: AppColor.aquaCasper2,
+                                                        image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index]['profileImg']}"),
+                                                            fit: BoxFit.fill),
+                                                        borderRadius: BorderRadius.circular(8.0),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                              offset: const Offset(2, 2),
+                                                              color: Colors.grey.withOpacity(0.6),
+                                                              blurRadius: 3),
+                                                          BoxShadow(
+                                                              offset: const Offset(-3, -3),
+                                                              color: Colors.grey.withOpacity(0.1),
+                                                              blurRadius: 3)
+                                                        ]
+                                                    ),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                        Row(children: [
+                                                          Icon(Icons.location_on,color: AppColor.whiteColor,),
+                                                          SizedBox(
+                                                            width: 70,
+                                                            child: Text(
+                                                              "${list[index]['title']??''}",
+                                                              style: TextStyle(
+                                                                  fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
+                                                            ),
+                                                          )
+                                                        ],),
+                                                        SizedBox(height: 10,),
 
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               );
                                             }
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 10.0, top: 0),
-                                          child: Container(
-                                            height: 111.0,
-                                            width: 101.0,
-                                            decoration: BoxDecoration(
-                                                color: AppColor.aquaCasper2,
-                                                image: DecorationImage(image: AssetImage("lib/assets/images/img2.jpeg"),
-                                                    fit: BoxFit.fill),
-                                                borderRadius: BorderRadius.circular(8.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      offset: const Offset(2, 2),
-                                                      color: Colors.grey.withOpacity(0.6),
-                                                      blurRadius: 3),
-                                                  BoxShadow(
-                                                      offset: const Offset(-3, -3),
-                                                      color: Colors.grey.withOpacity(0.1),
-                                                      blurRadius: 3)
-                                                ]
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Row(children: [
-                                                  Icon(Icons.location_on,color: AppColor.whiteColor,),
-                                                  SizedBox(
-                                                    width: 70,
-                                                    child: Text(
-                                                      "${list[index]['title']??''}",
-                                                      style: TextStyle(
-                                                          fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
-                                                    ),
-                                                  )
-                                                ],),
-                                                SizedBox(height: 10,),
+                                        return InkWell(
+                                          onTap: (){
+                                            String id = list[index]['_id'];
+                                            _navigationService.navigateTo(
+                                                summaryRoutSold, arguments:{ "id": id});
 
-                                              ],
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10.0, top: 0),
+                                            child: Container(
+                                              height: 111.0,
+                                              width: 101.0,
+                                              decoration: BoxDecoration(
+                                                  color: AppColor.aquaCasper2,
+                                                  image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index]['profileImg']}"),
+                                                      fit: BoxFit.fill),
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        offset: const Offset(2, 2),
+                                                        color: Colors.grey.withOpacity(0.6),
+                                                        blurRadius: 3),
+                                                    BoxShadow(
+                                                        offset: const Offset(-3, -3),
+                                                        color: Colors.grey.withOpacity(0.1),
+                                                        blurRadius: 3)
+                                                  ]
+                                              ),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  Row(children: [
+                                                    Icon(Icons.location_on,color: AppColor.whiteColor,),
+                                                    SizedBox(
+                                                      width: 70,
+                                                      child: Text(
+                                                        "${list[index]['title']??''}",
+                                                        style: TextStyle(
+                                                            fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
+                                                      ),
+                                                    )
+                                                  ],),
+                                                  SizedBox(height: 10,),
+
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         );

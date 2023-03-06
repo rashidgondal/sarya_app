@@ -28,6 +28,7 @@ import '../customWidgets/show_aimation.dart';
 import '../customWidgets/term_and_condtions.dart';
 import '../home/view/draft_itinerary_screen.dart';
 import '../home/view/sold_itinerary_screen.dart';
+import '../home/view/view_marker_screen.dart';
 import '../payments/view/bank_detail.dart';
 import '../payments/view/bank_update.dart';
 import '../settings/avatar/view/update_avatar.dart';
@@ -169,6 +170,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.storyViewRoute:
       return MaterialPageRoute(
           builder: (context) =>   StoryViewModel(images: settings.arguments as List<String>,));
+    case routes.mapViewRoute:
+      return MaterialPageRoute(
+          builder: (context) =>  ViewMarkerScreen(map: settings.arguments as Map,));
+
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

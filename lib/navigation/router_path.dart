@@ -35,5 +35,6 @@ const String searchPlacesRoute          = "Search Places Screen";
 const String foodShoppingRoute          = "Food Shopping Screen";
 const String searchItineraryRoute       = "Search Screen";
 const String storyViewRoute             = "Story View Screen";
+const String mapViewRoute             = " Map View Screen";
 
 

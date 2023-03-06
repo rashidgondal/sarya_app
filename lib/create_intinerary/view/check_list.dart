@@ -34,20 +34,21 @@ class _CheckListScreenState extends State<CheckListScreen> {
   void initState() {
     listOfBool = widget.map['listOfBool'];
     listOfCheckList = widget.map['checklist'];
-    preSelectedCheckList = widget.map['selectedCheckList'];
-    Future.delayed(Duration(microseconds: 500), (){
-      listOfCheckList.forEach((element) {
-        if(preSelectedCheckList.contains(element)){
-          int index = listOfCheckList.indexOf(element);
-          listOfBool[index] = true;
-          selectedCheckList.add(element);
-          setState(() {
 
-          });
-        }
+      preSelectedCheckList = widget.map['selectedCheckList'];
+      Future.delayed(Duration(microseconds: 500), () {
+        listOfCheckList.forEach((element) {
+          if (preSelectedCheckList.contains(element)) {
+            int index = listOfCheckList.indexOf(element);
+            listOfBool[index] = true;
+            selectedCheckList.add(element);
+            setState(() {
+
+            });
+          }
+        });
       });
 
-    });
     super.initState();
     _navigationService = locator<NavigationService>();
   }
@@ -87,7 +88,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
             ),
             centerTitle: true,
           ),
-          bottomNavigationBar: Container(
+          bottomNavigationBar:widget.map['bool']?null :Container(
             height: 90,
             color: AppColor.whiteColor,
             child: Column(
@@ -165,30 +166,33 @@ class _CheckListScreenState extends State<CheckListScreen> {
                                 data: Theme.of(context).copyWith(
                                     unselectedWidgetColor:
                                     AppColor.aquaCasper),
-                                child: Checkbox(
-                                  value: listOfBool[index],
-                                  onChanged: (bool? value) {
-                                    if(value == null){
-                                      return;
-                                    }
-                                    if(value == true){
-                                      selectedCheckList.add(listOfCheckList[index]);
-                                      listOfBool[index] = true;
-                                      setState(() {
+                                child: IgnorePointer(
+                                  ignoring: widget.map['bool'],
+                                  child: Checkbox(
+                                    value: listOfBool[index],
+                                    onChanged: (bool? value) {
+                                      if(value == null){
+                                        return;
+                                      }
+                                      if(value == true){
+                                        selectedCheckList.add(listOfCheckList[index]);
+                                        listOfBool[index] = true;
+                                        setState(() {
 
-                                      });
-                                    }else{
-                                      selectedCheckList.remove(listOfCheckList[index]);
+                                        });
+                                      }else{
+                                        selectedCheckList.remove(listOfCheckList[index]);
 
-                                      listOfBool[index] = false;
-                                      setState(() {
+                                        listOfBool[index] = false;
+                                        setState(() {
 
-                                      });
-                                    }
+                                        });
+                                      }
 
-                                  },
-                                  focusColor: AppColor.aquaCasper,
-                                  activeColor: AppColor.aquaCasper,
+                                    },
+                                    focusColor: AppColor.aquaCasper,
+                                    activeColor: AppColor.aquaCasper,
+                                  ),
                                 ),
                               )
                             ],
@@ -204,7 +208,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                         mainAxisExtent: 50.0),
                   ),
                 ),
-                Padding(
+                widget.map['bool']?SizedBox.shrink(): Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: CustomTextField(
                     hintText: 'Add more',

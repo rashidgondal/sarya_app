@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/activity_states.dart';
+import 'package:sarya/create_intinerary/intinerary_view_model/checklist_cubits.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/home/home_view_model/itinerary_by_id_cubits.dart';
@@ -20,8 +22,11 @@ import 'package:sarya/theme/color_scheme.dart';
 import '../../authentication/signin/models/signin_response_model.dart';
 import '../../core/network/routes/api_routes.dart';
 import '../../customWidgets/data_loading.dart';
+import '../../customWidgets/dialoge_activities_excursion.dart';
 import '../../helper/helper_methods.dart';
 import '../../locator.dart';
+import '../intinerary_view_model/CheckList_states.dart';
+import '../intinerary_view_model/activity_cubits.dart';
 import '../intinerary_view_model/summary_update_intinerary_cubits.dart';
 import '../intinerary_view_model/summary_update_intinerary_states.dart';
 import '../model/summary_update_intinerary_request.dart';
@@ -365,10 +370,15 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         const SizedBox(height: 25.0,),
                         Padding(
                           padding: const EdgeInsets.only(left: 27.0, right: 27.0),
-                          child: PinLocationMap(
-                            height: 146,
-                            width: size.width,
-                            list_of_marker: list,
+                          child: InkWell(
+                            onTap: (){
+                            _navigationService.navigateTo(mapViewRoute,);
+                            },
+                            child: PinLocationMap(
+                              height: 146,
+                              width: size.width,
+                              list_of_marker: list,
+                            ),
                           )
 
                           /*Container(
@@ -496,7 +506,395 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         const SizedBox(height: 10.0,),
                         Padding(
                           padding:const  EdgeInsets.only(left: 20.0, right: 27.0),
-                          child: GridView.builder(
+                          child: Wrap(
+                            spacing: 20,
+                            runSpacing: 20,
+                            children: [
+                              BlocBuilder<CheckListCubits, CheckListStates>(
+                                  builder: (context, state) {
+                                    List<bool> listOfBool = [];
+                                    List<String>  checkList = [];
+                                    if (state is CheckListLoaded) {
+                                      checkList = state.response.result!.toList() ?? [];
+                                      listOfBool = state.boolList.toList();
+                                    }
+                                    return   Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          InkWell(
+                                            onTap: (){
+
+                                              List<String> preSelectedCheckList = byIDResult.checklist??[];
+
+                                              print("preSelectedCheckList.....${preSelectedCheckList.length}");
+                                              _navigationService.navigateTo(checkListRoute,
+                                                  arguments:{ "checklist": checkList,
+                                                    "listOfBool": listOfBool,
+                                                    "bool": true,
+                                                    "selectedCheckList": preSelectedCheckList});
+
+
+
+                                            },
+                                            child: Container(
+                                              height: 65.0,
+                                              width: 65.0,
+                                              decoration: BoxDecoration(
+                                                  color: AppColor.aquaCasper2,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                      color: AppColor.borderColor2, width: 1)),
+                                              child: Center(
+                                                child: SvgPicture.asset("${listIncluded[0]['icon']}".svg),
+                                              ),
+
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5,),
+                                          Text("${listIncluded[0]['title']}",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                        ]);;
+                                  }),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+
+
+
+                                    },
+                                    child: Container(
+                                      height: 65.0,
+                                      width: 65.0,
+                                      decoration: BoxDecoration(
+                                          color: AppColor.aquaCasper2,
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: AppColor.borderColor2, width: 1)),
+                                      child: Center(
+                                        child: SvgPicture.asset("${listIncluded[1]['icon']}".svg),
+                                      ),
+
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5,),
+                                  Text("${listIncluded[1]['title']}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                ]),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+
+
+
+                                    },
+                                    child: Container(
+                                      height: 65.0,
+                                      width: 65.0,
+                                      decoration: BoxDecoration(
+                                          color: AppColor.aquaCasper2,
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: AppColor.borderColor2, width: 1)),
+                                      child: Center(
+                                        child: SvgPicture.asset("${listIncluded[2]['icon']}".svg),
+                                      ),
+
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5,),
+                                  Text("${listIncluded[2]['title']}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                ]),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+
+
+
+                                    },
+                                    child: Container(
+                                      height: 65.0,
+                                      width: 65.0,
+                                      decoration: BoxDecoration(
+                                          color: AppColor.aquaCasper2,
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: AppColor.borderColor2, width: 1)),
+                                      child: Center(
+                                        child: SvgPicture.asset("${listIncluded[3]['icon']}".svg),
+                                      ),
+
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5,),
+                                  Text("${listIncluded[3]['title']}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                ]),
+                              BlocBuilder<ActivityCubits, ActivityStates>(
+                                  builder: (context, state) {
+                                    List<String> list = [];
+                                    List<bool> listOfBool = [];
+                                    if (state is ActivityLoaded) {
+                                      list = state.activityTypeResponse.result ?? [];
+                                      listOfBool = state.listOfBool;
+                                    }
+                                    return  Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          InkWell(
+                                            onTap: (){
+
+                                            },
+                                            child: Container(
+                                              height: 65.0,
+                                              width: 65.0,
+                                              decoration: BoxDecoration(
+                                                  color: AppColor.aquaCasper2,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                      color: AppColor.borderColor2, width: 1)),
+                                              child: Center(
+                                                child: SvgPicture.asset("${listIncluded[4]['icon']}".svg),
+                                              ),
+
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5,),
+                                          Text("${listIncluded[4]['title']}",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                        ]);
+                                  }),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+
+
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].breakfast!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+
+                                      },
+                                      child: Container(
+                                        height: 65.0,
+                                        width: 65.0,
+                                        decoration: BoxDecoration(
+                                            color: AppColor.aquaCasper2,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: AppColor.borderColor2, width: 1)),
+                                        child: Center(
+                                          child: SvgPicture.asset("${listIncluded[5]['icon']}".svg),
+                                        ),
+
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5,),
+                                    Text("${listIncluded[5]['title']}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                  ]),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].lunch!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+
+
+                                      },
+                                      child: Container(
+                                        height: 65.0,
+                                        width: 65.0,
+                                        decoration: BoxDecoration(
+                                            color: AppColor.aquaCasper2,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: AppColor.borderColor2, width: 1)),
+                                        child: Center(
+                                          child: SvgPicture.asset("${listIncluded[6]['icon']}".svg),
+                                        ),
+
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5,),
+                                    Text("${listIncluded[6]['title']}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                  ]),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+
+                                      List<String> nameOfImage = byIDResult
+                                            .days![0].dinner!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+
+                                      },
+                                      child: Container(
+                                        height: 65.0,
+                                        width: 65.0,
+                                        decoration: BoxDecoration(
+                                            color: AppColor.aquaCasper2,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: AppColor.borderColor2, width: 1)),
+                                        child: Center(
+                                          child: SvgPicture.asset("${listIncluded[7]['icon']}".svg),
+                                        ),
+
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5,),
+                                    Text("${listIncluded[7]['title']}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                  ]),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].marketMallsStores!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+
+
+
+                                      },
+                                      child: Container(
+                                        height: 65.0,
+                                        width: 65.0,
+                                        decoration: BoxDecoration(
+                                            color: AppColor.aquaCasper2,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: AppColor.borderColor2, width: 1)),
+                                        child: Center(
+                                          child: SvgPicture.asset("${listIncluded[8]['icon']}".svg),
+                                        ),
+
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5,),
+                                    Text("${listIncluded[8]['title']}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                  ]),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].coffeeClubsLounges!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+
+
+
+                                      },
+                                      child: Container(
+                                        height: 65.0,
+                                        width: 65.0,
+                                        decoration: BoxDecoration(
+                                            color: AppColor.aquaCasper2,
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: AppColor.borderColor2, width: 1)),
+                                        child: Center(
+                                          child: SvgPicture.asset("${listIncluded[9]['icon']}".svg),
+                                        ),
+
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5,),
+                                    Text("${listIncluded[9]['title']}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
+                                  ]),
+                            ],)
+
+
+                          /*GridView.builder(
                             itemCount: listIncluded.length,
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -507,12 +905,105 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                 children: [
                                   InkWell(
                                     onTap: (){
+                                      if(index == 0){
+                                        List<String> checkList = byIDResult.checklist??[];
+                                        List<bool> listOfBool = List<bool>.generate(checkList.length, (index) => true);
 
-                                      List<String> nameOfImage = byIDResult.days![0].breakfast!.imagesPublic!;
-                                      List<String> linkPath = List<String>.generate(nameOfImage.length, (index) => '${ApiRoutes.picBaseURL}${nameOfImage[index]}');
+                                        _navigationService.navigateTo(checkListRoute,
+                                            arguments:{ "checklist": checkList,
+                                              "listOfBool": listOfBool,
+                                              "bool": true,
+                                              "selectedCheckList": []});
+                                      }
 
-                                      _navigationService.navigateTo(storyViewRoute, arguments: linkPath);
+                                      if(index == 5) {
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].breakfast!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
 
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+                                        return;
+                                      }
+
+                                      if(index == 5) {
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].breakfast!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+                                        return;
+                                      }
+
+                                      if(index == 6) {
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].lunch!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+                                        return;
+                                      }
+
+                                      if(index == 7) {
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].dinner!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+                                        return;
+                                      }
+
+                                      if(index == 8) {
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].marketMallsStores!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+                                        return;
+                                      }
+                                      if(index == 9) {
+                                        List<String> nameOfImage = byIDResult
+                                            .days![0].coffeeClubsLounges!.imagesPublic!;
+                                        List<String> linkPath = List<
+                                            String>.generate(
+                                            nameOfImage.length, (
+                                            index) => '${ApiRoutes
+                                            .picBaseURL}${nameOfImage[index]}');
+
+                                        _navigationService.navigateTo(
+                                            storyViewRoute,
+                                            arguments: linkPath);
+                                        return;
+                                      }
                                     },
                                     child: Container(
                                       height: 65.0,
@@ -541,7 +1032,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               mainAxisSpacing: 10.0,
                               crossAxisSpacing: 0.0,
                             ),
-                          ),
+                          ),*/
                         ),
 
                       ],

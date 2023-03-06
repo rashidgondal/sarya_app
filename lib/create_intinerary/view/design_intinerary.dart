@@ -331,6 +331,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                                   _navigationService.navigateTo(checkListRoute,
                                       arguments:{ "checklist": listOfCheckList,
                                                   "listOfBool": listOfBool,
+                                                  "bool": false,
                                                    "selectedCheckList": checkList})!.then((value) {
                                             //getCheckList();
                                     if(value != null){
