@@ -1,8 +1,8 @@
 class ApiRoutes {
 
   static const String _base_URL = 'https://api2.sarya.app/';
-  static const String _baseURL = 'http://api.sarya.app/';
-  static const String baseURL = 'http://api.sarya.app/';
+  static const String _baseURL = 'http://api2.sarya.app/';
+  static const String baseURL = 'http://api2.sarya.app/';
   static const String picBaseURL = 'https://cdn.sarya.app/itinerary/';
 
   //users
