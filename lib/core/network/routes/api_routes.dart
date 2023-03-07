@@ -1,21 +1,21 @@
 class ApiRoutes {
 
-  static const String _base_URL = 'https://api2.sarya.app/';
-  static const String _baseURL = 'http://api2.sarya.app/';
-  static const String baseURL = 'http://api2.sarya.app/';
+  static const String _base_URL = 'https://api.sarya.app/';
+  static const String baseURL = 'https://api.sarya.app/';
+
   static const String picBaseURL = 'https://cdn.sarya.app/itinerary/';
 
   //users
-  static const String signup    = '${_baseURL}user/signup';
-  static const String login     = '${_baseURL}user/login';
-  static const String forgot    = '${_baseURL}user/forgotpwd';
-  static const String reset     = '${_baseURL}user/resetpwd';
+  static const String signup    = '${_base_URL}user/signup';
+  static const String login     = '${_base_URL}user/login';
+  static const String forgot    = '${_base_URL}user/forgotpwd';
+  static const String reset     = '${_base_URL}user/resetpwd';
   static const String update    = 'user/update';
 
 
   //svg
-  static const String avatar     = '${_baseURL}svg/avatar';
-  static const String country    = '${_baseURL}country';
+  static const String avatar     = '${_base_URL}avatar';
+  static const String country    = '${_base_URL}country';
 
   //create intinerary
   static const String createIntinerary  = '${_base_URL}itinerary';

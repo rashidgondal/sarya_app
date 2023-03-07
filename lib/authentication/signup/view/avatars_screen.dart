@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sarya/authentication/signup/model/avatar_response.dart';
 import 'package:sarya/authentication/signup/signup_view_model/avatar_cubits.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
@@ -73,9 +74,9 @@ class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
                     }
 
                     if (state is AvatarLoaded) {
-                      List list = state.avatars;
-                       baseUrl = state.baseUrl;
-                       format = state.format;
+                      List<AvatarResult> list = state.avatarResponse.result??[];
+                       baseUrl = state.avatarResponse.baseUrl??'';
+                       format = state.avatarResponse.format??'';
 
                       return GridView.builder(
                         itemCount: list.length,
@@ -88,11 +89,9 @@ class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
                                 mainAxisSpacing: 30,
                                 crossAxisSpacing: 30),
                         itemBuilder: (context, index) => _buildImageItem(
-                            imageUrl: '$baseUrl${list[index]['name']}.$format',
-                            size: size,
-                            index: index,
+                            imageUrl: '$baseUrl${list[index].name}.$format',
                             list: list,
-                            listOfColor:list[index]['colors']
+                            listOfColor: list[index].colors??[]
                         ),
                       );
 
@@ -116,8 +115,6 @@ class _AvatarsTypesScreenState extends State<AvatarsTypesScreen> {
 
   Widget _buildImageItem({
     required String imageUrl,
-    required Size size,
-    required int index,
     required List list,
     required List listOfColor
   }) {

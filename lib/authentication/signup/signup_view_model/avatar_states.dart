@@ -28,12 +28,11 @@ class AvatarLoading extends AvatarStates {
 
 
 class AvatarLoaded extends AvatarStates {
-   final List avatars;
-   final String baseUrl;
-   final String format;
-   const AvatarLoaded({ required this.avatars, required this.baseUrl, required this.format});
+   final AvatarResponse avatarResponse;
+
+   const AvatarLoaded({ required this.avatarResponse});
 
    @override
-   List<Object> get props => [ avatars, baseUrl];
+   List<Object> get props => [];
 }
 

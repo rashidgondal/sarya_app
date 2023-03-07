@@ -1,50 +1,54 @@
 class AvatarResponse {
-  String? sId;
   String? baseUrl;
-  List<Avatars>? avatars;
   String? format;
+  String? resource;
+  List<AvatarResult>? result;
+  int? totalCount;
 
-  AvatarResponse({this.sId, this.baseUrl, this.avatars, this.format});
+  AvatarResponse(
+      {this.baseUrl, this.format, this.resource, this.result, this.totalCount});
 
   AvatarResponse.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
     baseUrl = json['baseUrl'];
-    if (json['avatars'] != null) {
-      avatars = <Avatars>[];
-      json['avatars'].forEach((v) {
-        avatars!.add(Avatars.fromJson(v));
+    format = json['format'];
+    resource = json['resource'];
+    if (json['result'] != null) {
+      result = <AvatarResult>[];
+      json['result'].forEach((v) {
+        result!.add(new AvatarResult.fromJson(v));
       });
     }
-    format = json['format'];
+    totalCount = json['totalCount'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['baseUrl'] = baseUrl;
-    if (avatars != null) {
-      data['avatars'] = avatars!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['baseUrl'] = this.baseUrl;
+    data['format'] = this.format;
+    data['resource'] = this.resource;
+    if (this.result != null) {
+      data['result'] = this.result!.map((v) => v.toJson()).toList();
     }
-    data['format'] = format;
+    data['totalCount'] = this.totalCount;
     return data;
   }
 }
 
-class Avatars {
+class AvatarResult {
   String? name;
   List<String>? colors;
 
-  Avatars({this.name, this.colors});
+  AvatarResult({this.name, this.colors});
 
-  Avatars.fromJson(Map<String, dynamic> json) {
+  AvatarResult.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     colors = json['colors'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['colors'] = colors;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['colors'] = this.colors;
     return data;
   }
 }

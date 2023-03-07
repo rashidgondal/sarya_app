@@ -10,14 +10,10 @@ class AvatarCubits extends Cubit<AvatarStates> {
     try{
       emit(AvatarLoading());
 
-       List result  = await AuthRepository.instance.avatar();
-      // AvatarResponse avatarResponse = AvatarResponse.fromJson(result);
-      List avatars = result[0]["avatars"];
-      String baseUrl = result[0]["baseUrl"];
-      String format = result[0]["format"];
+       var result  = await AuthRepository.instance.avatar();
+      AvatarResponse avatarResponse = AvatarResponse.fromJson(result);
 
-
-      emit(AvatarLoaded(avatars: avatars, baseUrl: baseUrl, format: format));
+      emit(AvatarLoaded(avatarResponse: avatarResponse));
 
     }catch(e){
       emit(const AvatarFailure(error: ''));
