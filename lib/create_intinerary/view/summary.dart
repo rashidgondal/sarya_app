@@ -32,7 +32,6 @@ import '../intinerary_view_model/activity_cubits.dart';
 import '../intinerary_view_model/summary_update_intinerary_cubits.dart';
 import '../intinerary_view_model/summary_update_intinerary_states.dart';
 import '../model/summary_update_intinerary_request.dart' ;
-import 'package:latlong2/latlong.dart' as latlng;
 
 class SummaryScreen extends StatefulWidget {
   final String routeName;
@@ -274,7 +273,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   if (state is ItineraryByIDLoaded) {
                     ByIDResult byIDResult = state.byIDResult;
                     var destination = byIDResult.destination;
-                    List<latlng.LatLng> list = state.listOfLatLng;
+                    List<LatLng> list = state.listOfLatLng;
 
                     return Column(
                       children: [
