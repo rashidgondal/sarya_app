@@ -614,6 +614,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           list_of_days[selected_index].breakfast = value;
 
                           listOfLatLng.add(LatLng(list_of_days[selected_index].breakfast!.location!.coordinates![1], list_of_days[selected_index].breakfast!.location!.coordinates![0]));
+                        setState(() {
+
+                        });
                         }
                       });
                     },
@@ -656,7 +659,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           size: 20,
                         ),
                         titleWidget: Text(
-                          'Lunch ${list_of_days[selected_index].dinner!.name??''}',
+                          'Lunch ${list_of_days[selected_index].lunch!.name??''}',
                           style: TextStyle(
                               fontSize: 15.0,
                               color: AppColor.headingColor2),
@@ -672,7 +675,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         if (value != null) {
                           list_of_days[selected_index].dinner = value;
                           listOfLatLng.add(LatLng(list_of_days[selected_index].dinner!.location!.coordinates![1], list_of_days[selected_index].dinner!.location!.coordinates![0]));
+                          setState(() {
 
+});
                         }
                       });
                     },
@@ -703,7 +708,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           list_of_days[selected_index]
                               .coffeeClubsLounges = value;
                           listOfLatLng.add(LatLng(list_of_days[selected_index].coffeeClubsLounges!.location!.coordinates![1], list_of_days[selected_index].coffeeClubsLounges!.location!.coordinates![0]));
+                            setState(() {
 
+                            });
                         }
                       });
                     },
@@ -735,7 +742,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                           list_of_days[selected_index].marketMallsStores =
                               value;
                           listOfLatLng.add(LatLng(list_of_days[selected_index].marketMallsStores!.location!.coordinates![1], list_of_days[selected_index].marketMallsStores!.location!.coordinates![0]));
+                          setState(() {
 
+                          });
                         }
                       });
                     },

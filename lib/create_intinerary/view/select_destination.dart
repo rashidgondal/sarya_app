@@ -36,6 +36,7 @@ class _SelectDestinationState extends State<SelectDestination> {
   late GoogleMapController _mapController;
   TextEditingController searchController = TextEditingController();
   String searchKeyWord = '';
+  SharedPrefs sharedPrefs = SharedPrefs();
 
   // on below line we have set the camera position
   static final CameraPosition _kGoogle = const CameraPosition(
@@ -99,9 +100,11 @@ class _SelectDestinationState extends State<SelectDestination> {
               color: AppColor.whiteColor,
               child: Center(
                 child: InkWell(
-                  onTap:tempCountryList.isEmpty? null:() {
-
-                    CreateIntineraryRequest createIntineraryRequest = CreateIntineraryRequest(destination: tempCountryList, live: false,step: 1);
+                  onTap:tempCountryList.isEmpty? null:() async{
+                    Map map = await sharedPrefs.getUser();
+                    String userName = map['userName'];
+                    print("userName.........$userName");
+                    CreateIntineraryRequest createIntineraryRequest = CreateIntineraryRequest(destination: tempCountryList, live: false,step: 1, userName: userName);
                    context.read<CreateIntineraryCubits>().createIntinerary(createIntineraryRequest: createIntineraryRequest, navigationService: _navigationService, context: context);
                    // _navigationService.navigateTo(designIntineraryRoute);
 

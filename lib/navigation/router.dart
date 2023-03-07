@@ -26,7 +26,9 @@ import '../create_intinerary/view/select_destination.dart';
 import '../customWidgets/share_intinerary.dart';
 import '../customWidgets/show_aimation.dart';
 import '../customWidgets/term_and_condtions.dart';
+import '../home/model/sold_all_response.dart';
 import '../home/view/draft_itinerary_screen.dart';
+import '../home/view/sold_itinerary_detail_screen.dart';
 import '../home/view/sold_itinerary_screen.dart';
 import '../home/view/view_marker_screen.dart';
 import '../payments/view/bank_detail.dart';
@@ -96,6 +98,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.summaryRoutEdit:
       return MaterialPageRoute(
         builder: (context) =>   SummaryScreen(routeName: edit, map: settings.arguments as Map,),
+      );
+      case routes.summaryRoutPurchase:
+      return MaterialPageRoute(
+        builder: (context) =>   SummaryScreen(routeName: purchase, map: settings.arguments as Map,),
       );
     case routes.designIntineraryRoute:
       return MaterialPageRoute(
@@ -173,6 +179,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.mapViewRoute:
       return MaterialPageRoute(
           builder: (context) =>  ViewMarkerScreen(map: settings.arguments as Map,));
+    case routes.soldDetailViewRoute:
+      return MaterialPageRoute(
+          builder: (context) =>  SoldItineraryDetail(soldAllResult: settings.arguments as SoldAllResult,));
 
     default:
       return MaterialPageRoute(

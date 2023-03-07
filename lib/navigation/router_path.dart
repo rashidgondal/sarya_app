@@ -15,6 +15,7 @@ const String destinationRout    = "Select Destination Screen";
 const String summaryRoutSold    = "Summary Screen Sold";
 const String summaryRoutStart   = "Summary Screen Start";
 const String summaryRoutEdit            = "Summary Screen Edit";
+const String summaryRoutPurchase            = "Summary Screen Purchase";
 const String designIntineraryRoute      = "Design Intinerary Screen";
 const String draftIntineraryRoute       = "Draft Intinerary Screen";
 const String dayDesignRoute             = "Day Design Intinerary Screen";
@@ -35,6 +36,7 @@ const String searchPlacesRoute          = "Search Places Screen";
 const String foodShoppingRoute          = "Food Shopping Screen";
 const String searchItineraryRoute       = "Search Screen";
 const String storyViewRoute             = "Story View Screen";
-const String mapViewRoute             = " Map View Screen";
+const String mapViewRoute               = " Map View Screen";
+const String soldDetailViewRoute        = " Sold Detail View Screen";
 
 

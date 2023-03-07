@@ -235,5 +235,56 @@ class SaryaAPI {
     }
   }
 
+  Future<dynamic> purchasedItinerary({required body}) async {
+    try {
+      String url = '';
+      url = ApiRoutes.purchase;
+      return await _http.iPost(url, data: body);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getAllPurchasedItinerary() async {
+    try {
+      String url = '';
+      url = ApiRoutes.getAllPurchase;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getPurchasedItineraryDetail({required String id}) async {
+    try {
+      String url = '';
+      url = ApiRoutes.purchaseItineraryDetail + "$id";
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getAllSoldItinerary() async {
+    try {
+      String url = '';
+      url = ApiRoutes.soldItinerary;
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getSoldItineraryDetail({required String id}) async {
+    try {
+      String url = '';
+      url = ApiRoutes.soldItinerary + "$id";
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
 
 }

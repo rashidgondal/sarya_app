@@ -6,6 +6,9 @@ import 'package:geojson/geojson.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/home/home_view_model/created_itinerary_states.dart';
+import 'package:sarya/home/home_view_model/purchase_itineraries_cubits.dart';
+import 'package:sarya/home/home_view_model/purchase_itineraries_states.dart';
+import 'package:sarya/home/model/all_purchases_response.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
@@ -16,7 +19,7 @@ import '../../customWidgets/drawer_screen.dart';
 import '../../helper/helper_methods.dart';
 import '../../navigation/navigation_service.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
+import 'package:timeago/timeago.dart' as timeago;
 import '../home_view_model/created_itinerary_cubits.dart';
 
 class ItineraryScreen extends StatefulWidget {
@@ -38,6 +41,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   @override
   void initState() {
     context.read<CreatedItineraryCubits>().getCreatedItinerary();
+    context.read<PurchaseItinerariesCubits>().getPurchaseItinerary();
     Flags.getImages();
     parseAndDrawAssetsOnMap();
     super.initState();
@@ -99,7 +103,10 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 actions: [
                   IconButton(
                     icon: SvgPicture.asset('home_appbar_icon_1'.svg),
-                    onPressed: () {},
+                    onPressed: () {
+                      _navigationService.navigateTo(soldIntineraryRoute);
+
+                    },
                   ),
                   IconButton(
                     icon: SvgPicture.asset('home_appbar_icon_2'.svg),
@@ -109,65 +116,122 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                   ),
                 ],
               ),
-              body: Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 30.0,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Text(
-                          "Created Itineraries",
-                          style: TextStyle(
-                              fontSize: 17.0, color: AppColor.colorLiteBlack5),
+              body: RefreshIndicator(
+                onRefresh: () async{
+
+                  context.read<CreatedItineraryCubits>().getCreatedItinerary();
+                  context.read<PurchaseItinerariesCubits>().getPurchaseItinerary();
+                },
+                child: Stack(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 30.0,
                         ),
-                      ),
-                      SizedBox(
-                        height: 125,
-                        child: BlocBuilder<CreatedItineraryCubits, CreatedItineraryStates>(
-                        builder: (context, state) {
+                        const Padding(
+                          padding: EdgeInsets.only(left: 30.0),
+                          child: Text(
+                            "Created Itineraries",
+                            style: TextStyle(
+                                fontSize: 17.0, color: AppColor.colorLiteBlack5),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 125,
+                          child: BlocBuilder<CreatedItineraryCubits, CreatedItineraryStates>(
+                              builder: (context, state) {
 
-                          if (state is CreatedItineraryInitial) {
-                            return SizedBox();
-                          }
+                                if (state is CreatedItineraryInitial) {
+                                  return SizedBox();
+                                }
 
-                          if (state is CreatedItineraryLoading) {
-                            Center(child: CupertinoActivityIndicator());
-                          }
+                                if (state is CreatedItineraryLoading) {
+                                  Center(child: CupertinoActivityIndicator());
+                                }
 
-                          if (state is CreatedItineraryLoaded) {
-                            var list = state.list;
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 20.0,),
-                                Expanded(
-                                  child: ListView.builder(
-                                      itemCount: list.length,
-                                      physics: BouncingScrollPhysics(),
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (BuildContext context, int index){
-                                            if(index == 0){
+                                if (state is CreatedItineraryLoaded) {
+                                  var list = state.list;
+                                  return   Column(
+                                    children: [
+                                      SizedBox(height: 10,),
+                                      Expanded(
+                                        child: ListView.builder(
+                                            itemCount: list.length,
+                                            physics: BouncingScrollPhysics(),
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (BuildContext context, int index){
+                                              if(index == 0){
+                                                return InkWell(
+                                                  onTap: (){
+                                                    String id = list[index]['_id'];
+                                                    _navigationService.navigateTo(
+                                                        summaryRoutEdit, arguments:{ "id": id});
+
+
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        left: 30.0,right: 10,top: 0),
+                                                    child: Container(
+                                                      height: 111.0,
+                                                      width: 101.0,
+                                                      decoration: BoxDecoration(
+                                                          color: AppColor.aquaCasper2,
+                                                          image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index]['profileImg']}"),
+                                                              fit: BoxFit.fill),
+                                                          borderRadius: BorderRadius.circular(8.0),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                                offset: const Offset(2, 2),
+                                                                color: Colors.grey.withOpacity(0.6),
+                                                                blurRadius: 3),
+                                                            BoxShadow(
+                                                                offset: const Offset(-3, -3),
+                                                                color: Colors.grey.withOpacity(0.1),
+                                                                blurRadius: 3)
+                                                          ]
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                        children: [
+                                                          Row(children: [
+                                                            Icon(Icons.location_on,color: AppColor.whiteColor,),
+                                                            SizedBox(
+                                                              width: 70,
+                                                              child: Text(
+                                                                "${list[index]['title']??''}",
+                                                                style: TextStyle(
+                                                                    fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
+                                                              ),
+                                                            )
+                                                          ],),
+                                                          SizedBox(height: 10,),
+
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
                                               return InkWell(
                                                 onTap: (){
                                                   String id = list[index]['_id'];
-                                                  _navigationService.navigateTo(summaryRoutStart,
-                                                      arguments:{ "id": id});
-                                                  },
+                                                  _navigationService.navigateTo(
+                                                      summaryRoutEdit, arguments:{ "id": id});
+
+                                                },
                                                 child: Padding(
                                                   padding: const EdgeInsets.only(
-                                                      left: 30.0,right: 10,top: 0),
+                                                      right: 10.0, top: 0),
                                                   child: Container(
                                                     height: 111.0,
                                                     width: 101.0,
                                                     decoration: BoxDecoration(
                                                         color: AppColor.aquaCasper2,
-                                                        image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index]['profileImg']}"),
+                                                        image:list[index]['profileImg'] == null?null :DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index]['profileImg']}"),
                                                             fit: BoxFit.fill),
                                                         borderRadius: BorderRadius.circular(8.0),
                                                         boxShadow: [
@@ -202,245 +266,246 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                                   ),
                                                 ),
                                               );
-                                            }
-                                        return InkWell(
-                                          onTap: (){
-                                            String id = list[index]['_id'];
-                                            _navigationService.navigateTo(
-                                                summaryRoutSold, arguments:{ "id": id});
+                                            }),
+                                      ),
+                                    ],
+                                  );;
+                                }
 
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 10.0, top: 0),
-                                            child: Container(
-                                              height: 111.0,
+                                return Center(child: Text("data not found"),);
+
+                              }
+                          )
+
+
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 30.0),
+                          child: Text(
+                            "Purchased Itineraries",
+                            style: TextStyle(
+                                fontSize: 17.0, color: AppColor.colorLiteBlack5),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        BlocBuilder<PurchaseItinerariesCubits, PurchaseItinerariesStates>(
+                            builder: (context, state) {
+                              List<Purchased> purchasedItineraries = [];
+
+                              if (state is PurchaseItineraryInitial
+                              ) {
+                                return SizedBox();
+                              }
+
+                              if (state is PurchaseItineraryLoading) {
+                                Center(child: CupertinoActivityIndicator());
+                              }
+
+                              if (state is PurchaseItineraryLoaded) {
+                                 purchasedItineraries = state.purchasedItineraries;
+
+                              }
+
+
+                              if (purchasedItineraries.isEmpty) {
+                                return Center(
+                                  child: Text(
+                                    "Data not found",
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: AppColor.colorLiteBlack2,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                );
+                              }
+                              return Expanded(
+                                child: ListView.builder(
+                                    itemCount: purchasedItineraries.length,
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          _navigationService.navigateTo(summaryRoutPurchase ,arguments: {"id":purchasedItineraries[index].sId});
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 15.0, left: 15, top: 10),
+                                          child: Container(
+                                              height: 86.0,
                                               width: 101.0,
                                               decoration: BoxDecoration(
-                                                  color: AppColor.aquaCasper2,
-                                                  image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index]['profileImg']}"),
-                                                      fit: BoxFit.fill),
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        offset: const Offset(2, 2),
-                                                        color: Colors.grey.withOpacity(0.6),
-                                                        blurRadius: 3),
-                                                    BoxShadow(
-                                                        offset: const Offset(-3, -3),
-                                                        color: Colors.grey.withOpacity(0.1),
-                                                        blurRadius: 3)
-                                                  ]
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                  border: Border.all(
+                                                      width: 1, color: AppColor.borderColor)),
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
-                                                  Row(children: [
-                                                    Icon(Icons.location_on,color: AppColor.whiteColor,),
-                                                    SizedBox(
-                                                      width: 70,
-                                                      child: Text(
-                                                        "${list[index]['title']??''}",
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Container(
+                                                    height: 72.0,
+                                                    width: 72.0,
+                                                    child:purchasedItineraries[index].profileImg == null? null: Image.network(
+                                                        "${ApiRoutes.picBaseURL}${purchasedItineraries[index].profileImg}",
+                                                        fit: BoxFit.cover),
+                                                    decoration: BoxDecoration(
+                                                        color: AppColor.aquaCasper2,
+                                                        borderRadius:
+                                                        BorderRadius.circular(10.0)),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "${purchasedItineraries[index].title}",
                                                         style: TextStyle(
-                                                            fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
+                                                            fontSize: 13.0,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: AppColor.headingColor),
                                                       ),
-                                                    )
-                                                  ],),
-                                                  SizedBox(height: 10,),
+                                                      const SizedBox(
+                                                        height: 3.0,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                        children: [
 
+                                                          Text(
+                                                            "${purchasedItineraries[index].destination.toString().replaceAll('[', '').replaceAll(']', '').trim()}",
+                                                            style: TextStyle(
+                                                                fontSize: 11.0,
+                                                                fontWeight: FontWeight.w500,
+                                                                color: AppColor.subtitleColor),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Text(
+                                                        "${timeago.format(DateTime.parse('${purchasedItineraries[index].createdAt}'))} , ${purchasedItineraries[index].totalDays} day package",
+                                                        style: TextStyle(
+                                                            fontSize: 11.0,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: AppColor.headingColor2),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 3.0,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                        children: const [
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: AppColor.borderColor,
+                                                            size: 15.0,
+                                                          ),
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: AppColor.borderColor,
+                                                            size: 15.0,
+                                                          ),
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: AppColor.borderColor,
+                                                            size: 15.0,
+                                                          ),
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: AppColor.borderColor,
+                                                            size: 15.0,
+                                                          ),
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: AppColor.borderColor,
+                                                            size: 15.0,
+                                                          ),
+                                                          Text(
+                                                            "(5)",
+                                                            style: TextStyle(
+                                                                fontSize: 11.0,
+                                                                fontWeight: FontWeight.w500,
+                                                                color: AppColor.headingColor2),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const Spacer(),
+                                                  Container(
+                                                    padding: EdgeInsets.symmetric(
+                                                        horizontal: 10, vertical: 10),
+                                                    decoration: BoxDecoration(
+                                                      color: AppColor.aquaCasper2,
+                                                      borderRadius: BorderRadius.circular(20),
+                                                    ),
+                                                    child: Text(
+                                                      "\$${purchasedItineraries[index].cost}",
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight.w500,
+                                                          fontSize: 10,
+                                                          color: AppColor.lightIndigo),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  )
                                                 ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                                ),
-                              ],
-
-                            );
-                          }
-
-                          return Center(child: Text("data not found"),);
-
-                        }
-                      )),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Text(
-                          "Purchase Itineraries",
-                          style: TextStyle(
-                              fontSize: 17.0, color: AppColor.colorLiteBlack5),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                            itemCount: 10,
-                            itemBuilder: (BuildContext context, int index) {
-                              return InkWell(
-                                onTap: () {
-                                  _navigationService.navigateTo(summaryRoutStart);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 30.0, left: 30, top: 10),
-                                  child: Container(
-                                      height: 86.0,
-                                      width: 101.0,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                          border: Border.all(
-                                              width: 1, color: AppColor.borderColor)),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Container(
-                                            height: 72.0,
-                                            width: 72.0,
-                                            decoration: BoxDecoration(
-                                                color: AppColor.aquaCasper2,
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0)),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                "Alina Fahim",
-                                                style: TextStyle(
-                                                    fontSize: 13.0,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: AppColor.headingColor),
-                                              ),
-                                              const SizedBox(
-                                                height: 3.0,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: const [
-                                                  Icon(
-                                                    Icons.question_mark,
-                                                    size: 10.0,
-                                                  ),
-                                                  Text(
-                                                    " United Arab Emirate",
-                                                    style: TextStyle(
-                                                        fontSize: 11.0,
-                                                        fontWeight: FontWeight.w500,
-                                                        color: AppColor.subtitleColor),
-                                                  ),
-                                                ],
-                                              ),
-                                              const Text(
-                                                "3 months Ago, 5 days Package",
-                                                style: TextStyle(
-                                                    fontSize: 11.0,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: AppColor.headingColor2),
-                                              ),
-                                              const SizedBox(
-                                                height: 3.0,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: const [
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: AppColor.borderColor,
-                                                    size: 15.0,
-                                                  ),
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: AppColor.borderColor,
-                                                    size: 15.0,
-                                                  ),
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: AppColor.borderColor,
-                                                    size: 15.0,
-                                                  ),
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: AppColor.borderColor,
-                                                    size: 15.0,
-                                                  ),
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: AppColor.borderColor,
-                                                    size: 15.0,
-                                                  ),
-                                                  Text(
-                                                    " (5)",
-                                                    style: TextStyle(
-                                                        fontSize: 11.0,
-                                                        fontWeight: FontWeight.w500,
-                                                        color: AppColor.headingColor2),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          const Spacer(),
-                                          const Icon(
-                                            Icons.navigate_next_sharp,
-                                            size: 30.0,
-                                            color: AppColor.lightIndigo,
-                                          )
-                                        ],
-                                      )),
-                                ),
+                                              )),
+                                        ),
+                                      );
+                                    }),
                               );
-                            }),
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20.0),
-                      child: InkWell(
-                        onTap: () {
-                          _navigationService.navigateTo(destinationRout, arguments: {"country":features, "boolList": boolList});
-                        },
-                        child: Container(
-                          height: 46.0,
-                          width: 200.0,
-                          decoration: BoxDecoration(
-                              color: AppColor.buttonColor.withOpacity(1),
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: const Center(
-                            child: Text(
-                              "Create New Itinerary",
-                              style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColor.whiteColor),
+
+
+                            }
+                        )
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
+                        child: InkWell(
+                          onTap: () {
+                            _navigationService.navigateTo(destinationRout, arguments: {"country":features, "boolList": boolList});
+                          },
+                          child: Container(
+                            height: 46.0,
+                            width: 200.0,
+                            decoration: BoxDecoration(
+                                color: AppColor.buttonColor.withOpacity(1),
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: const Center(
+                              child: Text(
+                                "Create New Itinerary",
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColor.whiteColor),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
     ));
   }

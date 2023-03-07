@@ -11,6 +11,7 @@ import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/home/home_view_model/itinerary_by_id_cubits.dart';
 import 'package:sarya/home/home_view_model/itinerary_by_id_states.dart';
+import 'package:sarya/home/home_view_model/purchase_itinerary_by_id_cubits.dart';
 import 'package:sarya/home/itineraryByIDResponse.dart';
 import 'package:sarya/pinLocationMap.dart';
 import 'package:sarya/story_view/story_view.dart';
@@ -24,12 +25,13 @@ import '../../core/network/routes/api_routes.dart';
 import '../../customWidgets/data_loading.dart';
 import '../../customWidgets/dialoge_activities_excursion.dart';
 import '../../helper/helper_methods.dart';
+import '../../home/model/purchase_itinerary_request.dart' as req;
 import '../../locator.dart';
 import '../intinerary_view_model/CheckList_states.dart';
 import '../intinerary_view_model/activity_cubits.dart';
 import '../intinerary_view_model/summary_update_intinerary_cubits.dart';
 import '../intinerary_view_model/summary_update_intinerary_states.dart';
-import '../model/summary_update_intinerary_request.dart';
+import '../model/summary_update_intinerary_request.dart' ;
 import 'package:latlong2/latlong.dart' as latlng;
 
 class SummaryScreen extends StatefulWidget {
@@ -58,9 +60,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
     {"title":"Activities","icon":"activityy_Icon"},{"title":"Breakfast","icon":"lunch_icon"},{"title":"Lunch","icon":"lunch_icon"},{"title":"Dinner","icon":"lunch_icon"},{"title":"Shopping","icon":"market_icon"},{"title":"Restaurant","icon":"coffee_icon"}
   ];
 
-
+  late Map signInResponse;
 
   SharedPrefs sharedPrefs = SharedPrefs();
+  String user = '';
   String userName = '';
   String nationality = '';
 
@@ -75,9 +78,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
 
   getSelectedCountries()async{
-    Map signInResponse =await sharedPrefs.getUser();
-      userName = "${signInResponse['firstName']} ${signInResponse['lastName']}";
+     signInResponse =await sharedPrefs.getUser();
+      user = "${signInResponse['firstName']} ${signInResponse['lastName']}";
       nationality = "${signInResponse['nationality']}";
+      userName = "${signInResponse['userName']}";
      setState(() {
 
     });
@@ -198,6 +202,35 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   child: const Center(
                     child: Text(
                       "Start",
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.whiteColor),
+                    ),
+                  ),
+                ),
+              ) ):
+              widget.routeName  == purchase ?
+
+              Center(child: InkWell(
+                onTap: () {
+                  req.PurchaseItineraryRequest request = req.PurchaseItineraryRequest(itinerary: req.Itinerary(
+                      sId: widget.map["id"],
+                    userName: userName
+                  ));
+                  context.read<PurchaseItineraryByIDCubits>().purchaseItinerary(request: request, navigationService: _navigationService);
+
+
+                },
+                child: Container(
+                  height: 46.0,
+                  width: 150.0,
+                  decoration: BoxDecoration(
+                      color: AppColor.buttonColor,
+                      borderRadius: BorderRadius.circular(8.0)),
+                  child: const Center(
+                    child: Text(
+                      "Purchase",
                       style: TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.w500,
@@ -335,7 +368,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                           style:TextStyle(fontSize: 13.0, color: AppColor.lightIndigo, fontWeight: FontWeight.w500),
                                         ),
                                         TextSpan(
-                                          text: 'by $userName',
+                                          text: 'by $user',
                                           style:TextStyle(fontSize: 13.0, color: AppColor.colorBlack, fontWeight: FontWeight.w500),
                                         )
                                       ]
@@ -892,146 +925,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                   ]),
                             ],)
 
-
-                          /*GridView.builder(
-                            itemCount: listIncluded.length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            physics:const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) => Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  InkWell(
-                                    onTap: (){
-                                      if(index == 0){
-                                        List<String> checkList = byIDResult.checklist??[];
-                                        List<bool> listOfBool = List<bool>.generate(checkList.length, (index) => true);
-
-                                        _navigationService.navigateTo(checkListRoute,
-                                            arguments:{ "checklist": checkList,
-                                              "listOfBool": listOfBool,
-                                              "bool": true,
-                                              "selectedCheckList": []});
-                                      }
-
-                                      if(index == 5) {
-                                        List<String> nameOfImage = byIDResult
-                                            .days![0].breakfast!.imagesPublic!;
-                                        List<String> linkPath = List<
-                                            String>.generate(
-                                            nameOfImage.length, (
-                                            index) => '${ApiRoutes
-                                            .picBaseURL}${nameOfImage[index]}');
-
-                                        _navigationService.navigateTo(
-                                            storyViewRoute,
-                                            arguments: linkPath);
-                                        return;
-                                      }
-
-                                      if(index == 5) {
-                                        List<String> nameOfImage = byIDResult
-                                            .days![0].breakfast!.imagesPublic!;
-                                        List<String> linkPath = List<
-                                            String>.generate(
-                                            nameOfImage.length, (
-                                            index) => '${ApiRoutes
-                                            .picBaseURL}${nameOfImage[index]}');
-
-                                        _navigationService.navigateTo(
-                                            storyViewRoute,
-                                            arguments: linkPath);
-                                        return;
-                                      }
-
-                                      if(index == 6) {
-                                        List<String> nameOfImage = byIDResult
-                                            .days![0].lunch!.imagesPublic!;
-                                        List<String> linkPath = List<
-                                            String>.generate(
-                                            nameOfImage.length, (
-                                            index) => '${ApiRoutes
-                                            .picBaseURL}${nameOfImage[index]}');
-
-                                        _navigationService.navigateTo(
-                                            storyViewRoute,
-                                            arguments: linkPath);
-                                        return;
-                                      }
-
-                                      if(index == 7) {
-                                        List<String> nameOfImage = byIDResult
-                                            .days![0].dinner!.imagesPublic!;
-                                        List<String> linkPath = List<
-                                            String>.generate(
-                                            nameOfImage.length, (
-                                            index) => '${ApiRoutes
-                                            .picBaseURL}${nameOfImage[index]}');
-
-                                        _navigationService.navigateTo(
-                                            storyViewRoute,
-                                            arguments: linkPath);
-                                        return;
-                                      }
-
-                                      if(index == 8) {
-                                        List<String> nameOfImage = byIDResult
-                                            .days![0].marketMallsStores!.imagesPublic!;
-                                        List<String> linkPath = List<
-                                            String>.generate(
-                                            nameOfImage.length, (
-                                            index) => '${ApiRoutes
-                                            .picBaseURL}${nameOfImage[index]}');
-
-                                        _navigationService.navigateTo(
-                                            storyViewRoute,
-                                            arguments: linkPath);
-                                        return;
-                                      }
-                                      if(index == 9) {
-                                        List<String> nameOfImage = byIDResult
-                                            .days![0].coffeeClubsLounges!.imagesPublic!;
-                                        List<String> linkPath = List<
-                                            String>.generate(
-                                            nameOfImage.length, (
-                                            index) => '${ApiRoutes
-                                            .picBaseURL}${nameOfImage[index]}');
-
-                                        _navigationService.navigateTo(
-                                            storyViewRoute,
-                                            arguments: linkPath);
-                                        return;
-                                      }
-                                    },
-                                    child: Container(
-                                      height: 65.0,
-                                      width: 65.0,
-                                      decoration: BoxDecoration(
-                                          color: AppColor.aquaCasper2,
-                                          borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: AppColor.borderColor2, width: 1)),
-                                      child: Center(
-                                        child: SvgPicture.asset("${listIncluded[index]['icon']}".svg),
-                                      ),
-
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5,),
-                                  Text("${listIncluded[index]['title']}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(fontSize: 12.0,color: AppColor.colorBlack,fontWeight: FontWeight.w500),)
-                                ]),
-
-
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              mainAxisSpacing: 10.0,
-                              crossAxisSpacing: 0.0,
-                            ),
-                          ),*/
                         ),
 
                       ],
@@ -1042,8 +935,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
                 })
 
-
-            ,
           ),
 
         ),
