@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarya/home/itineraryByIDResponse.dart';
+
+import '../../pinLocationMap.dart';
 
 abstract class ItineraryByIDStates extends Equatable {
   const ItineraryByIDStates();
@@ -23,6 +24,6 @@ class ItineraryByIDLoading extends ItineraryByIDStates {}
 
 class ItineraryByIDLoaded extends ItineraryByIDStates {
   final ByIDResult byIDResult;
-  final List<LatLng> listOfLatLng;
+  final List<FlagInformation> listOfLatLng;
   ItineraryByIDLoaded({required this.byIDResult, required this.listOfLatLng});
 }

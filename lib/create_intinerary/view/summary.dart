@@ -274,7 +274,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   if (state is ItineraryByIDLoaded) {
                     ByIDResult byIDResult = state.byIDResult;
                     var destination = byIDResult.destination;
-                    List<LatLng> list = state.listOfLatLng;
+                    List<FlagInformation> list = state.listOfLatLng;
 
                     return Column(
                       children: [
@@ -410,7 +410,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               _navigationService.navigateTo(mapViewRoute,arguments: {"listOfMarker":list});
 
                             },
-                            list_of_marker: list,
+                            list_of_flag_information: list,
+                            selected_place_information: (FlagInformation ) {  },
                           )
 
                           /*Container(
