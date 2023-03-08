@@ -112,7 +112,9 @@ class _UpdateAvatarState extends State<UpdateAvatar> {
                         String url = '${widget.map['url']}${widget
                             .map['listOfColor'][selectedPic]}.${widget
                             .map['format']}';
+                        String netWork = '${widget.map['listOfColor'][selectedPic]}';
 
+                        print("net........$netWork");
                           UpdateAvatarRequest  updateAvatarRequest = UpdateAvatarRequest(avatar: url);
                           context.read<UpdateAvatarCubits>().updateAvatar(updateAvatarRequest: updateAvatarRequest, navigationService: _navigationService);
 

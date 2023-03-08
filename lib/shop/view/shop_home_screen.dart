@@ -57,6 +57,7 @@ class _ShopScreenState extends State<ShopScreen> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
+        getUserInfo();
         context.read<PublicItineraryCubits>().getPublicItinerary();
       },
       child: SafeArea(

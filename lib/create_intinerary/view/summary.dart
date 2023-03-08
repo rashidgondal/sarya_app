@@ -69,6 +69,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
   @override
   void initState() {
     String id = widget.map['id'];
+    print("id...........$id");
     getSelectedCountries();
     context.read<ItineraryByIDCubits>().getItineraryByID(itineraryID: id);
     super.initState();
@@ -363,7 +364,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       text: '',
                                       children: <InlineSpan>[
                                         TextSpan(
-                                          text: 'Trip to ${destination![0]} ',
+                                          text: 'Trip to ${destination == null?"": destination![0]} ',
                                           style:TextStyle(fontSize: 13.0, color: AppColor.lightIndigo, fontWeight: FontWeight.w500),
                                         ),
                                         TextSpan(

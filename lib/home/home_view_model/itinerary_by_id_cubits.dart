@@ -14,12 +14,13 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
       final result = await ShopIntineraryRepository.instance
           .getItineraryByID(id: itineraryID);
 
+      print("getItineraryByID................${result}");
       ItineraryByIDResponse idResponse = ItineraryByIDResponse.fromJson(result);
       List<LatLng> list = [];
 
       if (idResponse.result == null) {
         emit(ItineraryByIDLoaded(
-            byIDResult: idResponse.result!, listOfLatLng: []));
+            byIDResult: idResponse.result??ByIDResult(), listOfLatLng: []));
         return;
       }
       if (idResponse.result!.days == null) {

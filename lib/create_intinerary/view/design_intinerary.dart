@@ -445,10 +445,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                             height: 100.0,
                             width: 100.0,
                             decoration: BoxDecoration(
-                                color: AppColor.aquaCasper,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    width: 1, color: AppColor.borderColor)),
+                              borderRadius: BorderRadius.circular(10)),
                             child: filesModel ==null?
                             SizedBox():
                             ClipRRect(

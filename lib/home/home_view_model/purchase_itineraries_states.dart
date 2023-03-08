@@ -29,6 +29,7 @@ class PurchaseItineraryLoading extends PurchaseItinerariesStates {
 
 class PurchaseItineraryLoaded extends PurchaseItinerariesStates {
   final List<Purchased> purchasedItineraries;
-   PurchaseItineraryLoaded({required this.purchasedItineraries});
+  final List<Created> createdItineraries;
+   PurchaseItineraryLoaded({required this.purchasedItineraries, required this.createdItineraries});
 }
 

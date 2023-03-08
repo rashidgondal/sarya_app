@@ -11,7 +11,7 @@ class TokenInterceptors extends Interceptor {
     SharedPrefs prefs = SharedPrefs();
     var token = await prefs.getToken();
     print("tokent ..........$token");
-    options.headers['x-access-token'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJuMGszZlgiLCJ1c2VyTmFtZSI6InRlc3R1c2VybmF0c19tcyIsImVtYWlsIjoiaGF4aWhhNzI0MkBqb2JzZmVlbC5jb20iLCJpYXQiOjE2NzYyMzAwNjd9.P-g7mVmp9jrJnyqORVlB1vtXteltlVi93CdZYfHGd_c';
+    options.headers['x-access-token'] = token;
 
     handler.next(options);
   }

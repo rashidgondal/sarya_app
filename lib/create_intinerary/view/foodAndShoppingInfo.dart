@@ -283,8 +283,9 @@ class _FoodAndShoppingInformationState
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 270,
+                  AnimatedContainer(
+                    duration: Duration(microseconds: 500),
+                    height:selectedImages == null || selectedImages!.isEmpty? 10:270,
                     child: GridView.builder(
                         shrinkWrap: false,
                         itemCount: 6,
@@ -381,7 +382,6 @@ class _FoodAndShoppingInformationState
                                           : Border.all(
                                               width: 0,
                                               color: Colors.transparent),
-                                      color: AppColor.aquaCasper2,
                                       borderRadius: BorderRadius.circular(8)),
                                 ),
                               ),
@@ -391,7 +391,6 @@ class _FoodAndShoppingInformationState
                             height: 100.0,
                             width: 100.0,
                             decoration: BoxDecoration(
-                                color: AppColor.aquaCasper2,
                                 borderRadius: BorderRadius.circular(8)),
                           );
                         }),
