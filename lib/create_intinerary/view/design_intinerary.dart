@@ -77,186 +77,325 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
     return Container(
       color: AppColor.whiteColor,
       child: SafeArea(
-          child:  Scaffold(
-            backgroundColor: AppColor.whiteColor,
-            appBar: AppBar(
-              elevation: 0,
-              toolbarHeight: 60,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: AppColor.subtitleColor,
-                ),
-                onPressed: () {
-                  _navigationService.goBack();
-                },
-              ),
-              automaticallyImplyLeading: false,
-              backgroundColor: AppColor.aquaCasper2,
-              title: const Text(
-                "Design your Intinerary",
-                style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
-              ),
-              centerTitle: true,
-            ),
-            bottomNavigationBar: Container(
-              height: 100,
-              color: AppColor.whiteColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _builtSaveButton(),
-                  const SizedBox(
-                    width: 20,
+          child:   GestureDetector(
+            onTap: ()=> FocusManager.instance.primaryFocus?.unfocus(),
+            child: Scaffold(
+              backgroundColor: AppColor.whiteColor,
+              appBar: AppBar(
+                elevation: 0,
+                toolbarHeight: 60,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: AppColor.subtitleColor,
                   ),
-                  _builtContinue()
-                ],
+                  onPressed: () {
+                    _navigationService.goBack();
+                  },
+                ),
+                automaticallyImplyLeading: false,
+                backgroundColor: AppColor.aquaCasper2,
+                title: const Text(
+                  "Design your Intinerary",
+                  style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
+                ),
+                centerTitle: true,
               ),
-            ),
-            body: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 30.0,
-                      ),
-                      const SizedBox(
-                        height: 2.0,
-                      ),
-                      CustomTextField(
-                          hintText: 'Intinerary title',
+              bottomNavigationBar: Container(
+                height: 100,
+                color: AppColor.whiteColor,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _builtSaveButton(),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    _builtContinue()
+                  ],
+                ),
+              ),
+              body: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 30.0,
+                        ),
+                        const SizedBox(
+                          height: 2.0,
+                        ),
+                        CustomTextField(
+                            hintText: 'Intinerary title',
+                            size: size,
+                            maxLine: 1,
+                            textInputType: TextInputType.text,
+                            textEditingController: titleController,
+                            icon:Row(children: [SvgPicture.asset("t_icon".svg)],)
+                        ),
+                        const SizedBox(
+                          height: 2.0,
+                        ),
+                        CustomTextField(
+                          hintText: 'Summary',
+                          size: size,
+                          maxLine: 4,
+                          textInputAction: TextInputAction.newline,
+                          textInputType: TextInputType.multiline,
+                          textEditingController: summaryController,
+                          icon:Row(children: [SvgPicture.asset("summary_icon".svg)]),
+                        ),
+                        const SizedBox(
+                          height: 2.0,
+                        ),
+                        CustomTextField(
+                          hintText: 'Itinerary Cost ',
                           size: size,
                           maxLine: 1,
-                          textInputType: TextInputType.text,
-                          textEditingController: titleController,
-                          icon:Row(children: [SvgPicture.asset("t_icon".svg)],)
-                      ),
-                      const SizedBox(
-                        height: 2.0,
-                      ),
-                      CustomTextField(
-                        hintText: 'Summary',
-                        size: size,
-                        maxLine: 4,
-                        textInputType: TextInputType.text,
-                        textEditingController: summaryController,
-                        icon:Row(children: [SvgPicture.asset("summary_icon".svg)]),
-                      ),
-                      const SizedBox(
-                        height: 2.0,
-                      ),
-                      CustomTextField(
-                        hintText: 'Itinerary Cost ',
-                        size: size,
-                        maxLine: 1,
-                        prefix: itineraryCost.isEmpty? null :Text(
-                          'Itinerary Cost ',
-                          style:TextStyle(
-                              fontSize: 12.0, color: AppColor.headingColor2),
-                        ),
-                        textInputType: TextInputType.number,
-                        onChange: (v){
-                          itineraryCost =v;
-                          setState(() {
-
-                          });
-                        },
-                        textEditingController: intineraryCostController,
-                        icon:Row(children: [SvgPicture.asset("cost_icon".svg)]),                  ),
-                      const SizedBox(
-                        height: 2.0,
-                      ),
-                      InkWell(
-                        onTap: (){
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>  TripEstimationCost()).then((value){
-                              if(value != null) {
-                                print("tripCost.........$value");
-
-                                tripCost = value;
-                                setState(() {
-
-                                });
-                              }
-                          });
-
-                        },
-                        child: TextDecoratedContainer(
-                          titleWidget:     Text(
-                            tripCost == 0 ?'Trip Estimated Cost': 'Trip Cost $tripCost',
-                            style: const TextStyle(
-                                fontSize: 15.0, color: AppColor.headingColor2),
+                          prefix: itineraryCost.isEmpty? null :Text(
+                            'Itinerary Cost ',
+                            style:TextStyle(
+                                fontSize: 12.0, color: AppColor.headingColor2),
                           ),
-                          iconImage: Row(children: [SvgPicture.asset("cost_icon".svg)]),
+                          textInputType: TextInputType.number,
+                          onChange: (v){
+                            itineraryCost =v;
+                            setState(() {
+
+                            });
+                          },
+                          textEditingController: intineraryCostController,
+                          icon:Row(children: [SvgPicture.asset("cost_icon".svg)]),                  ),
+                        const SizedBox(
+                          height: 2.0,
+                        ),
+                        InkWell(
+                          onTap: (){
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>  TripEstimationCost()).then((value){
+                                if(value != null) {
+                                  print("tripCost.........$value");
+
+                                  tripCost = value;
+                                  setState(() {
+
+                                  });
+                                }
+                            });
+
+                          },
+                          child: TextDecoratedContainer(
+                            titleWidget:     Text(
+                              tripCost == 0 ?'Trip Estimated Cost': 'Trip Cost $tripCost',
+                              style: const TextStyle(
+                                  fontSize: 15.0, color: AppColor.headingColor2),
+                            ),
+                            iconImage: Row(children: [SvgPicture.asset("cost_icon".svg)]),
+
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 2.0,
+                        ),
+                        BlocBuilder<TripCubits, TripStates>(
+                            builder: (context, state) {
+                              List<String> list = [];
+                              List<bool> listOfBool = [];
+                              if(state is TripLoaded){
+                                list = state.response.result??[];
+                                listOfBool = state.listOfBool;
+                              }
+                              return InkWell(
+                                  onTap: () {
+
+
+                                    _navigationService.navigateTo(checkListRoute,
+                                        arguments:{
+                                          "title": "Trip type",
+                                        "checklist": list,
+                                          "listOfBool": listOfBool,
+                                          "bool": false,
+                                          "selectedCheckList": tripType})!.then((value) {
+                                      //getCheckList();
+                                      if(value != null){
+                                        tripType = value;
+                                        setState(() {});
+
+                                      }else{
+                                        setState(() {
+
+                                        });
+                                      }
+
+                                    });
+
+
+
+
+                                  },
+                                  child: TextDecoratedContainer(
+                                      titleWidget:     Text(
+                                        'Select Trip Type',
+                                        style: const TextStyle(
+                                            fontSize: 15.0, color: AppColor.headingColor2),
+                                      ),
+                                      iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: AppColor.lightIndigo,
+                                        size: 20,
+                                      )));
+                            }
 
                         ),
-                      ),
-                      const SizedBox(
-                        height: 2.0,
-                      ),
-                      BlocBuilder<TripCubits, TripStates>(
-                          builder: (context, state) {
-                            List<String> list = [];
-                            List<bool> listOfBool = [];
-                            if(state is TripLoaded){
-                              list = state.response.result??[];
-                              listOfBool = state.listOfBool;
-                            }
-                            return InkWell(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>  SelectTripType(tripList:list, boolList: listOfBool,preTripList: tripType,)).then((value){
-                                    if(value != null){
-                                      tripType = value;
+                        tripType.isEmpty? SizedBox.shrink(): SizedBox(
+                          height: 40,
+                          child: ListView.builder(
+                              itemCount: tripType.length,
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index){
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: InkWell(
+                                    onTap: (){
+                                      tripType.remove(tripType[index]);
                                       setState(() {
 
                                       });
-                                    }else{
-                                      setState(() {
+                                    },
+                                    child: Container(
+                                        height: 35,
+                                        padding: EdgeInsets.symmetric(horizontal: 6,vertical: 5),
+                                        decoration: BoxDecoration(
+                                          color: AppColor.aquaGreen.withOpacity(0.7),
+                                          borderRadius: BorderRadius.circular(8),
 
-                                      });
-                                    }
-                                  });
+                                        ),
+                                        child:Row(
+                                          children: [
+                                            Text(
+                                              '${tripType[index]}',
+                                              style:  TextStyle(
+                                                  fontSize: 15.0, color: AppColor.whiteColor) ,
+                                            ),
+                                            SizedBox(width: 5),
+                                            Icon(Icons.close, color: AppColor.whiteColor, size: 15,)
+                                          ],
+                                        )),
+                                  ),
+                                );
+                              }),
+                        ),
+                        const SizedBox(
+                          height: 2.0,
+                        ),
+                        InkWell(
+                          onTap: (){
 
+                            cupertino_picker_sheet(context: context, child_items: widgetList, selected_index: (int i ) {
+                              int ii = i+1;
+                              totalDays = ii.toString();
 
-                                },
-                                child: TextDecoratedContainer(
-                                    titleWidget:     Text(
-                                      'Select Trip Type',
-                                      style: const TextStyle(
-                                          fontSize: 15.0, color: AppColor.headingColor2),
-                                    ),
-                                    iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
-                                    icon: Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                      color: AppColor.lightIndigo,
-                                      size: 20,
-                                    )));
-                          }
-
-                      ),
-                      tripType.isEmpty? SizedBox.shrink(): SizedBox(
-                        height: 40,
-                        child: ListView.builder(
-                            itemCount: tripType.length,
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index){
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: InkWell(
+                              setState(() {
+                              });
+                            });
+                          },
+                          child: TextDecoratedContainer(
+                              titleWidget:     Text(
+                                'Total Days: $totalDays ',
+                                style: const TextStyle(
+                                    fontSize: 15.0, color: AppColor.headingColor2),
+                              ),
+                              iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
+                              icon: Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                color: AppColor.lightIndigo,
+                                size: 20,
+                              )),
+                        ),
+                        const SizedBox(
+                          height: 2.0,
+                        ),
+                        BlocBuilder<CheckListCubits, CheckListStates>(
+                            builder: (context, state) {
+                              List<bool> listOfBool = [];
+                              if (state is CheckListLoaded) {
+                                listOfCheckList = state.response.result!.toList() ?? [];
+                                listOfBool = state.boolList.toList();
+                              }
+                              return   InkWell(
                                   onTap: (){
-                                    tripType.remove(tripType[index]);
-                                    setState(() {
+                                   /* if(checkList.isNotEmpty){
+                                      checkList.forEach((element) {
+                                        if(listOfCheckList.contains(element)){
+
+                                        }else{
+                                          listOfCheckList.add(element);
+                                          listOfBool.add(true);
+                                        }
+                                      });
+                                    }*/
+                                    _navigationService.navigateTo(checkListRoute,
+                                        arguments:{
+                                          "title": "CheckList",
+                                          "checklist": listOfCheckList,
+                                                    "listOfBool": listOfBool,
+                                                    "bool": false,
+                                                     "selectedCheckList": checkList})!.then((value) {
+                                              //getCheckList();
+                                      if(value != null){
+                                        checkList = value;
+                                        setState(() {});
+
+                                      }else{
+                                        setState(() {
+
+                                        });
+                                      }
 
                                     });
                                   },
-                                  child: Container(
+                                  child: TextDecoratedContainer(
+                                      titleWidget:     Text(
+                                        'Checklist',
+                                        style: const TextStyle(
+                                            fontSize: 15.0, color: AppColor.headingColor2),
+                                      ),
+                                      iconImage: Row(children: [SvgPicture.asset("checklist_icon".svg)]),
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: AppColor.lightIndigo,
+                                        size: 20,
+                                      ))
+
+
+                              );
+                            }),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        checkList.isEmpty? SizedBox.shrink(): SizedBox(
+                          height: 40,
+                          child: ListView.builder(
+                              itemCount: checkList.length,
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index){
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: InkWell(
+                                    onTap: (){
+                                      checkList.remove(checkList[index]);
+                                      setState(() {
+
+                                      });
+                                    },
+                                    child: Container(
                                       height: 35,
                                       padding: EdgeInsets.symmetric(horizontal: 6,vertical: 5),
                                       decoration: BoxDecoration(
@@ -267,257 +406,133 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                                       child:Row(
                                         children: [
                                           Text(
-                                            '${tripType[index]}',
-                                            style:  TextStyle(
-                                                fontSize: 15.0, color: AppColor.whiteColor) ,
+                                '${checkList[index]}',
+                                style:  TextStyle(
+                                fontSize: 15.0, color: AppColor.whiteColor) ,
                                           ),
                                           SizedBox(width: 5),
                                           Icon(Icons.close, color: AppColor.whiteColor, size: 15,)
                                         ],
                                       )),
-                                ),
-                              );
-                            }),
-                      ),
-                      const SizedBox(
-                        height: 2.0,
-                      ),
-                      InkWell(
-                        onTap: (){
-
-                          cupertino_picker_sheet(context: context, child_items: widgetList, selected_index: (int i ) {
-                            int ii = i+1;
-                            totalDays = ii.toString();
-
-                            setState(() {
-                            });
-                          });
-                        },
-                        child: TextDecoratedContainer(
-                            titleWidget:     Text(
-                              'Total Days: $totalDays ',
-                              style: const TextStyle(
+                                  ),
+                                );
+                              }),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children:  [
+                            const Text(
+                              'Upload Intinerary Profile Image.',
+                              style:  TextStyle(
                                   fontSize: 15.0, color: AppColor.headingColor2),
                             ),
-                            iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
-                            icon: Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: AppColor.lightIndigo,
-                              size: 20,
-                            )),
-                      ),
-                      const SizedBox(
-                        height: 2.0,
-                      ),
-                      BlocBuilder<CheckListCubits, CheckListStates>(
-                          builder: (context, state) {
-                            List<bool> listOfBool = [];
-                            if (state is CheckListLoaded) {
-                              listOfCheckList = state.response.result!.toList() ?? [];
-                              listOfBool = state.boolList.toList();
-                            }
-                            return   InkWell(
-                                onTap: (){
-                                 /* if(checkList.isNotEmpty){
-                                    checkList.forEach((element) {
-                                      if(listOfCheckList.contains(element)){
+                            InkWell(
+                              onTap: ()async{
+                                XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-                                      }else{
-                                        listOfCheckList.add(element);
-                                        listOfBool.add(true);
-                                      }
-                                    });
-                                  }*/
-                                  _navigationService.navigateTo(checkListRoute,
-                                      arguments:{ "checklist": listOfCheckList,
-                                                  "listOfBool": listOfBool,
-                                                  "bool": false,
-                                                   "selectedCheckList": checkList})!.then((value) {
-                                            //getCheckList();
-                                    if(value != null){
-                                      checkList = value;
-                                      setState(() {});
-
-                                    }else{
-                                      setState(() {
-
-                                      });
-                                    }
-
+                                if(image != null){
+                                  setState(() {
+                                    filesModel = ListOfFilesModel(
+                                        file: File(image.path),
+                                        percentage: 0.0,
+                                        name_of_file:  '${DateTime.now().toUtc().millisecondsSinceEpoch}${image.name}'
+                                    );
+                                    UploadFile(filesModel!);
                                   });
-                                },
-                                child: TextDecoratedContainer(
-                                    titleWidget:     Text(
-                                      'Checklist',
-                                      style: const TextStyle(
-                                          fontSize: 15.0, color: AppColor.headingColor2),
-                                    ),
-                                    iconImage: Row(children: [SvgPicture.asset("checklist_icon".svg)]),
-                                    icon: Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                      color: AppColor.lightIndigo,
-                                      size: 20,
-                                    ))
-
-
-                            );
-                          }),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      checkList.isEmpty? SizedBox.shrink(): SizedBox(
-                        height: 40,
-                        child: ListView.builder(
-                            itemCount: checkList.length,
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index){
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: InkWell(
-                                  onTap: (){
-                                    checkList.remove(checkList[index]);
-                                    setState(() {
-
-                                    });
-                                  },
-                                  child: Container(
-                                    height: 35,
-                                    padding: EdgeInsets.symmetric(horizontal: 6,vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color: AppColor.aquaGreen.withOpacity(0.7),
-                                      borderRadius: BorderRadius.circular(8),
-
-                                    ),
-                                    child:Row(
-                                      children: [
-                                        Text(
-                              '${checkList[index]}',
-                              style:  TextStyle(
-                              fontSize: 15.0, color: AppColor.whiteColor) ,
-                                        ),
-                                        SizedBox(width: 5),
-                                        Icon(Icons.close, color: AppColor.whiteColor, size: 15,)
-                                      ],
-                                    )),
-                                ),
-                              );
-                            }),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children:  [
-                          const Text(
-                            'Upload Intinerary Profile Image.',
-                            style:  TextStyle(
-                                fontSize: 15.0, color: AppColor.headingColor2),
-                          ),
-                          InkWell(
-                            onTap: ()async{
-                              XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
-                              if(image != null){
-                                setState(() {
-                                  filesModel = ListOfFilesModel(
-                                      file: File(image.path),
-                                      percentage: 0.0,
-                                      name_of_file:  '${DateTime.now().toUtc().millisecondsSinceEpoch}${image.name}'
-                                  );
-                                  UploadFile(filesModel!);
-                                });
-                              }
-                            },
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              size: 30,
-                              color: AppColor.lightIndigo,
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 100.0,
-                            width: 100.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10)),
-                            child: filesModel ==null?
-                            SizedBox():
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                height: 100.0,
-                                width: 100.0,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      height: 120.0,
-                                      width: 120.0,
-                                      child: Image.file(
-                                          File(filesModel!
-                                              .file!
-                                              .path),
-                                          fit: BoxFit.fill),
-                                    ),
-                                    Positioned(
-                                        top: 0,
-                                        right: 0,
-                                        child: Transform.translate(
-                                          offset: Offset(12, -12),
-                                          child: IconButton(
-                                              onPressed: () {
-                                                DeleteFile(
-                                                    filesModel!);
-                                                filesModel = null;
-                                                setState(() {});
-                                              },
-                                              icon: Icon(Icons.cancel)),
-                                        )),
-                                    Visibility(
-                                      visible: (filesModel!
-                                          .percentage! *
-                                          100)
-                                          .toInt() !=
-                                          100,
-                                      child: Center(
-                                        child: CircularPercentIndicator(
-                                          radius: 25.0,
-                                          lineWidth: 4.0,
-                                          percent: filesModel!
-                                              .percentage!,
-                                          center: Text(
-                                              (filesModel!
-                                                  .percentage! *
-                                                  100)
-                                                  .toInt()
-                                                  .toString() +
-                                                  '%',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.green)),
-                                          progressColor: Color(0xFF5e59ed),
-                                        ),
+                                }
+                              },
+                              child: Icon(
+                                Icons.camera_alt_outlined,
+                                size: 30,
+                                color: AppColor.lightIndigo,
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 100.0,
+                              width: 100.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10)),
+                              child: filesModel ==null?
+                              SizedBox():
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  height: 100.0,
+                                  width: 100.0,
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height: 120.0,
+                                        width: 120.0,
+                                        child: Image.file(
+                                            File(filesModel!
+                                                .file!
+                                                .path),
+                                            fit: BoxFit.fill),
                                       ),
-                                    )
-                                  ],
-                                ),
-                                decoration: BoxDecoration(
+                                      Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Transform.translate(
+                                            offset: Offset(12, -12),
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  DeleteFile(
+                                                      filesModel!);
+                                                  filesModel = null;
+                                                  setState(() {});
+                                                },
+                                                icon: Icon(Icons.cancel)),
+                                          )),
+                                      Visibility(
+                                        visible: (filesModel!
+                                            .percentage! *
+                                            100)
+                                            .toInt() !=
+                                            100,
+                                        child: Center(
+                                          child: CircularPercentIndicator(
+                                            radius: 25.0,
+                                            lineWidth: 4.0,
+                                            percent: filesModel!
+                                                .percentage!,
+                                            center: Text(
+                                                (filesModel!
+                                                    .percentage! *
+                                                    100)
+                                                    .toInt()
+                                                    .toString() +
+                                                    '%',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.green)),
+                                            progressColor: Color(0xFF5e59ed),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  decoration: BoxDecoration(
 
-                                    color: AppColor.aquaCasper2,
-                                    borderRadius: BorderRadius.circular(8)),
+                                      color: AppColor.aquaCasper2,
+                                      borderRadius: BorderRadius.circular(8)),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    ],
-                  )),
+                          ],
+                        )
+                      ],
+                    )),
+              ),
             ),
           ),
     ),

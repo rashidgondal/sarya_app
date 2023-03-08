@@ -83,9 +83,9 @@ class _UpdateBankDetailsState extends State<UpdateBankDetails> {
             loading = false;
           }
 
-          return DataLoading(
-            isLoading: loading,
-            child:       Scaffold(
+          return  GestureDetector(
+            onTap: ()=> FocusManager.instance.primaryFocus?.unfocus(),
+            child: Scaffold(
               backgroundColor: AppColor.whiteColor,
               bottomNavigationBar: Container(
                 height: 100,
@@ -221,8 +221,6 @@ class _UpdateBankDetailsState extends State<UpdateBankDetails> {
                 ),
               ),
             ),
-
-
           );
         })),
 

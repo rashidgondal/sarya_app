@@ -82,8 +82,8 @@ class _CheckListScreenState extends State<CheckListScreen> {
               },
             ),
             backgroundColor: AppColor.aquaCasper2,
-            title: const Text(
-              "CheckList",
+            title:  Text(
+              "${widget.map['title']}",
               style: TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
             ),
             centerTitle: true,
@@ -143,6 +143,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+
                         Container(
                           height: 44.0,
                           width: 160.0,

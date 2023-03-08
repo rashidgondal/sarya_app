@@ -93,6 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 20.0),
                           TextFormField(
                             controller: userNameController,
+
                             validator: (v) {
                               if (v!.isEmpty) {
                                 return "Please enter username.";

@@ -75,190 +75,193 @@ class _PhoneScreenState extends State<PhoneScreen> {
 
               return DataLoading(
           isLoading: loading,
-          child: Scaffold(
-            backgroundColor: AppColor.whiteColor,
-            appBar: AppBar(
-              elevation: 0,
-              title: const Text(
-                "Mobile No",
-                style:
-                    TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
-              ),
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: AppColor.lightIndigo,
+          child:  GestureDetector(
+            onTap: ()=> FocusManager.instance.primaryFocus?.unfocus(),
+            child: Scaffold(
+              backgroundColor: AppColor.whiteColor,
+              appBar: AppBar(
+                elevation: 0,
+                title: const Text(
+                  "Mobile No",
+                  style:
+                      TextStyle(fontSize: 17.0, color: AppColor.colorLiteBlack5),
                 ),
-                onPressed: () {
-                  _navigationService.goBack();
-                },
-              ),
-              backgroundColor: AppColor.aquaCasper2,
-              toolbarHeight: 55.0,
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(60),
-                child: Container(
-                  height: 50,
-                  width: size.width,
-                  color: AppColor.colorLiteGrey,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      SizedBox(
-                        width: 40.0,
-                      ),
-                      Text(
-                        "Account",
-                        style: TextStyle(
-                            fontSize: 14, color: AppColor.headingColor2),
-                      ),
-                    ],
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: AppColor.lightIndigo,
                   ),
+                  onPressed: () {
+                    _navigationService.goBack();
+                  },
                 ),
-              ),
-            ),
-            bottomSheet: Container(
-              height: 100,
-              color: AppColor.whiteColor,
-              width: size.width,
-              child: Center(
-                child: InkWell(
-                  onTap:
-                      telCode.isEmpty || phoneTextEditingController.text.isEmpty
-                          ? null
-                          : () {
-                              String phone = zeroLeadValue(
-                                  value: phoneTextEditingController.text);
-                              UpdatePhoneRequest updateNameRequest =
-                                  UpdatePhoneRequest(
-                                      telCode: telCode, phone: phone);
-
-                              context.read<PhoneCubits>().updatePhone(
-                                    updatePhoneRequest: updateNameRequest,
-                                    navigationService: _navigationService,
-                                  );
-                            },
+                backgroundColor: AppColor.aquaCasper2,
+                toolbarHeight: 55.0,
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(60),
                   child: Container(
-                    height: 46.0,
-                    width: 200.0,
-                    decoration: BoxDecoration(
-                        color: telCode.isEmpty ||
-                                phoneTextEditingController.text.isEmpty
-                            ? AppColor.colorLiteGrey
-                            : AppColor.aquaGreen,
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Center(
-                      child: Text(
-                        "Save",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            color: telCode.isEmpty ||
-                                    phoneTextEditingController.text.isEmpty
-                                ? AppColor.headingColor2
-                                : AppColor.whiteColor),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            body: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      showMaterialModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) => Container(
-                            color: Colors.white,
-                            height: MediaQuery.of(context).size.height / 1.2,
-                            width: MediaQuery.of(context).size.width,
-                            child: BottomSheetCountryPicker(
-                              countries: list,
-                              countryName: (v) {},
-                              countryTel: (v) {
-                                telCode = v;
-                              },
-                              nationality: (v) {},
-                            )),
-                      ).then((value) {
-                        setState(() {});
-                      });
-                    },
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: TextDecoratedContainer(
-                          titleWidget: Text(
-                            telCode.isEmpty ? 'Country' : '$telCode',
-                            style: TextStyle(
-                                fontSize: 15.0, color: AppColor.headingColor2),
-                          ),
-                          iconImage: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'flag-2'.svg,
-                                height: 16,
-                                width: 16,
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: CustomTextField(
-                      maxLine: 1,
-                      textEditingController: phoneTextEditingController,
-                      size: size,
-                      textInputType: TextInputType.phone,
-                      hintText: '',
-                      icon: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'mobile'.svg,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  /*  Padding(
-                    padding:const EdgeInsets.symmetric(horizontal: 30),
+                    height: 50,
+                    width: size.width,
+                    color: AppColor.colorLiteGrey,
                     child: Row(
-                      children: [
-                        const Text(
-                          "Let friends find me by my mobile number",
-                          style: TextStyle(
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w400,
-                              color: AppColor.headingColor2),
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                        SizedBox(
+                          width: 40.0,
                         ),
-                        const SizedBox(width: 10,),
-                        Theme(
-
-                          data: Theme.of(context).copyWith(
-                              unselectedWidgetColor:  AppColor.aquaCasper),
-                          child:Checkbox(
-                            value: true,
-                            onChanged: (bool? value) {},
-                            focusColor:  AppColor.aquaCasper,
-                            activeColor: AppColor.aquaCasper,
-
-                          ),
-                        )
+                        Text(
+                          "Account",
+                          style: TextStyle(
+                              fontSize: 14, color: AppColor.headingColor2),
+                        ),
                       ],
                     ),
-                  ),*/
-                ],
+                  ),
+                ),
+              ),
+              bottomSheet: Container(
+                height: 100,
+                color: AppColor.whiteColor,
+                width: size.width,
+                child: Center(
+                  child: InkWell(
+                    onTap:
+                        telCode.isEmpty || phoneTextEditingController.text.isEmpty
+                            ? null
+                            : () {
+                                String phone = zeroLeadValue(
+                                    value: phoneTextEditingController.text);
+                                UpdatePhoneRequest updateNameRequest =
+                                    UpdatePhoneRequest(
+                                        telCode: telCode, phone: phone);
+
+                                context.read<PhoneCubits>().updatePhone(
+                                      updatePhoneRequest: updateNameRequest,
+                                      navigationService: _navigationService,
+                                    );
+                              },
+                    child: Container(
+                      height: 46.0,
+                      width: 200.0,
+                      decoration: BoxDecoration(
+                          color: telCode.isEmpty ||
+                                  phoneTextEditingController.text.isEmpty
+                              ? AppColor.colorLiteGrey
+                              : AppColor.aquaGreen,
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: Center(
+                        child: Text(
+                          "Save",
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              color: telCode.isEmpty ||
+                                      phoneTextEditingController.text.isEmpty
+                                  ? AppColor.headingColor2
+                                  : AppColor.whiteColor),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              body: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        showMaterialModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => Container(
+                              color: Colors.white,
+                              height: MediaQuery.of(context).size.height / 1.2,
+                              width: MediaQuery.of(context).size.width,
+                              child: BottomSheetCountryPicker(
+                                countries: list,
+                                countryName: (v) {},
+                                countryTel: (v) {
+                                  telCode = v;
+                                },
+                                nationality: (v) {},
+                              )),
+                        ).then((value) {
+                          setState(() {});
+                        });
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: TextDecoratedContainer(
+                            titleWidget: Text(
+                              telCode.isEmpty ? 'Country' : '$telCode',
+                              style: TextStyle(
+                                  fontSize: 15.0, color: AppColor.headingColor2),
+                            ),
+                            iconImage: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'flag-2'.svg,
+                                  height: 16,
+                                  width: 16,
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: CustomTextField(
+                        maxLine: 1,
+                        textEditingController: phoneTextEditingController,
+                        size: size,
+                        textInputType: TextInputType.phone,
+                        hintText: '',
+                        icon: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'mobile'.svg,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    /*  Padding(
+                      padding:const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        children: [
+                          const Text(
+                            "Let friends find me by my mobile number",
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w400,
+                                color: AppColor.headingColor2),
+                          ),
+                          const SizedBox(width: 10,),
+                          Theme(
+
+                            data: Theme.of(context).copyWith(
+                                unselectedWidgetColor:  AppColor.aquaCasper),
+                            child:Checkbox(
+                              value: true,
+                              onChanged: (bool? value) {},
+                              focusColor:  AppColor.aquaCasper,
+                              activeColor: AppColor.aquaCasper,
+
+                            ),
+                          )
+                        ],
+                      ),
+                    ),*/
+                  ],
+                ),
               ),
             ),
           ),

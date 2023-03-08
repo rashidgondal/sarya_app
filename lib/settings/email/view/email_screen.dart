@@ -65,8 +65,8 @@ class _EmailScreenState extends State<EmailScreen> {
             loading = false;
           }
 
-          return DataLoading(
-            isLoading: loading,
+          return  GestureDetector(
+            onTap: ()=> FocusManager.instance.primaryFocus?.unfocus(),
             child: Scaffold(
               backgroundColor: AppColor.whiteColor,
               appBar: AppBar(
@@ -196,7 +196,6 @@ class _EmailScreenState extends State<EmailScreen> {
                 ),
               ),
             ),
-
           );
         })),
 

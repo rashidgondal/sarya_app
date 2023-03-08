@@ -11,6 +11,7 @@ class CustomTextField extends StatefulWidget {
   final Widget? icon;
   final Widget? suffixIcon;
   final Widget? prefix;
+  final TextInputAction? textInputAction;
   final Function(String)? onChange;
   const CustomTextField({Key? key,
     required this.maxLine,
@@ -18,6 +19,7 @@ class CustomTextField extends StatefulWidget {
     required this.size,
     required this.textInputType,
     required this.hintText,
+    this.textInputAction,
     this.icon,
     this.onChange,
     this.suffixIcon,
@@ -50,10 +52,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         Border.all(color: AppColor.borderColor2, width: 1)),
                     child: Center(
                       child: TextFormField(
-                        maxLines:widget. maxLine,
+                        minLines: 1,
+                        maxLines:widget.maxLine,
                         keyboardType: widget.textInputType,
                         onChanged: widget.onChange,
                         controller: widget.textEditingController,
+                        textInputAction: widget.textInputAction,
                         style: const TextStyle(
                             fontSize: 15.0, color: AppColor.headingColor),
                         decoration: InputDecoration(

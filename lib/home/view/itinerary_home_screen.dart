@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geojson/geojson.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/home/home_view_model/created_itinerary_states.dart';
@@ -50,8 +51,15 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     getUserInfo();
     context.read<TripCubits>().getTrip();
     context.read<CheckListCubits>().getCheckList();
+    getCurrentLocation();
   }
 
+  getCurrentLocation()async{
+    Position position = await CurrentLocation.determinePosition();
+     CurrentLocation.lat = position.latitude;
+    CurrentLocation.lng = position.longitude;
+    print(" CurrentLocation.lat...........${ CurrentLocation.lat}");
+  }
 
   Future<void> parseAndDrawAssetsOnMap() async {
 

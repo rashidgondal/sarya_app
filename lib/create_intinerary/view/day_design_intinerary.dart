@@ -39,7 +39,6 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   List<create_intenerary.Days> list_of_days = [];
   List<create_intenerary.Accomodation> list_of_accommodation = [];
   var countryList = [];
-  List<LatLng> listOfLatLng = [];
   List<Place> listOfSelectedPlaces = [];
   create_intenerary.Accomodation accomodation = create_intenerary.Accomodation();
 
@@ -339,27 +338,27 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         }
                         return InkWell(
                             onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      TypeOfTransport(
-                                        textEditingController:
-                                        textEditingController,
-                                        preTripList: list_of_days[selected_index].transportation??[],
-                                        tripList: list,
-                                        boolList: listOfBool,
-                                      )).then((value) {
-                                        if(value != null) {
-                                          list_of_days[selected_index]
-                                              .transportation =
-                                              value;
-                                          setState(() {});
-                                        }else{
-                                          setState(() {
+                              _navigationService.navigateTo(checkListRoute,
+                                  arguments:{
+                                    "title": "CheckList",
+                                    "checklist": list,
+                                    "listOfBool": listOfBool,
+                                    "bool": false,
+                                    "selectedCheckList": list_of_days[selected_index].transportation??[]})!.then((value) {
+                                //getCheckList();
+                                if(value != null){
+                                  list_of_days[selected_index].transportation = value;
+                                  setState(() {});
 
-                                          });
-                                        }
+                                }else{
+                                  setState(() {
+
+                                  });
+                                }
+
                               });
+
+
                             },
                             child: TextDecoratedContainer(
                                 icon: Icon(
@@ -521,28 +520,27 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         }
                         return InkWell(
                             onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      ActivitiesExcursion(
-                                        listOfActivity: list,
-                                        listOfBool: listOfBool,
-                                        preListOfActivity: list_of_days[selected_index].activities??[],
-                                      )).then((value) {
-                                        if(value != null) {
-                                          print("activities............${value
-                                              .toString()}");
-                                          list_of_days[selected_index]
-                                              .activities =
-                                              value;
 
-                                          setState(() {});
-                                        }else{
-                                          setState(() {
+                              _navigationService.navigateTo(checkListRoute,
+                                  arguments:{
+                                    "title": "CheckList",
+                                    "checklist": list,
+                                    "listOfBool": listOfBool,
+                                    "bool": false,
+                                    "selectedCheckList": list_of_days[selected_index].activities??[]})!.then((value) {
+                                //getCheckList();
+                                if(value != null){
+                                  list_of_days[selected_index].activities = value;
+                                  setState(() {});
 
-                                          });
-                                        }
+                                }else{
+                                  setState(() {
+
+                                  });
+                                }
+
                               });
+
                             },
                             child: TextDecoratedContainer(
                               icon: Icon(
@@ -608,12 +606,16 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                     onTap: () {
                       _navigationService.navigateTo(foodShoppingRoute,
                           arguments: {
-                            "title": "Breakfast"
+                            "title": "Breakfast",
+                            "name": list_of_days[selected_index].breakfast!.name??'',
+                            "coordinate": list_of_days[selected_index].breakfast!.location?.coordinates??[],
+                            "promo":list_of_days[selected_index].breakfast!.coupon??'',
+                            "rate":list_of_days[selected_index].breakfast!.rating??0.0,
+                            "comment":list_of_days[selected_index].breakfast!.comments??'',
                           })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].breakfast = value;
 
-                          listOfLatLng.add(LatLng(list_of_days[selected_index].breakfast!.location!.coordinates![1], list_of_days[selected_index].breakfast!.location!.coordinates![0]));
                         setState(() {
 
                         });
@@ -642,10 +644,15 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                   InkWell(
                     onTap: () {
                       _navigationService.navigateTo(foodShoppingRoute,
-                          arguments: {"title": "Lunch"})!.then((value) {
+                          arguments: {"title": "Lunch",
+                            "name": list_of_days[selected_index].lunch!.name??'',
+                            "coordinate": list_of_days[selected_index].lunch!.location?.coordinates??[],
+                            "promo":list_of_days[selected_index].lunch!.coupon??'',
+                            "rate":list_of_days[selected_index].lunch!.rating??0.0,
+                            "comment":list_of_days[selected_index].lunch!.comments??'',
+                          })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].lunch = value;
-                          listOfLatLng.add(LatLng(list_of_days[selected_index].lunch!.location!.coordinates![1], list_of_days[selected_index].lunch!.location!.coordinates![0]));
                           setState(() {
 
                           });
@@ -671,13 +678,17 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                   InkWell(
                     onTap: () {
                       _navigationService.navigateTo(foodShoppingRoute,
-                          arguments: {"title": "Dinner"})!.then((value) {
+                          arguments: {"title": "Dinner",
+                            "name": list_of_days[selected_index].dinner!.name??'',
+                            "coordinate": list_of_days[selected_index].dinner!.location?.coordinates??[],
+                            "promo":list_of_days[selected_index].dinner!.coupon??'',
+                            "rate":list_of_days[selected_index].dinner!.rating??0.0,
+                            "comment":list_of_days[selected_index].dinner!.comments??'',
+                          })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].dinner = value;
-                          listOfLatLng.add(LatLng(list_of_days[selected_index].dinner!.location!.coordinates![1], list_of_days[selected_index].dinner!.location!.coordinates![0]));
                           setState(() {
-
-});
+                          });
                         }
                       });
                     },
@@ -702,12 +713,16 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                     onTap: () {
                       _navigationService.navigateTo(foodShoppingRoute,
                           arguments: {
-                            "title": "Coffee Shops Clubs & Lounges"
+                            "title": "Coffee Shops Clubs & Lounges",
+                            "name": list_of_days[selected_index].coffeeClubsLounges!.name??'',
+                            "coordinate": list_of_days[selected_index].coffeeClubsLounges!.location?.coordinates??[],
+                            "promo":list_of_days[selected_index].coffeeClubsLounges!.coupon??'',
+                            "rate":list_of_days[selected_index].coffeeClubsLounges!.rating??0.0,
+                            "comment":list_of_days[selected_index].coffeeClubsLounges!.comments??'',
                           })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index]
                               .coffeeClubsLounges = value;
-                          listOfLatLng.add(LatLng(list_of_days[selected_index].coffeeClubsLounges!.location!.coordinates![1], list_of_days[selected_index].coffeeClubsLounges!.location!.coordinates![0]));
                             setState(() {
 
                             });
@@ -736,12 +751,16 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                     onTap: () {
                       _navigationService.navigateTo(foodShoppingRoute,
                           arguments: {
-                            "title": "Market, Malls & Store"
+                            "title": "Market, Malls & Store",
+                            "name": list_of_days[selected_index].marketMallsStores!.name??'',
+                            "coordinate": list_of_days[selected_index].marketMallsStores!.location?.coordinates??[],
+                            "promo":list_of_days[selected_index].marketMallsStores!.coupon??'',
+                            "rate":list_of_days[selected_index].marketMallsStores!.rating??0.0,
+                            "comment":list_of_days[selected_index].marketMallsStores!.comments??'',
                           })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].marketMallsStores =
                               value;
-                          listOfLatLng.add(LatLng(list_of_days[selected_index].marketMallsStores!.location!.coordinates![1], list_of_days[selected_index].marketMallsStores!.location!.coordinates![0]));
                           setState(() {
 
                           });

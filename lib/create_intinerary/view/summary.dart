@@ -238,8 +238,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     ),
                   ),
                 ),
-              ) ):
-              Center(child: InkWell(
+              ) ):SizedBox.shrink()
+          /*    Center(child: InkWell(
                 onTap: () {},
                 child: Container(
                   height: 46.0,
@@ -257,7 +257,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     ),
                   ),
                 ),
-              ) )
+              ) )*/
           ),
           body: SingleChildScrollView(
             physics:const BouncingScrollPhysics(),
@@ -576,8 +576,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                               decoration: BoxDecoration(
                                                   color: AppColor.aquaCasper2,
                                                   borderRadius: BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                      color: AppColor.borderColor2, width: 1)),
+
+                                              ),
                                               child: Center(
                                                 child: SvgPicture.asset("${listIncluded[0]['icon']}".svg),
                                               ),
@@ -607,8 +607,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       decoration: BoxDecoration(
                                           color: AppColor.aquaCasper2,
                                           borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: AppColor.borderColor2, width: 1)),
+                  ),
                                       child: Center(
                                         child: SvgPicture.asset("${listIncluded[1]['icon']}".svg),
                                       ),
@@ -637,8 +636,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       decoration: BoxDecoration(
                                           color: AppColor.aquaCasper2,
                                           borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: AppColor.borderColor2, width: 1)),
+
+                                      ),
                                       child: Center(
                                         child: SvgPicture.asset("${listIncluded[2]['icon']}".svg),
                                       ),
@@ -667,8 +666,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       decoration: BoxDecoration(
                                           color: AppColor.aquaCasper2,
                                           borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: AppColor.borderColor2, width: 1)),
+                                      ),
                                       child: Center(
                                         child: SvgPicture.asset("${listIncluded[3]['icon']}".svg),
                                       ),
@@ -703,8 +701,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                               decoration: BoxDecoration(
                                                   color: AppColor.aquaCasper2,
                                                   borderRadius: BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                      color: AppColor.borderColor2, width: 1)),
+                                           ),
                                               child: Center(
                                                 child: SvgPicture.asset("${listIncluded[4]['icon']}".svg),
                                               ),
@@ -745,8 +742,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                         decoration: BoxDecoration(
                                             color: AppColor.aquaCasper2,
                                             borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(
-                                                color: AppColor.borderColor2, width: 1)),
+                                          ),
                                         child: Center(
                                           child: SvgPicture.asset("${listIncluded[5]['icon']}".svg),
                                         ),
@@ -786,8 +782,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                         decoration: BoxDecoration(
                                             color: AppColor.aquaCasper2,
                                             borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(
-                                                color: AppColor.borderColor2, width: 1)),
+                                         ),
                                         child: Center(
                                           child: SvgPicture.asset("${listIncluded[6]['icon']}".svg),
                                         ),
@@ -826,8 +821,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                         decoration: BoxDecoration(
                                             color: AppColor.aquaCasper2,
                                             borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(
-                                                color: AppColor.borderColor2, width: 1)),
+
+
+                                        ),
                                         child: Center(
                                           child: SvgPicture.asset("${listIncluded[7]['icon']}".svg),
                                         ),
@@ -868,8 +864,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                         decoration: BoxDecoration(
                                             color: AppColor.aquaCasper2,
                                             borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(
-                                                color: AppColor.borderColor2, width: 1)),
+                                            ),
                                         child: Center(
                                           child: SvgPicture.asset("${listIncluded[8]['icon']}".svg),
                                         ),
@@ -910,8 +905,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                         decoration: BoxDecoration(
                                             color: AppColor.aquaCasper2,
                                             borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(
-                                                color: AppColor.borderColor2, width: 1)),
+                                        ),
                                         child: Center(
                                           child: SvgPicture.asset("${listIncluded[9]['icon']}".svg),
                                         ),

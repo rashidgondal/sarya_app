@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:places_api/places_api.dart';
@@ -8,6 +9,7 @@ import 'package:sarya/search_places/sarya_spacing.dart';
 import 'package:sarya/search_places/sarya_text.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
+import '../helper/helper_methods.dart';
 import 'Sarya_color.dart';
 import 'sarya_chip.dart';
 
@@ -37,6 +39,7 @@ class _PlacesSearchModalState extends State<PlacesSearchModal> {
 
   @override
   void initState() {
+
     BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(
         size: Size(20, 20),
@@ -48,6 +51,8 @@ class _PlacesSearchModalState extends State<PlacesSearchModal> {
     });
     super.initState();
   }
+
+
 
   List<Place> list_of_all_selected_places = [];
   var markers = <MarkerId, Marker>{};
@@ -155,6 +160,7 @@ class _PlacesSearchModalState extends State<PlacesSearchModal> {
                 : Builder(builder: (c) {
                     return flagIcon != null
                         ? SaryaMap(
+                            defaultPosition: LatLng(CurrentLocation.lat, CurrentLocation.lng),
                             onMapCreated: (controller) {
                               _googleMapController = controller;
                             },
@@ -221,6 +227,7 @@ class _PlacesSearchModalState extends State<PlacesSearchModal> {
       ),
     );
   }
+
 
   @override
   void dispose() {
