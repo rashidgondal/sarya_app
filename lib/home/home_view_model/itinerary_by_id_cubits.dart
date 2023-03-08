@@ -4,6 +4,7 @@ import 'package:sarya/home/home_view_model/itinerary_by_id_states.dart';
 import 'package:sarya/home/itineraryByIDResponse.dart';
 
 import '../../data/repository/shop_itinerary_repository/shop_itinerary_repository.dart';
+import '../../pinLocationMap.dart';
 
 class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
   ItineraryByIDCubits() : super(ItineraryByIDInitial());
@@ -15,7 +16,7 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
           .getItineraryByID(id: itineraryID);
 
       ItineraryByIDResponse idResponse = ItineraryByIDResponse.fromJson(result);
-      List<LatLng> list = [];
+      List<FlagInformation> list = [];
 
       if (idResponse.result == null) {
         emit(ItineraryByIDLoaded(
@@ -31,30 +32,79 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
       print(
           "idResponse.result!.days!.length............${idResponse.result!.days!.length}");
       for (int i = 0; i < idResponse.result!.days!.length; i++) {
-        list.add(LatLng(
-          idResponse.result!.days![i].breakfast!.location!.coordinates![1],
-          idResponse.result!.days![i].breakfast!.location!.coordinates![0],
-        ));
-        list.add(LatLng(
-          idResponse.result!.days![i].lunch!.location!.coordinates![1],
-          idResponse.result!.days![i].lunch!.location!.coordinates![0],
-        ));
-        list.add(LatLng(
-          idResponse.result!.days![i].dinner!.location!.coordinates![1],
-          idResponse.result!.days![i].lunch!.location!.coordinates![0],
-        ));
-        list.add(LatLng(
-          idResponse
-              .result!.days![i].coffeeClubsLounges!.location!.coordinates![1],
-          idResponse.result!.days![i].lunch!.location!.coordinates![0],
-        ));
-        list.add(LatLng(
-          idResponse
-              .result!.days![i].marketMallsStores!.location!.coordinates![1],
-          idResponse.result!.days![i].lunch!.location!.coordinates![0],
-        ));
+        list.add(FlagInformation(
+            list_of_images: [
+              'https://staging.housy.ae/public/uploads/all/sbb6vTwS5AR1BHViykqVSThJT9rJ6VNh9YlH5QyY.jpg',
+              'https://staging.housy.ae/public/uploads/all/4I68x6WhN0T3y4aBauuAZB4YO9RI9bWOFguTqXH0.jpg',
+              'https://staging.housy.ae/public/uploads/all/Z9dmjnZlN4WFKU3OHaB10ukuZoZ69EvXvxjBREHi.jpg',
+              'https://staging.housy.ae/public/uploads/all/Qmif7bQuIRJDepBm4vIAfyZ6nLKQ9FjOx5Ks0Jeo.jpg',
+              'https://staging.housy.ae/public/uploads/all/gpX5gfdSEFjSoxSrtMOj1Ov6Gx174vUffkNvwHaA.jpg'
+            ],
+            title: 'CZN Dubai breakfast',
+            subTitle: 'This is the information of CZN Bank Dubai',
+            latLng: LatLng(
+              idResponse.result!.days![i].breakfast!.location!.coordinates![1],
+              idResponse.result!.days![i].breakfast!.location!.coordinates![0],
+            )));
+        list.add(FlagInformation(
+            list_of_images: [
+              'https://staging.housy.ae/public/uploads/all/sbb6vTwS5AR1BHViykqVSThJT9rJ6VNh9YlH5QyY.jpg',
+              'https://staging.housy.ae/public/uploads/all/4I68x6WhN0T3y4aBauuAZB4YO9RI9bWOFguTqXH0.jpg',
+              'https://staging.housy.ae/public/uploads/all/Z9dmjnZlN4WFKU3OHaB10ukuZoZ69EvXvxjBREHi.jpg',
+              'https://staging.housy.ae/public/uploads/all/Qmif7bQuIRJDepBm4vIAfyZ6nLKQ9FjOx5Ks0Jeo.jpg',
+              'https://staging.housy.ae/public/uploads/all/gpX5gfdSEFjSoxSrtMOj1Ov6Gx174vUffkNvwHaA.jpg'
+            ],
+            title: 'CZN Dubai lunch',
+            subTitle: 'This is the information of CZN Bank Dubai',
+            latLng: LatLng(
+              idResponse.result!.days![i].lunch!.location!.coordinates![1],
+              idResponse.result!.days![i].lunch!.location!.coordinates![0],
+            )));
+        list.add(FlagInformation(
+            list_of_images: [
+              'https://staging.housy.ae/public/uploads/all/sbb6vTwS5AR1BHViykqVSThJT9rJ6VNh9YlH5QyY.jpg',
+              'https://staging.housy.ae/public/uploads/all/4I68x6WhN0T3y4aBauuAZB4YO9RI9bWOFguTqXH0.jpg',
+              'https://staging.housy.ae/public/uploads/all/Z9dmjnZlN4WFKU3OHaB10ukuZoZ69EvXvxjBREHi.jpg',
+              'https://staging.housy.ae/public/uploads/all/Qmif7bQuIRJDepBm4vIAfyZ6nLKQ9FjOx5Ks0Jeo.jpg',
+              'https://staging.housy.ae/public/uploads/all/gpX5gfdSEFjSoxSrtMOj1Ov6Gx174vUffkNvwHaA.jpg'
+            ],
+            title: 'CZN Dubai dinner',
+            subTitle: 'This is the information of CZN Bank Dubai',
+            latLng: LatLng(
+              idResponse.result!.days![i].dinner!.location!.coordinates![1],
+              idResponse.result!.days![i].lunch!.location!.coordinates![0],
+            )));
+        list.add(FlagInformation(
+            list_of_images: [
+              'https://staging.housy.ae/public/uploads/all/sbb6vTwS5AR1BHViykqVSThJT9rJ6VNh9YlH5QyY.jpg',
+              'https://staging.housy.ae/public/uploads/all/4I68x6WhN0T3y4aBauuAZB4YO9RI9bWOFguTqXH0.jpg',
+              'https://staging.housy.ae/public/uploads/all/Z9dmjnZlN4WFKU3OHaB10ukuZoZ69EvXvxjBREHi.jpg',
+              'https://staging.housy.ae/public/uploads/all/Qmif7bQuIRJDepBm4vIAfyZ6nLKQ9FjOx5Ks0Jeo.jpg',
+              'https://staging.housy.ae/public/uploads/all/gpX5gfdSEFjSoxSrtMOj1Ov6Gx174vUffkNvwHaA.jpg'
+            ],
+            title: 'CZN Dubai coffeeClubsLounges',
+            subTitle: 'This is the information of CZN Bank Dubai',
+            latLng: LatLng(
+              idResponse.result!.days![i].coffeeClubsLounges!.location!
+                  .coordinates![1],
+              idResponse.result!.days![i].lunch!.location!.coordinates![0],
+            )));
+        list.add(FlagInformation(
+            list_of_images: [
+              'https://staging.housy.ae/public/uploads/all/sbb6vTwS5AR1BHViykqVSThJT9rJ6VNh9YlH5QyY.jpg',
+              'https://staging.housy.ae/public/uploads/all/4I68x6WhN0T3y4aBauuAZB4YO9RI9bWOFguTqXH0.jpg',
+              'https://staging.housy.ae/public/uploads/all/Z9dmjnZlN4WFKU3OHaB10ukuZoZ69EvXvxjBREHi.jpg',
+              'https://staging.housy.ae/public/uploads/all/Qmif7bQuIRJDepBm4vIAfyZ6nLKQ9FjOx5Ks0Jeo.jpg',
+              'https://staging.housy.ae/public/uploads/all/gpX5gfdSEFjSoxSrtMOj1Ov6Gx174vUffkNvwHaA.jpg'
+            ],
+            title: 'CZN Dubai marketMallsStores',
+            subTitle: 'This is the information of CZN Bank Dubai',
+            latLng: LatLng(
+              idResponse.result!.days![i].marketMallsStores!.location!
+                  .coordinates![1],
+              idResponse.result!.days![i].lunch!.location!.coordinates![0],
+            )));
       }
-
       emit(ItineraryByIDLoaded(
           byIDResult: idResponse.result!, listOfLatLng: list));
     } catch (e) {

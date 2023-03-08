@@ -327,10 +327,8 @@ class _ShopScreenState extends State<ShopScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: () {
-
-                          _navigationService.navigateTo(summaryRoutPurchase ,arguments: {"id":list[index].sId});
-
-
+                          _navigationService.navigateTo(summaryRoutPurchase,
+                              arguments: {"id": list[index].sId});
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(

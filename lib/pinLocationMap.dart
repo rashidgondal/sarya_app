@@ -1,21 +1,23 @@
+import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
-// import 'package:latlong2/latlong.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
-//import 'package:flutter_map/flutter_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PinLocationMap extends StatefulWidget {
-  final List<LatLng> list_of_marker;
+  final List<FlagInformation> list_of_flag_information;
   final double height;
   final double width;
   final Function()? onTap;
+  final Function(FlagInformation)? selected_place_information;
   const PinLocationMap(
       {Key? key,
-      required this.list_of_marker,
       required this.height,
       this.onTap,
-      required this.width})
+      required this.width,
+      required this.list_of_flag_information,
+      required this.selected_place_information})
       : super(key: key);
 
   @override
@@ -23,8 +25,6 @@ class PinLocationMap extends StatefulWidget {
 }
 
 class _PinLocationMapState extends State<PinLocationMap> {
-  //LatLngBounds? latLngBounds;
-  //List<MarkerLayer> markerList = [];
   String? mapStyle;
   var markers = <MarkerId, Marker>{};
   BitmapDescriptor? flagIcon;
@@ -36,6 +36,9 @@ class _PinLocationMapState extends State<PinLocationMap> {
     super.initState();
   }
 
+  CustomInfoWindowController customInfoWindowController =
+      CustomInfoWindowController();
+
   bool load_assets = false;
   loadassets() async {
     mapStyle =
@@ -46,12 +49,80 @@ class _PinLocationMapState extends State<PinLocationMap> {
       ),
       'lib/assets/svgs/flag_icon.png',
     );
-    widget.list_of_marker.forEach((element) {
-      final markerIdVal = 'marker_id_${element.latitude}_${element.longitude}';
+    widget.list_of_flag_information.forEach((element) {
+      int index = widget.list_of_flag_information.indexOf(element);
+      final markerIdVal =
+          'marker_id_${element.latLng.latitude}_${element.latLng.longitude}';
       final markerId = MarkerId(markerIdVal);
       final marker = Marker(
         markerId: markerId,
-        position: LatLng(element.latitude, element.longitude),
+        position: LatLng(element.latLng.latitude, element.latLng.longitude),
+        onTap: () {
+          widget.selected_place_information!.call(element);
+          customInfoWindowController.addInfoWindow!(
+            Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${widget.list_of_flag_information[index].title}",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13),
+                          ),
+                          Expanded(
+                            child: Text(
+                              "${widget.list_of_flag_information[index].subTitle}",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              Position position = await requestLocation();
+                              String url =
+                                  'https://www.google.com/maps/dir/?api=1&origin=${position.latitude},${position.longitude}&destination=${element.latLng.latitude},${element.latLng.longitude}&travelmode=driving&dir_action=navigate';
+                              launchURL(url);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 3),
+                              child: Text(
+                                "View in Google Map",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                ),
+              ],
+            ),
+            LatLng(element.latLng.latitude, element.latLng.longitude),
+          );
+        },
         icon: flagIcon!,
       );
       final iceGiants = {markerId: marker};
@@ -138,27 +209,65 @@ class _PinLocationMapState extends State<PinLocationMap> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(19.0760, 72.8777),
-                  zoom: 11.5,
-                ),
-                onMapCreated: (controller) {
-                  controller.setMapStyle(mapStyle);
-                  if (markers.isNotEmpty) {
-                    controller.animateCamera(
-                        CameraUpdate.newLatLngBounds(_bounds(markers), 50.0));
-                  }
-                  onMapCreated(controller);
-                },
-                myLocationButtonEnabled: false,
-                myLocationEnabled: false,
-                zoomControlsEnabled: true,
-                zoomGesturesEnabled: true,
-                markers: Set<Marker>.of(markers.values),
-                onTap: (v) {
-                  widget.onTap!.call();
-                },
+            : Stack(
+                children: [
+                  GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(19.0760, 72.8777),
+                      zoom: 11.5,
+                    ),
+                    onMapCreated: (controller) {
+                      controller.setMapStyle(mapStyle);
+                      customInfoWindowController.googleMapController =
+                          controller;
+                      if (markers.isNotEmpty) {
+                        controller.animateCamera(CameraUpdate.newLatLngBounds(
+                            _bounds(markers), 50.0));
+                      }
+                      onMapCreated(controller);
+                    },
+                    onCameraMove: (position) {
+                      customInfoWindowController.onCameraMove!();
+                    },
+                    myLocationButtonEnabled: false,
+                    myLocationEnabled: false,
+                    zoomControlsEnabled: true,
+                    zoomGesturesEnabled: true,
+                    markers: Set<Marker>.of(markers.values),
+                    onTap: (v) {
+                      customInfoWindowController.hideInfoWindow!();
+                      if (widget.onTap != null) {
+                        widget.onTap!.call();
+                      }
+                    },
+                  ),
+                  CustomInfoWindow(
+                    controller: customInfoWindowController,
+                    height: 75,
+                    width: 150,
+                    offset: 50,
+                  ),
+                ],
               ));
   }
+}
+
+launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+class FlagInformation {
+  String title;
+  String subTitle;
+  LatLng latLng;
+  List<String> list_of_images;
+  FlagInformation(
+      {required this.title,
+      required this.subTitle,
+      required this.latLng,
+      required this.list_of_images});
 }
