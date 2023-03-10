@@ -10,44 +10,18 @@ import '../../utils/constant.dart';
 class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
   ItineraryByIDCubits() : super(ItineraryByIDInitial());
 
-  Future getItineraryByID({required String itineraryID, required String callTyp}) async {
+  Future getItineraryByID(
+      {required String itineraryID, required String callTyp}) async {
     try {
-
       print("call type..............$callTyp");
-      if(callTyp == sold || callTyp == edit )
-      {
+      if (callTyp == sold || callTyp == edit) {
         emit(ItineraryByIDLoading());
-
 
         final result = await ShopIntineraryRepository.instance
             .getCreatedItineraryByID(id: itineraryID);
 
-        ItineraryByIDResponse idResponse = ItineraryByIDResponse.fromJson(
-            result);
-
-
-        if (idResponse.result == null) {
-          emit(ItineraryByIDLoaded(
-              byIDResult: idResponse.result ?? ByIDResult(), listOfLatLng: []));
-          return;
-        }
-        if (idResponse.result!.days == null) {
-          emit(ItineraryByIDLoaded(byIDResult: idResponse.result!, listOfLatLng: []));
-          return;
-        }
-        emit(ItineraryByIDLoaded(
-            byIDResult: idResponse.result!, listOfLatLng: []));
-
-      }
-      else  if(callTyp == purchase) {
-        emit(ItineraryByIDLoading());
-
-
-        final result = await ShopIntineraryRepository.instance
-            .getPublicItineraryByID(id: itineraryID);
-
-        ItineraryByIDResponse idResponse = ItineraryByIDResponse.fromJson(
-            result);
+        ItineraryByIDResponse idResponse =
+            ItineraryByIDResponse.fromJson(result);
 
         if (idResponse.result == null) {
           emit(ItineraryByIDLoaded(
@@ -61,17 +35,35 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
         }
         emit(ItineraryByIDLoaded(
             byIDResult: idResponse.result!, listOfLatLng: []));
-
-      }
-      else if(callTyp == start ){
+      } else if (callTyp == purchase) {
         emit(ItineraryByIDLoading());
 
+        final result = await ShopIntineraryRepository.instance
+            .getPublicItineraryByID(id: itineraryID);
+
+        ItineraryByIDResponse idResponse =
+            ItineraryByIDResponse.fromJson(result);
+
+        if (idResponse.result == null) {
+          emit(ItineraryByIDLoaded(
+              byIDResult: idResponse.result ?? ByIDResult(), listOfLatLng: []));
+          return;
+        }
+        if (idResponse.result!.days == null) {
+          emit(ItineraryByIDLoaded(
+              byIDResult: idResponse.result!, listOfLatLng: []));
+          return;
+        }
+        emit(ItineraryByIDLoaded(
+            byIDResult: idResponse.result!, listOfLatLng: []));
+      } else if (callTyp == start) {
+        emit(ItineraryByIDLoading());
 
         final result = await ShopIntineraryRepository.instance
             .getPurchaseItineraryByID(id: itineraryID);
 
-        ItineraryByIDResponse idResponse = ItineraryByIDResponse.fromJson(
-            result);
+        ItineraryByIDResponse idResponse =
+            ItineraryByIDResponse.fromJson(result);
         List<List<FlagInformation>> list = [];
 
         if (idResponse.result == null) {
@@ -85,8 +77,8 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
           return;
         }
 
-        print("idResponse.result!.days!.length............${idResponse.result!
-            .days!.length}");
+        print(
+            "idResponse.result!.days!.length............${idResponse.result!.days!.length}");
 
         for (int i = 0; i < idResponse.result!.days!.length; i++) {
           List<FlagInformation> listOFFlag = [];
@@ -101,10 +93,10 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
               title: 'CZN Dubai breakfast',
               subTitle: 'This is the information of CZN Bank Dubai',
               latLng: LatLng(
-                idResponse.result!.days![i].breakfast!.location!
-                    .coordinates![1],
-                idResponse.result!.days![i].breakfast!.location!
-                    .coordinates![0],
+                idResponse
+                    .result!.days![i].breakfast!.location!.coordinates![1],
+                idResponse
+                    .result!.days![i].breakfast!.location!.coordinates![0],
               )));
           listOFFlag.add(FlagInformation(
               list_of_images: [
@@ -168,7 +160,7 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
           list.add(listOFFlag);
         }
 
-       /* for (int i = 0; i < idResponse.result!.days!.length; i++) {
+        /* for (int i = 0; i < idResponse.result!.days!.length; i++) {
           list.add(FlagInformation(
               list_of_images: [
                 'https://staging.housy.ae/public/uploads/all/sbb6vTwS5AR1BHViykqVSThJT9rJ6VNh9YlH5QyY.jpg',
@@ -246,10 +238,7 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
         }*/
         emit(ItineraryByIDLoaded(
             byIDResult: idResponse.result!, listOfLatLng: list));
-      }
-      else{
-
-      }
+      } else {}
     } catch (e) {
       print("catch.............${e.toString()}");
       emit(const ItineraryByIDFailure(error: ''));
