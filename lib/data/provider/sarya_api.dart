@@ -70,8 +70,8 @@ class SaryaAPI {
       String url = '';
       url = ApiRoutes.country;
       log('url.....$url', name: 'getCountry | SaryaApi');
-
-      return await _http.iGet(url);
+          var data = await _http.iGet(url);
+      return data;
     } catch (e) {
       log('1.....${e.toString()}', name: 'catch | SaryaApi');
 
@@ -225,10 +225,30 @@ class SaryaAPI {
   }
 
 
-  Future<dynamic> getItineraryByID({required String id}) async {
+  Future<dynamic> getCreatedItineraryByID({required String id}) async {
     try {
       String url = '';
-      url = ApiRoutes.getIntineraryByID + "$id";
+      url = ApiRoutes.getIntineraryByIDCreated + "$id";
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getPublicItineraryByID({required String id}) async {
+    try {
+      String url = '';
+      url = ApiRoutes.getIntineraryByIDPublic + "$id";
+      return await _http.iGet(url);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getPurchaseItineraryByID({required String id}) async {
+    try {
+      String url = '';
+      url = ApiRoutes.getIntineraryByIDPurchase + "$id";
       return await _http.iGet(url);
     } catch (e) {
       rethrow;
@@ -285,6 +305,15 @@ class SaryaAPI {
     }
   }
 
+  Future<dynamic> startItinerary({required body}) async {
+    try {
+      String url = '';
+      url = ApiRoutes.setItineraryStat;
+      return await _http.iPTCH(url, data: body);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
 
 }

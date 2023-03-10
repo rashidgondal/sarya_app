@@ -24,6 +24,7 @@ class SignInCubits extends Cubit<SignInStates> {
       pref.saveUser(res);
       Map  signInResponse = await pref.getUser();
       print("res.token...............${signInResponse['nationality']}");
+      print("res.token...............${res.token}");
 
       pref.saveToken(res.token);
       emit(SignInLoaded(signInResponse: res));

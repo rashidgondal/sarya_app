@@ -42,7 +42,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
   @override
   void initState() {
-    context.read<CreatedItineraryCubits>().getCreatedItinerary();
     context.read<PurchaseItinerariesCubits>().getPurchaseItinerary();
     Flags.getImages();
     parseAndDrawAssetsOnMap();
@@ -125,7 +124,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               body: RefreshIndicator(
                 onRefresh: () async{
                   getUserInfo();
-                  context.read<CreatedItineraryCubits>().getCreatedItinerary();
                   context.read<PurchaseItinerariesCubits>().getPurchaseItinerary();
                 },
                 child: Stack(
@@ -319,7 +317,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                     itemBuilder: (BuildContext context, int index) {
                                       return InkWell(
                                         onTap: () {
-                                          _navigationService.navigateTo(summaryRoutPurchase ,arguments: {"id":purchasedItineraries[index].sId});
+                                          _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId});
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.only(

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sarya/home/home_view_model/completed_itinerary_cubits.dart';
+import 'package:sarya/home/model/completed_request.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../../navigation/navigation_service.dart';
+import '../../home/home_view_model/stop_itinerary_cubits.dart';
+import '../../home/model/stop_request.dart';
 
 class TripCompleteScreen extends StatefulWidget {
-  const TripCompleteScreen({Key? key}) : super(key: key);
+  final Map map;
+  const TripCompleteScreen({Key? key, required this.map}) : super(key: key);
 
   @override
   State<TripCompleteScreen> createState() => _TripCompleteScreenState();
@@ -67,7 +73,14 @@ class _TripCompleteScreenState extends State<TripCompleteScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        _navigationService.navigateTo(chooseAvatarRout);
+                        StopRequest stopRequest = StopRequest(itinerary:
+                        StopItinerary(
+                            sId: widget.map['id'],
+                            active: true,
+                            day: widget.map['days']));
+
+                        context.read<StopItineraryStateCubits>().getStopItinerary(stopRequest: stopRequest, service: _navigationService );
+
                       },
                       child: Container(
                         height: 46.0,
@@ -87,7 +100,14 @@ class _TripCompleteScreenState extends State<TripCompleteScreen> {
                     const SizedBox(width: 20.0,),
                     InkWell(
                       onTap: () {
-                        _navigationService.navigateTo(chooseAvatarRout);
+
+                        CompletedRequest req = CompletedRequest(itinerary:
+                        CompletedItinerary(
+                            sId: widget.map['id'],
+                            completed: true,
+                           ));
+
+                        context.read<CompletedItineraryStateCubits>().setCompletedItineraryState(completedRequest: req, service: _navigationService);
                       },
                       child: Container(
                         height: 46.0,

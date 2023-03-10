@@ -21,16 +21,17 @@ class CountryCubits extends Cubit<CountryStates> {
 
       emit(CountryLoading());
 
-      final List countries = await AuthRepository.instance.countries() ;
+      Map map = await AuthRepository.instance.countries() ;
+      List<dynamic> listOfCountries = map['result'];
       SharedPrefs sharedPrefs = SharedPrefs();
-      sharedPrefs.saveCountries(countries);
+      sharedPrefs.saveCountries(listOfCountries);
 
       emit(CountryLoaded(
-        countries: countries,
+        countries: listOfCountries,
       ));
 
     } catch (e) {
-      log("CountryLoaded..............catch");
+      log("CountryLoaded..............catch...${e.toString()}");
 
       emit(const CountryFailure(error: ''));
     }

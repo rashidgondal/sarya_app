@@ -35,7 +35,9 @@ class ApiRoutes {
   static const String deleteIntinerary            = '${_base_URL}itinerary/';
   static const String allDraftDeleteIntinerary    = '${_base_URL}itinerary/drafted';
 
-  static const String getIntineraryByID           = '${_base_URL}itinerary/';
+  static const String getIntineraryByIDCreated    = '${_base_URL}itinerary/';
+  static const String getIntineraryByIDPublic     = '${_base_URL}itinerary/public/';
+  static const String getIntineraryByIDPurchase   = '${_base_URL}itinerary/purchased/';
 
   //airport data api
   static const String airport        = 'https://airlabs.co/api/v9/airports?iata_code=CDG&api_key=44d8a4aa-4c02-4a5b-9fd2-f21717ee9d4c';
@@ -46,5 +48,7 @@ class ApiRoutes {
   static const String purchaseItineraryDetail   = '${_base_URL}itinerary/purchase/';
   static const String soldItinerary             = '${_base_URL}itinerary/sold';
   static const String soldItineraryDetail       = '${_base_URL}itinerary/sold/';
+
+  static const String setItineraryStat            = '${_base_URL}itinerary/state';
 
 }

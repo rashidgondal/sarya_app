@@ -243,10 +243,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               InkWell(
                                   onTap: () async {
                                     SharedPrefs pref = SharedPrefs();
-                                    List listOfCountries =
+                                    var data =
                                         await pref.getCountries();
-                                    _navigationService.navigateTo(signupRout,
-                                        arguments: listOfCountries);
+                                    if(data.isNotEmpty) {
+                                      List listOfCountries = data;
+                                      _navigationService.navigateTo(signupRout,
+                                          arguments: listOfCountries);
+                                    }else{
+                                      _navigationService.navigateTo(signupRout,
+                                          arguments: []);
+                                    }
                                   },
                                   child: const Text(
                                     "Sign Up!",

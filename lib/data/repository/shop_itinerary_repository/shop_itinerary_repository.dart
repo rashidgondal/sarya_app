@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:sarya/data/provider/sarya_api.dart';
 
 class ShopIntineraryRepository {
@@ -54,12 +56,12 @@ class ShopIntineraryRepository {
     }
   }
 
-  Future<dynamic> getItineraryByID({required String id}) async{
+  Future<dynamic> getCreatedItineraryByID({required String id}) async{
     try{
       print("getItineraryByID .............${id}");
 
-      var result  =  await _saryaAPI.getItineraryByID(id: id);
-      print("getItineraryByID .............${result.toString()}");
+      var result  =  await _saryaAPI.getCreatedItineraryByID(id: id);
+      log("getItineraryByID .............${result.toString()}");
 
       return result;
 
@@ -67,6 +69,36 @@ class ShopIntineraryRepository {
       return e;
     }
   }
+
+  Future<dynamic> getPublicItineraryByID({required String id}) async{
+    try{
+      print("getItineraryByID .............${id}");
+
+      var result  =  await _saryaAPI.getPublicItineraryByID(id: id);
+      log("getItineraryByID .............${result.toString()}");
+
+      return result;
+
+    }catch(e){
+      return e;
+    }
+  }
+
+  Future<dynamic> getPurchaseItineraryByID({required String id}) async{
+    try{
+      print("getItineraryByID .............${id}");
+
+      var result  =  await _saryaAPI.getPurchaseItineraryByID(id: id);
+      log("getItineraryByID .............${result.toString()}");
+
+      return result;
+
+    }catch(e){
+      return e;
+    }
+  }
+
+
 
 
 }

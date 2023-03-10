@@ -1,7 +1,7 @@
 import '/core/network/network.dart';
 import '/core/core.dart';
 
-class AuthenticationAPI {
+/*class AuthenticationAPI {
   AuthenticationAPI();
   final http = HTTPAUTH.instance;
 
@@ -12,7 +12,7 @@ class AuthenticationAPI {
       rethrow;
     }
   }
-/*
+*//*
   Future<dynamic> changePassword({required body}) async {
     try {
       return await http.iPost(ApiRoutes.changePassUrl, data: body);
@@ -27,5 +27,5 @@ class AuthenticationAPI {
     } catch (e) {
       rethrow;
     }
-  }*/
-}
+  }*//*
+}*/

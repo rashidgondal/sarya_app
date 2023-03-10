@@ -14,8 +14,11 @@ import 'package:sarya/create_intinerary/intinerary_view_model/checklist_cubits.d
 import 'package:sarya/create_intinerary/intinerary_view_model/delete_all_intinerary_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/transport_cubits.dart';
 import 'package:sarya/create_intinerary/intinerary_view_model/update_intinerary_cubits.dart';
+import 'package:sarya/home/home_view_model/completed_itinerary_cubits.dart';
 import 'package:sarya/home/home_view_model/draft_itinerary_cubits.dart';
 import 'package:sarya/home/home_view_model/sold_itinerary_by_id_cubits.dart';
+import 'package:sarya/home/home_view_model/start_itinerary_cubits.dart';
+import 'package:sarya/home/home_view_model/stop_itinerary_cubits.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/payments/payments_view_model/update_bank_cubits.dart';
 import 'package:sarya/settings/avatar/view_model/update_avatar_cubits.dart';
@@ -88,6 +91,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => SoldItinerariesCubits()),
         BlocProvider(create: (context) => SoldItineraryByIDCubits()),
         BlocProvider(create: (context) => PurchaseItinerariesCubits()),
+        BlocProvider(create: (context) => StartItineraryStateCubits()),
+        BlocProvider(create: (context) => StopItineraryStateCubits()),
+        BlocProvider(create: (context) => CompletedItineraryStateCubits()),
       ],
       child: MaterialApp(
         title: 'Sarya',

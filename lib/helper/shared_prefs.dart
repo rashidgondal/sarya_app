@@ -45,9 +45,14 @@ class SharedPrefs {
     prefs.setString(_saveUserDataKey, json.encode(value));
   }
 
-    Future getCountries() async {
+    Future<dynamic> getCountries() async {
       final prefs = await SharedPreferences.getInstance();
-      return json.decode(prefs.getString(_countriesResponseKey)!);
+      var data = prefs.getString(_countriesResponseKey);
+      print("getCountries............$data");
+      if(data == null){
+        return '';
+      }
+      return json.decode(data);
     }
 
     Future<void> saveCountries(dynamic value) async {
