@@ -24,6 +24,6 @@ class ItineraryByIDLoading extends ItineraryByIDStates {}
 
 class ItineraryByIDLoaded extends ItineraryByIDStates {
   final ByIDResult byIDResult;
-  final List<FlagInformation> listOfLatLng;
-  ItineraryByIDLoaded({required this.byIDResult, required this.listOfLatLng});
+  final  List<List<FlagInformation>>? listOfLatLng;
+  ItineraryByIDLoaded({required this.byIDResult, this.listOfLatLng});
 }

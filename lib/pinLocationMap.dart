@@ -1,11 +1,11 @@
-import 'package:custom_info_window/custom_info_window.dart';
+  import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class PinLocationMap extends StatefulWidget {
+  class PinLocationMap extends StatefulWidget {
   final List<FlagInformation> list_of_flag_information;
   final double height;
   final double width;
@@ -24,7 +24,7 @@ class PinLocationMap extends StatefulWidget {
   State<PinLocationMap> createState() => _PinLocationMapState();
 }
 
-class _PinLocationMapState extends State<PinLocationMap> {
+  class _PinLocationMapState extends State<PinLocationMap> {
   String? mapStyle;
   var markers = <MarkerId, Marker>{};
   BitmapDescriptor? flagIcon;
@@ -45,7 +45,7 @@ class _PinLocationMapState extends State<PinLocationMap> {
         await rootBundle.loadString('lib/assets/json_data/map_style.txt');
     flagIcon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(
-        size: Size(20, 20),
+        size: Size(80, 80),
       ),
       'lib/assets/svgs/flag_icon.png',
     );
@@ -252,7 +252,7 @@ class _PinLocationMapState extends State<PinLocationMap> {
   }
 }
 
-launchURL(String url) async {
+  launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
@@ -260,7 +260,7 @@ launchURL(String url) async {
   }
 }
 
-class FlagInformation {
+  class FlagInformation {
   String title;
   String subTitle;
   LatLng latLng;

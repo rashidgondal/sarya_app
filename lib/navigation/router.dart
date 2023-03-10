@@ -23,6 +23,7 @@ import '../create_intinerary/view/check_list.dart';
 import '../create_intinerary/view/design_intinerary.dart';
 import '../create_intinerary/view/foodAndShoppingInfo.dart';
 import '../create_intinerary/view/select_destination.dart';
+import '../create_intinerary/view/trip_completed.dart';
 import '../customWidgets/share_intinerary.dart';
 import '../customWidgets/show_aimation.dart';
 import '../customWidgets/term_and_condtions.dart';
@@ -182,6 +183,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.soldDetailViewRoute:
       return MaterialPageRoute(
           builder: (context) =>  SoldItineraryDetail(soldAllResult: settings.arguments as SoldAllResult,));
+    case routes.tripCompletedRoute:
+      return MaterialPageRoute(
+          builder: (context) =>  TripCompleteScreen(map: settings.arguments as Map));
 
     default:
       return MaterialPageRoute(

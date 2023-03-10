@@ -2,15 +2,20 @@ class GetAllPurchasesResponse {
   String? msg;
   List<Created>? created;
   List<Purchased>? purchased;
+  List<Active>? active;
   int? totalCreated;
   int? totalPurchased;
+  int? totalActive;
 
   GetAllPurchasesResponse(
       {this.msg,
         this.created,
         this.purchased,
+        this.active,
         this.totalCreated,
-        this.totalPurchased});
+        this.totalPurchased,
+        this.totalActive
+      });
 
   GetAllPurchasesResponse.fromJson(Map<String, dynamic> json) {
     msg = json['msg'];
@@ -26,8 +31,15 @@ class GetAllPurchasesResponse {
         purchased!.add(new Purchased.fromJson(v));
       });
     }
+    if (json['active'] != null) {
+      purchased = <Purchased>[];
+      json['active'].forEach((v) {
+        purchased!.add(new Purchased.fromJson(v));
+      });
+    }
     totalCreated = json['totalCreated'];
     totalPurchased = json['totalPurchased'];
+    totalActive = json['totalActive'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,8 +51,12 @@ class GetAllPurchasesResponse {
     if (this.purchased != null) {
       data['purchased'] = this.purchased!.map((v) => v.toJson()).toList();
     }
+    if (this.active != null) {
+      data['active'] = this.active!.map((v) => v.toJson()).toList();
+    }
     data['totalCreated'] = this.totalCreated;
     data['totalPurchased'] = this.totalPurchased;
+    data['totalActive'] = this.totalActive;
     return data;
   }
 }
@@ -86,14 +102,20 @@ class Created {
   Created.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     userName = json['userName'];
-    destination = json['destination'].cast<String>();
+    if(json['destination'] !!= null) {
+      destination = json['destination'].cast<String>();
+    }
     title = json['title'];
     summary = json['summary'];
     cost = json['cost'];
     tripCost = json['tripCost'];
-    tripType = json['tripType'].cast<String>();
+    if(json['tripType'] != null) {
+      tripType = json['tripType'].cast<String>();
+    }
     totalDays = json['totalDays'];
-    checklist = json['checklist'].cast<String>();
+    if(json['checklist'] != null) {
+      checklist = json['checklist'].cast<String>();
+    }
     profileImg = json['profileImg'];
     step = json['step'];
     live = json['live'];
@@ -160,14 +182,18 @@ class Days {
   Days.fromJson(Map<String, dynamic> json) {
     country = json['country'];
     airport = json['airport'];
-    transportation = json['transportation'].cast<String>();
+    if(json['transportation'] != null){
+      transportation = json['transportation'].cast<String>();
+    }
     if (json['accomodation'] != null) {
       accomodation = <Accomodation>[];
       json['accomodation'].forEach((v) {
         accomodation!.add(new Accomodation.fromJson(v));
       });
     }
-    activities = json['activities'].cast<String>();
+    if(json['activities'] != null) {
+      activities = json['activities'].cast<String>();
+    }
     breakfast = json['breakfast'] != null
         ? new Breakfast.fromJson(json['breakfast'])
         : null;
@@ -242,7 +268,9 @@ class Location {
 
   Location.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    coordinates = json['coordinates'].cast<double>();
+    if(json['coordinates'] != null) {
+      coordinates = json['coordinates'].cast<double>();
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -276,8 +304,12 @@ class Breakfast {
     location = json['location'] != null
         ? new Location.fromJson(json['location'])
         : null;
-    images = json['images'].cast<String>();
+    if(json['images'] != null) {
+      images = json['images'].cast<String>();
+    }
+    if(json['imagesPublic'] != null){
     imagesPublic = json['imagesPublic'].cast<String>();
+    }
     coupon = json['coupon'];
     rating = json['rating'];
     comments = json['comments'];
@@ -339,15 +371,23 @@ class Purchased {
   Purchased.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     userName = json['userName'];
-    destination = json['destination'].cast<String>();
+    if(json['destination'] != null) {
+      destination = json['destination'].cast<String>();
+    }
     title = json['title'];
     summary = json['summary'];
     cost = json['cost'];
     tripCost = json['tripCost'];
-    tripType = json['tripType'].cast<String>();
+    if(json['tripType'] != null) {
+      tripType = json['tripType'].cast<String>();
+    }
     totalDays = json['totalDays'];
-    checklist = json['checklist'].cast<String>();
-    profileImg = json['profileImg'];
+    if(json['checklist'] != null) {
+      checklist = json['checklist'].cast<String>();
+    }
+    if(json['profileImg'] != null) {
+      profileImg = json['profileImg'];
+    }
     step = json['step'];
     live = json['live'];
     if (json['days'] != null) {
@@ -379,6 +419,100 @@ class Purchased {
     if (this.days != null) {
       data['days'] = this.days!.map((v) => v.toJson()).toList();
     }
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['__v'] = this.iV;
+    return data;
+  }
+}
+
+class Active {
+  String? sId;
+  String? userName;
+  List<String>? destination;
+  String? title;
+  String? summary;
+  int? cost;
+  int? tripCost;
+  List<String>? tripType;
+  int? totalDays;
+  List<String>? checklist;
+  String? profileImg;
+  int? step;
+  List<Days>? days;
+  bool? live;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+
+  Active(
+      {this.sId,
+        this.userName,
+        this.destination,
+        this.title,
+        this.summary,
+        this.cost,
+        this.tripCost,
+        this.tripType,
+        this.totalDays,
+        this.checklist,
+        this.profileImg,
+        this.step,
+        this.days,
+        this.live,
+        this.createdAt,
+        this.updatedAt,
+        this.iV});
+
+  Active.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    userName = json['userName'];
+    if(json['destination'] != null) {
+      destination = json['destination'].cast<String>();
+    }
+    title = json['title'];
+    summary = json['summary'];
+    cost = json['cost'];
+    tripCost = json['tripCost'];
+    if(json['tripType'] != null) {
+      tripType = json['tripType'].cast<String>();
+    }
+    totalDays = json['totalDays'];
+    if(json['checklist'] != null) {
+      checklist = json['checklist'].cast<String>();
+    }
+    profileImg = json['profileImg'];
+    step = json['step'];
+    if (json['days'] != null) {
+      days = <Days>[];
+      json['days'].forEach((v) {
+        days!.add(new Days.fromJson(v));
+      });
+    }
+    live = json['live'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['userName'] = this.userName;
+    data['destination'] = this.destination;
+    data['title'] = this.title;
+    data['summary'] = this.summary;
+    data['cost'] = this.cost;
+    data['tripCost'] = this.tripCost;
+    data['tripType'] = this.tripType;
+    data['totalDays'] = this.totalDays;
+    data['checklist'] = this.checklist;
+    data['profileImg'] = this.profileImg;
+    data['step'] = this.step;
+    if (this.days != null) {
+      data['days'] = this.days!.map((v) => v.toJson()).toList();
+    }
+    data['live'] = this.live;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;

@@ -61,14 +61,20 @@ class ByIDResult {
   ByIDResult.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     userName = json['userName'];
-    destination = json['destination'].cast<String>();
+    if(json['destination'] != null) {
+      destination = json['destination'].cast<String>();
+    }
     title = json['title'];
     summary = json['summary'];
     cost = json['cost'];
     tripCost = json['tripCost'];
-    tripType = json['tripType'].cast<String>();
+    if(json['tripType'] != null) {
+      tripType = json['tripType'].cast<String>();
+    }
     totalDays = json['totalDays'];
-    checklist = json['checklist'].cast<String>();
+    if(json['checklist'] != null) {
+      checklist = json['checklist'].cast<String>();
+    }
     profileImg = json['profileImg'];
     step = json['step'];
     live = json['live'];
@@ -135,14 +141,18 @@ class ByIDDays {
   ByIDDays.fromJson(Map<String, dynamic> json) {
     country = json['country'];
     airport = json['airport'];
-    transportation = json['transportation'].cast<String>();
+    if(json['transportation']!= null) {
+      transportation = json['transportation'].cast<String>();
+    }
     if (json['accomodation'] != null) {
       accomodation = <ByIDAccomodation>[];
       json['accomodation'].forEach((v) {
         accomodation!.add(new ByIDAccomodation.fromJson(v));
       });
     }
-    activities = json['activities'].cast<String>();
+    if(json['activities'] != null) {
+      activities = json['activities'].cast<String>();
+    }
     breakfast = json['breakfast'] != null
         ? new ByIDBreakfast.fromJson(json['breakfast'])
         : null;
@@ -217,7 +227,9 @@ class ByIDLocation {
 
   ByIDLocation.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    coordinates = json['coordinates'].cast<double>();
+    if( json['coordinates'] != null) {
+      coordinates = json['coordinates'].cast<double>();
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -251,8 +263,12 @@ class ByIDBreakfast {
     location = json['location'] != null
         ? new ByIDLocation.fromJson(json['location'])
         : null;
-    images = json['images'].cast<String>();
-    imagesPublic = json['imagesPublic'].cast<String>();
+    if(json['images'] != null) {
+      images = json['images'].cast<String>();
+    }
+    if(json['imagesPublic'] != null) {
+      imagesPublic = json['imagesPublic'].cast<String>();
+    }
     coupon = json['coupon'];
     rating = json['rating'];
     comments = json['comments'];

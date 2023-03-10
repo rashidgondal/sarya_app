@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:sarya/data/provider/sarya_api.dart';
 
 class PurchaseSoldItineraryRepository {
@@ -13,7 +15,7 @@ class PurchaseSoldItineraryRepository {
   Future<dynamic> getAllPurchase() async{
     try {
       var result  = await _saryaAPI.getAllPurchasedItinerary();
-      print("getAllPurchase.............${result.toString()}");
+      log("getAllPurchase.............${result.toString()}");
       return result;
     }catch(e){
       rethrow;
@@ -65,5 +67,19 @@ class PurchaseSoldItineraryRepository {
     }
 
   }
+
+  Future<dynamic> setStates({required  body}) async{
+    try {
+      print("getSoldItineraryDetail.....id........$body");
+
+      var result  = await _saryaAPI.startItinerary(body: body);
+      print("getSoldItineraryDetail.............$result");
+      return result;
+    }catch(e){
+      rethrow;
+    }
+
+  }
+
 
 }

@@ -23,6 +23,7 @@ class AppColor {
   static const borderColor2     =   Color(0xFFADADAD);
   static const buttonColor      =   Color(0xFF19C6C0);
   static const textColor        =   Color(0xFF87D5CB);
+  static const stopColor        =   Color(0xFFF98E8E);
 
 
 }

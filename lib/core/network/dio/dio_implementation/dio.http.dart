@@ -79,128 +79,13 @@ class HTTP implements IHTTP {
   }
 
   @override
-  Future<dynamic> iPostRequest(String url,
-      {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters}) async {
-    try {
-      SharedPrefs prefs = SharedPrefs();
-      var token = await prefs.getToken();
-      var res = await dioInstance(token).post(url, data: data);
-
-      var result = ApiResponse().response(res);
-      return result;
-    } catch (e) {
-      rethrow;
-    }
+  Future iPTCH(String url, {Map<String, dynamic>? data, Map<String, dynamic>? queryParameters}) async{
+    var res = await _dio.patch(url,data: data, queryParameters: queryParameters);
+    var result = ApiResponse().response(res);
+    return result;
   }
 
-  @override
-  Future iGetRequest(String url,
-      {Map<String, dynamic>? queryParameters}) async {
-    try {
-      SharedPrefs prefs = SharedPrefs();
-      var token = await prefs.getToken();
-      var res = await dioInstance(token).get(url);
-      var result = ApiResponse().response(res);
-      return result;
-    } catch (e) {
-      log('data......0..${e.toString()}',
-          name: ' trip | CreateIntineraryRepository');
 
-      rethrow;
-    }
-  }
 }
 
-class HTTPAUTH with IHTTP {
-  final Dio _dio = Dio();
-  HTTPAUTH._privateConstructor() {}
 
-  static final HTTPAUTH _instance = HTTPAUTH._privateConstructor();
-
-  static HTTPAUTH get instance => _instance;
-
-  @override
-  Future<dynamic> iDelete(String url,
-      {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters}) async {
-    try {
-      var res =
-          await _dio.delete(url, data: data, queryParameters: queryParameters);
-      var result = ApiResponse().response(res);
-      return result;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<dynamic> iGet(String url,
-      {Map<String, dynamic>? queryParameters}) async {
-    try {
-      var res = await _dio.get(url, queryParameters: queryParameters);
-      var result = ApiResponse().response(res);
-      return result;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<dynamic> iPost(String url,
-      {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters}) async {
-    try {
-      var res =
-          await _dio.post(url, data: data, queryParameters: queryParameters);
-      var result = ApiResponse().response(res);
-      return result;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<dynamic> iPut(String url,
-      {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters}) async {
-    try {
-      var res = await _dio.put(url,
-          data: json.encode(data), queryParameters: queryParameters);
-      var result = ApiResponse().response(res);
-      return result;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<dynamic> iPostRequest(String url,
-      {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters}) async {
-    try {
-/*
-      SharedPrefs prefs = SharedPrefs();
-      var token = await prefs.getToken();
-      var res = await dioInstance(token).post(url, data: data);
-
-      var result = ApiResponse().response(res);
-      return result;*/
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future iGetRequest(String url,
-      {Map<String, dynamic>? queryParameters}) async {}
-}
-
-Dio dioInstance(String accessCode) {
-  Dio dio = Dio();
-  BaseOptions options = BaseOptions(
-      baseUrl: ApiRoutes.baseURL, headers: {'x-access-token': '$accessCode'});
-
-  dio.options = options;
-  return dio;
-}
