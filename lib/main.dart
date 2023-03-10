@@ -121,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _navigationService = locator<NavigationService>();
 
-    Future.delayed(Duration(milliseconds: 3400), () async {
+    Future.delayed(Duration(milliseconds: 3300), () async {
       _navigationService.navigatePushReplace(loginRout);
       if (Platform.isAndroid) {
         await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.all(120),
+        margin: EdgeInsets.all(130),
         child: Center(
           child: Image.asset(
             'lib/assets/images/Sarya_White_SP.gif',
