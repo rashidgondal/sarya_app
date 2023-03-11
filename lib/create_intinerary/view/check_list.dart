@@ -55,8 +55,8 @@ class _CheckListScreenState extends State<CheckListScreen> {
 
   @override
   void dispose() {
-    listOfBool.clear();
-    listOfCheckList.clear();
+    listOfBool = [];
+    listOfCheckList = [];
     super.dispose();
   }
 

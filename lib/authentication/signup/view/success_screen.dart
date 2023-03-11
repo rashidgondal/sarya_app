@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -9,7 +8,6 @@ import 'package:sarya/customWidgets/data_loading.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
-
 import '../../../navigation/navigation_service.dart';
 import '../signup_view_model/signup_cubits.dart';
 

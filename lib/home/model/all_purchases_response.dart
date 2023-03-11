@@ -32,9 +32,9 @@ class GetAllPurchasesResponse {
       });
     }
     if (json['active'] != null) {
-      purchased = <Purchased>[];
+      active = <Active>[];
       json['active'].forEach((v) {
-        purchased!.add(new Purchased.fromJson(v));
+        active!.add(new Active.fromJson(v));
       });
     }
     totalCreated = json['totalCreated'];

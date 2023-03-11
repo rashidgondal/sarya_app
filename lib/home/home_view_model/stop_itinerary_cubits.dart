@@ -8,14 +8,19 @@ import '../../navigation/router_path.dart';
 class StopItineraryStateCubits extends Cubit<StopItineraryStates> {
   StopItineraryStateCubits(): super(StopItineraryInitial());
 
-  Future getStopItinerary({required StopRequest stopRequest, required NavigationService service}) async{
+  Future getStopItinerary({required StopRequest stopRequest, required NavigationService service,String? buttonName}) async{
     try{
       emit(StopItineraryLoading());
 
       final  result = await PurchaseSoldItineraryRepository.instance.setStates(body: stopRequest.toJson());
 
       emit(StopItineraryLoaded());
-      service.navigatePushReplace(dashboardRout);
+      if(buttonName == null) {
+        service.navigatePushReplace(dashboardRout);
+      }
+      else{
+        service.goBack();
+      }
 
     }catch(e){
       print("catch.............${e.toString()}");

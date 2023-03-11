@@ -185,7 +185,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               String id = widget.map['id'];
 
                               SummaryUpdateIntineraryRequest summary = SummaryUpdateIntineraryRequest(live: true,step: 4);
-                              context.read<SummaryUpdateIntineraryCubits>().summaryUpdateIntineraryPage(summaryUpdateIntineraryRequest:summary, navigationService:  _navigationService, route:"Sold", id: id);
+                              context.read<SummaryUpdateIntineraryCubits>().summaryUpdateIntineraryPage(summaryUpdateIntineraryRequest:summary, navigationService:  _navigationService, route:"Sold", id: id, );
 
                             },
                             child: Container(
@@ -212,7 +212,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           StartRequest startRequest = StartRequest(itinerary: StartItinerary(sId: widget.map['id'], active: true));
                           context.read<StartItineraryStateCubits>().setStartItineraryState(startRequest: startRequest);
 
-                          _navigationService.navigateTo(mapViewRoute,arguments: {"listOfMarker":list, 'totalDays':byIDResult.totalDays, "id": widget.map['id']});
+                          _navigationService.navigateTo(mapViewRoute,arguments: {"listOfMarker":list, 'totalDays':byIDResult.totalDays, "id": widget.map['id'], "step":0});
 
                         },
                         child: Container(

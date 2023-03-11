@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geojson/geojson.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarya/extensions/string_extension.dart';
 import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/home/home_view_model/created_itinerary_states.dart';
@@ -21,6 +22,7 @@ import '../../helper/helper_methods.dart';
 import '../../navigation/navigation_service.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:timeago/timeago.dart' as timeago;
+import '../../pinLocationMap.dart';
 import '../home_view_model/created_itinerary_cubits.dart';
 
 class ItineraryScreen extends StatefulWidget {
@@ -132,9 +134,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                         builder: (context, state) {
                           List<Purchased> purchasedItineraries = [];
                           List<Created> createdItineraries = [];
+                          List<Active> activeItineraries = [];
 
-                          if (state is PurchaseItineraryInitial
-                          ) {
+                          if (state is PurchaseItineraryInitial) {
                             return SizedBox();
                           }
 
@@ -145,6 +147,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                           if (state is PurchaseItineraryLoaded) {
                             purchasedItineraries = state.purchasedItineraries;
                             createdItineraries  = state.createdItineraries;
+                            activeItineraries  = state.activeItineraries;
+
+                            print("activeItineraries........${activeItineraries.toString()}");
                           }
 
 
@@ -292,9 +297,190 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
 
                               ),
+                              const SizedBox(
+                                height: 30.0,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 30.0),
+                                child: Text(
+                                  "Active Itineraries",
+                                  style: TextStyle(
+                                      fontSize: 17.0, color: AppColor.colorLiteBlack5),
+                                ),
+                              ),
+                              SizedBox(
+                                  height: 125,
+                                  child: Expanded(
+                                    child: ListView.builder(
+                                        itemCount: activeItineraries.length,
+                                        physics: BouncingScrollPhysics(),
+                                        padding: EdgeInsets.only(top: 10),
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (BuildContext context, int index){
+                                          if(index == 0){
+                                            return InkWell(
+                                              onTap: (){
+                                                List<List<FlagInformation>> list = [];
 
+                                                for (int i = 0; i < activeItineraries[index].days!.length; i++) {
+                                                  List<FlagInformation> listOFFlag = [];
+                                                  listOFFlag.add(FlagInformation(
+                                                      list_of_images:activeItineraries[index].days![i].breakfast!.images??[],
+                                                      title: '${activeItineraries[index]!.days![i].breakfast!.name??''}',
+                                                      subTitle: '${activeItineraries[index]!.days![i].breakfast!.comments??''}',
+                                                      latLng: LatLng(
+                                                       activeItineraries[index].days![i].breakfast!.location!
+                                                            .coordinates![1],
+                                                       activeItineraries[index].days![i].breakfast!.location!
+                                                            .coordinates![0],
+                                                      )));
+                                                  listOFFlag.add(FlagInformation(
+                                                      list_of_images:activeItineraries[index].days![i].lunch!.images??[],
+                                                      title: '${activeItineraries[index]!.days![i].lunch!.name??''}',
+                                                      subTitle: '${activeItineraries[index]!.days![i].lunch!.comments??''}',
+                                                      latLng: LatLng(
+                                                       activeItineraries[index].days![i].lunch!.location!
+                                                            .coordinates![1],
+                                                       activeItineraries[index].days![i].lunch!.location!
+                                                            .coordinates![0],
+                                                      )));
+                                                  listOFFlag.add(FlagInformation(
+                                                      list_of_images:activeItineraries[index].days![i].dinner!.images??[],
+                                                      title: '${activeItineraries[index]!.days![i].dinner!.name??''}',
+                                                      subTitle: '${activeItineraries[index]!.days![i].dinner!.comments??''}',
+                                                      latLng: LatLng(
+                                                       activeItineraries[index].days![i].dinner!.location!
+                                                            .coordinates![1],
+                                                       activeItineraries[index].days![i].dinner!.location!
+                                                            .coordinates![0],
+                                                      )));
+                                                  listOFFlag.add(FlagInformation(
+                                                      list_of_images:activeItineraries[index].days![i].marketMallsStores!.images??[],
+                                                      title: '${activeItineraries[index]!.days![i].marketMallsStores!.name??''}',
+                                                      subTitle: '${activeItineraries[index]!.days![i].marketMallsStores!.comments??''}',
+                                                      latLng: LatLng(
+                                                       activeItineraries[index].days![i].marketMallsStores!.location!
+                                                            .coordinates![1],
+                                                       activeItineraries[index].days![i].marketMallsStores!.location!
+                                                            .coordinates![0],
+                                                      )));
+                                                  listOFFlag.add(FlagInformation(
+                                                      list_of_images:activeItineraries[index].days![i].coffeeClubsLounges!.images??[],
+                                                      title: '${activeItineraries[index]!.days![i].coffeeClubsLounges!.name??''}',
+                                                      subTitle: '${activeItineraries[index]!.days![i].coffeeClubsLounges!.comments??''}',
+                                                      latLng: LatLng(
+                                                       activeItineraries[index].days![i].coffeeClubsLounges!.location!
+                                                            .coordinates![1],
+                                                       activeItineraries[index].days![i].coffeeClubsLounges!.location!
+                                                            .coordinates![0],
+                                                      )));
+
+                                                  list.add(listOFFlag);
+                                                }
+
+                                                String id = activeItineraries[index].sId??'';
+                                                _navigationService.navigateTo(mapViewRoute,arguments: {"listOfMarker":list, 'totalDays':activeItineraries[index].totalDays, "id": id, "step":activeItineraries[index].step??0});
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 30.0,right: 10,top: 0),
+                                                child: Container(
+                                                  height: 111.0,
+                                                  width: 101.0,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColor.aquaCasper2,
+                                                      image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${activeItineraries[index].profileImg}"),
+                                                          fit: BoxFit.fill),
+                                                      borderRadius: BorderRadius.circular(8.0),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            offset: const Offset(2, 2),
+                                                            color: Colors.grey.withOpacity(0.6),
+                                                            blurRadius: 3),
+                                                        BoxShadow(
+                                                            offset: const Offset(-3, -3),
+                                                            color: Colors.grey.withOpacity(0.1),
+                                                            blurRadius: 3)
+                                                      ]
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      Row(children: [
+                                                        Icon(Icons.location_on,color: AppColor.whiteColor,),
+                                                        SizedBox(
+                                                          width: 70,
+                                                          child: Text(
+                                                            "${activeItineraries[index].title??''}",
+                                                            style: TextStyle(
+                                                                fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
+                                                          ),
+                                                        )
+                                                      ],),
+                                                      SizedBox(height: 10,),
+
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          return InkWell(
+                                            onTap: (){
+                                              String id = activeItineraries[index].sId??'';
+                                              _navigationService.navigateTo(
+                                                  summaryRoutEdit, arguments:{ "id": id});
+
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10.0, top: 0),
+                                              child: Container(
+                                                height: 111.0,
+                                                width: 101.0,
+                                                decoration: BoxDecoration(
+                                                    color: AppColor.aquaCasper2,
+                                                    image:activeItineraries[index].profileImg == null?null :DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${activeItineraries[index].profileImg}"),
+                                                        fit: BoxFit.fill),
+                                                    borderRadius: BorderRadius.circular(8.0),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                          offset: const Offset(2, 2),
+                                                          color: Colors.grey.withOpacity(0.6),
+                                                          blurRadius: 3),
+                                                      BoxShadow(
+                                                          offset: const Offset(-3, -3),
+                                                          color: Colors.grey.withOpacity(0.1),
+                                                          blurRadius: 3)
+                                                    ]
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Row(children: [
+                                                      Icon(Icons.location_on,color: AppColor.whiteColor,),
+                                                      SizedBox(
+                                                        width: 70,
+                                                        child: Text(
+                                                          "${activeItineraries[index].title??''}",
+                                                          style: TextStyle(
+                                                              fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
+                                                        ),
+                                                      )
+                                                    ],),
+                                                    SizedBox(height: 10,),
+
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  )
+
+
+                              ),
                               SizedBox(height: 10,),
-
                               const SizedBox(
                                 height: 20.0,
                               ),

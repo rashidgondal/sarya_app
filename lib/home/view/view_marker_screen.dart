@@ -7,6 +7,7 @@ import 'package:sarya/home/model/stop_request.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 
+import '../../core/network/routes/api_routes.dart';
 import '../../navigation/router_path.dart';
 import '../../pinLocationMap.dart';
 import '../../theme/color_scheme.dart';
@@ -28,7 +29,7 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> with TickerProvider
   void initState() {
     list = widget.map['listOfMarker'];
     print("widget.map['listOfMarker'].....${widget.map['listOfMarker'].length}");
-    _tabControllerMain = TabController(length: 3, vsync: this);
+    _tabControllerMain = TabController(length: widget.map['totalDays'], vsync: this, initialIndex: widget.map['step']);
 
     super.initState();
     _navigationService = locator<NavigationService>();
@@ -61,12 +62,14 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> with TickerProvider
                       width: 60,
                       child: IconButton(
                         onPressed: (){
+                          int day = _tabControllerMain.index +1;
+
                           StopRequest stopRequest = StopRequest(itinerary:
                                 StopItinerary(
                                     sId: widget.map['id'], active: true,
-                                    day: widget.map['totalDays']));
+                                    day: day));
 
-                          context.read<StopItineraryStateCubits>().getStopItinerary(stopRequest: stopRequest, service: _navigationService);
+                          context.read<StopItineraryStateCubits>().getStopItinerary(stopRequest: stopRequest, service: _navigationService, buttonName: 'back');
                         },
                         icon: Icon(Icons.arrow_back_ios,size: 30,),
                       ),
@@ -98,7 +101,7 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> with TickerProvider
                                 blurRadius: 2)
                           ], borderRadius: BorderRadius.circular(20)),
                           onTap: (i) {
-                           // _taskViewModel.setInitialIndex(i);
+                            print("i...........$i");
                           },
                           tabs: list.map<Widget>((e){
                             int day = list.indexOf(e);
@@ -118,7 +121,9 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> with TickerProvider
                     SizedBox(width: 5,),
                     InkWell(
                       onTap: (){
-                        _navigationService.navigateTo(tripCompletedRoute,arguments: {"id":widget.map['id'], "day":"2"});
+                        int day = _tabControllerMain.index +1;
+
+                        _navigationService.navigateTo(tripCompletedRoute,arguments: {"id":widget.map['id'], "day":"$day"});
                       },
                       child: Container(
                         height: 30,
@@ -179,7 +184,7 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> with TickerProvider
                                     width: 70,
                                     child: CachedNetworkImage(
                                       imageUrl:
-                                      "${place_information!.list_of_images[i]}",
+                                      "${ApiRoutes.picBaseURL}${place_information!.list_of_images[i]}",
                                       placeholder: (context, url) => Center(
                                           child: CircularProgressIndicator()),
                                       fit: BoxFit.cover,

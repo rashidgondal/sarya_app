@@ -11,7 +11,11 @@ class PurchaseItinerariesCubits extends Cubit<PurchaseItinerariesStates> {
       emit(PurchaseItineraryLoading());
       final  result = await PurchaseSoldItineraryRepository.instance.getAllPurchase();
       GetAllPurchasesResponse response = GetAllPurchasesResponse.fromJson(result);
-      emit(PurchaseItineraryLoaded(purchasedItineraries: response.purchased??[], createdItineraries: response.created??[]));
+      print("active...........${response.active.toString()}");
+      if(response.active != null){
+
+      }
+      emit(PurchaseItineraryLoaded(purchasedItineraries: response.purchased??[], createdItineraries: response.created??[], activeItineraries: response.active??[]));
 
     }catch(e){
       print("catch.............${e.toString()}");
