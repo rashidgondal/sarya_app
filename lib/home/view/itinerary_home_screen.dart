@@ -320,7 +320,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                           if(index == 0){
                                             return InkWell(
                                               onTap: (){
-                                                List<List<FlagInformation>> list = [];
+                                                _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":"active"});
+
+                                                /*    List<List<FlagInformation>> list = [];
 
                                                 for (int i = 0; i < activeItineraries[index].days!.length; i++) {
                                                   List<FlagInformation> listOFFlag = [];
@@ -380,7 +382,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
                                                 String id = activeItineraries[index].sId??'';
                                                 _navigationService.navigateTo(mapViewRoute,arguments: {"listOfMarker":list, 'totalDays':activeItineraries[index].totalDays, "id": id, "step":activeItineraries[index].step??0});
-                                              },
+                                              */},
                                               child: Padding(
                                                 padding: const EdgeInsets.only(
                                                     left: 30.0,right: 10,top: 0),
@@ -567,7 +569,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                                         ],
                                                       ),
                                                       Text(
-                                                        "${timeago.format(DateTime.parse('${purchasedItineraries[index].createdAt}'))} , ${purchasedItineraries[index].totalDays} day package",
+                                                        '',
+                                                        //"${timeago.format(DateTime.parse('${purchasedItineraries[index].createdAt}'))} , ${purchasedItineraries[index].totalDays} day package",
                                                         style: TextStyle(
                                                             fontSize: 11.0,
                                                             fontWeight: FontWeight.w500,
@@ -619,7 +622,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                                     ],
                                                   ),
                                                   const Spacer(),
-                                                  Container(
+                                               /*   Container(
                                                     padding: EdgeInsets.symmetric(
                                                         horizontal: 10, vertical: 10),
                                                     decoration: BoxDecoration(
@@ -627,13 +630,14 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                                       borderRadius: BorderRadius.circular(20),
                                                     ),
                                                     child: Text(
-                                                      "\$${purchasedItineraries[index].cost}",
+                                                      */
+                                                  /*"\$${purchasedItineraries[index].cost}"*//*"",
                                                       style: TextStyle(
                                                           fontWeight: FontWeight.w500,
                                                           fontSize: 10,
                                                           color: AppColor.lightIndigo),
                                                     ),
-                                                  ),
+                                                  ),*/
                                                   SizedBox(
                                                     width: 5,
                                                   )

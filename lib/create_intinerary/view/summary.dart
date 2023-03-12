@@ -16,23 +16,17 @@ import 'package:sarya/home/home_view_model/start_itinerary_cubits.dart';
 import 'package:sarya/home/itineraryByIDResponse.dart';
 import 'package:sarya/home/model/start_request.dart';
 import 'package:sarya/pinLocationMap.dart';
-import 'package:sarya/story_view/story_view.dart';
 import 'package:sarya/utils/constant.dart';
 import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
-
-import '../../authentication/signin/models/signin_response_model.dart';
 import '../../core/network/routes/api_routes.dart';
-import '../../customWidgets/data_loading.dart';
-import '../../customWidgets/dialoge_activities_excursion.dart';
 import '../../helper/helper_methods.dart';
 import '../../home/model/purchase_itinerary_request.dart' as req;
 import '../../locator.dart';
 import '../intinerary_view_model/CheckList_states.dart';
 import '../intinerary_view_model/activity_cubits.dart';
 import '../intinerary_view_model/summary_update_intinerary_cubits.dart';
-import '../intinerary_view_model/summary_update_intinerary_states.dart';
 import '../model/summary_update_intinerary_request.dart' ;
 
 class SummaryScreen extends StatefulWidget {
@@ -112,6 +106,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 ByIDResult byIDResult = state.byIDResult;
                 var destination = byIDResult.destination;
                 List<List<FlagInformation>> list = state.listOfLatLng??[];
+                ByIDState? stateID = state.state;
 
                 return  Scaffold(
                   backgroundColor: AppColor.whiteColor,
@@ -209,11 +204,34 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       ):
                       widget.routeName  == start ? Center(child: InkWell(
                         onTap: () {
-                          StartRequest startRequest = StartRequest(itinerary: StartItinerary(sId: widget.map['id'], active: true));
-                          context.read<StartItineraryStateCubits>().setStartItineraryState(startRequest: startRequest);
+                         if(widget.map['type'] == 'active') {
+                           StartRequest startRequest = StartRequest(
+                               itinerary: StartItinerary(
+                                   sId: widget.map['id'], active: true));
 
-                          _navigationService.navigateTo(mapViewRoute,arguments: {"listOfMarker":list, 'totalDays':byIDResult.totalDays, "id": widget.map['id'], "step":0});
+                           context.read<StartItineraryStateCubits>()
+                               .setStartItineraryState(
+                               startRequest: startRequest);
+                         }
 
+                         if(stateID != null) {
+                           int day = stateID.day??0;
+                           _navigationService.navigateTo(mapViewRoute,
+                               arguments: {
+                                 "listOfMarker": list,
+                                 'totalDays': byIDResult.totalDays,
+                                 "id": widget.map['id'],
+                                 "step": day
+                               });
+                         }else{
+                           _navigationService.navigateTo(mapViewRoute,
+                               arguments: {
+                                 "listOfMarker": list,
+                                 'totalDays': byIDResult.totalDays,
+                                 "id": widget.map['id'],
+                                 "step": 0
+                               });
+                         }
                         },
                         child: Container(
                           height: 46.0,

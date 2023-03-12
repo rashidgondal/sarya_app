@@ -146,7 +146,7 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
 
 
         emit(ItineraryByIDLoaded(
-            byIDResult: idResponse.result!, listOfLatLng: list));
+            byIDResult: idResponse.result!, listOfLatLng: list, state: idResponse.state));
       }
       else{
 

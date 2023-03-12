@@ -1,13 +1,16 @@
 class ItineraryByIDResponse {
   String? msg;
   ByIDResult? result;
+  ByIDState? state;
 
-  ItineraryByIDResponse({this.msg, this.result});
+  ItineraryByIDResponse({this.msg, this.result, this.state});
 
   ItineraryByIDResponse.fromJson(Map<String, dynamic> json) {
     msg = json['msg'];
     result =
     json['result'] != null ? new ByIDResult.fromJson(json['result']) : null;
+    state = json['state'] != null ? new ByIDState.fromJson(json['state']) : null;
+
   }
 
   Map<String, dynamic> toJson() {
@@ -15,6 +18,9 @@ class ItineraryByIDResponse {
     data['msg'] = this.msg;
     if (this.result != null) {
       data['result'] = this.result!.toJson();
+    }
+    if (this.state != null) {
+      data['state'] = this.state!.toJson();
     }
     return data;
   }
@@ -285,6 +291,51 @@ class ByIDBreakfast {
     data['coupon'] = this.coupon;
     data['rating'] = this.rating;
     data['comments'] = this.comments;
+    return data;
+  }
+}
+
+class ByIDState {
+  String? userName;
+  String? itineraryID;
+  bool? active;
+  bool? completed;
+  int? day;
+  String? purchaseTime;
+  String? startTime;
+  String? endTime;
+
+  ByIDState(
+      {this.userName,
+        this.itineraryID,
+        this.active,
+        this.completed,
+        this.day,
+        this.purchaseTime,
+        this.startTime,
+        this.endTime});
+
+  ByIDState.fromJson(Map<String, dynamic> json) {
+    userName = json['userName'];
+    itineraryID = json['itineraryID'];
+    active = json['active'];
+    completed = json['completed'];
+    day = json['day'];
+    purchaseTime = json['purchaseTime'];
+    startTime = json['startTime'];
+    endTime = json['endTime'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['userName'] = this.userName;
+    data['itineraryID'] = this.itineraryID;
+    data['active'] = this.active;
+    data['completed'] = this.completed;
+    data['day'] = this.day;
+    data['purchaseTime'] = this.purchaseTime;
+    data['startTime'] = this.startTime;
+    data['endTime'] = this.endTime;
     return data;
   }
 }
