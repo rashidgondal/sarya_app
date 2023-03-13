@@ -187,7 +187,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                     const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 20.0,
+                        crossAxisSpacing: 10.0,
                         mainAxisExtent: 50.0),
                   ),
                 ),

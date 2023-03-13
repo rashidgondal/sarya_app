@@ -117,58 +117,7 @@ class _FoodAndShoppingInformationState
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      List<String> publicImageName = [];
-                      List<String> imageName = [];
-                      List<String> publicImagePath = [];
-                      List<String> selectedImagePath = [];
-
-                      selected_public_Images!.forEach((element) {
-                        publicImageName.add(element.name_of_file!);
-                        publicImagePath.add(element.file!.path);
-                      });
-
-                      selectedImages!.forEach((element) {
-                        imageName.add(element.name_of_file!);
-                        selectedImagePath.add(element.file!.path);
-
-                      });
-
-                      int rate = ratingData.toInt();
-                      create_intenerary.Breakfast? breakfast =
-                          create_intenerary.Breakfast(
-                              location: location,
-                              name: nameOfPlace,
-                              comments: commentController.text,
-                              coupon: promoController.text,
-                              images: imageName,
-                              imagesPublic: publicImageName,
-                              rating: rate,
-                              imagesPublicPath: publicImagePath,
-                              imagesSelectPath: selectedImagePath
-                          );
-
-                      _navigationService.goBack(value: breakfast);
-                    },
-                    child: Container(
-                      height: 46.0,
-                      width: 150.0,
-                      decoration: BoxDecoration(
-                          color: AppColor.buttonColor,
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: const Center(
-                        child: Text(
-                          "Done",
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w500,
-                              color: AppColor.whiteColor),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                  _buildDone()                ],
               ),
             ),
             body: Container(
@@ -199,6 +148,9 @@ class _FoodAndShoppingInformationState
 
                                     location.coordinates = [places[0].geometry.location.lng,places![0].geometry.location.lat];
                                     nameOfPlace = places![0].name;
+                                    setState(() {
+
+                                    });
 
                                   }
                                 },
@@ -454,6 +406,90 @@ class _FoodAndShoppingInformationState
         ),
       ),
     );
+  }
+
+
+  _buildDone(){
+    if(
+        selected_public_Images == null ||
+        selectedImages == null ||
+        promoController.text.isEmpty ||
+        commentController.text.isEmpty ||
+        ratingData == 0.0 ||
+            nameOfPlace == ''
+
+
+    ) {
+      return Container(
+        height: 46.0,
+        width: 150.0,
+        decoration: BoxDecoration(
+            color: AppColor.colorLiteBlack4,
+            borderRadius: BorderRadius.circular(8.0)),
+        child: const Center(
+          child: Text(
+            "Done",
+            style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.w500,
+                color: AppColor.whiteColor),
+          ),
+        ),
+      );
+    }
+
+    return InkWell(
+      onTap: () {
+        List<String> publicImageName = [];
+        List<String> imageName = [];
+        List<String> publicImagePath = [];
+        List<String> selectedImagePath = [];
+
+        selected_public_Images!.forEach((element) {
+          publicImageName.add(element.name_of_file!);
+          publicImagePath.add(element.file!.path);
+        });
+
+        selectedImages!.forEach((element) {
+          imageName.add(element.name_of_file!);
+          selectedImagePath.add(element.file!.path);
+
+        });
+
+        int rate = ratingData.toInt();
+        create_intenerary.Breakfast? breakfast =
+        create_intenerary.Breakfast(
+            location: location,
+            name: nameOfPlace,
+            comments: commentController.text,
+            coupon: promoController.text,
+            images: imageName,
+            imagesPublic: publicImageName,
+            rating: rate,
+            imagesPublicPath: publicImagePath,
+            imagesSelectPath: selectedImagePath
+        );
+
+        _navigationService.goBack(value: breakfast);
+      },
+      child: Container(
+        height: 46.0,
+        width: 150.0,
+        decoration: BoxDecoration(
+            color: AppColor.buttonColor,
+            borderRadius: BorderRadius.circular(8.0)),
+        child: const Center(
+          child: Text(
+            "Done",
+            style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.w500,
+                color: AppColor.whiteColor),
+          ),
+        ),
+      ),
+    );
+
   }
 
 

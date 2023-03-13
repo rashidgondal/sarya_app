@@ -16,7 +16,9 @@ import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 import '../../core/network/routes/api_routes.dart';
+import '../../create_intinerary/intinerary_view_model/activity_cubits.dart';
 import '../../create_intinerary/intinerary_view_model/checklist_cubits.dart';
+import '../../create_intinerary/intinerary_view_model/transport_cubits.dart';
 import '../../create_intinerary/intinerary_view_model/trip_cubits.dart';
 import '../../customWidgets/drawer_screen.dart';
 import '../../helper/helper_methods.dart';
@@ -64,6 +66,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     getUserInfo();
     context.read<TripCubits>().getTrip();
     context.read<CheckListCubits>().getCheckList();
+    context.read<ActivityCubits>().getActivity();
+    context.read<TransportCubits>().getTransport();
     getCurrentLocation();
   }
 
