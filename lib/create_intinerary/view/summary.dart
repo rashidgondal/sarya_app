@@ -113,6 +113,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
           if (state is ItineraryByIDLoaded) {
             ByIDResult byIDResult = state.byIDResult;
             var destination = byIDResult.destination;
+            print('listOfLatLng..... ${state.listOfLatLng}');
             List<List<FlagInformation>> list = state.listOfLatLng ?? [];
             ByIDState? stateID = state.state;
             print('destination = ${destination}');
@@ -504,7 +505,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                         'country_name = ${element2.country_name}');
                                     print('selected_state = ${selected_state}');
                                     if (element2.country_name ==
-                                        '${selected_state}') {
+                                            '${selected_state}' ||
+                                        element2.country_name.isEmpty) {
                                       listOfFlag.add(element2);
                                     }
                                   });
