@@ -381,36 +381,57 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       return Padding(
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                                height: 60.0,
-                                                width: 70.0,
-                                                child: image_index != -1
-                                                    ? Image.asset(
-                                                        Flags.listOfFlag[
-                                                            image_index])
-                                                    : Icon(
-                                                        Icons.flag,
-                                                        size: 40,
-                                                        color: AppColor
-                                                            .lightIndigo,
-                                                      )),
-                                            SizedBox(
-                                              height: 5,
+                                        child: InkWell(
+                                          onTap: () {
+                                            selected_state = '';
+                                            setState(() {});
+                                            selected_state = destination[index];
+                                            setState(() {});
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 5),
+                                            decoration: selected_state ==
+                                                    destination[index]
+                                                ? BoxDecoration(
+                                                    color: AppColor.aquaCasper2,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            7))
+                                                : BoxDecoration(),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                    width: 70.0,
+                                                    child: image_index != -1
+                                                        ? Image.asset(
+                                                            Flags.listOfFlag[
+                                                                image_index])
+                                                        : Icon(
+                                                            Icons.flag,
+                                                            size: 40,
+                                                            color: AppColor
+                                                                .lightIndigo,
+                                                          )),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  "${destination.isEmpty ? "" : destination[index]}",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: AppColor
+                                                          .headingColor2,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                )
+                                              ],
                                             ),
-                                            Text(
-                                              "${destination.isEmpty ? "" : destination[index]}",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: AppColor.headingColor2,
-                                                  fontWeight: FontWeight.w500),
-                                            )
-                                          ],
+                                          ),
                                         ),
                                       );
                                     },
