@@ -97,7 +97,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 leading: IconButton(
                     icon: map == null
                         ? SvgPicture.asset('user'.svg, height: 26.0, width: 26.0,)
-                        : SvgPicture.network(map!['avatar'], height: 26.0, width: 26.0,),
+                        :
+
+                    SvgPicture.network(map!['avatar'], height: 26.0, width: 26.0,),
                     onPressed: () {
                       _scaffoldKey.currentState!.openDrawer();
                     }),
@@ -206,7 +208,11 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                                   width: 101.0,
                                                   decoration: BoxDecoration(
                                                       color: AppColor.aquaCasper2,
-                                                      image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${createdItineraries[index].profileImg}"),
+                                                      image: DecorationImage(
+                                                          onError: (o, s){
+
+                                                          },
+                                                          image: NetworkImage("${ApiRoutes.picBaseURL}${createdItineraries[index].profileImg}",),
                                                           fit: BoxFit.fill),
                                                       borderRadius: BorderRadius.circular(8.0),
                                                       boxShadow: [
