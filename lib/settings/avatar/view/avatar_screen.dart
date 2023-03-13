@@ -105,7 +105,9 @@ class _AvatarScreenState extends State<AvatarScreen> {
                     child: InkWell(
                       onTap: (){
                         _navigationService.navigateTo(avatarRout,
-                            arguments: {'isFromSignUp':false});
+                            arguments: {'isFromSignUp':false})!.then((value) {
+                          getUserInfo();
+                        });
                       },
                       child: Container(
                         height: 50.0,

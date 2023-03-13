@@ -66,15 +66,21 @@ class SearchResult {
         this.live});
 
   SearchResult.fromJson(Map<String, dynamic> json) {
-    checklist = json['checklist'].cast<String>();
+    if(json['checklist'] != null) {
+      checklist = json['checklist'].cast<String>();
+    }
     sId = json['_id'];
     userName = json['userName'];
-    destination = json['destination'].cast<String>();
+    if(json['destination'] != null) {
+      destination = json['destination'].cast<String>();
+    }
     title = json['title'];
     summary = json['summary'];
     cost = json['cost'];
     tripCost = json['tripCost'];
-    tripType = json['tripType'].cast<String>();
+    if(json['tripType'] != null) {
+      tripType = json['tripType'].cast<String>();
+    }
     totalDays = json['totalDays'];
     step = json['step'];
     if (json['days'] != null) {
@@ -142,14 +148,18 @@ class Days {
   Days.fromJson(Map<String, dynamic> json) {
     country = json['country'];
     airport = json['airport'];
-    transportation = json['transportation'].cast<String>();
+    if(json['transportation'] != null) {
+      transportation = json['transportation'].cast<String>();
+    }
     if (json['accomodation'] != null) {
       accomodation = <Accomodation>[];
       json['accomodation'].forEach((v) {
         accomodation!.add(new Accomodation.fromJson(v));
       });
     }
-    activities = json['activities'].cast<String>();
+    if(json['activities'] != null) {
+      activities = json['activities'].cast<String>();
+    }
     breakfast = json['breakfast'] != null
         ? new Breakfast.fromJson(json['breakfast'])
         : null;
@@ -228,8 +238,12 @@ class Breakfast {
   Breakfast.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     coordinates = json['coordinates'];
-    images = json['images'].cast<String>();
-    imagesPublic = json['imagesPublic'].cast<String>();
+    if(json['images'] != null) {
+      images = json['images'].cast<String>();
+    }
+    if(json['imagesPublic'] != null) {
+      imagesPublic = json['imagesPublic'].cast<String>();
+    }
     coupon = json['coupon'];
     rating = json['rating'];
     comments = json['comments'];

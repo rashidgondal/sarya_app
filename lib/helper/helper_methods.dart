@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show SystemUiOverlayStyle, rootBundle;
 import 'package:geolocator/geolocator.dart';
 
 String zeroLeadValue({required String value}) {
@@ -77,4 +78,32 @@ void cupertino_picker_sheet(
           ),
         ),
       ));
+}
+
+class StatusBarStyle {
+
+  static Widget statusBarStyle({Widget? child}) {
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: Platform.isAndroid
+          ? SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarColor: Colors.black,
+          systemNavigationBarColor: Colors.black,
+          statusBarIconBrightness: Brightness.light)
+          : SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarColor: Colors.black,
+          systemNavigationBarColor: Colors.black,
+          statusBarIconBrightness: Brightness.light),
+      child: child!,
+    );
+  }
+
+
+
+
+
+
 }

@@ -13,10 +13,15 @@ class SearchItineraryCubits extends Cubit<SearchItineraryStates> {
 
       final  result = await ShopIntineraryRepository.instance.getSearchItinerary(searchedKeyword: searchKeyWord);
       SearchItineraryResponse searchItineraryResponse = SearchItineraryResponse.fromJson(result);
-      SharedPrefs pref = SharedPrefs();
-      emit(SearchItineraryLoaded(searchItineraryResponse: searchItineraryResponse));
+      if(searchItineraryResponse.result != null){
+        emit(SearchItineraryLoaded(list: searchItineraryResponse.result??[]));
+      }else{
+        emit(SearchItineraryLoaded(list: []));
+
+      }
 
     }catch(e){
+      print("catch......................${e.toString()}");
       emit(const SearchItineraryFailure(error: ''));
     }
   }

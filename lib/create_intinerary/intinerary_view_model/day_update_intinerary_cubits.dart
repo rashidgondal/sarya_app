@@ -24,7 +24,7 @@ class DayUpdateIntineraryCubits extends Cubit<DayUpdateIntineraryStates> {
       emit(DayUpdateIntineraryLoaded());
       if(route == "Continue")
       {
-        navigationService.navigateTo(summaryRoutSold,arguments: {"id":itineraryId});
+        navigationService.navigateTo(summaryRoutSold,arguments: {"id":itineraryId, "type":""});
       }
       else
       {

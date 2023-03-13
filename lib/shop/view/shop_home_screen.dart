@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -350,9 +351,17 @@ class _ShopScreenState extends State<ShopScreen> {
                                   Container(
                                     height: 72.0,
                                     width: 72.0,
-                                    child: Image.network(
-                                        "${ApiRoutes.picBaseURL}${list[index].profileImg}",
-                                        fit: BoxFit.cover),
+                                    child: CachedNetworkImage(
+                                      imageUrl: "${ApiRoutes.picBaseURL}${list[index].profileImg}",
+                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                          Row(
+                                            children: [
+                                              CupertinoActivityIndicator(),
+                                            ],
+                                          ),
+                                      errorWidget: (context, url, error) => SizedBox(),
+                                    ),
+
                                     decoration: BoxDecoration(
                                         color: AppColor.aquaCasper2,
                                         borderRadius:

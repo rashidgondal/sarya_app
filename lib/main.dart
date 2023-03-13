@@ -36,6 +36,7 @@ import 'create_intinerary/intinerary_view_model/day_update_intinerary_cubits.dar
 import 'create_intinerary/intinerary_view_model/delete_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/summary_update_intinerary_cubits.dart';
 import 'create_intinerary/intinerary_view_model/trip_cubits.dart';
+import 'helper/helper_methods.dart';
 import 'home/home_view_model/created_itinerary_cubits.dart';
 import 'home/home_view_model/itinerary_by_id_cubits.dart';
 import 'home/home_view_model/purchase_itineraries_cubits.dart';
@@ -101,7 +102,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MyHomePage(),
+        home: StatusBarStyle.statusBarStyle(child: MyHomePage()),
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: routes.generateRoute,
       ),

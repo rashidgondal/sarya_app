@@ -73,7 +73,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         width: 169,
                         child:  map ==null?
                         SvgPicture.asset('user'.svg):
-                        SvgPicture.network(map!["avatar"]!, height: 60,width: 169,) ,
+                        SvgPicture.network(map!["avatar"], height: 60,width: 169,) ,
                       ),
                       const  SizedBox(height: 15,),
 

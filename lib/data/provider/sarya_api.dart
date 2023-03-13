@@ -188,7 +188,9 @@ class SaryaAPI {
     try {
       String url = '';
       url = ApiRoutes.searchIntinerary+searchedKeyword;
-      return await _http.iGet(url);
+      print("url.........$url");
+      var data = await _http.iGet(url);
+      return  data;
     } catch (e) {
       rethrow;
     }
@@ -198,7 +200,8 @@ class SaryaAPI {
     try {
       String url = '';
       url = 'https://airlabs.co/api/v9/airports?iata_code=$search&api_key=44d8a4aa-4c02-4a5b-9fd2-f21717ee9d4c';
-      return await _http.iGet(url);
+      var data  = await _http.iGet(url);
+      return data;
     } catch (e) {
       rethrow;
     }

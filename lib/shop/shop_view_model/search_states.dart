@@ -27,7 +27,7 @@ class SearchItineraryLoading extends SearchItineraryStates {
 }
 
 class SearchItineraryLoaded extends SearchItineraryStates {
-  final SearchItineraryResponse searchItineraryResponse;
-  const SearchItineraryLoaded({required this.searchItineraryResponse});
+  final  List<SearchResult> list;
+  const SearchItineraryLoaded({required this.list});
 }
 
