@@ -46,6 +46,8 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   void initState() {
     int dayLength = widget.map['totalDays'];
     countryList = widget.map['country'];
+    list_of_days[selected_index].country = countryList[selected_flag];
+
     for (var i = 0; i < dayLength; i++) {
       list_of_days.add(create_intenerary.Days(
         airport: '',
@@ -210,8 +212,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
 
                             return InkWell(
                               onTap: () {
-                                list_of_days[selected_index].country =
-                                countryList[index];
+                                list_of_days[selected_index].country = countryList[index];
                                 selected_flag = index;
                                 setState(() {});
                               },
@@ -899,15 +900,16 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
 
   Widget _buildContinue(){
 
-    if (list_of_days[selected_index].airport ==null ||
+    if (list_of_days[selected_index].airport == null ||
         list_of_days[selected_index].transportation == null ||
         list_of_days[selected_index].accomodation == null ||
-        list_of_days[selected_index].accomodation == null ||
+        list_of_days[selected_index].activities == null ||
         list_of_days[selected_index].breakfast == null ||
         list_of_days[selected_index].lunch == null ||
         list_of_days[selected_index].dinner == null ||
         list_of_days[selected_index].marketMallsStores == null ||
-        list_of_days[selected_index].coffeeClubsLounges == null
+        list_of_days[selected_index].coffeeClubsLounges == null||
+        list_of_days[selected_index].country == null
     ) {
       return Container(
         height: 46.0,
