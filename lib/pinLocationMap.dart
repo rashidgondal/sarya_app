@@ -1,11 +1,11 @@
-  import 'package:custom_info_window/custom_info_window.dart';
+import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-  class PinLocationMap extends StatefulWidget {
+class PinLocationMap extends StatefulWidget {
   final List<FlagInformation> list_of_flag_information;
   final double height;
   final double width;
@@ -24,7 +24,7 @@ import 'package:url_launcher/url_launcher.dart';
   State<PinLocationMap> createState() => _PinLocationMapState();
 }
 
-  class _PinLocationMapState extends State<PinLocationMap> {
+class _PinLocationMapState extends State<PinLocationMap> {
   String? mapStyle;
   var markers = <MarkerId, Marker>{};
   BitmapDescriptor? flagIcon;
@@ -252,7 +252,7 @@ import 'package:url_launcher/url_launcher.dart';
   }
 }
 
-  launchURL(String url) async {
+launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
@@ -260,14 +260,16 @@ import 'package:url_launcher/url_launcher.dart';
   }
 }
 
-  class FlagInformation {
+class FlagInformation {
   String title;
   String subTitle;
   LatLng latLng;
   List<String> list_of_images;
+  String country_name;
   FlagInformation(
       {required this.title,
       required this.subTitle,
       required this.latLng,
+      required this.country_name,
       required this.list_of_images});
 }

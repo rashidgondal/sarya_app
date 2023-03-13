@@ -83,9 +83,12 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
         for (int i = 0; i < idResponse.result!.days!.length; i++) {
           List<FlagInformation> listOFFlag = [];
           listOFFlag.add(FlagInformation(
-              list_of_images: idResponse.result!.days![i].breakfast!.images??[],
-              title: '${idResponse.result!.days![i].breakfast!.name??''}',
-              subTitle: '${idResponse.result!.days![i].breakfast!.comments??''}',
+              list_of_images:
+                  idResponse.result!.days![i].breakfast!.images ?? [],
+              title: '${idResponse.result!.days![i].breakfast!.name ?? ''}',
+              subTitle:
+                  '${idResponse.result!.days![i].breakfast!.comments ?? ''}',
+              country_name: '${idResponse.result!.days![i].country}',
               latLng: LatLng(
                 idResponse
                     .result!.days![i].breakfast!.location!.coordinates![1],
@@ -93,29 +96,31 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
                     .result!.days![i].breakfast!.location!.coordinates![0],
               )));
           listOFFlag.add(FlagInformation(
-              list_of_images: idResponse.result!.days![i].lunch!.images??[],
-              title: '${idResponse.result!.days![i].lunch!.name??''}',
-              subTitle: '${idResponse.result!.days![i].lunch!.comments??''}',
+              list_of_images: idResponse.result!.days![i].lunch!.images ?? [],
+              title: '${idResponse.result!.days![i].lunch!.name ?? ''}',
+              subTitle: '${idResponse.result!.days![i].lunch!.comments ?? ''}',
+              country_name: '${idResponse.result!.days![i].country}',
               latLng: LatLng(
-                idResponse.result!.days![i].lunch!.location!
-                    .coordinates![1],
-                idResponse.result!.days![i].lunch!.location!
-                    .coordinates![0],
+                idResponse.result!.days![i].lunch!.location!.coordinates![1],
+                idResponse.result!.days![i].lunch!.location!.coordinates![0],
               )));
           listOFFlag.add(FlagInformation(
-              list_of_images: idResponse.result!.days![i].dinner!.images??[],
-              title: '${idResponse.result!.days![i].dinner!.name??''}',
-              subTitle: '${idResponse.result!.days![i].dinner!.comments??''}',
+              list_of_images: idResponse.result!.days![i].dinner!.images ?? [],
+              title: '${idResponse.result!.days![i].dinner!.name ?? ''}',
+              subTitle: '${idResponse.result!.days![i].dinner!.comments ?? ''}',
+              country_name: '${idResponse.result!.days![i].country}',
               latLng: LatLng(
-                idResponse.result!.days![i].dinner!.location!
-                    .coordinates![1],
-                idResponse.result!.days![i].dinner!.location!
-                    .coordinates![0],
+                idResponse.result!.days![i].dinner!.location!.coordinates![1],
+                idResponse.result!.days![i].dinner!.location!.coordinates![0],
               )));
           listOFFlag.add(FlagInformation(
-              list_of_images: idResponse.result!.days![i].marketMallsStores!.images??[],
-              title: '${idResponse.result!.days![i].marketMallsStores!.name??''}',
-              subTitle: '${idResponse.result!.days![i].marketMallsStores!.comments??''}',
+              list_of_images:
+                  idResponse.result!.days![i].marketMallsStores!.images ?? [],
+              title:
+                  '${idResponse.result!.days![i].marketMallsStores!.name ?? ''}',
+              subTitle:
+                  '${idResponse.result!.days![i].marketMallsStores!.comments ?? ''}',
+              country_name: '${idResponse.result!.days![i].country}',
               latLng: LatLng(
                 idResponse.result!.days![i].marketMallsStores!.location!
                     .coordinates![1],
@@ -123,9 +128,13 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
                     .coordinates![0],
               )));
           listOFFlag.add(FlagInformation(
-              list_of_images: idResponse.result!.days![i].coffeeClubsLounges!.images??[],
-              title: '${idResponse.result!.days![i].coffeeClubsLounges!.name??''}',
-              subTitle: '${idResponse.result!.days![i].coffeeClubsLounges!.comments??''}',
+              list_of_images:
+                  idResponse.result!.days![i].coffeeClubsLounges!.images ?? [],
+              title:
+                  '${idResponse.result!.days![i].coffeeClubsLounges!.name ?? ''}',
+              subTitle:
+                  '${idResponse.result!.days![i].coffeeClubsLounges!.comments ?? ''}',
+              country_name: '${idResponse.result!.days![i].country}',
               latLng: LatLng(
                 idResponse.result!.days![i].coffeeClubsLounges!.location!
                     .coordinates![1],
