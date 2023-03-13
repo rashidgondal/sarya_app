@@ -18,6 +18,8 @@ class DayUpdateIntineraryCubits extends Cubit<DayUpdateIntineraryStates> {
       {required DayDesignIntineraryRequest dayDesignIntineraryRequest, required NavigationService navigationService, required String route, required String itineraryId}) async {
     try {
       emit(DayUpdateIntineraryLoading());
+      print("log.............1...${dayDesignIntineraryRequest.toJson()}");
+
 
       var res = await CreateIntineraryRepository.instance.updateIntinerary(body: dayDesignIntineraryRequest.toJson(), id: itineraryId);
 
