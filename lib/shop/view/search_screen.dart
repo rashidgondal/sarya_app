@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/shop/shop_view_model/search_cubits.dart';
 import 'package:sarya/shop/shop_view_model/search_states.dart';
 import 'package:sarya/theme/color_scheme.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import '../../navigation/router_path.dart';
 import '../model/search_itinerary_response.dart';
 
@@ -196,13 +195,10 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                                                 MainAxisAlignment.center,
                                                 crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                                children: const [
-                                                  Icon(
-                                                    Icons.question_mark,
-                                                    size: 10.0,
-                                                  ),
+                                                children: [
+
                                                   Text(
-                                                    " United Arab Emirate",
+                                                    "${list[index].destination.toString().replaceAll('[', '').replaceAll(']', '').trim()}",
                                                     style: TextStyle(
                                                         fontSize: 11.0,
                                                         fontWeight: FontWeight.w500,
@@ -210,8 +206,8 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                                                   ),
                                                 ],
                                               ),
-                                              const Text(
-                                                "3 months Ago, 5 days Package",
+                                              Text(
+                                                "${timeago.format(DateTime.parse('${list[index].createdAt}'))} , ${list[index].totalDays} day package",
                                                 style: TextStyle(
                                                     fontSize: 11.0,
                                                     fontWeight: FontWeight.w500,

@@ -46,8 +46,6 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
   void initState() {
     int dayLength = widget.map['totalDays'];
     countryList = widget.map['country'];
-    list_of_days[selected_index].country = countryList[selected_flag];
-    print("ccccccc.............."+countryList[selected_flag]);
 
     for (var i = 0; i < dayLength; i++) {
       list_of_days.add(create_intenerary.Days(
@@ -62,6 +60,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
         marketMallsStores: create_intenerary.Breakfast(),
       ));
     }
+    list_of_days[selected_index].country = countryList[selected_flag];
+    print("ccccccc.............."+countryList[selected_flag]);
+
     super.initState();
     _navigationService = locator<NavigationService>();
   }
@@ -306,7 +307,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                             }
 
                             list_of_days[selected_index].airport =
-                            value[0];
+                            value;
                             setState(() {});
                           }
                         });
@@ -440,13 +441,10 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                                   print('length................... ${list!.length}');
 
                                   list_of_days[selected_index].accomodation = list;
+                                  setState(() {
 
-                                  /*  listOfSelectedPlaces = places!;
-                                  //list_of_accommodation.add(create_intenerary.Accomodation());
-                                  print('length ${places!.length}');
-                                  print('marker_id_${places![0].geometry.location.lat}_${places[0].geometry.location.lng}');
-                                  print('${places![0].name}');
-                                  print('${places![0].vicinity}');*/
+                                  });
+
                                 }
                               },
                             ),
@@ -827,12 +825,14 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
       if (list_of_days[selected_index].airport ==null ||
           list_of_days[selected_index].transportation == null ||
           list_of_days[selected_index].accomodation == null ||
-          list_of_days[selected_index].accomodation == null ||
+          list_of_days[selected_index].activities == null ||
           list_of_days[selected_index].breakfast == null ||
           list_of_days[selected_index].lunch == null ||
           list_of_days[selected_index].dinner == null ||
           list_of_days[selected_index].marketMallsStores == null ||
-          list_of_days[selected_index].coffeeClubsLounges == null
+          list_of_days[selected_index].coffeeClubsLounges == null ||
+          list_of_days[selected_index].country == null
+
       ) {
         return Container(
           height: 46.0,

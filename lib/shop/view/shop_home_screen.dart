@@ -391,10 +391,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Icon(
-                                            Icons.question_mark,
-                                            size: 10.0,
-                                          ),
+
                                           Text(
                                             "${list[index].destination.toString().replaceAll('[', '').replaceAll(']', '').trim()}",
                                             style: TextStyle(

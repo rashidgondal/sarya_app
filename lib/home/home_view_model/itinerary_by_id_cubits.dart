@@ -70,7 +70,7 @@ class ItineraryByIDCubits extends Cubit<ItineraryByIDStates> {
               )));
           listOFFlag.add(FlagInformation(
               list_of_images: idResponse.result!.days![i].marketMallsStores!.images??[],
-              title: '${idResponse.result!.days![i].marketMallsStores!.name??''}',
+              title: '${idResponse.result!.days![i].marketMallsStores?.name??''}',
               subTitle: '${idResponse.result!.days![i].marketMallsStores!.comments??''}',
               latLng: LatLng(
                 idResponse.result!.days![i].marketMallsStores!.location!

@@ -65,8 +65,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
 
     super.initState();
     _navigationService = locator<NavigationService>();
-    context.read<ActivityCubits>().getActivity();
-    context.read<TransportCubits>().getTransport();
+
   }
 
 

@@ -21,7 +21,7 @@ class _AirportSelectionState extends State<AirportSelection> {
 
   final TextEditingController textEditingController = TextEditingController();
 
-  List<String> tempList = [];
+  String selectedAirport = '';
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _AirportSelectionState extends State<AirportSelection> {
           Container(
             padding:const  EdgeInsets.symmetric(horizontal: 15),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InkWell(
                   onTap: () {
@@ -53,28 +53,6 @@ class _AirportSelectionState extends State<AirportSelection> {
                             fontSize: 15.0,
                             fontWeight: FontWeight.w500,
                             color: AppColor.colorBlack),
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop(tempList);
-
-                  },
-                  child: Container(
-                    height: 40.0,
-                    width: 120.0,
-                    decoration: BoxDecoration(
-                        color: AppColor.buttonColor,
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: const Center(
-                      child: Text(
-                        "OK",
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.whiteColor),
                       ),
                     ),
                   ),
@@ -148,43 +126,22 @@ class _AirportSelectionState extends State<AirportSelection> {
                           itemCount: list.length,
                           itemBuilder: (context, index) =>  Container(
                             height: 44.0,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             decoration: const BoxDecoration(
                               color: AppColor.whiteColor,
                             ),
-                            child: CheckboxListTile(
-                              title:Text(
+                            child: InkWell(
+                              onTap: (){
+                                selectedAirport = list[index]["name"];
+                                Navigator.of(context).pop(selectedAirport);
+                              },
+                              child: Text(
                                 "${list[index]["name"]}",
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w400,
                                     color: AppColor.headingColor),
                               ),
-                              onChanged:  (bool? value) {
-
-                                if(value == null){
-                                  return;
-                                }
-
-                                if(value){
-                                  listOfBool[index] = true;
-                                  tempList.add(list[index]['name']);
-                                  setState(() {
-
-                                  });
-                                }else{
-
-                                  listOfBool[index] = false;
-                                  tempList.remove(list[index]['name']);
-                                  setState(() {
-
-                                  });
-                                }
-
-                              } ,
-                              value: listOfBool[index],
-                              secondary: const Icon(Icons.airplanemode_active_outlined, color: AppColor.colorBlue,),
-
                             )
 
                           ),
