@@ -47,6 +47,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
     int dayLength = widget.map['totalDays'];
     countryList = widget.map['country'];
     list_of_days[selected_index].country = countryList[selected_flag];
+    print("ccccccc.............."+countryList[selected_flag]);
 
     for (var i = 0; i < dayLength; i++) {
       list_of_days.add(create_intenerary.Days(
