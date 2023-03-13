@@ -1991,7 +1991,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     hobbies: hobbyController.text,
                     favCountry: favCountryController.text,
                     extraInfo: tellMoreController.text,
-                    bankDetails: bankDetails));
+                    bankDetails: bankDetails,
+                    avatar: ''
+
+                ));
 
             _navigationService.navigateTo(termRoutSecond);
             return;

@@ -73,7 +73,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ],
           ),
         ),
-        Positioned(
+        widget.icon == null? Container(color: Colors.transparent,): Positioned(
           bottom: widget.maxLine == 1 ? 57 : 100,
           left: 20,
           child: Container(
@@ -81,7 +81,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             height: 20,
             child: Row(
               children: [
-                widget.icon == null? SizedBox(): widget.icon!,
+                 widget.icon!,
                 SizedBox(width: 5,),
                Container(
                   color: AppColor.whiteColor,

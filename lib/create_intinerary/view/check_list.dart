@@ -1,17 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:sarya/extensions/string_extension.dart';
-import 'package:sarya/helper/shared_prefs.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/navigation_service.dart';
-import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
-
 import '../../customWidgets/custom_text_field.dart';
-import '../intinerary_view_model/CheckList_states.dart';
-import '../intinerary_view_model/checklist_cubits.dart';
 
 class CheckListScreen extends StatefulWidget {
   final Map map;
@@ -24,23 +16,18 @@ class CheckListScreen extends StatefulWidget {
 class _CheckListScreenState extends State<CheckListScreen> {
   late NavigationService _navigationService;
   List<String> listOfCheckList = [];
-  List<bool> listOfBool = [];
   TextEditingController addMoreController = TextEditingController();
   List<String> selectedCheckList = [];
   List<String> preSelectedCheckList = [];
-  List<String> tempCheckList = [];
 
   @override
   void initState() {
-    listOfBool = widget.map['listOfBool'];
     listOfCheckList = widget.map['checklist'];
-
       preSelectedCheckList = widget.map['selectedCheckList'];
       Future.delayed(Duration(microseconds: 500), () {
         listOfCheckList.forEach((element) {
           if (preSelectedCheckList.contains(element)) {
             int index = listOfCheckList.indexOf(element);
-            listOfBool[index] = true;
             selectedCheckList.add(element);
             setState(() {
 
@@ -55,8 +42,6 @@ class _CheckListScreenState extends State<CheckListScreen> {
 
   @override
   void dispose() {
-    listOfBool = [];
-    listOfCheckList = [];
     super.dispose();
   }
 
@@ -101,8 +86,6 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        SharedPrefs pref = SharedPrefs();
-                        pref.saveTempCheckList(tempCheckList);
                         _navigationService.goBack(value: selectedCheckList);
                       },
                       child: Container(
@@ -139,11 +122,12 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   child: GridView.builder(
                     itemCount: listOfCheckList.length,
                     physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) => Row(
+                    itemBuilder: (context, index){
+
+                      return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-
                         Container(
                           height: 44.0,
                           width: 160.0,
@@ -170,21 +154,19 @@ class _CheckListScreenState extends State<CheckListScreen> {
                                 child: IgnorePointer(
                                   ignoring: widget.map['bool'],
                                   child: Checkbox(
-                                    value: listOfBool[index],
+                                    value: selectedCheckList.contains(listOfCheckList[index]),
                                     onChanged: (bool? value) {
                                       if(value == null){
                                         return;
                                       }
                                       if(value == true){
                                         selectedCheckList.add(listOfCheckList[index]);
-                                        listOfBool[index] = true;
                                         setState(() {
 
                                         });
                                       }else{
                                         selectedCheckList.remove(listOfCheckList[index]);
 
-                                        listOfBool[index] = false;
                                         setState(() {
 
                                         });
@@ -200,7 +182,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                           ),
                         ),
                       ],
-                    ),
+                    );},
                     gridDelegate:
                     const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -219,9 +201,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                     textEditingController: addMoreController,
                     suffixIcon: IconButton(onPressed: (){
                       listOfCheckList.add(addMoreController.text);
-                      listOfBool.add(true);
                       selectedCheckList.add(addMoreController.text);
-                      tempCheckList.add(addMoreController.text);
                       addMoreController.clear();
                       setState(() {
 

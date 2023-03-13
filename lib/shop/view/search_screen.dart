@@ -1,3 +1,5 @@
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,7 +70,9 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                     child: Center(
                       child: TextFormField(
                         controller: searchController,
+                        autofocus: true,
                         onChanged: (v){
+
                           context.read<SearchItineraryCubits>().getSearchItinerary(searchKeyWord: v);
                             setState(() {
 
@@ -119,8 +123,7 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                         }
 
                         if (state is SearchItineraryLoaded) {
-                          SearchItineraryResponse response = state.searchItineraryResponse;
-                          list = response.result?? [];
+                          list = state.list;
                         }
 
                         if(list.isEmpty){
@@ -140,17 +143,14 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                             itemBuilder: (BuildContext context, int index) {
                               return InkWell(
                                 onTap: () {
-                                  _navigationService.navigateTo(summaryRoutStart);
-                                },
+                                  _navigationService.navigateTo(summaryRoutPurchase,
+                                      arguments: {"id": list[index].sId});                                },
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: Container(
                                       height: 86.0,
-                                      width: 101.0,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(10.0),
-                                          image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${list[index].profileImg}"),fit: BoxFit.fill),
-
                                           border: Border.all(
                                               width: 1, color: AppColor.borderColor)),
                                       child: Row(
@@ -166,6 +166,12 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                                                 color: AppColor.aquaCasper2,
                                                 borderRadius:
                                                 BorderRadius.circular(10.0)),
+                                            child: CachedNetworkImage(
+                                              imageUrl: "${ApiRoutes.picBaseURL}${list[index].profileImg}",
+                                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                  CupertinoActivityIndicator(),
+                                              errorWidget: (context, url, error) => SizedBox.shrink(),
+                                            ),
                                           ),
                                           const SizedBox(
                                             width: 10,

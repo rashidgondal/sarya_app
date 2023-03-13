@@ -105,12 +105,12 @@ class _DraftItineraryScreenState extends State<DraftItineraryScreen> {
                                   if(list[index]['step'] == 3) {
                                     String id = list[index]['_id'];
                                     _navigationService.navigateTo(
-                                        summaryRoutSold, arguments:{ "id": id});
+                                        summaryRoutSold, arguments:{ "id": id,"type":""});
 
                                   }else if(list[index]['step'] == 4) {
                                     String id = list[index]['_id'];
                                     _navigationService.navigateTo(
-                                        summaryRoutSold, arguments:{ "id": id});
+                                        summaryRoutSold, arguments:{ "id": id, "type":""});
 
                                   } else if(list[index]['step'] == 1){
                                     String id = list[index]['_id'];

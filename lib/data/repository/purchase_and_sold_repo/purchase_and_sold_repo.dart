@@ -18,7 +18,7 @@ class PurchaseSoldItineraryRepository {
       log("getAllPurchase.............${result.toString()}");
       return result;
     }catch(e){
-      rethrow;
+      return null;
     }
 
   }

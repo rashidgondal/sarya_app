@@ -17,7 +17,7 @@ class UpdateAvatarCubits extends Cubit<UpdateAvatarStates> {
       SharedPrefs pref = SharedPrefs();
       pref.saveUser(res);
       emit(UpdateAvatarLoaded());
-      navigationService.navigatePushReplace(settingRoute);
+      navigationService.navigatePushReplace(dashboardRout);
 
     }catch(e){
       emit(const UpdateAvatarFailure(error: ''));

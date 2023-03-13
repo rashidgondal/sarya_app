@@ -6,18 +6,27 @@ import 'package:sarya/home/model/all_purchases_response.dart';
 class PurchaseItinerariesCubits extends Cubit<PurchaseItinerariesStates> {
   PurchaseItinerariesCubits(): super(PurchaseItineraryInitial());
 
-  Future getPurchaseItinerary() async{
+  Future getPurchaseItinerary({required Function() isEmpty}) async{
     try{
       emit(PurchaseItineraryLoading());
       final  result = await PurchaseSoldItineraryRepository.instance.getAllPurchase();
-      GetAllPurchasesResponse response = GetAllPurchasesResponse.fromJson(result);
-      print("active...........${response.active.toString()}");
-      if(response.active != null){
+      if(result != null){
+        GetAllPurchasesResponse response = GetAllPurchasesResponse.fromJson(result);
+        print("active...........${response.active.toString()}");
+
+        emit(PurchaseItineraryLoaded(purchasedItineraries: response.purchased??[], createdItineraries: response.created??[], activeItineraries: response.active??[]));
+
+        if(response.purchased!.isEmpty  && response.created!.isEmpty){
+          isEmpty.call();
+        }
+      }else{
+        isEmpty.call();
 
       }
-      emit(PurchaseItineraryLoaded(purchasedItineraries: response.purchased??[], createdItineraries: response.created??[], activeItineraries: response.active??[]));
+
 
     }catch(e){
+      isEmpty.call();
       print("catch.............${e.toString()}");
       emit(const PurchaseItineraryFailure(error: ''));
     }

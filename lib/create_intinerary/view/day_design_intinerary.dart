@@ -340,7 +340,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                             onTap: () {
                               _navigationService.navigateTo(checkListRoute,
                                   arguments:{
-                                    "title": "CheckList",
+                                    "title": "Transport",
                                     "checklist": list,
                                     "listOfBool": listOfBool,
                                     "bool": false,
@@ -512,20 +512,25 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                   ),
                   BlocBuilder<ActivityCubits, ActivityStates>(
                       builder: (context, state) {
-                        List<String> list = [];
-                        List<bool> listOfBool = [];
+                        List<String> listActivity = [];
+                        List<bool> boolData = [];
                         if (state is ActivityLoaded) {
-                          list = state.activityTypeResponse.result ?? [];
-                          listOfBool = state.listOfBool;
+                          listActivity = state.activityTypeResponse.result ?? [];
+                          print("selectedCheckList...${ state.listOfBool.toString()}...selected_index..$selected_index}");
+
+                          boolData = state.listOfBool;
                         }
+
                         return InkWell(
                             onTap: () {
 
+                              print("selectedCheckList...${boolData.toString()}...selected_index..$selected_index......listActivity..${listActivity}.....${list_of_days[selected_index].activities.toString()}");
+
                               _navigationService.navigateTo(checkListRoute,
                                   arguments:{
-                                    "title": "CheckList",
-                                    "checklist": list,
-                                    "listOfBool": listOfBool,
+                                    "title": "Activities and Excursion",
+                                    "checklist": listActivity,
+                                    "listOfBool": boolData,
                                     "bool": false,
                                     "selectedCheckList": list_of_days[selected_index].activities??[]})!.then((value) {
                                 //getCheckList();
@@ -612,6 +617,10 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                             "promo":list_of_days[selected_index].breakfast!.coupon??'',
                             "rate":list_of_days[selected_index].breakfast!.rating??0.0,
                             "comment":list_of_days[selected_index].breakfast!.comments??'',
+                            "public_image_path":list_of_days[selected_index].breakfast!.imagesPublicPath??[],
+                            "selected_image_path":list_of_days[selected_index].breakfast!.imagesSelectPath??[],
+                            "selected_image_names":list_of_days[selected_index].breakfast!.imagesPublic??[],
+                            "selected_image_names":list_of_days[selected_index].breakfast!.images??[],
                           })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].breakfast = value;
@@ -650,6 +659,10 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                             "promo":list_of_days[selected_index].lunch!.coupon??'',
                             "rate":list_of_days[selected_index].lunch!.rating??0.0,
                             "comment":list_of_days[selected_index].lunch!.comments??'',
+                            "public_image_path":list_of_days[selected_index].lunch!.imagesPublicPath??[],
+                            "selected_image_path":list_of_days[selected_index].lunch!.imagesSelectPath??[],
+                            "selected_image_names":list_of_days[selected_index].lunch!.imagesPublic??[],
+                            "selected_image_names":list_of_days[selected_index].lunch!.images??[],
                           })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].lunch = value;
@@ -684,6 +697,11 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                             "promo":list_of_days[selected_index].dinner!.coupon??'',
                             "rate":list_of_days[selected_index].dinner!.rating??0.0,
                             "comment":list_of_days[selected_index].dinner!.comments??'',
+                            "public_image_path":list_of_days[selected_index].dinner!.imagesPublicPath??[],
+                            "selected_image_path":list_of_days[selected_index].dinner!.imagesSelectPath??[],
+                            "selected_image_names":list_of_days[selected_index].dinner!.imagesPublic??[],
+                            "selected_image_names":list_of_days[selected_index].dinner!.images??[],
+
                           })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].dinner = value;
@@ -719,6 +737,10 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                             "promo":list_of_days[selected_index].coffeeClubsLounges!.coupon??'',
                             "rate":list_of_days[selected_index].coffeeClubsLounges!.rating??0.0,
                             "comment":list_of_days[selected_index].coffeeClubsLounges!.comments??'',
+                            "public_image_path":list_of_days[selected_index].coffeeClubsLounges!.imagesPublicPath??[],
+                            "selected_image_path":list_of_days[selected_index].coffeeClubsLounges!.imagesSelectPath??[],
+                            "selected_image_names":list_of_days[selected_index].coffeeClubsLounges!.imagesPublic??[],
+                            "selected_image_names":list_of_days[selected_index].coffeeClubsLounges!.images??[],
                           })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index]
@@ -757,6 +779,10 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                             "promo":list_of_days[selected_index].marketMallsStores!.coupon??'',
                             "rate":list_of_days[selected_index].marketMallsStores!.rating??0.0,
                             "comment":list_of_days[selected_index].marketMallsStores!.comments??'',
+                            "public_image_path":list_of_days[selected_index].marketMallsStores!.imagesPublicPath??[],
+                            "selected_image_path":list_of_days[selected_index].marketMallsStores!.imagesSelectPath??[],
+                            "selected_image_names":list_of_days[selected_index].marketMallsStores!.imagesPublic??[],
+                            "selected_image_names":list_of_days[selected_index].marketMallsStores!.images??[],
                           })!.then((value) {
                         if (value != null) {
                           list_of_days[selected_index].marketMallsStores =
@@ -829,7 +855,7 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
         print("selected index.....$selected_index");
 
 
-        if (selected_index < list_of_days.length) {
+        if (selected_index+1 == list_of_days.length) {
             create_intenerary.DayDesignIntineraryRequest
             request = create_intenerary.DayDesignIntineraryRequest(
               step: 3,
@@ -904,8 +930,9 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
     return InkWell(
       onTap: () {
 
+        print("selected index.....${selected_index+1}.....lenght....${list_of_days.length}");
 
-        if (selected_index < list_of_days.length) {
+        if (selected_index+1 == list_of_days.length) {
           create_intenerary.DayDesignIntineraryRequest
           request = create_intenerary.DayDesignIntineraryRequest(
             step: 3,

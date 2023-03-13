@@ -10,7 +10,7 @@ class TokenInterceptors extends Interceptor {
       RequestOptions options, RequestInterceptorHandler handler) async {
     SharedPrefs prefs = SharedPrefs();
     var token = await prefs.getToken();
-    print("tokent ..........$token");
+    print("tokent is ..........$token");
     options.headers['x-access-token'] = token;
 
     handler.next(options);

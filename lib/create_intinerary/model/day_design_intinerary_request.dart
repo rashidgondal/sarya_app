@@ -159,6 +159,8 @@ class Breakfast {
   String? coupon;
   int? rating;
   String? comments;
+  List<String>? imagesSelectPath;
+  List<String>? imagesPublicPath;
 
   Breakfast(
       {this.name,
@@ -167,7 +169,11 @@ class Breakfast {
         this.imagesPublic,
         this.coupon,
         this.rating,
-        this.comments});
+        this.comments,
+        this.imagesPublicPath,
+        this.imagesSelectPath
+      }
+      );
 
   Breakfast.fromJson(Map<String, dynamic> json) {
     name = json['name'];

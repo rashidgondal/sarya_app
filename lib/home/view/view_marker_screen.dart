@@ -27,9 +27,10 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> with TickerProvider
 
   @override
   void initState() {
+    int day = widget.map['step'] ;
     list = widget.map['listOfMarker'];
     print("widget.map['listOfMarker'].....${widget.map['listOfMarker'].length}");
-    _tabControllerMain = TabController(length: widget.map['totalDays'], vsync: this, initialIndex: widget.map['step']);
+    _tabControllerMain = TabController(length: widget.map['totalDays'], vsync: this, initialIndex: day);
 
     super.initState();
     _navigationService = locator<NavigationService>();
@@ -62,7 +63,7 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> with TickerProvider
                       width: 60,
                       child: IconButton(
                         onPressed: (){
-                          int day = _tabControllerMain.index +1;
+                          int day = _tabControllerMain.index ;
 
                           StopRequest stopRequest = StopRequest(itinerary:
                                 StopItinerary(
@@ -179,20 +180,31 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> with TickerProvider
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(7),
-                                  child: Container(
-                                    height: 70,
-                                    width: 70,
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                      "${ApiRoutes.picBaseURL}${place_information!.list_of_images[i]}",
-                                      placeholder: (context, url) => Center(
-                                          child: CircularProgressIndicator()),
-                                      fit: BoxFit.cover,
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
+                                  child: InkWell(
+                                    onTap: (){
+
+                                      var image = "${ApiRoutes.picBaseURL}${place_information!.list_of_images[i]}";
+
+
+                                      _navigationService.navigateTo(
+                                          storyViewRoute,
+                                          arguments: [image]);
+                                    },
+                                    child: Container(
+                                      height: 70,
+                                      width: 70,
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                        "${ApiRoutes.picBaseURL}${place_information!.list_of_images[i]}",
+                                        placeholder: (context, url) => Center(
+                                            child: CircularProgressIndicator()),
+                                        fit: BoxFit.cover,
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
+                                      ),
+                                      decoration:
+                                      BoxDecoration(color: Colors.blue),
                                     ),
-                                    decoration:
-                                    BoxDecoration(color: Colors.blue),
                                   ),
                                 ),
                               ),

@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -215,6 +216,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                          }
 
                          if(stateID != null) {
+                           print("stateID...........$stateID");
                            int day = stateID.day??0;
                            _navigationService.navigateTo(mapViewRoute,
                                arguments: {
@@ -224,6 +226,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                  "step": day
                                });
                          }else{
+                           print("stateID...........2");
+
                            _navigationService.navigateTo(mapViewRoute,
                                arguments: {
                                  "listOfMarker": list,
@@ -279,7 +283,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             ),
                           ),
                         ),
-                      )) :SizedBox.shrink()
+                      )):
+                      SizedBox.shrink()
                     /*    Center(child: InkWell(
                 onTap: () {},
                 child: Container(
@@ -308,7 +313,16 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             height: size.height * 0.200,
                             width: size.width,
                             decoration: BoxDecoration(
-                                image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${byIDResult.profileImg}"),fit: BoxFit.fill)
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: "${ApiRoutes.picBaseURL}${byIDResult.profileImg}",
+                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                  Row(
+                                    children: [
+                                      CupertinoActivityIndicator(),
+                                    ],
+                                  ),
+                              errorWidget: (context, url, error) => SizedBox(),
                             ),
                           ),
                           const SizedBox(height: 10.0,),

@@ -43,6 +43,12 @@ class _FoodAndShoppingInformationState
   List<ListOfFilesModel>? selected_public_Images = [];
   List<ListOfFilesModel>? selectedImages = [];
 
+  List<String> public_Image_Path = [];
+  List<String> selected_Image_Path = [];
+
+  List<String> public_Image_Names = [];
+  List<String> selected_Image_Names = [];
+
   @override
   void initState() {
     promoController.text =   widget.map['promo'];
@@ -50,6 +56,24 @@ class _FoodAndShoppingInformationState
     ratingData =   widget.map['rate'] +0.0;
     nameOfPlace = widget.map['name'];
     location.coordinates = widget.map['coordinate'];
+    public_Image_Path = widget.map['public_image_path'];
+    selected_Image_Path = widget.map['selected_image_path'];
+
+
+    public_Image_Names = widget.map['selected_image_names'];
+    selected_Image_Names = widget.map['selected_image_names'];
+
+    public_Image_Path.forEach((element) {
+      int index = public_Image_Path.indexOf(element);
+      selected_public_Images!.add(ListOfFilesModel(name_of_file:public_Image_Names[index], percentage: 1.0, file: File(element)));
+    });
+
+    selected_Image_Path.forEach((element) {
+      int index = selected_Image_Path.indexOf(element);
+      selectedImages!.add(ListOfFilesModel(name_of_file:selected_Image_Names[index], percentage: 1.0, file: File(element)));
+
+    });
+
 
     super.initState();
     _navigationService = locator<NavigationService>();
@@ -97,14 +121,18 @@ class _FoodAndShoppingInformationState
                     onTap: () {
                       List<String> publicImageName = [];
                       List<String> imageName = [];
+                      List<String> publicImagePath = [];
+                      List<String> selectedImagePath = [];
 
                       selected_public_Images!.forEach((element) {
                         publicImageName.add(element.name_of_file!);
+                        publicImagePath.add(element.file!.path);
                       });
-
 
                       selectedImages!.forEach((element) {
                         imageName.add(element.name_of_file!);
+                        selectedImagePath.add(element.file!.path);
+
                       });
 
                       int rate = ratingData.toInt();
@@ -116,7 +144,10 @@ class _FoodAndShoppingInformationState
                               coupon: promoController.text,
                               images: imageName,
                               imagesPublic: publicImageName,
-                              rating: rate);
+                              rating: rate,
+                              imagesPublicPath: publicImagePath,
+                              imagesSelectPath: selectedImagePath
+                          );
 
                       _navigationService.goBack(value: breakfast);
                     },
