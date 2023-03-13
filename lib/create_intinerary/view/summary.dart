@@ -385,8 +385,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                           onTap: () {
                                             selected_state = '';
                                             setState(() {});
-                                            selected_state = destination[index];
-                                            setState(() {});
+                                            Future.delayed(
+                                              Duration(milliseconds: 100),
+                                              () {
+                                                selected_state =
+                                                    destination[index];
+                                                setState(() {});
+                                              },
+                                            );
                                           },
                                           child: Container(
                                             padding: EdgeInsets.symmetric(
