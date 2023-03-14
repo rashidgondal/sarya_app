@@ -17,6 +17,7 @@ class GetAllPurchasesResponse {
         this.totalActive});
 
   GetAllPurchasesResponse.fromJson(Map<String, dynamic> json) {
+    print("json.........${json['created']}");
     msg = json['msg'];
     if (json['created'] != null) {
       created = <Created>[];
@@ -77,7 +78,9 @@ class Created {
   Created.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     title = json['title'];
-    destination = json['destination'].cast<String>();
+    if(json['destination'] != null) {
+      destination = json['destination'].cast<String>();
+    }
     profileImg = json['profileImg'];
     totalDays = json['totalDays'];
   }
@@ -110,7 +113,9 @@ class Purchased {
   Purchased.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     title = json['title'];
-    destination = json['destination'].cast<String>();
+    if(json['destination'] != null) {
+      destination = json['destination'].cast<String>();
+    }
     profileImg = json['profileImg'];
     totalDays = json['totalDays'];
   }
@@ -143,7 +148,9 @@ class Active {
 
   Active.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    destination = json['destination'].cast<String>();
+    if(json['destination'] != null) {
+      destination = json['destination'].cast<String>();
+    }
     title = json['title'];
     totalDays = json['totalDays'];
     profileImg = json['profileImg'];

@@ -246,6 +246,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                 if (stateID != null) {
                                   print("stateID...........$stateID");
                                   int day = stateID.day ?? 0;
+                                  print("stateID...day........$day");
+
                                   _navigationService
                                       .navigateTo(mapViewRoute, arguments: {
                                     "listOfMarker": list,
@@ -1159,7 +1161,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
           if (state is ItineraryByIDLoaded) {
             ByIDResult byIDResult = state.byIDResult;
             List<String>? destination = byIDResult.destination;
-            selected_state = destination![0];
+            selected_state = destination == null?'':destination![0];
             setState(() {});
           }
         },

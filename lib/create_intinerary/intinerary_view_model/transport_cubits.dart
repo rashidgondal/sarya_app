@@ -14,7 +14,6 @@ class TransportCubits extends Cubit<TransportStates> {
       final TransportResponse  res = await CreateIntineraryRepository.instance.transport();
       List<bool> listOfBool = await List.filled(res.result!.length, false);
 
-      SharedPrefs pref = SharedPrefs();
 
       emit(TransportLoaded(response: res, listOfBool: listOfBool));
 

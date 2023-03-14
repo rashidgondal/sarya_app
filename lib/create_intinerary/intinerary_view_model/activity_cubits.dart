@@ -14,7 +14,6 @@ class ActivityCubits extends Cubit<ActivityStates> {
       final ActivityTypeResponse  res = await CreateIntineraryRepository.instance.activity();
       List<bool> listOfBool = await List.filled(res.result!.length, false);
 
-      SharedPrefs pref = SharedPrefs();
 
       emit(ActivityLoaded(activityTypeResponse: res, listOfBool: listOfBool));
 

@@ -13,8 +13,6 @@ class TripCubits extends Cubit<TripStates> {
 
       final TripResponse  res = await CreateIntineraryRepository.instance.trip();
       List<bool> listOfBool = await List.filled(res.result!.length, false);
-      SharedPrefs pref = SharedPrefs();
-
       emit(TripLoaded(response: res, listOfBool: listOfBool));
 
     }catch(e){

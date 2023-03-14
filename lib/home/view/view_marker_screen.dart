@@ -28,6 +28,7 @@ class _ViewMarkerScreenState extends State<ViewMarkerScreen> with TickerProvider
   @override
   void initState() {
     int day = widget.map['step'] ;
+    print("day..........$day");
     list = widget.map['listOfMarker'];
     print("widget.map['listOfMarker'].....${widget.map['listOfMarker'].length}");
     _tabControllerMain = TabController(length: widget.map['totalDays'], vsync: this, initialIndex: day);

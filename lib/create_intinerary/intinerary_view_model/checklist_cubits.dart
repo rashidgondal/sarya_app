@@ -13,7 +13,6 @@ class CheckListCubits extends Cubit<CheckListStates> {
 
       final CheckListResponse  res = await CreateIntineraryRepository.instance.checkList();
       List<bool> listOfBool = await List.filled(res.result!.length, false);
-      SharedPrefs pref = SharedPrefs();
 
       emit(CheckListLoaded(response: res, boolList: listOfBool));
 

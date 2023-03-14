@@ -56,7 +56,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
       await geo.parse(data, verbose: true);
 
       features = geo.features;
-      print("features ....${features.length}");
       boolList = List.filled(features.length, false);
       _navigationService.navigateTo(destinationRout, arguments: {"country":features, "boolList": boolList});
     });
@@ -75,7 +74,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     Position position = await CurrentLocation.determinePosition();
      CurrentLocation.lat = position.latitude;
     CurrentLocation.lng = position.longitude;
-    print(" CurrentLocation.lat...........${ CurrentLocation.lat}");
   }
 
   Future<void> parseAndDrawAssetsOnMap() async {
@@ -86,13 +84,11 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     await geo.parse(data, verbose: true);
 
     features = geo.features;
-    print("features ....${features.length}");
     boolList = List.filled(features.length, false);
 
   }
 
   getUserInfo() async {
-    print("..........");
     SharedPrefs pref = SharedPrefs();
 
     map = await pref.getUser();
@@ -170,67 +166,110 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                             createdItineraries  = state.createdItineraries;
                             activeItineraries  = state.activeItineraries;
 
-                            print("activeItineraries........${activeItineraries.toString()}");
                           }
 
 
-                          if (purchasedItineraries.isEmpty) {
-                            return Center(
-                              child: Text(
-                                "Data not found",
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: AppColor.colorLiteBlack2,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            );
-                          }
 
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 30.0,
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 30.0),
-                                child: Text(
-                                  "Created Itineraries",
-                                  style: TextStyle(
-                                      fontSize: 17.0, color: AppColor.colorLiteBlack5),
+
+                          return SingleChildScrollView(
+                            physics: BouncingScrollPhysics(),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 30.0,
                                 ),
-                              ),
-                              createdItineraries.isEmpty? SizedBox.shrink():  SizedBox(
-                                  height: 125,
-                                  child: ListView.builder(
-                                      itemCount: createdItineraries.length,
-                                      physics: BouncingScrollPhysics(),
-                                      padding: EdgeInsets.only(top: 10),
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (BuildContext context, int index){
-                                        if(index == 0){
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 30.0),
+                                  child: Text(
+                                    "Created Itineraries",
+                                    style: TextStyle(
+                                        fontSize: 17.0, color: AppColor.colorLiteBlack5),
+                                  ),
+                                ),
+                                createdItineraries.isEmpty? SizedBox.shrink():  SizedBox(
+                                    height: 125,
+                                    child: ListView.builder(
+                                        itemCount: createdItineraries.length,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.only(top: 10),
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (BuildContext context, int index){
+                                          if(index == 0){
+                                            return InkWell(
+                                              onTap: (){
+                                                String id = createdItineraries[index].sId??'';
+                                                _navigationService.navigateTo(
+                                                    summaryRoutEdit, arguments:{ "id": id, "type":""});
+
+
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 30.0,right: 10,top: 0),
+                                                child: Container(
+                                                  height: 111.0,
+                                                  width: 101.0,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColor.aquaCasper2,
+                                                      image: DecorationImage(
+                                                          onError: (o, s){
+
+                                                          },
+                                                          image: NetworkImage("${ApiRoutes.picBaseURL}${createdItineraries[index].profileImg}",),
+                                                          fit: BoxFit.fill),
+                                                      borderRadius: BorderRadius.circular(8.0),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            offset: const Offset(2, 2),
+                                                            color: Colors.grey.withOpacity(0.6),
+                                                            blurRadius: 3),
+                                                        BoxShadow(
+                                                            offset: const Offset(-3, -3),
+                                                            color: Colors.grey.withOpacity(0.1),
+                                                            blurRadius: 3)
+                                                      ]
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      Row(children: [
+                                                        Icon(Icons.location_on,color: AppColor.whiteColor,),
+                                                        SizedBox(
+                                                          width: 70,
+                                                          child: Text(
+                                                            "${createdItineraries[index].title??''}",
+                                                            style: TextStyle(
+                                                                fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
+                                                          ),
+                                                        )
+                                                      ],),
+                                                      SizedBox(height: 10,),
+
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
                                           return InkWell(
                                             onTap: (){
                                               String id = createdItineraries[index].sId??'';
                                               _navigationService.navigateTo(
                                                   summaryRoutEdit, arguments:{ "id": id, "type":""});
 
-
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 30.0,right: 10,top: 0),
+                                                  right: 10.0, top: 0),
                                               child: Container(
                                                 height: 111.0,
                                                 width: 101.0,
                                                 decoration: BoxDecoration(
                                                     color: AppColor.aquaCasper2,
-                                                    image: DecorationImage(
-                                                        onError: (o, s){
-
-                                                        },
-                                                        image: NetworkImage("${ApiRoutes.picBaseURL}${createdItineraries[index].profileImg}",),
+                                                    image:createdItineraries[index].profileImg == null?null :DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${createdItineraries[index].profileImg}"),
                                                         fit: BoxFit.fill),
                                                     borderRadius: BorderRadius.circular(8.0),
                                                     boxShadow: [
@@ -265,94 +304,95 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                               ),
                                             ),
                                           );
-                                        }
-                                        return InkWell(
-                                          onTap: (){
-                                            String id = createdItineraries[index].sId??'';
-                                            _navigationService.navigateTo(
-                                                summaryRoutEdit, arguments:{ "id": id, "type":""});
-
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 10.0, top: 0),
-                                            child: Container(
-                                              height: 111.0,
-                                              width: 101.0,
-                                              decoration: BoxDecoration(
-                                                  color: AppColor.aquaCasper2,
-                                                  image:createdItineraries[index].profileImg == null?null :DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${createdItineraries[index].profileImg}"),
-                                                      fit: BoxFit.fill),
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        offset: const Offset(2, 2),
-                                                        color: Colors.grey.withOpacity(0.6),
-                                                        blurRadius: 3),
-                                                    BoxShadow(
-                                                        offset: const Offset(-3, -3),
-                                                        color: Colors.grey.withOpacity(0.1),
-                                                        blurRadius: 3)
-                                                  ]
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Row(children: [
-                                                    Icon(Icons.location_on,color: AppColor.whiteColor,),
-                                                    SizedBox(
-                                                      width: 70,
-                                                      child: Text(
-                                                        "${createdItineraries[index].title??''}",
-                                                        style: TextStyle(
-                                                            fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
-                                                      ),
-                                                    )
-                                                  ],),
-                                                  SizedBox(height: 10,),
-
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      })
+                                        })
 
 
-                              ),
-                              activeItineraries.isEmpty?SizedBox.shrink():    const SizedBox(
-                                height: 30.0,
-                              ),
-                              activeItineraries.isEmpty?SizedBox.shrink():    const Padding(
-                                padding: EdgeInsets.only(left: 30.0),
-                                child: Text(
-                                  "Active Itineraries",
-                                  style: TextStyle(
-                                      fontSize: 17.0, color: AppColor.colorLiteBlack5),
                                 ),
-                              ),
-                              activeItineraries.isEmpty?SizedBox.shrink():    SizedBox(
-                                  height: 125,
-                                  child: ListView.builder(
-                                      itemCount: activeItineraries.length,
-                                      physics: BouncingScrollPhysics(),
-                                      padding: EdgeInsets.only(top: 10),
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (BuildContext context, int index){
-                                        if(index == 0){
+                                activeItineraries.isEmpty?SizedBox.shrink():    const SizedBox(
+                                  height: 30.0,
+                                ),
+                                activeItineraries.isEmpty?SizedBox.shrink():    const Padding(
+                                  padding: EdgeInsets.only(left: 30.0),
+                                  child: Text(
+                                    "Active Itineraries",
+                                    style: TextStyle(
+                                        fontSize: 17.0, color: AppColor.colorLiteBlack5),
+                                  ),
+                                ),
+                                activeItineraries.isEmpty?SizedBox.shrink():    SizedBox(
+                                    height: 125,
+                                    child: ListView.builder(
+                                        itemCount: activeItineraries.length,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.only(top: 10),
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (BuildContext context, int index){
+                                          if(index == 0){
+                                            return InkWell(
+                                              onTap: (){
+                                                _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":"active"});
+                                                },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 30.0,right: 10,top: 0),
+                                                child: Container(
+                                                  height: 111.0,
+                                                  width: 101.0,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColor.aquaCasper2,
+                                                      image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${activeItineraries[index].profileImg}"),
+                                                          fit: BoxFit.fill),
+                                                      borderRadius: BorderRadius.circular(8.0),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            offset: const Offset(2, 2),
+                                                            color: Colors.grey.withOpacity(0.6),
+                                                            blurRadius: 3),
+                                                        BoxShadow(
+                                                            offset: const Offset(-3, -3),
+                                                            color: Colors.grey.withOpacity(0.1),
+                                                            blurRadius: 3)
+                                                      ]
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      Row(children: [
+                                                        Icon(Icons.location_on,color: AppColor.whiteColor,),
+                                                        SizedBox(
+                                                          width: 70,
+                                                          child: Text(
+                                                            "${activeItineraries[index].title??''}",
+                                                            style: TextStyle(
+                                                                fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
+                                                          ),
+                                                        )
+                                                      ],),
+                                                      SizedBox(height: 10,),
+
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
                                           return InkWell(
                                             onTap: (){
-                                              _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":"active"});
-                                              },
+                                              String id = activeItineraries[index].sId??'';
+                                              _navigationService.navigateTo(
+                                                  summaryRoutEdit, arguments:{ "id": id, "type":"active"});
+
+                                            },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 30.0,right: 10,top: 0),
+                                                  right: 10.0, top: 0),
                                               child: Container(
                                                 height: 111.0,
                                                 width: 101.0,
                                                 decoration: BoxDecoration(
                                                     color: AppColor.aquaCasper2,
-                                                    image: DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${activeItineraries[index].profileImg}"),
+                                                    image:activeItineraries[index].profileImg == null?null :DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${activeItineraries[index].profileImg}"),
                                                         fit: BoxFit.fill),
                                                     borderRadius: BorderRadius.circular(8.0),
                                                     boxShadow: [
@@ -387,76 +427,24 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                               ),
                                             ),
                                           );
-                                        }
-                                        return InkWell(
-                                          onTap: (){
-                                            String id = activeItineraries[index].sId??'';
-                                            _navigationService.navigateTo(
-                                                summaryRoutEdit, arguments:{ "id": id, "type":"active"});
-
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 10.0, top: 0),
-                                            child: Container(
-                                              height: 111.0,
-                                              width: 101.0,
-                                              decoration: BoxDecoration(
-                                                  color: AppColor.aquaCasper2,
-                                                  image:activeItineraries[index].profileImg == null?null :DecorationImage(image: NetworkImage("${ApiRoutes.picBaseURL}${activeItineraries[index].profileImg}"),
-                                                      fit: BoxFit.fill),
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        offset: const Offset(2, 2),
-                                                        color: Colors.grey.withOpacity(0.6),
-                                                        blurRadius: 3),
-                                                    BoxShadow(
-                                                        offset: const Offset(-3, -3),
-                                                        color: Colors.grey.withOpacity(0.1),
-                                                        blurRadius: 3)
-                                                  ]
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Row(children: [
-                                                    Icon(Icons.location_on,color: AppColor.whiteColor,),
-                                                    SizedBox(
-                                                      width: 70,
-                                                      child: Text(
-                                                        "${activeItineraries[index].title??''}",
-                                                        style: TextStyle(
-                                                            fontSize: 10.0, color: AppColor.whiteColor, fontWeight: FontWeight.w500),
-                                                      ),
-                                                    )
-                                                  ],),
-                                                  SizedBox(height: 10,),
-
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      })
-                              ),
-                              SizedBox(height: 10,),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 30.0),
-                                child: Text(
-                                  "Purchased Itineraries",
-                                  style: TextStyle(
-                                      fontSize: 17.0, color: AppColor.colorLiteBlack5),
+                                        })
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 5.0,
-                              ),
-                              Expanded(
-                                child: ListView.builder(
+                                SizedBox(height: 10,),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 30.0),
+                                  child: Text(
+                                    "Purchased Itineraries",
+                                    style: TextStyle(
+                                        fontSize: 17.0, color: AppColor.colorLiteBlack5),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
+                                ListView.builder(
                                     itemCount: purchasedItineraries.length,
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
@@ -608,9 +596,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                               )),
                                         ),
                                       );
-                                    }),
-                              )
-                            ],
+                                    })
+                              ],
+                            ),
                           );
 
 
