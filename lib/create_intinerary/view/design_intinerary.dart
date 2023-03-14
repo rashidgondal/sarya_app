@@ -44,15 +44,13 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
 
   TextEditingController titleController = TextEditingController();
   TextEditingController summaryController = TextEditingController();
-  TextEditingController intineraryCostController = TextEditingController();
-  TextEditingController totalDaysController = TextEditingController();
   List<String> listOfCheckList = [];
   late NavigationService _navigationService;
-  int tripCost = 0;
+  int tripCost = 0, itineraryCost = 0;
   List<String> checkList = [];
   List<String> tripType = [];
   final ImagePicker _picker = ImagePicker();
-  String itineraryCost ='', totalDays = '';
+  String   totalDays = '';
   SharedPrefs pref = SharedPrefs();
   List<Widget> widgetList = [];
 
@@ -153,7 +151,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                         ),
                         InkWell(
                           onTap: (){
-                            double selectValue = itineraryCost.isEmpty?5.0: double.parse(itineraryCost);
+                            int selectValue = itineraryCost == 0 ? 5 : itineraryCost;
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) =>  ItineraryCost(value: selectValue,)).then((value){
@@ -170,7 +168,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                           },
                           child: TextDecoratedContainer(
                             titleWidget:     Text(
-                              itineraryCost == '0' ?'Itinerary Cost': 'Itinerary Cost $itineraryCost',
+                              itineraryCost == 0 ?'Itinerary Cost': 'Itinerary Cost $itineraryCost',
                               style: const TextStyle(
                                   fontSize: 15.0, color: AppColor.headingColor2),
                             ),
@@ -179,24 +177,6 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                           ),
                         ),
 
-                        /* CustomTextField(
-                          hintText: 'Itinerary Cost ',
-                          size: size,
-                          maxLine: 1,
-                          prefix: itineraryCost.isEmpty? null :Text(
-                            'Itinerary Cost ',
-                            style:TextStyle(
-                                fontSize: 12.0, color: AppColor.headingColor2),
-                          ),
-                          textInputType: TextInputType.number,
-                          onChange: (v){
-                            itineraryCost =v;
-                            setState(() {
-
-                            });
-                          },
-                          textEditingController: intineraryCostController,
-                          icon:Row(children: [SvgPicture.asset("cost_icon".svg)]),                  ),*/
                         const SizedBox(
                           height: 2.0,
                         ),
@@ -234,48 +214,54 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                               List<String> list = [];
                               List<bool> listOfBool = [];
                               if(state is TripLoaded){
-                                list = state.response.result??[];
+                                list = state.response.result!.toSet().toList()??[];
                                 listOfBool = state.listOfBool;
+                                return InkWell(
+                                    onTap: () {
+
+
+                                      _navigationService.navigateTo(checkListRoute,
+                                          arguments:{
+                                            "title": "Trip type",
+                                            "checklist": list,
+                                            "bool": false,
+                                            "selectedCheckList": tripType})!.then((value) {
+
+                                        if(value != null){
+                                          tripType = value['selectedList'];
+                                          tripType = tripType.toSet().toList();
+                                          List<String> selectedList = value['addMoreList'];
+                                          state.response.result!.addAll(selectedList);
+                                          setState(() {});
+
+                                        }else{
+                                          setState(() {
+
+                                          });
+                                        }
+
+                                      });
+
+
+
+
+                                    },
+                                    child: TextDecoratedContainer(
+                                        titleWidget:     Text(
+                                          'Select Trip Type',
+                                          style: const TextStyle(
+                                              fontSize: 15.0, color: AppColor.headingColor2),
+                                        ),
+                                        iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
+                                        icon: Icon(
+                                          Icons.arrow_forward_ios_outlined,
+                                          color: AppColor.lightIndigo,
+                                          size: 20,
+                                        )));
+
                               }
-                              return InkWell(
-                                  onTap: () {
 
-
-                                    _navigationService.navigateTo(checkListRoute,
-                                        arguments:{
-                                          "title": "Trip type",
-                                          "checklist": list,
-                                          "bool": false,
-                                          "selectedCheckList": tripType})!.then((value) {
-
-                                      if(value != null){
-                                        tripType = value;
-                                        setState(() {});
-
-                                      }else{
-                                        setState(() {
-
-                                        });
-                                      }
-
-                                    });
-
-
-
-
-                                  },
-                                  child: TextDecoratedContainer(
-                                      titleWidget:     Text(
-                                        'Select Trip Type',
-                                        style: const TextStyle(
-                                            fontSize: 15.0, color: AppColor.headingColor2),
-                                      ),
-                                      iconImage: Row(children: [SvgPicture.asset("type_icon".svg)]),
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios_outlined,
-                                        color: AppColor.lightIndigo,
-                                        size: 20,
-                                      )));
+                              return SizedBox();
                             }
 
                         ),
@@ -352,56 +338,53 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                             builder: (context, state) {
                               List<bool> listOfBool = [];
                               if (state is CheckListLoaded) {
-                                listOfCheckList = state.response.result!.toList() ?? [];
+                                listOfCheckList = state.response.result!.toSet().toList() ?? [];
                                 listOfBool = state.boolList.toList();
-                              }
-                              return   InkWell(
-                                  onTap: (){
-                                   /* if(checkList.isNotEmpty){
-                                      checkList.forEach((element) {
-                                        if(listOfCheckList.contains(element)){
+                                return   InkWell(
+                                    onTap: (){
+
+                                      _navigationService.navigateTo(checkListRoute,
+                                          arguments:{
+                                            "title": "CheckList",
+                                            "checklist": listOfCheckList,
+                                            "listOfBool": listOfBool,
+                                            "bool": false,
+                                            "selectedCheckList": checkList})!.then((value) {
+                                        //getCheckList();
+                                        if(value != null){
+                                          checkList = value['selectedList'];
+                                          checkList = checkList.toSet().toList();
+                                          List<String> selectedList = value['addMoreList'];
+                                          state.response.result!.addAll(selectedList);
+                                          setState(() {});
 
                                         }else{
-                                          listOfCheckList.add(element);
-                                          listOfBool.add(true);
+                                          setState(() {
+
+                                          });
                                         }
+
                                       });
-                                    }*/
-                                    _navigationService.navigateTo(checkListRoute,
-                                        arguments:{
-                                          "title": "CheckList",
-                                          "checklist": listOfCheckList,
-                                                    "listOfBool": listOfBool,
-                                                    "bool": false,
-                                                     "selectedCheckList": checkList})!.then((value) {
-                                              //getCheckList();
-                                      if(value != null){
-                                        checkList = value;
-                                        setState(() {});
-
-                                      }else{
-                                        setState(() {
-
-                                        });
-                                      }
-
-                                    });
-                                  },
-                                  child: TextDecoratedContainer(
-                                      titleWidget:     Text(
-                                        'Checklist',
-                                        style: const TextStyle(
-                                            fontSize: 15.0, color: AppColor.headingColor2),
-                                      ),
-                                      iconImage: Row(children: [SvgPicture.asset("checklist_icon".svg)]),
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios_outlined,
-                                        color: AppColor.lightIndigo,
-                                        size: 20,
-                                      ))
+                                    },
+                                    child: TextDecoratedContainer(
+                                        titleWidget:     Text(
+                                          'Checklist',
+                                          style: const TextStyle(
+                                              fontSize: 15.0, color: AppColor.headingColor2),
+                                        ),
+                                        iconImage: Row(children: [SvgPicture.asset("checklist_icon".svg)]),
+                                        icon: Icon(
+                                          Icons.arrow_forward_ios_outlined,
+                                          color: AppColor.lightIndigo,
+                                          size: 20,
+                                        ))
 
 
-                              );
+                                );
+                              }
+
+                              return SizedBox();
+
                             }),
                         const SizedBox(
                           height: 5.0,
@@ -570,7 +553,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
 
     if( titleController.text.isEmpty ||
             summaryController.text.isEmpty ||
-            intineraryCostController.text.isEmpty ||
+             itineraryCost == 0||
             tripCost ==0 ||
             tripType.isEmpty ||
             totalDays.isEmpty ||
@@ -598,7 +581,6 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
     return InkWell(
       onTap: () {
         int totalDay = int.parse(totalDays);
-        int itineraryCost = int.parse(intineraryCostController.text);
 
         DesignIntineraryRequest createIntineraryRequest = DesignIntineraryRequest(
 
@@ -643,7 +625,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
     if(
     titleController.text.isEmpty ||
         summaryController.text.isEmpty ||
-        intineraryCostController.text.isEmpty ||
+        itineraryCost == 0 ||
         tripCost ==0 ||
         tripType.isEmpty ||
         totalDays.isEmpty ||
@@ -671,7 +653,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
       onTap: () {
 
         int totalDay = int.parse(totalDays);
-        int itineraryCost = int.parse(intineraryCostController.text);
+
 
         DesignIntineraryRequest createIntineraryRequest = DesignIntineraryRequest(
             title: titleController.text,

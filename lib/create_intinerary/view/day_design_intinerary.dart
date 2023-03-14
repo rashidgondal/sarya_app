@@ -336,50 +336,53 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         List<String> list = [];
                         List<bool> listOfBool = [];
                         if (state is TransportLoaded) {
-                          list = state.response.result ?? [];
-                          listOfBool = state.listOfBool;
+                          list = state.response.result!.toSet().toList() ?? [];
+                          return InkWell(
+                              onTap: () {
+                                _navigationService.navigateTo(checkListRoute,
+                                    arguments:{
+                                      "title": "Transport",
+                                      "checklist": list,
+                                      "bool": false,
+                                      "selectedCheckList": list_of_days[selected_index].transportation??[]})!.then((value) {
+                                  //getCheckList();
+                                  if(value != null){
+                                    list_of_days[selected_index].transportation = value['selectedList'];
+                                    list_of_days[selected_index].transportation =    list_of_days[selected_index].transportation!.toSet().toList();
+                                    List<String> selectedList = value['addMoreList'];
+                                    state.response.result!.addAll(selectedList);
+                                    setState(() {});
+
+                                  }else{
+                                    setState(() {
+
+                                    });
+                                  }
+
+                                });
+
+
+                              },
+                              child: TextDecoratedContainer(
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios_outlined,
+                                    color: AppColor.lightIndigo,
+                                    size: 20,
+                                  ),
+                                  titleWidget: Text(
+                                    'Type of transport',
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: AppColor.headingColor2),
+                                  ),
+                                  iconImage: Row(
+                                    children: [
+                                      SvgPicture.asset('transport_icoon'.svg)
+                                    ],
+                                  )));
                         }
-                        return InkWell(
-                            onTap: () {
-                              _navigationService.navigateTo(checkListRoute,
-                                  arguments:{
-                                    "title": "Transport",
-                                    "checklist": list,
-                                    "listOfBool": listOfBool,
-                                    "bool": false,
-                                    "selectedCheckList": list_of_days[selected_index].transportation??[]})!.then((value) {
-                                //getCheckList();
-                                if(value != null){
-                                  list_of_days[selected_index].transportation = value;
-                                  setState(() {});
 
-                                }else{
-                                  setState(() {
-
-                                  });
-                                }
-
-                              });
-
-
-                            },
-                            child: TextDecoratedContainer(
-                                icon: Icon(
-                                  Icons.arrow_forward_ios_outlined,
-                                  color: AppColor.lightIndigo,
-                                  size: 20,
-                                ),
-                                titleWidget: Text(
-                                  'Type of transport',
-                                  style: TextStyle(
-                                      fontSize: 15.0,
-                                      color: AppColor.headingColor2),
-                                ),
-                                iconImage: Row(
-                                  children: [
-                                    SvgPicture.asset('transport_icoon'.svg)
-                                  ],
-                                )));
+                        return SizedBox();
                       }),
                   list_of_days[selected_index].transportation == null?SizedBox.shrink():
                   list_of_days[selected_index].transportation!.isEmpty? SizedBox.shrink():
@@ -515,56 +518,58 @@ class _DayDesignIntineraryScreenState extends State<DayDesignIntineraryScreen> {
                         List<String> listActivity = [];
                         List<bool> boolData = [];
                         if (state is ActivityLoaded) {
-                          listActivity = state.activityTypeResponse.result ?? [];
+                          listActivity = state.activityTypeResponse.result!.toSet().toList() ?? [];
                           print("selectedCheckList...${ state.listOfBool.toString()}...selected_index..$selected_index}");
+                          return InkWell(
+                              onTap: () {
 
-                          boolData = state.listOfBool;
+                                print("selectedCheckList...${boolData.toString()}...selected_index..$selected_index......listActivity..${listActivity}.....${list_of_days[selected_index].activities.toString()}");
+
+                                _navigationService.navigateTo(checkListRoute,
+                                    arguments:{
+                                      "title": "Activities and Excursion",
+                                      "checklist": listActivity,
+                                      "bool": false,
+                                      "selectedCheckList": list_of_days[selected_index].activities??[]})!.then((value) {
+                                  //getCheckList();
+                                  if(value != null){
+                                    list_of_days[selected_index].activities = value['selectedList'];
+                                    list_of_days[selected_index].activities = list_of_days[selected_index].activities!.toSet().toList();
+                                    List<String> selectedList = value['addMoreList'];
+                                    state.activityTypeResponse.result!.addAll(selectedList);
+                                    setState(() {});
+
+                                  }else{
+                                    setState(() {
+
+                                    });
+                                  }
+
+                                });
+
+                              },
+                              child: TextDecoratedContainer(
+                                icon: Icon(
+                                  Icons.arrow_forward_ios_outlined,
+                                  color: AppColor.lightIndigo,
+                                  size: 20,
+                                ),
+                                titleWidget: Text(
+                                  'Activities and Excursion',
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: AppColor.headingColor2),
+                                ),
+                                iconImage: Row(
+                                  children: [
+                                    SvgPicture.asset('activityy_Icon'.svg)
+                                  ],
+                                ),
+                              ));
+
                         }
+                        return SizedBox();
 
-                        return InkWell(
-                            onTap: () {
-
-                              print("selectedCheckList...${boolData.toString()}...selected_index..$selected_index......listActivity..${listActivity}.....${list_of_days[selected_index].activities.toString()}");
-
-                              _navigationService.navigateTo(checkListRoute,
-                                  arguments:{
-                                    "title": "Activities and Excursion",
-                                    "checklist": listActivity,
-                                    "listOfBool": boolData,
-                                    "bool": false,
-                                    "selectedCheckList": list_of_days[selected_index].activities??[]})!.then((value) {
-                                //getCheckList();
-                                if(value != null){
-                                  list_of_days[selected_index].activities = value;
-                                  setState(() {});
-
-                                }else{
-                                  setState(() {
-
-                                  });
-                                }
-
-                              });
-
-                            },
-                            child: TextDecoratedContainer(
-                              icon: Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: AppColor.lightIndigo,
-                                size: 20,
-                              ),
-                              titleWidget: Text(
-                                'Activities and Excursion',
-                                style: TextStyle(
-                                    fontSize: 15.0,
-                                    color: AppColor.headingColor2),
-                              ),
-                              iconImage: Row(
-                                children: [
-                                  SvgPicture.asset('activityy_Icon'.svg)
-                                ],
-                              ),
-                            ));
                       }),
                   list_of_days[selected_index].activities == null?SizedBox.shrink():
                   list_of_days[selected_index].activities!.isEmpty? SizedBox.shrink():

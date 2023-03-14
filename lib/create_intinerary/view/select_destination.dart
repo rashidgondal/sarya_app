@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'dart:developer';
-
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geojson/geojson.dart';
@@ -29,7 +29,7 @@ class _SelectDestinationState extends State<SelectDestination> {
   TextEditingController searchController = TextEditingController();
   String searchKeyWord = '';
   SharedPrefs sharedPrefs = SharedPrefs();
-
+  String? mapStyle;
   // on below line we have set the camera position
   static final CameraPosition _kGoogle = const CameraPosition(
     target: LatLng(19.0759837, 72.8776559),
@@ -48,10 +48,16 @@ class _SelectDestinationState extends State<SelectDestination> {
 
   @override
   void initState() {
+    loadstyle();
     features = widget.map['country'];
     boolList = widget.map['boolList'];
     super.initState();
     _navigationService = locator<NavigationService>();
+  }
+
+  loadstyle() async {
+    mapStyle =
+        await rootBundle.loadString('lib/assets/json_data/map_style.txt');
   }
 
   @override
@@ -138,6 +144,7 @@ class _SelectDestinationState extends State<SelectDestination> {
                 zoomControlsEnabled: true,
                 polygons: _polygon,
                 onMapCreated: (GoogleMapController controller) {
+                  controller.setMapStyle(mapStyle);
                   _mapController = controller;
                 },
               ),

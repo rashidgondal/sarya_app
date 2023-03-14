@@ -359,14 +359,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         width: size.width,
                         decoration: BoxDecoration(),
                         child: CachedNetworkImage(
+                          fit: BoxFit.cover,
                           imageUrl:
                               "${ApiRoutes.picBaseURL}${byIDResult.profileImg}",
                           progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Row(
-                            children: [
-                              CupertinoActivityIndicator(),
-                            ],
-                          ),
+                              (context, url, downloadProgress) => Center(
+                                child:  CupertinoActivityIndicator(),
+
+                              ),
                           errorWidget: (context, url, error) => SizedBox(),
                         ),
                       ),
@@ -425,7 +425,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 SizedBox(
-                                                    width: 70.0,
+                                                    width: 30.0,
                                                     child: image_index != -1
                                                         ? Image.asset(
                                                             Flags.listOfFlag[

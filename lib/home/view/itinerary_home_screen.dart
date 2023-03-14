@@ -177,7 +177,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                 const SizedBox(
                                   height: 30.0,
                                 ),
-                                const Padding(
+                                createdItineraries.isEmpty? SizedBox.shrink():    const Padding(
                                   padding: EdgeInsets.only(left: 30.0),
                                   child: Text(
                                     "Created Itineraries",
@@ -189,7 +189,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                     height: 125,
                                     child: ListView.builder(
                                         itemCount: createdItineraries.length,
-                                        physics: NeverScrollableScrollPhysics(),
+                                        physics: BouncingScrollPhysics(),
                                         shrinkWrap: true,
                                         padding: EdgeInsets.only(top: 10),
                                         scrollDirection: Axis.horizontal,
@@ -320,7 +320,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                     height: 125,
                                     child: ListView.builder(
                                         itemCount: activeItineraries.length,
-                                        physics: NeverScrollableScrollPhysics(),
+                                        physics: BouncingScrollPhysics(),
                                         shrinkWrap: true,
                                         padding: EdgeInsets.only(top: 10),
                                         scrollDirection: Axis.horizontal,

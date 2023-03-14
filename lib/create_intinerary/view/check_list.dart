@@ -20,6 +20,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
   TextEditingController addMoreController = TextEditingController();
   List<String> selectedCheckList = [];
   List<String> preSelectedCheckList = [];
+  List<String> listOfAddMore = [];
 
 
 
@@ -35,6 +36,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
 
             });
           }
+
         });
       });
 
@@ -88,7 +90,8 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        _navigationService.goBack(value: selectedCheckList);
+
+                        _navigationService.goBack(value:{"selectedList": selectedCheckList,"addMoreList":listOfAddMore});
                       },
                       child: Container(
                         height: 46.0,
@@ -202,11 +205,14 @@ class _CheckListScreenState extends State<CheckListScreen> {
                     textInputType: TextInputType.text,
                     textEditingController: addMoreController,
                     suffixIcon: IconButton(onPressed: (){
+                      if(listOfCheckList.contains(addMoreController.text)){
+                        return;
+                      }
                       listOfCheckList.add(addMoreController.text);
                       selectedCheckList.add(addMoreController.text);
-                      if(widget.addMore != null) {
-                        widget.addMore!.call(addMoreController.text);
-                      }
+
+                      listOfAddMore.add(addMoreController.text);
+
                       addMoreController.clear();
                       setState(() {
 

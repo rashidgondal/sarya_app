@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
 class ItineraryCost extends StatefulWidget {
-    final double value;
+    final int value;
 
   const ItineraryCost({Key? key, required this.value})
       : super(key: key);
@@ -13,7 +13,7 @@ class ItineraryCost extends StatefulWidget {
 
 class _ItineraryCostState extends State<ItineraryCost> {
   TextEditingController textEditingController = TextEditingController();
-  double costValue = 0.0;
+  int costValue = 0;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _ItineraryCostState extends State<ItineraryCost> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pop('5.0');
+                    Navigator.of(context).pop(5);
 
                   },
                   child: Container(
@@ -61,7 +61,8 @@ class _ItineraryCostState extends State<ItineraryCost> {
                 InkWell(
                   onTap: () {
                     String cost = textEditingController.text;
-                    Navigator.of(context).pop(cost);
+                    int result = int.parse(cost);
+                    Navigator.of(context).pop(result);
 
                   },
                   child: Container(
@@ -121,7 +122,7 @@ class _ItineraryCostState extends State<ItineraryCost> {
                       if(costValue<= 5.0){
                         return;
                       }
-                      costValue = costValue- 5.0;
+                      costValue = costValue- 5;
                       textEditingController.text = costValue.toString();
                       setState(() {
 
@@ -145,7 +146,7 @@ class _ItineraryCostState extends State<ItineraryCost> {
                         controller: textEditingController,
                         textAlignVertical: TextAlignVertical.center,
                         onChanged: (val){
-                          costValue = double.parse(val);
+                          costValue = int.parse(val);
                           setState(() {
 
                           });
@@ -158,15 +159,22 @@ class _ItineraryCostState extends State<ItineraryCost> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "0.0",
+                          prefix:Text("\$", style: TextStyle(
+                              color: AppColor.colorLiteBlack4,
+                              fontSize: 32.0,
+
+                              fontWeight: FontWeight.w600)
+                          ),
                           hintStyle: TextStyle(
                               color: AppColor.colorLiteBlack4,
                               fontSize: 32.0,
+
                               fontWeight: FontWeight.w600)
                         ),
                       )),
                   InkWell(
                     onTap: (){
-                      costValue = costValue + 5.0;
+                      costValue = costValue + 5;
                       print("result.........$costValue");
                       textEditingController.text = costValue.toString();
                       setState(() {
