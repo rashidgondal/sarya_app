@@ -158,18 +158,22 @@ class _SearchItineraryScreenState extends State<SearchItineraryScreen> {
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          Container(
-                                            height: 72.0,
-                                            width: 72.0,
-                                            decoration: BoxDecoration(
-                                                color: AppColor.aquaCasper2,
-                                                borderRadius:
-                                                BorderRadius.circular(10.0)),
-                                            child: CachedNetworkImage(
-                                              imageUrl: "${ApiRoutes.picBaseURL}${list[index].profileImg}",
-                                              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                                  CupertinoActivityIndicator(),
-                                              errorWidget: (context, url, error) => SizedBox.shrink(),
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Container(
+                                              height: 72.0,
+                                              width: 72.0,
+                                              decoration: BoxDecoration(
+                                                  color: AppColor.aquaCasper2,
+                                                  borderRadius:
+                                                  BorderRadius.circular(10.0)),
+                                              child: CachedNetworkImage(
+                                                fit: BoxFit.fill,
+                                                imageUrl: "${ApiRoutes.picBaseURL}${list[index].profileImg}",
+                                                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                    CupertinoActivityIndicator(),
+                                                errorWidget: (context, url, error) => SizedBox.shrink(),
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(

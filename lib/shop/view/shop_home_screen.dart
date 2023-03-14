@@ -348,23 +348,27 @@ class _ShopScreenState extends State<ShopScreen> {
                                   const SizedBox(
                                     width: 5,
                                   ),
-                                  Container(
-                                    height: 72.0,
-                                    width: 72.0,
-                                    child: CachedNetworkImage(
-                                      imageUrl: "${ApiRoutes.picBaseURL}${list[index].profileImg}",
-                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                          Center(
-                                            child:  CupertinoActivityIndicator(),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Container(
+                                      height: 72.0,
+                                      width: 72.0,
+                                      child: CachedNetworkImage(
+                                        imageUrl: "${ApiRoutes.picBaseURL}${list[index].profileImg}",
+                                        fit: BoxFit.fill,
+                                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                            Center(
+                                              child:  CupertinoActivityIndicator(),
 
-                                          ),
-                                      errorWidget: (context, url, error) => SizedBox(),
+                                            ),
+                                        errorWidget: (context, url, error) => SizedBox(),
+                                      ),
+
+                                      decoration: BoxDecoration(
+                                          color: AppColor.aquaCasper2,
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)),
                                     ),
-
-                                    decoration: BoxDecoration(
-                                        color: AppColor.aquaCasper2,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
                                   ),
                                   const SizedBox(
                                     width: 10,
