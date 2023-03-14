@@ -160,7 +160,7 @@ class _ItineraryCostState extends State<ItineraryCost> {
                           border: InputBorder.none,
                           hintText: "0.0",
                           prefix:Text("\$", style: TextStyle(
-                              color: AppColor.colorLiteBlack4,
+                              color: AppColor.colorBlack,
                               fontSize: 32.0,
 
                               fontWeight: FontWeight.w600)
