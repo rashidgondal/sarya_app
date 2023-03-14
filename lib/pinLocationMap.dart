@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import 'map_launcher_widget.dart';
 
 class PinLocationMap extends StatefulWidget {
   final List<FlagInformation> list_of_flag_information;
@@ -94,10 +95,12 @@ class _PinLocationMapState extends State<PinLocationMap> {
                           ),
                           InkWell(
                             onTap: () async {
-                              Position position = await requestLocation();
-                              String url =
-                                  'https://www.google.com/maps/dir/?api=1&origin=${position.latitude},${position.longitude}&destination=${element.latLng.latitude},${element.latLng.longitude}&travelmode=driving&dir_action=navigate';
-                              launchURL(url);
+                              openGoogleMap(element.latLng.latitude,
+                                  element.latLng.longitude);
+                              // Position position = await requestLocation();
+                              // String url =
+                              //     'https://www.google.com/maps/dir/?api=1&origin=${position.latitude},${position.longitude}&destination=${element.latLng.latitude},${element.latLng.longitude}&travelmode=driving&dir_action=navigate';
+                              // launchURL(url);
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 3),
@@ -249,14 +252,6 @@ class _PinLocationMapState extends State<PinLocationMap> {
                   ),
                 ],
               ));
-  }
-}
-
-launchURL(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
   }
 }
 

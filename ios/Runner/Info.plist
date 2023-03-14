@@ -56,6 +56,22 @@
 		<string>Your photo library is used to update profile picture and add product images.</string>
 		<key>NSSpeechRecognitionUsageDescription</key>
 		<string>The app uses speech recognition for dictating messages.</string>
+        <key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>comgooglemaps</string>
+            <string>baidumap</string>
+            <string>iosamap</string>
+            <string>waze</string>
+            <string>yandexmaps</string>
+            <string>yandexnavi</string>
+            <string>citymapper</string>
+            <string>mapswithme</string>
+            <string>osmandmaps</string>
+            <string>dgis</string>
+            <string>qqmap</string>
+            <string>here-location</string>
+            <string>tomtomgo</string>
+        </array>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
 		<key>UISupportedInterfaceOrientations</key>
