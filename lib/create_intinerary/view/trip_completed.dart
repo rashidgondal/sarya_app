@@ -55,7 +55,9 @@ class _TripCompleteScreenState extends State<TripCompleteScreen> {
           body: Column(children: [
             Container(
               height: size.height *0.300,
-              color: AppColor.aquaGreen,
+              child: Center(
+                child: Image.asset("lib/assets/images/completed.gif"),
+              ),
             ),
             Expanded(child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
