@@ -430,7 +430,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                 const SizedBox(
                                   height: 20.0,
                                 ),
-                                const Padding(
+                                purchasedItineraries.isEmpty?SizedBox.shrink(): const Padding(
                                   padding: EdgeInsets.only(left: 30.0),
                                   child: Text(
                                     "Purchased Itineraries",

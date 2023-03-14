@@ -7,7 +7,8 @@ import '../../customWidgets/custom_text_field.dart';
 
 class CheckListScreen extends StatefulWidget {
   final Map map;
-  CheckListScreen({Key? key, required this.map}) : super(key: key);
+  final Function(String)? addMore;
+  CheckListScreen({Key? key, required this.map, this.addMore}) : super(key: key);
 
   @override
   State<CheckListScreen> createState() => _CheckListScreenState();
@@ -20,6 +21,8 @@ class _CheckListScreenState extends State<CheckListScreen> {
   List<String> selectedCheckList = [];
   List<String> preSelectedCheckList = [];
 
+
+
   @override
   void initState() {
     listOfCheckList = widget.map['checklist'];
@@ -27,7 +30,6 @@ class _CheckListScreenState extends State<CheckListScreen> {
       Future.delayed(Duration(microseconds: 500), () {
         listOfCheckList.forEach((element) {
           if (preSelectedCheckList.contains(element)) {
-            int index = listOfCheckList.indexOf(element);
             selectedCheckList.add(element);
             setState(() {
 
@@ -202,6 +204,9 @@ class _CheckListScreenState extends State<CheckListScreen> {
                     suffixIcon: IconButton(onPressed: (){
                       listOfCheckList.add(addMoreController.text);
                       selectedCheckList.add(addMoreController.text);
+                      if(widget.addMore != null) {
+                        widget.addMore!.call(addMoreController.text);
+                      }
                       addMoreController.clear();
                       setState(() {
 

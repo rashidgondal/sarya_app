@@ -24,6 +24,7 @@ import 'package:sarya/navigation/navigation_service.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
 
+import '../../customWidgets/dial_itinerary_cost.dart';
 import '../../customWidgets/text_decorated_icon.dart';
 import '../../helper/helper_methods.dart';
 import '../intinerary_view_model/Trip_states.dart';
@@ -128,7 +129,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                           height: 2.0,
                         ),
                         CustomTextField(
-                            hintText: 'Intinerary title',
+                            hintText: 'Itinerary title',
                             size: size,
                             maxLine: 1,
                             textInputType: TextInputType.text,
@@ -150,7 +151,35 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                         const SizedBox(
                           height: 2.0,
                         ),
-                        CustomTextField(
+                        InkWell(
+                          onTap: (){
+                            double selectValue = itineraryCost.isEmpty?5.0: double.parse(itineraryCost);
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>  ItineraryCost(value: selectValue,)).then((value){
+                              if(value != null) {
+                                print("tripCost.........$value");
+
+                                itineraryCost = value;
+                                setState(() {
+
+                                });
+                              }
+                            });
+
+                          },
+                          child: TextDecoratedContainer(
+                            titleWidget:     Text(
+                              itineraryCost == '0' ?'Itinerary Cost': 'Itinerary Cost $itineraryCost',
+                              style: const TextStyle(
+                                  fontSize: 15.0, color: AppColor.headingColor2),
+                            ),
+                            iconImage: Row(children: [SvgPicture.asset("cost_icon".svg)]),
+
+                          ),
+                        ),
+
+                        /* CustomTextField(
                           hintText: 'Itinerary Cost ',
                           size: size,
                           maxLine: 1,
@@ -167,7 +196,7 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                             });
                           },
                           textEditingController: intineraryCostController,
-                          icon:Row(children: [SvgPicture.asset("cost_icon".svg)]),                  ),
+                          icon:Row(children: [SvgPicture.asset("cost_icon".svg)]),                  ),*/
                         const SizedBox(
                           height: 2.0,
                         ),
@@ -215,11 +244,10 @@ class _DesignIntineraryScreenState extends State<DesignIntineraryScreen> {
                                     _navigationService.navigateTo(checkListRoute,
                                         arguments:{
                                           "title": "Trip type",
-                                        "checklist": list,
-                                          "listOfBool": listOfBool,
+                                          "checklist": list,
                                           "bool": false,
                                           "selectedCheckList": tripType})!.then((value) {
-                                      //getCheckList();
+
                                       if(value != null){
                                         tripType = value;
                                         setState(() {});
