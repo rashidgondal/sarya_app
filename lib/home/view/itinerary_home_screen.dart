@@ -466,6 +466,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                                   const SizedBox(
                                                     width: 5,
                                                   ),
+                                                   
                                                   ClipRRect(
                                                     borderRadius: BorderRadius.circular(8),
                                                     child: Container(
