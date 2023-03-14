@@ -102,6 +102,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       child: SafeArea(
           child: BlocConsumer<ItineraryByIDCubits, ItineraryByIDStates>(
         builder: (context, state) {
+
           if (state is ItineraryByIDInitial) {
             return SizedBox();
           }
@@ -254,6 +255,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                     'totalDays': byIDResult.totalDays,
                                     "id": widget.map['id'],
                                     "step": day
+                                  })!.then((value) {
+                                    String id = widget.map['id'];
+                                    context
+                                        .read<ItineraryByIDCubits>()
+                                        .getItineraryByID(itineraryID: id, callTyp: widget.routeName);
                                   });
                                 } else {
                                   print("stateID...........2");
@@ -264,6 +270,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                     'totalDays': byIDResult.totalDays,
                                     "id": widget.map['id'],
                                     "step": 0
+                                  })!.then((value){
+                                    String id = widget.map['id'];
+                                    context
+                                        .read<ItineraryByIDCubits>()
+                                        .getItineraryByID(itineraryID: id, callTyp: widget.routeName);
                                   });
                                 }
                               },
@@ -348,14 +359,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         width: size.width,
                         decoration: BoxDecoration(),
                         child: CachedNetworkImage(
+                          fit: BoxFit.cover,
                           imageUrl:
                               "${ApiRoutes.picBaseURL}${byIDResult.profileImg}",
                           progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Row(
-                            children: [
-                              CupertinoActivityIndicator(),
-                            ],
-                          ),
+                              (context, url, downloadProgress) => Center(
+                                child:  CupertinoActivityIndicator(),
+
+                              ),
                           errorWidget: (context, url, error) => SizedBox(),
                         ),
                       ),
@@ -414,7 +425,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 SizedBox(
-                                                    width: 70.0,
+                                                    width: 30.0,
                                                     child: image_index != -1
                                                         ? Image.asset(
                                                             Flags.listOfFlag[

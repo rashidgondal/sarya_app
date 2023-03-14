@@ -354,10 +354,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                     child: CachedNetworkImage(
                                       imageUrl: "${ApiRoutes.picBaseURL}${list[index].profileImg}",
                                       progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                          Row(
-                                            children: [
-                                              CupertinoActivityIndicator(),
-                                            ],
+                                          Center(
+                                            child:  CupertinoActivityIndicator(),
+
                                           ),
                                       errorWidget: (context, url, error) => SizedBox(),
                                     ),

@@ -168,9 +168,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
                           }
 
-
-
-
                           return SingleChildScrollView(
                             physics: BouncingScrollPhysics(),
                             child: Column(
@@ -180,7 +177,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                 const SizedBox(
                                   height: 30.0,
                                 ),
-                                const Padding(
+                                createdItineraries.isEmpty? SizedBox.shrink():    const Padding(
                                   padding: EdgeInsets.only(left: 30.0),
                                   child: Text(
                                     "Created Itineraries",
@@ -192,7 +189,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                     height: 125,
                                     child: ListView.builder(
                                         itemCount: createdItineraries.length,
-                                        physics: NeverScrollableScrollPhysics(),
+                                        physics: BouncingScrollPhysics(),
                                         shrinkWrap: true,
                                         padding: EdgeInsets.only(top: 10),
                                         scrollDirection: Axis.horizontal,
@@ -323,7 +320,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                     height: 125,
                                     child: ListView.builder(
                                         itemCount: activeItineraries.length,
-                                        physics: NeverScrollableScrollPhysics(),
+                                        physics: BouncingScrollPhysics(),
                                         shrinkWrap: true,
                                         padding: EdgeInsets.only(top: 10),
                                         scrollDirection: Axis.horizontal,
@@ -331,7 +328,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                           if(index == 0){
                                             return InkWell(
                                               onTap: (){
-                                                _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":"active"});
+                                                _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":""});
                                                 },
                                               child: Padding(
                                                 padding: const EdgeInsets.only(
@@ -433,7 +430,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                 const SizedBox(
                                   height: 20.0,
                                 ),
-                                const Padding(
+                                purchasedItineraries.isEmpty?SizedBox.shrink(): const Padding(
                                   padding: EdgeInsets.only(left: 30.0),
                                   child: Text(
                                     "Purchased Itineraries",
@@ -451,7 +448,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                     itemBuilder: (BuildContext context, int index) {
                                       return InkWell(
                                         onTap: () {
-                                          _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":""});
+                                          _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":"active"});
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.only(

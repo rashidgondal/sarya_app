@@ -7,7 +7,8 @@ import '../../customWidgets/custom_text_field.dart';
 
 class CheckListScreen extends StatefulWidget {
   final Map map;
-  CheckListScreen({Key? key, required this.map}) : super(key: key);
+  final Function(String)? addMore;
+  CheckListScreen({Key? key, required this.map, this.addMore}) : super(key: key);
 
   @override
   State<CheckListScreen> createState() => _CheckListScreenState();
@@ -19,6 +20,9 @@ class _CheckListScreenState extends State<CheckListScreen> {
   TextEditingController addMoreController = TextEditingController();
   List<String> selectedCheckList = [];
   List<String> preSelectedCheckList = [];
+  List<String> listOfAddMore = [];
+
+
 
   @override
   void initState() {
@@ -27,12 +31,12 @@ class _CheckListScreenState extends State<CheckListScreen> {
       Future.delayed(Duration(microseconds: 500), () {
         listOfCheckList.forEach((element) {
           if (preSelectedCheckList.contains(element)) {
-            int index = listOfCheckList.indexOf(element);
             selectedCheckList.add(element);
             setState(() {
 
             });
           }
+
         });
       });
 
@@ -86,7 +90,8 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        _navigationService.goBack(value: selectedCheckList);
+
+                        _navigationService.goBack(value:{"selectedList": selectedCheckList,"addMoreList":listOfAddMore});
                       },
                       child: Container(
                         height: 46.0,
@@ -200,8 +205,14 @@ class _CheckListScreenState extends State<CheckListScreen> {
                     textInputType: TextInputType.text,
                     textEditingController: addMoreController,
                     suffixIcon: IconButton(onPressed: (){
+                      if(listOfCheckList.contains(addMoreController.text)){
+                        return;
+                      }
                       listOfCheckList.add(addMoreController.text);
                       selectedCheckList.add(addMoreController.text);
+
+                      listOfAddMore.add(addMoreController.text);
+
                       addMoreController.clear();
                       setState(() {
 
