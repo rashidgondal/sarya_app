@@ -65,6 +65,7 @@ class PurchaseSoldItineraryRepository {
     }catch(e){
       rethrow;
     }
+    
 
   }
 
