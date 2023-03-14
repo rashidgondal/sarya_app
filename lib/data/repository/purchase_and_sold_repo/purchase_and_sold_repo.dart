@@ -66,6 +66,7 @@ class PurchaseSoldItineraryRepository {
       rethrow;
     }
 
+
   }
 
   Future<dynamic> setStates({required  body}) async{
