@@ -11,6 +11,7 @@ class StartItineraryStateCubits extends Cubit<StartItineraryStates> {
       emit(StartItineraryLoading());
 
       final  result = await PurchaseSoldItineraryRepository.instance.setStates(body: startRequest.toJson());
+      print("result.............$result");
 
       emit(StartItineraryLoaded());
 

@@ -168,9 +168,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
                           }
 
-
-
-
                           return SingleChildScrollView(
                             physics: BouncingScrollPhysics(),
                             child: Column(
@@ -331,7 +328,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                           if(index == 0){
                                             return InkWell(
                                               onTap: (){
-                                                _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":"active"});
+                                                _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":""});
                                                 },
                                               child: Padding(
                                                 padding: const EdgeInsets.only(
@@ -451,7 +448,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                     itemBuilder: (BuildContext context, int index) {
                                       return InkWell(
                                         onTap: () {
-                                          _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":""});
+                                          _navigationService.navigateTo(summaryRoutStart ,arguments: {"id":purchasedItineraries[index].sId, "type":"active"});
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.only(

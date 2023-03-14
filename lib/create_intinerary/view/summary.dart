@@ -102,6 +102,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       child: SafeArea(
           child: BlocConsumer<ItineraryByIDCubits, ItineraryByIDStates>(
         builder: (context, state) {
+
           if (state is ItineraryByIDInitial) {
             return SizedBox();
           }
@@ -254,6 +255,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                     'totalDays': byIDResult.totalDays,
                                     "id": widget.map['id'],
                                     "step": day
+                                  })!.then((value) {
+                                    String id = widget.map['id'];
+                                    context
+                                        .read<ItineraryByIDCubits>()
+                                        .getItineraryByID(itineraryID: id, callTyp: widget.routeName);
                                   });
                                 } else {
                                   print("stateID...........2");
@@ -264,6 +270,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                     'totalDays': byIDResult.totalDays,
                                     "id": widget.map['id'],
                                     "step": 0
+                                  })!.then((value){
+                                    String id = widget.map['id'];
+                                    context
+                                        .read<ItineraryByIDCubits>()
+                                        .getItineraryByID(itineraryID: id, callTyp: widget.routeName);
                                   });
                                 }
                               },
