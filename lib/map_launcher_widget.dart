@@ -6,8 +6,8 @@ openGoogleMap(double lat, double lng) async {
     await MapLauncher.showMarker(
       mapType: MapType.google,
       coords: Coords(lat, lng),
-      title: 'L',
-      description: 'L',
+      title: '',
+      description: '',
     );
   }
 }
