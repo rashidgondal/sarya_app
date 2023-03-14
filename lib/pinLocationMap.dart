@@ -95,12 +95,18 @@ class _PinLocationMapState extends State<PinLocationMap> {
                           ),
                           InkWell(
                             onTap: () async {
+                              print('click on button');
                               openGoogleMap(element.latLng.latitude,
                                   element.latLng.longitude);
                               // Position position = await requestLocation();
                               // String url =
                               //     'https://www.google.com/maps/dir/?api=1&origin=${position.latitude},${position.longitude}&destination=${element.latLng.latitude},${element.latLng.longitude}&travelmode=driving&dir_action=navigate';
-                              // launchURL(url);
+                              // print('${url}');
+                              // if (await canLaunch(url)) {
+                              //   await launch(url);
+                              // } else {
+                              //   throw 'Could not launch $url';
+                              // }
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 3),
