@@ -128,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _navigationService = locator<NavigationService>();
 
-    Future.delayed(Duration(milliseconds: 3300), () async {
+    Future.delayed(Duration(milliseconds: 3100), () async {
       _navigationService.navigatePushReplace(loginRout);
       if (Platform.isAndroid) {
         await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
