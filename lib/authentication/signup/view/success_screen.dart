@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -8,6 +9,7 @@ import 'package:sarya/customWidgets/data_loading.dart';
 import 'package:sarya/locator.dart';
 import 'package:sarya/navigation/router_path.dart';
 import 'package:sarya/theme/color_scheme.dart';
+
 import '../../../navigation/navigation_service.dart';
 import '../signup_view_model/signup_cubits.dart';
 
@@ -21,7 +23,6 @@ class SuccessScreen extends StatefulWidget {
 class _SuccessScreenState extends State<SuccessScreen>
     with SingleTickerProviderStateMixin {
   late NavigationService _navigationService;
-  // late ConfettiController _controllerCenter;
   bool active_gif = false;
   FlutterGifController? controller;
   @override
@@ -111,7 +112,6 @@ class _SuccessScreenState extends State<SuccessScreen>
             ),
             body: Stack(
               children: [
-
                 Container(
                   height: size.height,
                   width: size.width,
@@ -133,83 +133,83 @@ class _SuccessScreenState extends State<SuccessScreen>
                       ),
                       Expanded(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text(
-                                "Hooray!",
-                                style: TextStyle(
-                                    fontSize: 38.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColor.colorBlue),
-                              ),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              const Text(
-                                "You are done, now lets customize \n your avatar.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColor.aquaCasper),
-                              ),
-                              const SizedBox(
-                                height: 40.0,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  _navigationService.navigateTo(avatarRout,
-                                      arguments: {'isFromSignUp': true});
-                                },
-                                child: Container(
-                                  height: 46.0,
-                                  width: 200.0,
-                                  decoration: BoxDecoration(
-                                      color: AppColor.buttonColor,
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  child: const Center(
-                                    child: Text(
-                                      "Customize Avatar",
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColor.whiteColor),
-                                    ),
-                                  ),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Hooray!",
+                            style: TextStyle(
+                                fontSize: 38.0,
+                                fontWeight: FontWeight.w700,
+                                color: AppColor.colorBlue),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          const Text(
+                            "You are done, now lets customize \n your avatar.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                                color: AppColor.aquaCasper),
+                          ),
+                          const SizedBox(
+                            height: 40.0,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              _navigationService.navigateTo(avatarRout,
+                                  arguments: {'isFromSignUp': true});
+                            },
+                            child: Container(
+                              height: 46.0,
+                              width: 200.0,
+                              decoration: BoxDecoration(
+                                  color: AppColor.buttonColor,
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: const Center(
+                                child: Text(
+                                  "Customize Avatar",
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColor.whiteColor),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  print("onta..........");
-                                  SignupRequest req =
-                                      context.read<SignupCubits>().getSignupRequest;
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              print("onta..........");
+                              SignupRequest req =
+                                  context.read<SignupCubits>().getSignupRequest;
 
-                                  context.read<SignupCubits>().doSignup(
-                                      signupRequest: req,
-                                      navigationService: _navigationService);
-                                },
-                                child: Container(
-                                  height: 46.0,
-                                  width: 200.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  child: const Center(
-                                    child: Text(
-                                      "Skip",
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColor.colorBlack),
-                                    ),
-                                  ),
+                              context.read<SignupCubits>().doSignup(
+                                  signupRequest: req,
+                                  navigationService: _navigationService);
+                            },
+                            child: Container(
+                              height: 46.0,
+                              width: 200.0,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: const Center(
+                                child: Text(
+                                  "Skip",
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColor.colorBlack),
                                 ),
                               ),
-                            ],
-                          ))
+                            ),
+                          ),
+                        ],
+                      ))
                     ],
                   ),
                 ),
